@@ -12,6 +12,8 @@ export 'package:mhfatha/screens/home/home_screen.dart';
 // /* --------------------------------- LAYOUT --------------------------------- */
 export 'package:mhfatha/layout/bottom_nav.dart';
 export 'package:mhfatha/layout/sidebar.dart';
+export 'package:mhfatha/layout/theme_provider.dart';
+export 'package:mhfatha/layout/background.dart';
 
 // /* ---------------------------------- MAIN ---------------------------------- */
 export 'package:mhfatha/main.dart';
@@ -20,7 +22,12 @@ export 'package:mhfatha/main.dart';
 export 'package:mhfatha/screens/Auth/login_screen.dart';
 export 'package:mhfatha/screens/Auth/register_screen.dart';
 
+// /* -------------------------------- settings -------------------------------- */
+export 'package:mhfatha/screens/settings/settings.dart';
 
+
+// /* -------------------------------- settings -------------------------------- */
+export 'package:mhfatha/layout/DirectionalityWrapper.dart';
 
 
 // /* ------------------------------ Configuration ----------------------------- */
@@ -48,7 +55,20 @@ export  'package:flutter/material.dart';
 
 
 // /* ---------------------------------- HTTP ---------------------------------- */
-// export 'package:http/http.dart';
+export 'package:http/http.dart';
 
-// /* ------------------------ Babstrap settings screen ------------------------ */
-export 'package:settings_ui/settings_ui.dart';
+
+// /* -------------------------------- provider -------------------------------- */
+export 'package:provider/provider.dart';
+
+// /* ---------------------------------- intl ---------------------------------- */
+// export 'package:intl/intl.dart';
+
+// /* ----------------------------- multi_language ----------------------------- */
+export 'package:flutter_locales/flutter_locales.dart';
+
+// /* --------------------------- shared preferences --------------------------- */
+export 'package:shared_preferences/shared_preferences.dart';
+
+// /* ------------------------------- foundation ------------------------------- */
+export 'package:flutter/foundation.dart';

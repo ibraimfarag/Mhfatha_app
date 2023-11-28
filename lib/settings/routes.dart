@@ -2,15 +2,19 @@
 import 'package:mhfatha/settings/imports.dart';
 
 class Routes {
-  static const String login = '/login';
-  static const String register = '/register';
-  static const String home = '/home';
+  static  String login = '/login';
+  static  String register = '/register';
+  static  String home = '/home';
+  static  String settings = '/settings';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
-      login: (context) => const LoginScreen(),
-      register: (context) => const RegisterScreen(),
-      home: (context) => const HomeScreen(),
+      login: (context) =>  LoginScreen(),
+      register: (context) =>  RegisterScreen(),
+      home: (context) =>  HomeScreen(),
+      settings: (context) =>  SettingsScreen(),
+
+      
     };
   }
 
@@ -28,10 +32,10 @@ class ErrorScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Error'),
+        title:  Text('Error'),
       ),
       body: Center(
-        child: const Text('Page not found'),
+        child:  Text('Page not found'),
       ),
     );
   }

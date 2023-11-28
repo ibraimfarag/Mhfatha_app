@@ -14,13 +14,19 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   
   Widget build(BuildContext context) {
-    return Scaffold(
+    bool isEnglish = Provider.of<AppState>(context).isEnglish;
+
+    return DirectionalityWrapper(
+      child:Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
       ),
-      body: const Text('Home'),
+      body:
+                  Text(isEnglish ? 'English Text' : 'نص باللغة العربية'),
 
-         bottomNavigationBar: const BottomNav(),
+
+                     bottomNavigationBar:  BottomNav(initialIndex: 0),
+    )
     );
   }
 }
