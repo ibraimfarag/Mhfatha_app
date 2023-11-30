@@ -11,15 +11,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-Color colors = Color.fromARGB(220, 128, 202, 110);
-
-List<String> imageList = [
-  'images/login_in.png',
-  'images/login_in2.png',
-
-  // Add more image paths as needed
-];
-
+  Color colors = Color.fromARGB(220, 255, 255, 255);
+  Color backgroundColor = Color(0xFF05204a);
 
   @override
   Widget build(BuildContext context) {
@@ -28,205 +21,235 @@ List<String> imageList = [
 
     return DirectionalityWrapper(
       child: Scaffold(
-      body: Stack(
-        children: <Widget>[
-       PageView.builder(
-  itemCount: imageList.length, // Replace imageList with your list of image paths
-  itemBuilder: (context, index) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(imageList[index]),
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
-  },
-),
-
-          Container(
+        body: SingleChildScrollView(
+          child: Container(
+            height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [
-              Colors.transparent,
-              Colors.transparent,
-              Color(0xff161d27).withOpacity(0.9),
-              Color(0xff161d27),
-            ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
-          ),
-Positioned(
-  top: 20,
-  right: 20,
-  child: Container(
-    decoration: BoxDecoration(
-      color: Colors.black.withOpacity(0.6),
-      borderRadius: BorderRadius.circular(15),
-    ),
-    padding: EdgeInsets.all(1),
-    child: Row(
-      children: [
-        PopupMenuButton<String>(
-          icon: Icon(Icons.language, color: Colors.white),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          onSelected: (String value) {
-            if (value == 'en' || value == 'ar') {
-              Provider.of<AppState>(context, listen: false).toggleLanguage();
-            }
-          },
-          itemBuilder: (BuildContext context) {
-            return <PopupMenuEntry<String>>[
-              PopupMenuItem<String>(
-                value: 'en',
-                child: Text('English'),
+              image: DecorationImage(
+                image: AssetImage('assets/backgound.png'),
+                fit: BoxFit.cover,
               ),
-              PopupMenuItem<String>(
-                value: 'ar',
-                child: Text('العربية'),
-              ),
-              // Add more languages as needed
-            ];
-          },
-        ),
-        SizedBox(width: 10), // Add some spacing between language and dark mode icons
-        IconButton(
-          icon: Icon(
-            Icons.nightlight_round, // You can replace this with your dark mode icon
-            color: Colors.white,
-          ),
-          onPressed: () {
-            // Implement logic to toggle dark mode
-            Provider.of<AppState>(context, listen: false).toggleDarkMode();
-          },
-        ),
-      ],
-    ),
-  ),
-),
-
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
+            ),
+            child: Stack(
               children: <Widget>[
-                    Image.asset(
-                    'images/logo.png', // Replace with the path to your image
-                    height: 40, // Adjust the height as needed
-                    // width: 100, // Adjust the width as needed
-                  ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  isEnglish ? 'time to get discounts, Sign in' : 'وقت للحصول على الخصومات, سجل دخولك الان',
-                  style: TextStyle(color: Colors.grey.shade500, fontSize: 16),
-                ),
-             
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  height: 50,
-                  margin: EdgeInsets.only(left: 40, right: 40),
-                  child: TextField(
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                    decoration: InputDecoration(
-                      hintText: isEnglish ?"Email or mobile number":"البريد الالكتروني او رقم الجوال",
-                      hintStyle: TextStyle(color: Colors.grey.shade700),
-                      filled: true,
-                      fillColor: Color(0xff161d27).withOpacity(0.9),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide(color: colors)),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide(color: colors)),
+                // Background Image
+
+                Positioned(
+                  top: 60,
+                  right: 20,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: backgroundColor,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    padding: EdgeInsets.all(1),
+                    child: Row(
+                      children: [
+                        PopupMenuButton<String>(
+                          icon: Icon(Icons.language,
+                              color: Color.fromARGB(146, 255, 255, 255)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          onSelected: (String value) {
+                            if (value == 'en' || value == 'ar') {
+                              Provider.of<AppState>(context, listen: false)
+                                  .toggleLanguage();
+                            }
+                          },
+                          itemBuilder: (BuildContext context) {
+                            return <PopupMenuEntry<String>>[
+                              PopupMenuItem<String>(
+                                value: 'en',
+                                child: Text('English'),
+                              ),
+                              PopupMenuItem<String>(
+                                value: 'ar',
+                                child: Text('العربية'),
+                              ),
+                              // Add more languages as needed
+                            ];
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 12,
-                ),
-                Container(
-                  height: 50,
-                  margin: EdgeInsets.only(left: 40, right: 40),
-                  child: TextField(
-                    obscureText: true,
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                    decoration: InputDecoration(
-                      hintText: isEnglish ?"Password":"كلمة السر",
-                      hintStyle: TextStyle(color: Colors.grey.shade700),
-                      filled: true,
-                      fillColor: Color(0xff161d27).withOpacity(0.9),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide(color: colors)),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide(color: colors)),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-                Text(
-                   isEnglish ?"Forgot Password?":"هل نسيت كلمة السر ؟",
-                  style: TextStyle(
-                      color: colors, fontSize: 14, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-Container(
-  height: 50,
-  width: double.infinity,
-  margin: EdgeInsets.only(left: 40, right: 40),
-  child: ElevatedButton(
-    onPressed: () {
-      // Implement your logic when the button is pressed
-    },
-    style: ElevatedButton.styleFrom(
-      primary: colors, // Set the background color
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30),
-      ),
-    ),
-    child: Text(
-      isEnglish?"SIGN IN":"تسجيل الدخول",
-      style: TextStyle(
-        color: Colors.white,
-        fontWeight: FontWeight.bold,
-        fontSize: 16,
-      ),
-    ),
-  ),
-),
-SizedBox(
-  height: 16,
-),                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+
+                Column(
+                  // mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    Text(
-                     isEnglish? "create new account":"انشاء حساب جديد",
-                      style: TextStyle(color: Colors.white),
+                    SizedBox(
+                      height: 150,
+                    ),
+                    Image.asset(
+                      'images/logo.png', // Replace with the path to your image
+                      height: 50, // Adjust the height as needed
+                      // width: 100, // Adjust the width as needed
                     ),
                     SizedBox(
-                      width: 8,
+                      height: 10,
                     ),
-                    
+                    Text(
+                      isEnglish
+                          ? 'time to get discounts'
+                          : 'وقت للحصول على الخصومات',
+                      style:
+                          TextStyle(color: Colors.grey.shade500, fontSize: 16),
+                    ),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Container(
+                      margin:  EdgeInsets.fromLTRB ( 45, 0, 45, 0), // Adjust the padding as needed
+
+                      alignment: isEnglish
+                          ? Alignment.centerLeft
+                          : Alignment.centerRight,
+                      child: Text(
+                        isEnglish
+                            ? 'Email or mobile number'
+                            : 'البريد الالكتروني',
+                        style: TextStyle(
+                            color: colors,
+                            fontSize: 16,
+                            fontWeight: FontWeight.normal),
+                      ),
+                    ),
+                    SizedBox(height: 8), // Adjust the height as needed
+                    Container(
+                      margin: EdgeInsets.only(left: 40, right: 40),
+                      child: TextField(
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                        decoration: InputDecoration(
+                          hintStyle: TextStyle(color: Colors.grey.shade700),
+                          filled: true,
+                          fillColor:  backgroundColor,
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(color: backgroundColor)),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(color: backgroundColor)),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                      Container(
+                      margin:  EdgeInsets.fromLTRB ( 45, 0, 45, 0), // Adjust the padding as needed
+
+                      alignment: isEnglish
+                          ? Alignment.centerLeft
+                          : Alignment.centerRight,
+                      child: Text(
+                        isEnglish
+                            ?  "Password" : "كلمة السر",
+                        style: TextStyle(
+                            color: colors,
+                            fontSize: 16,
+                            fontWeight: FontWeight.normal),
+                      ),
+                    ),
+                      SizedBox(
+                      height: 8,
+                    ),
+                                           Container(
+                      margin: EdgeInsets.only(left: 40, right: 40),
+                      child: TextField(
+                                                obscureText: true,
+
+                        style: TextStyle(fontSize: 16, color: Colors.white),
+                        decoration: InputDecoration(
+                          hintStyle: TextStyle(color: Colors.grey.shade700),
+                          filled: true,
+                          fillColor:backgroundColor,
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(color: backgroundColor)),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(color: backgroundColor)),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                      Container(
+                      margin:  EdgeInsets.fromLTRB ( 45, 0, 45, 0), // Adjust the padding as needed
+
+                      alignment: isEnglish
+                          ? Alignment.centerRight
+                          : Alignment.centerLeft,
+                      child: Text(
+                        isEnglish
+                            ? "Forgot Password?" : "هل نسيت كلمة السر ؟",
+                        style: TextStyle(
+                            color: colors,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+Row(
+  mainAxisAlignment: MainAxisAlignment.end, // Align items to the start (left)
+  children: [
+    Container(
+      height: 50,
+      width: 100,
+      margin: EdgeInsets.only(left: 40, right: 40),
+      child: ElevatedButton(
+        onPressed: () {
+          // Implement your logic when the button is pressed
+        },
+        style: ElevatedButton.styleFrom(
+          primary: backgroundColor, // Set the background color
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        child: Text(
+          isEnglish ? "SIGN IN" : "دخول",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+      ),
+    ),
+  ],
+),
+                    SizedBox(
+                      height: 66,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+
+                        Text(
+                          isEnglish ? "create new account" : "انشاء حساب جديد",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 0,
+                    ),
                   ],
-                ),
-                SizedBox(
-                  height: 30,
                 ),
               ],
             ),
           ),
-        ],
+        ),
       ),
-    ),
     );
   }
-
-  
 }

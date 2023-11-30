@@ -49,6 +49,7 @@ dependencies:
   shared_preferences: ^2.2.2
   settings_ui: ^2.0.2
   flutter_settings_ui: ^2.0.1
+  csc_picker: ^0.2.7
 
 
 dev_dependencies:
@@ -78,6 +79,8 @@ flutter:
     - assets/icon/
     - assets/profile/
     - images/
+    - assets/
+    # - assets/background.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
