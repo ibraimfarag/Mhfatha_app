@@ -3,6 +3,6 @@
 import 'package:mhfatha/settings/imports.dart';
 
 // provider.dart
-class MyProvider {
+class AuthProvider {
   
 }

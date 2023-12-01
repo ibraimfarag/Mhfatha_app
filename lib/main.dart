@@ -54,7 +54,7 @@ class _MhfathaAppState extends State<MhfathaApp> {
         builder: (BuildContext context) {
           return Directionality(
             textDirection: isEnglish ? TextDirection.ltr : TextDirection.rtl,
-            child: RegisterScreen(),
+            child: LoginScreen(),
           );
         },
       ),

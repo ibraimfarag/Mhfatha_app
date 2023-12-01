@@ -13,6 +13,9 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   Color colors = Color.fromARGB(220, 255, 255, 255);
   Color backgroundColor = Color(0xFF05204a);
+TextEditingController _emailController = TextEditingController();
+TextEditingController _passwordController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -120,6 +123,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     Container(
                       margin: EdgeInsets.only(left: 40, right: 40),
                       child: TextField(
+                          controller: _emailController,
+
                         style: TextStyle(fontSize: 16, color: Colors.white),
                         decoration: InputDecoration(
                           hintStyle: TextStyle(color: Colors.grey.shade700),
@@ -159,6 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       margin: EdgeInsets.only(left: 40, right: 40),
                       child: TextField(
                                                 obscureText: true,
+                          controller: _passwordController,
 
                         style: TextStyle(fontSize: 16, color: Colors.white),
                         decoration: InputDecoration(
@@ -203,9 +209,23 @@ Row(
       width: 100,
       margin: EdgeInsets.only(left: 40, right: 40),
       child: ElevatedButton(
-        onPressed: () {
-          // Implement your logic when the button is pressed
-        },
+        onPressed: () async {
+  // Get the values entered by the user in the email and password fields
+  String emailOrMobile = _emailController.text; // Assuming you have a TextEditingController for the email field
+  String password = _passwordController.text; // Assuming you have a TextEditingController for the password field
+
+  // Now you can use these values in your API call
+  bool loginSuccess = await Api().loginUser(emailOrMobile, password);
+
+  if (loginSuccess) {
+    // Navigate to the next screen or perform other actions
+    print('Login successful');
+  } else {
+    // Handle login failure
+    print('Login failed');
+  }
+},
+
         style: ElevatedButton.styleFrom(
           primary: backgroundColor, // Set the background color
           shape: RoundedRectangleBorder(

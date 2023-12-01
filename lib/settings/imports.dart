@@ -74,3 +74,8 @@ export 'package:shared_preferences/shared_preferences.dart';
 export 'package:flutter/foundation.dart';
 
 export  'package:csc_picker/csc_picker.dart';
+
+
+// /* --------------------------------- Widgets -------------------------------- */
+
+export 'package:mhfatha/widgets/region_selection.dart';
