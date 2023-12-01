@@ -35,7 +35,9 @@ Future<bool> loginUser(String emailOrMobile, String password) async {
     if (response.statusCode == 200) {
       // If the response is successful, parse the JSON and return true
       final jsonResponse = jsonDecode(response.body);
-      return jsonResponse['success'];
+          AuthProvider().setUserData(jsonResponse);
+
+        return jsonResponse['success'];
     } else {
       // If the response is not successful, throw an exception with the status code and the error message
       throw Exception('Failed to login. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
