@@ -12,6 +12,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => AppState()),
         ChangeNotifierProvider(create: (context) => DarkModeProvider()), // Add DarkModeProvider
+        ChangeNotifierProvider(create: (context) => AuthProvider()), // Add DarkModeProvider
       ],
       child: MhfathaApp(),
     ),
