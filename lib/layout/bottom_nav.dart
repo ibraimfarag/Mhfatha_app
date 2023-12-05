@@ -38,9 +38,6 @@ class _BottomNavState extends State<BottomNav> {
               Navigator.pushReplacementNamed(context, '/home');
               break;
             case 1:
-              Navigator.pushReplacementNamed(context, '/login');
-              break;
-            case 2:
               Navigator.pushReplacementNamed(context, '/settings');
               break;
             
@@ -51,10 +48,7 @@ class _BottomNavState extends State<BottomNav> {
             icon: Icon(Icons.home),
             label: 'الرئيسية',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'الدخول',
-          ),
+        
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
             label: 'الاعدادات',

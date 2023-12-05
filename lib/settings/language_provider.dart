@@ -49,4 +49,9 @@ class AppState with ChangeNotifier {
     _isEnglish = prefs.getBool('isEnglish') ?? true;
     notifyListeners();
   }
+
+    String get display {
+    return _isEnglish ? 'en' : 'ar';
+  }
+
 }

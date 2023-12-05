@@ -47,9 +47,9 @@ dependencies:
   intl: ^0.18.1
   intl_utils: ^2.8.6
   shared_preferences: ^2.2.2
-  settings_ui: ^2.0.2
-  flutter_settings_ui: ^2.0.1
-  csc_picker: ^0.2.7
+  carousel_slider: ^4.2.1
+  geolocator: ^10.1.0
+  permission_handler: ^11.0.1
 
 
 dev_dependencies:

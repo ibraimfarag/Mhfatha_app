@@ -29,6 +29,9 @@ export 'package:mhfatha/screens/settings/settings.dart';
 // /* -------------------------------- settings -------------------------------- */
 export 'package:mhfatha/layout/DirectionalityWrapper.dart';
 
+/* ------------------------------ AppVariables ------------------------------ */
+export 'package:mhfatha/settings/AppVariables.dart';
+
 
 // /* ------------------------------ Configuration ----------------------------- */
 export 'package:mhfatha/settings/languages.dart';
@@ -73,9 +76,26 @@ export 'package:shared_preferences/shared_preferences.dart';
 // /* ------------------------------- foundation ------------------------------- */
 export 'package:flutter/foundation.dart';
 
-export  'package:csc_picker/csc_picker.dart';
+
+// /* ----------------------------- carousel_slider ---------------------------- */
+
+export 'package:carousel_slider/carousel_slider.dart';
+
+// /* -------------------------------- location -------------------------------- */
+
+export'package:geolocator/geolocator.dart';
+
+// /* --------------------------- permission handler --------------------------- */
 
 
+
+
+// /* -------------------------------------------------------------------------- */
 // /* --------------------------------- Widgets -------------------------------- */
-
+// /* -------------------------------------------------------------------------- */
 export 'package:mhfatha/widgets/region_selection.dart';
+
+// /* ----------------------------- StoresCarousel ----------------------------- */
+
+export 'package:mhfatha/widgets/StoresCarousel.dart';
+

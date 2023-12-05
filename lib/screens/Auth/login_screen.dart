@@ -22,6 +22,11 @@ TextEditingController _passwordController = TextEditingController();
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
     Size size = MediaQuery.of(context).size;
 
+AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+
+
+
     return DirectionalityWrapper(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -215,15 +220,28 @@ Row(
   String password = _passwordController.text; // Assuming you have a TextEditingController for the password field
 
   // Now you can use these values in your API call
-  bool loginSuccess = await Api().loginUser(emailOrMobile, password);
+Api api = Api();
+AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+bool loginSuccess = await api.loginUser(authProvider, emailOrMobile, password);
 
   if (loginSuccess) {
     // Navigate to the next screen or perform other actions
     print('Login successful');
+          Navigator.pushReplacementNamed(context, '/home');
+
+// print('User Data: ${authProvider.user}');
+
   } else {
     // Handle login failure
     print('Login failed');
   }
+  
+if (authProvider.isAuthenticated && authProvider.user != null) {
+  // print('User Name: ${authProvider.user!['first_name']}');
+  // print('Token: ${authProvider.token}');
+  print(' ${authProvider.isAuthenticated}');
+}
 },
 
         style: ElevatedButton.styleFrom(
@@ -244,22 +262,32 @@ Row(
     ),
   ],
 ),
+
                     SizedBox(
                       height: 66,
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: <Widget>[
+    GestureDetector(
+      onTap: () {
+        // Navigate to the register screen when the text is tapped
+        Navigator.pushNamed(context, '/register');
+      },
+      child: Text(
+        isEnglish ? "create new account" : "انشاء حساب جديد",
+        style: TextStyle(
+          color: Colors.white,
+          decoration: TextDecoration.underline, // Add underline to indicate it's clickable
+        ),
+      ),
+    ),
+    SizedBox(
+      width: 8,
+    ),
+  ],
+),
 
-                        Text(
-                          isEnglish ? "create new account" : "انشاء حساب جديد",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                      ],
-                    ),
                     SizedBox(
                       height: 0,
                     ),

@@ -1,13 +1,13 @@
 // lib\screens\settings\settings.dart
 
 import 'package:mhfatha/settings/imports.dart';
-import 'package:flutter_settings_ui/flutter_settings_ui.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
     bool isDarkMode = Provider.of<AppState>(context).isDarkMode;
+    AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     
     return DirectionalityWrapper(
@@ -32,7 +32,7 @@ class SettingsScreen extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Profile Name'),
+                    Text(' ${authProvider.user!['first_name']}'),
                     // Other profile details...
                   ],
                 ),
@@ -97,16 +97,22 @@ class SettingsScreen extends StatelessWidget {
             ),
           ),
             // Logout Button
-            ElevatedButton(
-              onPressed: () {
-                // Implement logout logic
-              },
-              child: Text(isEnglish ? 'Logout' : 'تسجيل الخروج'),
-            ),
+         ElevatedButton(
+  onPressed: () {
+    // Call the logout method from AuthProvider
+    Provider.of<AuthProvider>(context, listen: false).logout();
+
+    // Navigate to the login screen or perform any other necessary actions
+    Navigator.pushNamedAndRemoveUntil(context, Routes.login, (route) => false);
+  },
+
+  child: Text(isEnglish ? 'Logout' : 'تسجيل الخروج'),
+),
+
           ],
         ),
       ),
-      bottomNavigationBar: BottomNav(initialIndex: 2),
+      bottomNavigationBar: BottomNav(initialIndex: 1),
     )
     );
   }

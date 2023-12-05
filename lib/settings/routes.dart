@@ -20,7 +20,7 @@ class Routes {
 
   static MaterialPageRoute unknownRoute(RouteSettings settings) {
     return MaterialPageRoute(
-      builder: (context) => ErrorScreen(),
+      builder: (context) => LoginScreen(),
     );
   }
 }
