@@ -218,10 +218,10 @@ Future<void> _sendLocation() async {
         child: Column(
           children: [
            SizedBox(
-            height: 200,
+            height: 100,
            ),
-      //  if (latitude != null && longitude != null)
-      //         Text('Latitude: $latitude, Longitude: $longitude'),
+
+            
          if (filteredStores.isNotEmpty)
               Container(
                 // Add your custom properties for the CarouselSlider...
