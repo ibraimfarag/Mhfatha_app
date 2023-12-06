@@ -86,10 +86,55 @@ Future<void> _sendLocation() async {
     }
   }
 
+void _showStoreOptions(BuildContext context) {
+
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+            bool isEnglish = Provider.of<AppState>(context).isEnglish;
+
+      return Container(
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                // Handle "Info about this store" option
+                Navigator.pop(context); // Close the bottom sheet
+                // Add your logic to show store info
+              },
+                              child: Text(
+                isEnglish ? 'Info about this store' : 'معلومات عن هذا المتجر',
+              ),
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                // Handle "Show discounts" option
+                Navigator.pop(context); // Close the bottom sheet
+                // Add your logic to show discounts
+              },
+                           child: Text(
+                isEnglish ? 'Show discounts' : 'عرض الخصومات',
+              ),
+
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
 
   List<Widget> buildStoreContainers() {
     return filteredStores.map((store) {
-      return Container(
+      return GestureDetector(
+      onTap: () {
+        _showStoreOptions(context);
+      },
+      child:  Container(
         width: 500,
         margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
         decoration: BoxDecoration(
@@ -199,7 +244,8 @@ Future<void> _sendLocation() async {
 
           ],
         ),
-      );
+      ),
+    );
     }).toList();
   }
   @override
@@ -221,7 +267,24 @@ Future<void> _sendLocation() async {
             height: 100,
            ),
 
-            
+            Container(
+  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+  alignment: isEnglish ? Alignment.centerLeft : Alignment.centerRight,
+  child: Row(
+    children: [
+      Icon(Icons.store, color: Colors.black, size: 24),
+      SizedBox(width: 10),
+      Text(
+        isEnglish ? 'Nearby Stores' : 'متاجر قريبة',
+        style: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ],
+  ),
+),
+
          if (filteredStores.isNotEmpty)
               Container(
                 // Add your custom properties for the CarouselSlider...
@@ -239,7 +302,20 @@ Future<void> _sendLocation() async {
                 ),
               ),
 
- 
+Padding(
+  padding: EdgeInsets.symmetric(vertical: 20),
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: [
+      buildIconWithText(Icons.qr_code, 'Scan QR', 'فحص كود'),
+      buildIconWithText(Icons.store, 'Nearby', 'قريبة'),
+      buildIconWithText(Icons.search, 'Search', 'البحث'),
+      buildIconWithText(Icons.local_offer, 'Top Discount', 'أعلى خصم'),
+    ],
+  ),
+),
+
+
           ],
         ),
       ),
@@ -249,6 +325,34 @@ Future<void> _sendLocation() async {
     );
   }
 
+Widget buildIconWithText(IconData icon, String englishText, String arabicText) {
+  final isEnglish = Provider.of<AppState>(context).isEnglish;
+
+  return GestureDetector(
+    onTap: () {
+      // Handle tap action here
+      // Navigate to the appropriate screen
+    },
+    child: Column(
+      children: [
+        CircleAvatar(
+          radius: 30,
+          backgroundColor: Colors.blue,
+          child: Icon(
+            icon,
+            color: Colors.white,
+            size: 30,
+          ),
+        ),
+        SizedBox(height: 8),
+        Text(
+          isEnglish ? englishText : arabicText,
+          style: TextStyle(fontSize: 14),
+        ),
+      ],
+    ),
+  );
+}
 
 }
 
