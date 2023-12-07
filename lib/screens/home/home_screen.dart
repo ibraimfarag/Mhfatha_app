@@ -16,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   double? latitude;
   double? longitude;
+  
   List<Map<String, dynamic>> filteredStores = [];
 
 
@@ -25,25 +26,51 @@ class _HomeScreenState extends State<HomeScreen> {
     _getLocation();
   }
 
-  Future<void> _getLocation() async {
-    try {
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-      setState(() {
-        latitude = position.latitude;
-        longitude = position.longitude;
-     
+Future<void> _getLocation() async {
+  // Check if permission is granted
+  var status = await Permission.locationWhenInUse.status;
+  
+  if (status.isDenied) {
+    // Request permission if not granted
 
-      });
+    status = await Permission.locationWhenInUse.request();
 
-      // Call the method to send location when the coordinates are available
-      if (latitude != null && longitude != null ) {
-        await _sendLocation();
-      }
-    } catch (e) {
-      print("Error getting location: $e");
+        // status = await Permission.location.request();
+// await requestLocationPermission();
+  // await Permission.location.request();
+  //  bool isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
+    
+    // await Geolocator.checkPermission();
+    await Geolocator.requestPermission();
+    
+    if (status.isDenied) {
+      // Handle case when permission is still not granted
+      print('Location permission is denied.');
+
+      return;
     }
   }
+
+  try {
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+    LocationPermission permission;
+   permission = await Geolocator.requestPermission();
+   
+    setState(() {
+      latitude = position.latitude;
+      longitude = position.longitude;
+    });
+
+    // Call the method to send location when the coordinates are available
+    if (latitude != null && longitude != null) {
+      await _sendLocation();
+    }
+  } catch (e) {
+    print("Error getting location: $e");
+  }
+}
 
 Future<void> _sendLocation() async {
   AuthProvider authProvider =

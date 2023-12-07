@@ -21,7 +21,7 @@ void main() async {
   await Future.wait([
     SharedPreferences.getInstance(),
   ]);
-  await requestLocationPermission();
+  
 
   runApp(
     MultiProvider(
