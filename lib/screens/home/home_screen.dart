@@ -113,12 +113,15 @@ Future<void> _sendLocation() async {
     }
   }
 
-void _showStoreOptions(BuildContext context) {
 
+
+void _showStoreOptions(BuildContext context, Map<String, dynamic> store) {
   showModalBottomSheet(
     context: context,
     builder: (BuildContext context) {
-            bool isEnglish = Provider.of<AppState>(context).isEnglish;
+      bool isEnglish = Provider.of<AppState>(context).isEnglish;
+      AuthProvider authProvider =
+          Provider.of<AuthProvider>(context, listen: false);
 
       return Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
@@ -132,21 +135,49 @@ void _showStoreOptions(BuildContext context) {
                 Navigator.pop(context); // Close the bottom sheet
                 // Add your logic to show store info
               },
-                              child: Text(
-                isEnglish ? 'Info about this store' : 'معلومات عن هذا المتجر',
+              child: Text(
+                isEnglish
+                    ? 'Info about this store'
+                    : 'معلومات عن هذا المتجر',
               ),
             ),
             SizedBox(height: 10),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 // Handle "Show discounts" option
                 Navigator.pop(context); // Close the bottom sheet
-                // Add your logic to show discounts
+
+                // Display sub-context bottom menu
+                _showSubContextBottomMenu(context, store);
+                // Add the logic to get store details by calling the API
+
+                // Get store ID
+                int storeId = store['id'];
+
+                // Call the API to get store details
+                String storeDetails = await Api().getStoreDetails(authProvider, store['id']);
+
+                // Parse the store details JSON
+                Map<String, dynamic> storeDetailsMap = jsonDecode(storeDetails);
+
+                // Access the "discounts" list
+                List<dynamic> discounts = storeDetailsMap['store']['discounts'];
+
+                // Iterate over each discount
+                for (var discount in discounts) {
+                  // Access discount properties
+                  int id = discount['id'];
+                  double percent = double.parse(discount['percent']);
+                  String category = discount['category'];
+                  // ... access other properties as needed
+
+                  // Now, you can use these properties as needed.
+                  print('Discount ID: $id, Percent: $percent, Category: $category');
+                }
               },
-                           child: Text(
+              child: Text(
                 isEnglish ? 'Show discounts' : 'عرض الخصومات',
               ),
-
             ),
           ],
         ),
@@ -155,11 +186,80 @@ void _showStoreOptions(BuildContext context) {
   );
 }
 
+
+
+
+void _showSubContextBottomMenu(BuildContext context, Map<String, dynamic> store) {
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      bool isEnglish = Provider.of<AppState>(context).isEnglish;
+      AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+      // Access the "discounts" list
+      List<dynamic>? discounts = store['discounts'];
+
+      return Container(
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Hello', // Display your "Hello" text here
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              'Store ID: ${store['id']}',
+              style: TextStyle(fontSize: 16),
+            ),
+            SizedBox(height: 20),
+            // Check if discounts is null or empty
+            if (discounts == null || discounts.isEmpty)
+              Text(
+                isEnglish ? 'No discounts available' : 'لا يوجد خصومات',
+                style: TextStyle(fontSize: 16),
+              )
+            else
+              // Display discounts as text
+              
+              for (var discount in discounts)
+                Text(
+                  'Discount ID: ${discount['id']}, Percent: ${discount['percent']}, Category: ${discount['category']}',
+                  style: TextStyle(fontSize: 16),
+                ),
+            SizedBox(height: 20),
+            Align(
+              // Set alignment based on language
+              alignment: isEnglish ? Alignment.bottomRight : Alignment.bottomLeft,
+              child: ElevatedButton(
+                onPressed: () {
+                  // Handle the "العودة : Back" button
+                  Navigator.pop(context); // Close the sub-context bottom sheet
+                  _showStoreOptions(context, store);
+                },
+                child: Text(
+                  isEnglish ? 'Back' : 'العودة',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+
   List<Widget> buildStoreContainers() {
     return filteredStores.map((store) {
       return GestureDetector(
       onTap: () {
-        _showStoreOptions(context);
+        _showStoreOptions(context,store);
       },
       child:  Container(
         width: 500,
@@ -265,8 +365,7 @@ void _showStoreOptions(BuildContext context) {
                   ],
                 ),
               )
-              // Add more containers as needed
-
+       
 
 
           ],
@@ -357,8 +456,7 @@ Widget buildIconWithText(IconData icon, String englishText, String arabicText) {
 
   return GestureDetector(
     onTap: () {
-      // Handle tap action here
-      // Navigate to the appropriate screen
+
     },
     child: Column(
       children: [
@@ -384,9 +482,5 @@ Widget buildIconWithText(IconData icon, String englishText, String arabicText) {
 }
 
 
-      // appBar: AppBar(
-      //   title:  Text(' ${authProvider.user!['first_name']}'),
-      // ),
-      // body:
-      //             Text('${authProvider.token}'),
+  
                  

@@ -90,6 +90,37 @@ class Api {
 
 
 
+  Future<String> getStoreDetails(AuthProvider authProvider, int storeId) async {
+    final url = Uri.parse('$baseUrl/store');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${authProvider.token}',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'id': storeId,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        // print('Store Details Response Data: $jsonResponse');
+
+        // Convert the response data to a JSON string
+        String jsonString = jsonEncode(jsonResponse);
+        // print(jsonString);
+        return jsonString;
+      } else {
+        throw Exception('Failed to get store details. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
+      }
+    } catch (e) {
+      print('Error getting store details: $e');
+      return ''; // Return an empty string or handle the error as needed
+    }
+  }
 
 
 
