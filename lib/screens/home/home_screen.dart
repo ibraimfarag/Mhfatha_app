@@ -172,7 +172,7 @@ void _showStoreOptions(BuildContext context, Map<String, dynamic> store) {
                   // ... access other properties as needed
 
                   // Now, you can use these properties as needed.
-                  print('Discount ID: $id, Percent: $percent, Category: $category');
+                  // print('Discount ID: $id, Percent: $percent, Category: $category');
                 }
               },
               child: Text(
@@ -213,13 +213,17 @@ void _showSubContextBottomMenu(BuildContext context, Map<String, dynamic> store)
               'Store ID: ${store['id']}',
               style: TextStyle(fontSize: 16),
             ),
+            Text(
+              'Store ID: ${store['discounts']}',
+              style: TextStyle(fontSize: 16),
+            ),
             SizedBox(height: 20),
             // Check if discounts is null or empty
    
 
 
 
-   
+
             SizedBox(height: 20),
             Align(
               // Set alignment based on language
