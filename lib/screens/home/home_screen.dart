@@ -220,7 +220,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       return Container(
                         width: MediaQuery.of(context).size.width - 100,
-                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        margin: const EdgeInsets.all(10),
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
                           color: Colors.grey[200],
