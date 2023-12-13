@@ -14,29 +14,47 @@ class StoreInfoScreen extends StatelessWidget {
 
     return DirectionalityWrapper(
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            isEnglish ? 'Store Information' : 'معلومات المتجر',
-          ),
-        ),
+appBar: AppBar(
+  // title: Text(
+    // 'Store Information',
+    // Uncomment the lines below if you want to provide localized titles
+    // isEnglish ? 'Store Information' : 'معلومات المتجر',
+  // ),
+  // Make the AppBar transparent
+  backgroundColor: Colors.transparent,
+  elevation: 0, // Remove the shadow
+  // Add the IconButton to the actions
+  actions: [
+    IconButton(
+      icon: Icon(Icons.arrow_forward),
+      onPressed: () {
+        // Navigate back to the previous screen
+        Navigator.pop(context);
+      },
+      // Change the color of the back button icon
+      color: Color.fromARGB(255, 7, 0, 34),
+    ),
+  ],
+),
+
         body: Container(
           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 20),
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Handle "Info about this store" option
-                    Navigator.pop(context); // Close the screen
-                  },
-                  child: Text(
-                    isEnglish ? 'Back' : 'العودة',
-                  ),
-                ),
-              ),
+              // Container(
+              //   padding: EdgeInsets.symmetric(vertical: 20),
+              //   child: ElevatedButton(
+              //     onPressed: () {
+              //       // Handle "Info about this store" option
+              //       Navigator.pop(context); // Close the screen
+              //     },
+              //     child: Text(
+              //       isEnglish ? 'Back' : 'العودة',
+              //     ),
+              //   ),
+              // ),
               Container(
                 width: 500,
                 margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
@@ -55,33 +73,33 @@ class StoreInfoScreen extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          // Container(
-                          //   height: 100,
-                          //   child: ClipRRect(
-                          //     borderRadius: BorderRadius.only(
-                          //       topLeft: Radius.circular(15),
-                          //       topRight: Radius.circular(15),
-                          //     ),
-                          //     child: ShaderMask(
-                          //       shaderCallback: (Rect bounds) {
-                          //         return LinearGradient(
-                          //           begin: Alignment.bottomCenter,
-                          //           end: Alignment.topCenter,
-                          //           colors: [
-                          //             Colors.transparent,
-                          //             Colors.black.withOpacity(0.8)
-                          //           ],
-                          //           stops: [0.0, 1.0],
-                          //         ).createShader(bounds);
-                          //       },
-                          //       blendMode: BlendMode.dstIn,
-                          //       child: Image.network(
-                          //         'https://mhfatha.net/FrontEnd/assets/images/store_images/${store['photo']}',
-                          //         fit: BoxFit.fill,
-                          //       ),
-                          //     ),
-                          //   ),
-                          // ),
+                          Container(
+                            height: 100,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(15),
+                                topRight: Radius.circular(15),
+                              ),
+                              child: ShaderMask(
+                                shaderCallback: (Rect bounds) {
+                                  return LinearGradient(
+                                    begin: Alignment.bottomCenter,
+                                    end: Alignment.topCenter,
+                                    colors: [
+                                      Colors.transparent,
+                                      Colors.black.withOpacity(0.8)
+                                    ],
+                                    stops: [0.0, 1.0],
+                                  ).createShader(bounds);
+                                },
+                                blendMode: BlendMode.dstIn,
+                                child: Image.network(
+                                  'https://mhfatha.net/FrontEnd/assets/images/store_images/${storeData?['photo']}',
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                            ),
+                          ),
                           Container(
                             padding: const EdgeInsets.all(8.0),
                             child: Align(
