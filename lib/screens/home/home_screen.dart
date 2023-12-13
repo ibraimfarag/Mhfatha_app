@@ -129,6 +129,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   // Handle "Info about this store" option
                   Navigator.pop(context); // Close the bottom sheet
                   // Add your logic to show store info
+Navigator.pushNamed(context, '/store-info', arguments: store);
+
                 },
                 child: Text(
                   isEnglish ? 'Info about this store' : 'معلومات عن هذا المتجر',

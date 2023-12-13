@@ -6,6 +6,7 @@ class Routes {
   static  String register = '/register';
   static  String home = '/home';
   static  String settings = '/settings';
+  static String storeInfo = '/store-info';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -13,6 +14,7 @@ class Routes {
       register: (context) =>  RegisterScreen(),
       home: (context) =>  HomeScreen(),
       settings: (context) =>  SettingsScreen(),
+      storeInfo: (context) => StoreInfoScreen(),
 
       
     };

@@ -9,6 +9,11 @@ export 'package:mhfatha/api/api.dart';
 export 'package:mhfatha/screens/home/home_screen.dart';
 
 
+// /* ------------------------------- store info ------------------------------- */
+
+export 'package:mhfatha/screens/home/StoreInfo.dart';
+
+
 // /* --------------------------------- LAYOUT --------------------------------- */
 export 'package:mhfatha/layout/bottom_nav.dart';
 export 'package:mhfatha/layout/sidebar.dart';
