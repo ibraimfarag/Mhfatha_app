@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:mhfatha/settings/imports.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -16,9 +15,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   double? latitude;
   double? longitude;
-  
-  List<Map<String, dynamic>> filteredStores = [];
 
+  List<Map<String, dynamic>> filteredStores = [];
 
   @override
   void initState() {
@@ -26,66 +24,66 @@ class _HomeScreenState extends State<HomeScreen> {
     _getLocation();
   }
 
-Future<void> _getLocation() async {
-  // Check if permission is granted
-  var status = await Permission.locationWhenInUse.status;
-  
-  if (status.isDenied) {
-    // Request permission if not granted
+  Future<void> _getLocation() async {
+    // Check if permission is granted
+    var status = await Permission.locationWhenInUse.status;
 
-    status = await Permission.locationWhenInUse.request();
-
-        // status = await Permission.location.request();
-// await requestLocationPermission();
-  // await Permission.location.request();
-  //  bool isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
-    
-    // await Geolocator.checkPermission();
-    await Geolocator.requestPermission();
-    
     if (status.isDenied) {
-      // Handle case when permission is still not granted
-      print('Location permission is denied.');
+      // Request permission if not granted
 
-      return;
+      status = await Permission.locationWhenInUse.request();
+
+      // status = await Permission.location.request();
+// await requestLocationPermission();
+      // await Permission.location.request();
+      //  bool isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
+
+      // await Geolocator.checkPermission();
+      await Geolocator.requestPermission();
+
+      if (status.isDenied) {
+        // Handle case when permission is still not granted
+        print('Location permission is denied.');
+
+        return;
+      }
+    }
+
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      LocationPermission permission;
+      permission = await Geolocator.requestPermission();
+
+      setState(() {
+        latitude = position.latitude;
+        longitude = position.longitude;
+      });
+
+      // Call the method to send location when the coordinates are available
+      if (latitude != null && longitude != null) {
+        await _sendLocation();
+      }
+    } catch (e) {
+      print("Error getting location: $e");
     }
   }
 
-  try {
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
-    LocationPermission permission;
-   permission = await Geolocator.requestPermission();
-   
-    setState(() {
-      latitude = position.latitude;
-      longitude = position.longitude;
-    });
+  Future<void> _sendLocation() async {
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
 
-    // Call the method to send location when the coordinates are available
-    if (latitude != null && longitude != null) {
-      await _sendLocation();
-    }
-  } catch (e) {
-    print("Error getting location: $e");
-  }
-}
+    try {
+      // Get the language display value from the app state
+      String language = Provider.of<AppState>(context, listen: false).display;
 
-Future<void> _sendLocation() async {
-  AuthProvider authProvider =
-      Provider.of<AuthProvider>(context, listen: false);
-
-  try {
-    // Get the language display value from the app state
-    String language = Provider.of<AppState>(context, listen: false).display;
-
-    final response = await Api().sendLocation(
-      authProvider,
-      latitude!,
-      longitude!,
-      language,  // Include the language in the request
-    );
+      final response = await Api().sendLocation(
+        authProvider,
+        latitude!,
+        longitude!,
+        language, // Include the language in the request
+      );
 
       if (response.isNotEmpty) {
         // Parse the JSON string to get the list of stores
@@ -97,9 +95,8 @@ Future<void> _sendLocation() async {
           List<dynamic> stores = jsonResponse['filteredStores'];
 
           // Convert each item in the list to a Map
-          List<Map<String, dynamic>> validStores = stores
-              .whereType<Map<String, dynamic>>()
-              .toList();
+          List<Map<String, dynamic>> validStores =
+              stores.whereType<Map<String, dynamic>>().toList();
 
           setState(() {
             filteredStores = validStores;
@@ -113,83 +110,79 @@ Future<void> _sendLocation() async {
     }
   }
 
+  void _showStoreOptions(BuildContext context, Map<String, dynamic> store) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        bool isEnglish = Provider.of<AppState>(context).isEnglish;
+        AuthProvider authProvider =
+            Provider.of<AuthProvider>(context, listen: false);
 
-
-void _showStoreOptions(BuildContext context, Map<String, dynamic> store) {
-  showModalBottomSheet(
-    context: context,
-    builder: (BuildContext context) {
-      bool isEnglish = Provider.of<AppState>(context).isEnglish;
-      AuthProvider authProvider =
-          Provider.of<AuthProvider>(context, listen: false);
-
-      return Container(
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                // Handle "Info about this store" option
-                Navigator.pop(context); // Close the bottom sheet
-                // Add your logic to show store info
-              },
-              child: Text(
-                isEnglish
-                    ? 'Info about this store'
-                    : 'معلومات عن هذا المتجر',
+        return Container(
+          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  // Handle "Info about this store" option
+                  Navigator.pop(context); // Close the bottom sheet
+                  // Add your logic to show store info
+                },
+                child: Text(
+                  isEnglish ? 'Info about this store' : 'معلومات عن هذا المتجر',
+                ),
               ),
-            ),
-            SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () async {
-                // Handle "Show discounts" option
-                Navigator.pop(context); // Close the bottom sheet
+              SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () async {
+                  // Handle "Show discounts" option
+                  Navigator.pop(context); // Close the bottom sheet
 
-                // Display sub-context bottom menu
-                _showSubContextBottomMenu(context, store);
-                // Add the logic to get store details by calling the API
+                  // Display sub-context bottom menu
+                  _showSubContextBottomMenu(context, store);
+                  // Add the logic to get store details by calling the API
 
-                // Get store ID
-                int storeId = store['id'];
+                  // Get store ID
+                  int storeId = store['id'];
 
-                // Call the API to get store details
-                String storeDetails = await Api().getStoreDetails(authProvider, store['id']);
+                  // Call the API to get store details
+                  String storeDetails =
+                      await Api().getStoreDetails(authProvider, store['id']);
 
-                // Parse the store details JSON
-                Map<String, dynamic> storeDetailsMap = jsonDecode(storeDetails);
+                  // Parse the store details JSON
+                  Map<String, dynamic> storeDetailsMap =
+                      jsonDecode(storeDetails);
 
-                // Access the "discounts" list
-                List<dynamic> discounts = storeDetailsMap['store']['discounts'];
+                  // Access the "discounts" list
+                  List<dynamic> discounts =
+                      storeDetailsMap['store']['discounts'];
 
-                // Iterate over each discount
-                for (var discount in discounts) {
-                  // Access discount properties
-                  int id = discount['id'];
-                  double percent = double.parse(discount['percent']);
-                  String category = discount['category'];
-                  // ... access other properties as needed
+                  // Iterate over each discount
+                  for (var discount in discounts) {
+                    // Access discount properties
+                    int id = discount['id'];
+                    double percent = double.parse(discount['percent']);
+                    String category = discount['category'];
+                    // ... access other properties as needed
 
-                  // Now, you can use these properties as needed.
-                  // print('Discount ID: $id, Percent: $percent, Category: $category');
-                }
-              },
-              child: Text(
-                isEnglish ? 'Show discounts' : 'عرض الخصومات',
+                    // Now, you can use these properties as needed.
+                    // print('Discount ID: $id, Percent: $percent, Category: $category');
+                  }
+                },
+                child: Text(
+                  isEnglish ? 'Show discounts' : 'عرض الخصومات',
+                ),
               ),
-            ),
-          ],
-        ),
-      );
-    },
-  );
-}
+            ],
+          ),
+        );
+      },
+    );
+  }
 
-
-
-
-void _showSubContextBottomMenu(BuildContext context, Map<String, dynamic> store) {
+  void _showSubContextBottomMenu(BuildContext context, Map<String, dynamic> store) {
   showModalBottomSheet(
     context: context,
     builder: (BuildContext context) {
@@ -198,49 +191,69 @@ void _showSubContextBottomMenu(BuildContext context, Map<String, dynamic> store)
 
       return Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Hello', // Display your "Hello" text here
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              'Store ID: ${store['id']}',
-              style: TextStyle(fontSize: 16),
-            ),
-            Text(
-              'Store ID: ${store['discounts']}',
-              style: TextStyle(fontSize: 16),
-            ),
-            SizedBox(height: 20),
-            // Check if discounts is null or empty
-   
-
-
-
-
-            SizedBox(height: 20),
-            Align(
-              // Set alignment based on language
-              alignment: isEnglish ? Alignment.bottomRight : Alignment.bottomLeft,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Handle the "العودة : Back" button
-                  Navigator.pop(context); // Close the sub-context bottom sheet
-                  _showStoreOptions(context, store);
-                },
-                child: Text(
-                  isEnglish ? 'Back' : 'العودة',
-                  style: TextStyle(fontSize: 16),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: isEnglish ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                isEnglish
+                  ? 'Discounts ${store['name']}'
+                  : 'خصومات  ${store['name']}',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-          ],
+
+              if (store['discounts'] == null || store['discounts'].isEmpty)
+                Text(
+                  isEnglish ? 'No discounts available now' : 'لا توجد خصومات متاحة الآن',
+                  style: TextStyle(fontSize: 16),
+                )
+              else
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Column(
+                    children: store['discounts'].entries.map<Widget>((entry) {
+                      Map<String, dynamic> discount = entry.value as Map<String, dynamic>;
+
+                      return Container(
+                        width: MediaQuery.of(context).size.width - 100,
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Text(
+                          isEnglish
+                            ? 'Discount on: ${discount['category']} Percent: ${discount['percent']}%'
+                            : '%${discount['percent']}:نسبة الخصم  ${discount['category']}:خصم على',
+                          style: TextStyle(fontSize: 16),
+                          textAlign: isEnglish ? TextAlign.left : TextAlign.right,
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+
+              SizedBox(height: 20),
+              Align(
+                alignment: isEnglish ? Alignment.bottomRight : Alignment.bottomLeft,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _showStoreOptions(context, store);
+                  },
+                  child: Text(
+                    isEnglish ? 'Back' : 'العودة',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       );
     },
@@ -251,23 +264,19 @@ void _showSubContextBottomMenu(BuildContext context, Map<String, dynamic> store)
   List<Widget> buildStoreContainers() {
     return filteredStores.map((store) {
       return GestureDetector(
-      onTap: () {
-        _showStoreOptions(context,store);
-      },
-      child:  Container(
-        width: 500,
-        margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-        decoration: BoxDecoration(
-          color: Color.fromARGB(255, 3, 12, 19),
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Column(
-          children: [
-      
-      
-
-
-      Container(
+        onTap: () {
+          _showStoreOptions(context, store);
+        },
+        child: Container(
+          width: 500,
+          margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+          decoration: BoxDecoration(
+            color: Color.fromARGB(255, 3, 12, 19),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Column(
+            children: [
+              Container(
                 width: 500,
                 // height: 100,
                 margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -300,9 +309,9 @@ void _showSubContextBottomMenu(BuildContext context, Map<String, dynamic> store)
                           },
                           blendMode: BlendMode.dstIn,
                           child: Image.network(
-  'https://mhfatha.net/FrontEnd/assets/images/store_images/${store['photo']}', // Replace with your actual image URL
-  fit: BoxFit.fill,
-),
+                            'https://mhfatha.net/FrontEnd/assets/images/store_images/${store['photo']}', // Replace with your actual image URL
+                            fit: BoxFit.fill,
+                          ),
                         ),
                       ),
                     ),
@@ -329,7 +338,6 @@ void _showSubContextBottomMenu(BuildContext context, Map<String, dynamic> store)
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                        
                           Row(
                             children: [
                               Icon(Icons.location_on,
@@ -350,130 +358,117 @@ void _showSubContextBottomMenu(BuildContext context, Map<String, dynamic> store)
                               ),
                             ],
                           ),
-
                         ],
                       ),
                     ),
-                   
                   ],
                 ),
               )
-       
-
-
-          ],
+            ],
+          ),
         ),
-      ),
-    );
+      );
     }).toList();
   }
-  @override
 
+  @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
     Size size = MediaQuery.of(context).size;
 
-    AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
 
     return DirectionalityWrapper(
       child: Scaffold(
-      body:  Container(
-    width: size.width, // Set the width of the container
-    child:SingleChildScrollView(
-        child: Column(
-          children: [
-           SizedBox(
-            height: 100,
-           ),
-
-            Container(
-  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-  alignment: isEnglish ? Alignment.centerLeft : Alignment.centerRight,
-  child: Row(
-    children: [
-      Icon(Icons.store, color: Colors.black, size: 24),
-      SizedBox(width: 10),
-      Text(
-        isEnglish ? 'Nearby Stores' : 'متاجر قريبة',
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ],
-  ),
-),
-
-         if (filteredStores.isNotEmpty)
-              Container(
-                // Add your custom properties for the CarouselSlider...
-                child: CarouselSlider(
-                  items: buildStoreContainers(),
-                  options: CarouselOptions(
-                    autoPlay: true,
-                    aspectRatio: 22 / 12,
-                    enlargeCenterPage: false,
-                    enableInfiniteScroll: true,
-                    autoPlayCurve: Curves.fastOutSlowIn,
-                    autoPlayAnimationDuration: Duration(milliseconds: 4000),
-                    viewportFraction: 0.5,
+        body: Container(
+          width: size.width, // Set the width of the container
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 100,
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  alignment:
+                      isEnglish ? Alignment.centerLeft : Alignment.centerRight,
+                  child: Row(
+                    children: [
+                      Icon(Icons.store, color: Colors.black, size: 24),
+                      SizedBox(width: 10),
+                      Text(
+                        isEnglish ? 'Nearby Stores' : 'متاجر قريبة',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-
-Padding(
-  padding: EdgeInsets.symmetric(vertical: 20),
-  child: Row(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    children: [
-      buildIconWithText(Icons.qr_code, 'Scan QR', 'فحص كود'),
-      buildIconWithText(Icons.store, 'Nearby', 'قريبة'),
-      buildIconWithText(Icons.search, 'Search', 'البحث'),
-      buildIconWithText(Icons.local_offer, 'Top Discount', 'أعلى خصم'),
-    ],
-  ),
-),
-
-
-          ],
+                if (filteredStores.isNotEmpty)
+                  Container(
+                    // Add your custom properties for the CarouselSlider...
+                    child: CarouselSlider(
+                      items: buildStoreContainers(),
+                      options: CarouselOptions(
+                        autoPlay: true,
+                        aspectRatio: 22 / 12,
+                        enlargeCenterPage: false,
+                        enableInfiniteScroll: true,
+                        autoPlayCurve: Curves.fastOutSlowIn,
+                        autoPlayAnimationDuration: Duration(milliseconds: 4000),
+                        viewportFraction: 0.5,
+                      ),
+                    ),
+                  ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      buildIconWithText(Icons.qr_code, 'Scan QR', 'فحص كود'),
+                      buildIconWithText(Icons.store, 'Nearby', 'قريبة'),
+                      buildIconWithText(Icons.search, 'Search', 'البحث'),
+                      buildIconWithText(
+                          Icons.local_offer, 'Top Discount', 'أعلى خصم'),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
+        bottomNavigationBar: BottomNav(initialIndex: 0),
       ),
-      ),
-      bottomNavigationBar: BottomNav(initialIndex: 0),
-    ),
     );
   }
 
-Widget buildIconWithText(IconData icon, String englishText, String arabicText) {
-  final isEnglish = Provider.of<AppState>(context).isEnglish;
+  Widget buildIconWithText(
+      IconData icon, String englishText, String arabicText) {
+    final isEnglish = Provider.of<AppState>(context).isEnglish;
 
-  return GestureDetector(
-    onTap: () {
-
-    },
-    child: Column(
-      children: [
-        CircleAvatar(
-          radius: 30,
-          backgroundColor: Colors.blue,
-          child: Icon(
-            icon,
-            color: Colors.white,
-            size: 30,
+    return GestureDetector(
+      onTap: () {},
+      child: Column(
+        children: [
+          CircleAvatar(
+            radius: 30,
+            backgroundColor: Colors.blue,
+            child: Icon(
+              icon,
+              color: Colors.white,
+              size: 30,
+            ),
           ),
-        ),
-        SizedBox(height: 8),
-        Text(
-          isEnglish ? englishText : arabicText,
-          style: TextStyle(fontSize: 14),
-        ),
-      ],
-    ),
-  );
+          SizedBox(height: 8),
+          Text(
+            isEnglish ? englishText : arabicText,
+            style: TextStyle(fontSize: 14),
+          ),
+        ],
+      ),
+    );
+  }
 }
-
-}
-
-
-  
-                 
