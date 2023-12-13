@@ -196,9 +196,6 @@ void _showSubContextBottomMenu(BuildContext context, Map<String, dynamic> store)
       bool isEnglish = Provider.of<AppState>(context).isEnglish;
       AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
 
-      // Access the "discounts" list
-      List<dynamic>? discounts = store['discounts'];
-
       return Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
         child: Column(
@@ -218,19 +215,11 @@ void _showSubContextBottomMenu(BuildContext context, Map<String, dynamic> store)
             ),
             SizedBox(height: 20),
             // Check if discounts is null or empty
-            if (discounts == null || discounts.isEmpty)
-              Text(
-                isEnglish ? 'No discounts available' : 'لا يوجد خصومات',
-                style: TextStyle(fontSize: 16),
-              )
-            else
-              // Display discounts as text
-              
-              for (var discount in discounts)
-                Text(
-                  'Discount ID: ${discount['id']}, Percent: ${discount['percent']}, Category: ${discount['category']}',
-                  style: TextStyle(fontSize: 16),
-                ),
+   
+
+
+
+   
             SizedBox(height: 20),
             Align(
               // Set alignment based on language
