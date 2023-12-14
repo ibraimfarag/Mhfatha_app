@@ -319,7 +319,7 @@ Navigator.pushNamed(context, '/store-info', arguments: store);
                     ),
                     // Text widget for store name
                     Container(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(15),
                       child: Align(
                         alignment: Alignment.centerRight,
                         child: Text(
