@@ -50,6 +50,7 @@ dependencies:
   carousel_slider: ^4.2.1
   geolocator: ^10.1.0
   permission_handler: ^11.0.1
+  url_launcher: ^6.2.2
 
 
 dev_dependencies:

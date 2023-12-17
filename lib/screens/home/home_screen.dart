@@ -318,22 +318,27 @@ Navigator.pushNamed(context, '/store-info', arguments: store);
                       ),
                     ),
                     // Text widget for store name
-                    Container(
-                      padding: const EdgeInsets.all(15),
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Text(
-                          ' ${store['name']}',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: AppVariables.serviceFontFamily,
-                            fontSize: 14,
-                          ),
-                          textAlign: TextAlign.right,
-                        ),
-                      ),
-                    ),
+                  Container(
+  padding: const EdgeInsets.all(15),
+  child: Align(
+    alignment: Provider.of<AppState>(context).isEnglish
+        ? Alignment.centerLeft
+        : Alignment.centerRight,
+    child: Text(
+      ' ${store['name']}',
+      style: TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+        fontFamily: AppVariables.serviceFontFamily,
+        fontSize: 14,
+      ),
+      textAlign: Provider.of<AppState>(context).isEnglish
+          ? TextAlign.left
+          : TextAlign.right,
+    ),
+  ),
+),
+
                     // Row for buttons with icons
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -350,13 +355,14 @@ Navigator.pushNamed(context, '/store-info', arguments: store);
                                   // Handle onPressed for "يبعد 5 كم" button
                                 },
                                 child: Text(
-                                  'يبعد  ${store['distance']}',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontFamily: AppVariables.serviceFontFamily,
-                                  ),
-                                ),
+  '${Provider.of<AppState>(context).isEnglish ? 'Distance: ' : 'يبعد '}${store['distance']}',
+  style: TextStyle(
+    color: Colors.white,
+    fontSize: 12,
+    fontFamily: AppVariables.serviceFontFamily,
+  ),
+),
+
                               ),
                             ],
                           ),

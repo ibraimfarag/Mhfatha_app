@@ -92,7 +92,7 @@ export'package:geolocator/geolocator.dart';
 
 // /* --------------------------- permission handler --------------------------- */
 
-
+export 'package:url_launcher/url_launcher.dart';
 
 
 // /* -------------------------------------------------------------------------- */
