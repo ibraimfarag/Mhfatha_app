@@ -91,10 +91,11 @@ class StoreInfoScreen extends StatelessWidget {
                           children: [
                             Container(
                               height: 200,
+                              width:500,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(15),
-                                  topRight: Radius.circular(15),
+                                  topLeft: Radius.circular(0),
+                                  topRight: Radius.circular(0),
                                 ),
                                 child: ShaderMask(
                                   shaderCallback: (Rect bounds) {
@@ -111,7 +112,7 @@ class StoreInfoScreen extends StatelessWidget {
                                   blendMode: BlendMode.dstIn,
                                   child: Image.network(
                                     'https://mhfatha.net/FrontEnd/assets/images/store_images/${storeData?['photo']}',
-                                    fit: BoxFit.fill,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
@@ -378,13 +379,12 @@ if (phoneNumber != null && phoneNumber.isNotEmpty) {
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Column(
-                            children: storeData?['discounts']
-                                .entries
-                                .map<Widget>((entry) {
-                              Map<String, dynamic> discount =
-                                  entry.value as Map<String, dynamic>;
-
+children: (storeData?['discounts'] is List<dynamic>
+  ? (storeData?['discounts'] as List<dynamic>)
+  : [])
+  .map<Widget>((discount) {
                               return Container(
+                                width: 250,
                                 margin: const EdgeInsets.all(10),
                                 padding: const EdgeInsets.all(20),
                                 decoration: BoxDecoration(

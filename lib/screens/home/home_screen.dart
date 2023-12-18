@@ -217,10 +217,12 @@ Navigator.pushNamed(context, '/store-info', arguments: store);
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Column(
-                    children: store['discounts'].entries.map<Widget>((entry) {
-                      Map<String, dynamic> discount = entry.value as Map<String, dynamic>;
-
-                      return Container(
+                    // children: store['discounts'].entries.map<Widget>((entry) {
+                    //   Map<String, dynamic> discount = entry.value as Map<String, dynamic>;
+children: (store?['discounts'] is List<dynamic>
+  ? (store?['discounts'] as List<dynamic>)
+  : [])
+  .map<Widget>((discount) {                      return Container(
                         width: MediaQuery.of(context).size.width - 100,
                         margin: const EdgeInsets.all(10),
                         padding: const EdgeInsets.all(20),
@@ -291,7 +293,7 @@ Navigator.pushNamed(context, '/store-info', arguments: store);
                     // Image with gradient
                     Container(
                       height: 100,
-                      // width: 250,
+                      width: 180,
                       child: ClipRRect(
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(15),
@@ -312,7 +314,7 @@ Navigator.pushNamed(context, '/store-info', arguments: store);
                           blendMode: BlendMode.dstIn,
                           child: Image.network(
                             'https://mhfatha.net/FrontEnd/assets/images/store_images/${store['photo']}', // Replace with your actual image URL
-                            fit: BoxFit.fill,
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
