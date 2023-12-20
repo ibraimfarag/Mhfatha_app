@@ -51,6 +51,7 @@ dependencies:
   geolocator: ^10.1.0
   permission_handler: ^11.0.1
   url_launcher: ^6.2.2
+  qr_code_scanner: ^1.0.1
 
 
 dev_dependencies:

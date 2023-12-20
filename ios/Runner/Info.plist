@@ -8,6 +8,10 @@
 <array>
     <string>tel</string>
 </array>
+<key>io.flutter.embedded_views_preview</key>
+<true/>
+<key>NSCameraUsageDescription</key>
+<string>This app needs camera access to scan QR codes</string>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>We need your location to provide better service.</string>
     <key>NSLocationUsageDescription</key>

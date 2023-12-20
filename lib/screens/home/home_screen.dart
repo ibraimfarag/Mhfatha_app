@@ -15,6 +15,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   double? latitude;
   double? longitude;
+ // Declare a GlobalKey for the QR code scanner
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+
+  // Declare a controller for the QR code scanner
+  late QRViewController controller;
 
   List<Map<String, dynamic>> filteredStores = [];
 
@@ -380,7 +385,33 @@ children: (store?['discounts'] is List<dynamic>
       );
     }).toList();
   }
+ // Function to show the QR code scanner
+  void _showQRScanner() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: 300,
+          child: QRView(
+            key: qrKey,
+            onQRViewCreated: _onQRViewCreated,
+          ),
+        );
+      },
+    );
+  }
 
+  // Function to handle QR code view creation
+  void _onQRViewCreated(QRViewController controller) {
+    this.controller = controller;
+    controller.scannedDataStream.listen((scanData) {
+      // Handle the scanned QR code data
+      print("Scanned QR code data: $scanData");
+
+      // Add your logic here to process the scanned QR code data
+      // For example, you can navigate to a new screen or perform an action based on the data.
+    });
+  }
   @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
@@ -460,7 +491,8 @@ children: (store?['discounts'] is List<dynamic>
     final isEnglish = Provider.of<AppState>(context).isEnglish;
 
     return GestureDetector(
-      onTap: () {},
+      onTap: () {        _showQRScanner();
+},
       child: Column(
         children: [
           CircleAvatar(

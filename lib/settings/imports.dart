@@ -94,7 +94,8 @@ export'package:geolocator/geolocator.dart';
 
 export 'package:url_launcher/url_launcher.dart';
 
-
+// QR
+export 'package:qr_code_scanner/qr_code_scanner.dart';
 // /* -------------------------------------------------------------------------- */
 // /* --------------------------------- Widgets -------------------------------- */
 // /* -------------------------------------------------------------------------- */
