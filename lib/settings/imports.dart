@@ -30,6 +30,9 @@ export 'package:mhfatha/screens/Auth/register_screen.dart';
 // /* -------------------------------- settings -------------------------------- */
 export 'package:mhfatha/screens/settings/settings.dart';
 
+/* -------------------------------- QrScreen ------------------------ */
+export 'package:mhfatha/screens/QR/qr_screen.dart';
+
 
 // /* -------------------------------- settings -------------------------------- */
 export 'package:mhfatha/layout/DirectionalityWrapper.dart';

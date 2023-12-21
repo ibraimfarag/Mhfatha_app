@@ -469,11 +469,11 @@ children: (store?['discounts'] is List<dynamic>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      buildIconWithText(Icons.qr_code, 'Scan QR', 'فحص كود'),
-                      buildIconWithText(Icons.store, 'Nearby', 'قريبة'),
-                      buildIconWithText(Icons.search, 'Search', 'البحث'),
+                      buildIconWithText(Icons.qr_code, 'Scan QR', 'فحص كود',() {_showQRScanner();}),
+                      buildIconWithText(Icons.store, 'Nearby', 'قريبة',() {}),
+                      buildIconWithText(Icons.search, 'Search', 'البحث',() {}),
                       buildIconWithText(
-                          Icons.local_offer, 'Top Discount', 'أعلى خصم'),
+                          Icons.local_offer, 'Top Discount', 'أعلى خصم',() {}),
                     ],
                   ),
                 ),
@@ -486,31 +486,30 @@ children: (store?['discounts'] is List<dynamic>
     );
   }
 
-  Widget buildIconWithText(
-      IconData icon, String englishText, String arabicText) {
-    final isEnglish = Provider.of<AppState>(context).isEnglish;
+Widget buildIconWithText(
+  IconData icon, String englishText, String arabicText, VoidCallback onTap) {
+  final isEnglish = Provider.of<AppState>(context).isEnglish;
 
-    return GestureDetector(
-      onTap: () {        _showQRScanner();
-},
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: 30,
-            backgroundColor: Colors.blue,
-            child: Icon(
-              icon,
-              color: Colors.white,
-              size: 30,
-            ),
+  return GestureDetector(
+    onTap: onTap,
+    child: Column(
+      children: [
+        CircleAvatar(
+          radius: 30,
+          backgroundColor: Colors.blue,
+          child: Icon(
+            icon,
+            color: Colors.white,
+            size: 30,
           ),
-          SizedBox(height: 8),
-          Text(
-            isEnglish ? englishText : arabicText,
-            style: TextStyle(fontSize: 14),
-          ),
-        ],
-      ),
-    );
-  }
+        ),
+        SizedBox(height: 8),
+        Text(
+          isEnglish ? englishText : arabicText,
+          style: TextStyle(fontSize: 14),
+        ),
+      ],
+    ),
+  );
+}
 }
