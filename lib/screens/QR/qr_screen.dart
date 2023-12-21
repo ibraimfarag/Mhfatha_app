@@ -1,144 +1,98 @@
 // lib/screens/QR/qr_screen.dart
 
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
 
 import 'package:mhfatha/settings/imports.dart';
+class QrScanner extends StatefulWidget {
+  @override
+  _QrScannerState createState() => _QrScannerState();
+}
 
-class QrScanner extends StatelessWidget {
+class _QrScannerState extends State<QrScanner> {
+  late QRViewController controller;
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  Barcode? scannedData; // Variable to store the scanned data
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool isEnglish = Provider.of<AppState>(context).isEnglish;
-    bool isDarkMode = Provider.of<AppState>(context).isDarkMode;
-    AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+    // ... (unchanged code)
 
-    
     return DirectionalityWrapper(
       child: Scaffold(
-      appBar: AppBar(
-        title: Text(isEnglish ? 'Settings' : 'الاعدادات'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Profile Section
-            Row(
-              children: [
-                CircleAvatar(
-                  radius: 30,
-                  // Add your profile image here
-                  backgroundImage: AssetImage('assets/profile/profile_img.jpg'),
-                ),
-                SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(' ${authProvider.user!['first_name']}'),
-                    // Other profile details...
-                  ],
-                ),
-              ],
-            ),
-
-            SizedBox(height: 20),
-
-            // Language Section
-              Row(
-              children: [
-                Icon(Icons.language),
-                SizedBox(width: 10),
-                Text(isEnglish ? 'Language' : 'اللغة'),
-                SizedBox(width: 10),
-                DropdownButton<String>(
-                  value: isEnglish ? 'English' : 'Arabic',
-                  onChanged: (String? newValue) {
-                    if (newValue == 'English') {
-                      Provider.of<AppState>(context, listen: false).toggleLanguage();
-                    } else {
-                      Provider.of<AppState>(context, listen: false).toggleLanguage();
-                    }
-                  },
-                  items: <String>['English', 'Arabic'].map((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
-              ],
-            ),
-
-            // Other Settings...
-            buildSettingItem(context, Icons.settings, 'Account Settings', 'إعدادات الحساب', () {
-              // Navigate to account settings screen
-              // Navigator.pushNamed(context, Routes.accountSettings);
-            }),
-
-            buildSettingItem(context, Icons.privacy_tip, 'Privacy', 'الخصوصية', () {
-              // Implement privacy logic
-            }),
-
-            buildSettingItem(context, Icons.report, 'Report', 'الإبلاغ', () {
-              // Implement report logic
-            }),
-
-            buildSettingItem(context, Icons.message, 'Messages', 'الرسائل', () {
-              // Implement messages logic
-            }),
-
-          ListTile(
-            title: Text('Dark Mode'),
-            trailing: Switch(
-              value: isDarkMode,
-              onChanged: (value) {
-            Provider.of<AppState>(context, listen: false).toggleDarkMode();
-
-
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.arrow_forward),
+              onPressed: () {
+                // Navigate back to the previous screen
+                Navigator.pop(context);
               },
+              // Change the color of the back button icon
+              color: Color.fromARGB(255, 7, 0, 34),
             ),
+          ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: QRView(
+                  key: qrKey,
+                  onQRViewCreated: _onQRViewCreated,
+                ),
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Scanned Data: ${scannedData?.code ?? "No data"}',
+                style: TextStyle(fontSize: 16),
+              ),
+            ],
           ),
-            // Logout Button
-         ElevatedButton(
-  onPressed: () {
-    // Call the logout method from AuthProvider
-    Provider.of<AuthProvider>(context, listen: false).logout();
-
-    // Navigate to the login screen or perform any other necessary actions
-    Navigator.pushNamedAndRemoveUntil(context, Routes.login, (route) => false);
-  },
-
-  child: Text(isEnglish ? 'Logout' : 'تسجيل الخروج'),
-),
-
-          ],
         ),
-      ),
-      bottomNavigationBar: BottomNav(initialIndex: 1),
-    )
-    );
-  }
-
-  Widget buildSettingItem(
-    BuildContext context,
-    IconData icon,
-    String englishTitle,
-    String arabicTitle,
-    VoidCallback onTap,
-  ) {
-    bool isEnglish = Provider.of<AppState>(context).isEnglish;
-
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child: Row(
-          children: [
-            Icon(icon),
-            SizedBox(width: 10),
-            Text(isEnglish ? englishTitle : arabicTitle),
-          ],
-        ),
+        bottomNavigationBar: BottomNav(initialIndex: 1),
       ),
     );
   }
+
+void _onQRViewCreated(QRViewController controller) {
+  AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+  this.controller = controller;
+  controller.scannedDataStream.listen((scanData) async {
+    try {
+            String lang = Provider.of<AppState>(context, listen: false).display;
+
+      if (scanData is Barcode) {
+        String qrText = scanData.code!;
+
+     
+            String lang = Provider.of<AppState>(context, listen: false).display;
+
+        String response = await Api().getStoreDetailsByQR(authProvider, qrText, lang);
+Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => QrResponse(responseData: response),
+          ),
+        );
+
+
+        // print('Store QR Response: $response');
+      }
+    } catch (e) {
+      print('Error handling QR data: $e');
+    }
+  });
+}
 }

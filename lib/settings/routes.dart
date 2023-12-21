@@ -8,6 +8,7 @@ class Routes {
   static  String settings = '/settings';
   static String storeInfo = '/store-info';
   static String qrscanner = '/qr-scanner';
+  static String qrresponse = '/qr-response';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -17,6 +18,7 @@ class Routes {
       settings: (context) =>  SettingsScreen(),
       storeInfo: (context) => StoreInfoScreen(),
       qrscanner: (context) => QrScanner(),
+      qrresponse: (context) => QrResponse(responseData: '',),
 
       
     };

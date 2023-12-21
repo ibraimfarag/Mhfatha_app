@@ -123,6 +123,42 @@ class Api {
   }
 
 
+  // /* -------------------------------------------------------------------------- */
+  // /* ---------------------------- Store QR Code API -------------------------- */
+  // /* -------------------------------------------------------------------------- */
+
+  Future<String> getStoreDetailsByQR(AuthProvider authProvider, String encryptedStoreID, String lang) async {
+    final url = Uri.parse('$baseUrl/store-qr');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${authProvider.token}',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'encryptedStoreID': encryptedStoreID,
+          'lang': lang,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        // print('Store QR Response Data: $jsonResponse');
+
+        // Convert the response data to a JSON string
+        String jsonString = jsonEncode(jsonResponse);
+
+        return jsonString;
+      } else {
+        throw Exception('Failed to get store details by QR. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
+      }
+    } catch (e) {
+      print('Error getting store details by QR: $e');
+      return ''; // Return an empty string or handle the error as needed
+    }
+  }
 
 
 

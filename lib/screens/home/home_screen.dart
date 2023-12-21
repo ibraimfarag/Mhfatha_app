@@ -238,7 +238,7 @@ children: (store?['discounts'] is List<dynamic>
                         child: Text(
                           isEnglish
                             ? 'Discount on: ${discount['category']} Percent: ${discount['percent']}%'
-                            : '%${discount['percent']}:نسبة الخصم  ${discount['category']}:خصم على',
+                            : 'خصم على : ${discount['category']}  نسبة الخصم : ${discount['percent']}% ',
                           style: TextStyle(fontSize: 16),
                           textAlign: isEnglish ? TextAlign.left : TextAlign.right,
                         ),
