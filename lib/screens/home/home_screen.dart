@@ -278,6 +278,7 @@ children: (store?['discounts'] is List<dynamic>
         },
         child: Container(
           width: 500,
+          // height: 900,
           margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
           decoration: BoxDecoration(
             color: Color.fromARGB(255, 3, 12, 19),
@@ -287,7 +288,7 @@ children: (store?['discounts'] is List<dynamic>
             children: [
               Container(
                 width: 500,
-                // height: 100,
+                // height: 900,
                 margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                 decoration: BoxDecoration(
                   color: Color.fromARGB(255, 3, 12, 19),
@@ -326,7 +327,7 @@ children: (store?['discounts'] is List<dynamic>
                     ),
                     // Text widget for store name
                   Container(
-  padding: const EdgeInsets.all(15),
+  padding: const EdgeInsets.symmetric(horizontal: 15 ,vertical: 5),
   child: Align(
     alignment: Provider.of<AppState>(context).isEnglish
         ? Alignment.centerLeft
@@ -469,7 +470,7 @@ children: (store?['discounts'] is List<dynamic>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      buildIconWithText(Icons.qr_code, 'Scan QR', 'فحص كود',() {_showQRScanner();}),
+                      buildIconWithText(Icons.qr_code, 'Scan QR', 'فحص كود',() {Navigator.pushNamed(context, '/qr-scanner');}),
                       buildIconWithText(Icons.store, 'Nearby', 'قريبة',() {}),
                       buildIconWithText(Icons.search, 'Search', 'البحث',() {}),
                       buildIconWithText(
