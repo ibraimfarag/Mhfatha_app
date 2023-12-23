@@ -36,6 +36,9 @@ export 'package:mhfatha/screens/QR/qr_screen.dart';
 export 'package:mhfatha/screens/QR/qr_response.dart';
 
 
+export 'package:mhfatha/screens/QR/get_discount.dart';
+
+
 // /* -------------------------------- settings -------------------------------- */
 export 'package:mhfatha/layout/DirectionalityWrapper.dart';
 

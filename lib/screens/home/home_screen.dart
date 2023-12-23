@@ -28,7 +28,20 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _getLocation();
   }
+  int calculateDaysRemaining(String endDate) {
+    DateTime endDateTime = DateTime.parse(endDate);
+    DateTime now = DateTime.now();
+    Duration difference = endDateTime.difference(now);
+    return difference.inDays;
+  }
 
+  // Function to get the correct Arabic word for days
+  String getArabicDaysWord(int days) {
+    return days > 10 ? 'يوم' : 'أيام';
+  }
+  String getEnglishDaysWord(int days) {
+    return days > 1 ? 'Days' : 'Day';
+  }
   Future<void> _getLocation() async {
     // Check if permission is granted
     var status = await Permission.locationWhenInUse.status;
@@ -235,13 +248,29 @@ children: (store?['discounts'] is List<dynamic>
                           color: Colors.grey[200],
                           borderRadius: BorderRadius.circular(30),
                         ),
-                        child: Text(
-                          isEnglish
-                            ? 'Discount on: ${discount['category']} Percent: ${discount['percent']}%'
-                            : 'خصم على : ${discount['category']}  نسبة الخصم : ${discount['percent']}% ',
-                          style: TextStyle(fontSize: 16),
-                          textAlign: isEnglish ? TextAlign.left : TextAlign.right,
-                        ),
+                        child:  Column(children: [
+                                Row(children: [Text(
+                                isEnglish
+                                    ? 'Discount on: ${discount['category']} '
+                                    : 'خصم على : ${discount['category']} ',
+                                style: TextStyle(fontSize: 14),
+                                textAlign: isEnglish ? TextAlign.left : TextAlign.right,
+                              )],),
+                                Row(children: [Text(
+                                isEnglish
+                                    ? 'Percent: ${discount['percent']}%'
+                                    : 'نسبة الخصم : ${discount['percent']}% ',
+                                style: TextStyle(fontSize: 14),
+                                textAlign: isEnglish ? TextAlign.left : TextAlign.right,
+                              ),],),
+                              Row(children: [Text(
+                                    isEnglish
+                                      ? 'Days Remaining: ${calculateDaysRemaining(discount['end_date'])} ${getEnglishDaysWord(calculateDaysRemaining(discount['end_date']))}'
+                                        : 'الأيام المتبقية: ${calculateDaysRemaining(discount['end_date'])} ${getArabicDaysWord(calculateDaysRemaining(discount['end_date']))}',
+                                    style: TextStyle(fontSize: 12, color: Colors.blue),
+                                    textAlign: isEnglish ? TextAlign.left : TextAlign.right,
+                                  ),],)
+                              ],) 
                       );
                     }).toList(),
                   ),

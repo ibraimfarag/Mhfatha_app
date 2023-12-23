@@ -163,6 +163,38 @@ class Api {
 
 
 
+  Future<void> postDiscountDetails(AuthProvider authProvider, int userID, int storeID, int discountID, double totalPayment) async {
+    final url = Uri.parse('$baseUrl/discounts-post');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${authProvider.token}',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'user_id': userID,
+          'store_id': storeID,
+          'discount_id': discountID,
+          'total_payment': totalPayment,
+          'lang': 'ar', // Adjust the language as needed
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        print('Response Data: $jsonResponse');
+        // Handle the response as needed
+      } else {
+        throw Exception('Failed to post discount details. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
+      }
+    } catch (e) {
+      print('Error posting discount details: $e');
+      // Handle the error as needed
+    }
+  }
+
 
 
 }

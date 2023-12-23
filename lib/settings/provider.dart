@@ -20,6 +20,9 @@ class AuthProvider extends ChangeNotifier {
   // Getter for the user data
   Map<String, dynamic>? get user => _user;
 
+
+  int? get userId => _user?['id'];
+
   // Load authentication data from SharedPreferences
   Future<void> loadAuthData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

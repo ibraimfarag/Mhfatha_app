@@ -13,7 +13,20 @@ class QrResponse extends StatefulWidget {
 }
 
 class _QrResponseState extends State<QrResponse> {
-  
+    int calculateDaysRemaining(String endDate) {
+    DateTime endDateTime = DateTime.parse(endDate);
+    DateTime now = DateTime.now();
+    Duration difference = endDateTime.difference(now);
+    return difference.inDays;
+  }
+
+  // Function to get the correct Arabic word for days
+  String getArabicDaysWord(int days) {
+    return days > 10 ? 'يوم' : 'أيام';
+  }
+  String getEnglishDaysWord(int days) {
+    return days > 1 ? 'Days' : 'Day';
+  }
   @override
   Widget build(BuildContext context) {
     // Parse the JSON response data
@@ -79,7 +92,22 @@ class _QrResponseState extends State<QrResponse> {
                     for (var discount in discounts)
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Row(
+                        child:GestureDetector(
+   onTap: () {
+    // Create a Map to hold both store and discount data
+    Map<String, dynamic> data = {
+      'store': store,
+      'discount': discount,
+    };
+
+    // Navigate to the new screen when the Container is tapped
+    Navigator.pushNamed(
+      context,
+      '/get-discount',
+      arguments: data, // Pass the combined data to the new screen
+    );
+  },
+      child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
@@ -104,10 +132,18 @@ class _QrResponseState extends State<QrResponse> {
                                     : 'نسبة الخصم : ${discount['percent']}% ',
                                 style: TextStyle(fontSize: 14),
                                 textAlign: isEnglish ? TextAlign.left : TextAlign.right,
-                              ),],)
+                              ),],),
+                                Row(children: [Text(
+                                    isEnglish
+                                      ? 'Days Remaining: ${calculateDaysRemaining(discount['end_date'])} ${getEnglishDaysWord(calculateDaysRemaining(discount['end_date']))}'
+                                        : 'الأيام المتبقية: ${calculateDaysRemaining(discount['end_date'])} ${getArabicDaysWord(calculateDaysRemaining(discount['end_date']))}',
+                                    style: TextStyle(fontSize: 12, color: Colors.blue),
+                                    textAlign: isEnglish ? TextAlign.left : TextAlign.right,
+                                  ),],)
                               ],) 
                             ),
                           ],
+                        ),
                         ),
                       ),
                   ],
