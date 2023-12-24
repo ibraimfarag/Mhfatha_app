@@ -86,6 +86,7 @@ Navigator.push(
             builder: (context) => QrResponse(responseData: response),
           ),
         );
+          controller.stopCamera();
 
 
         // print('Store QR Response: $response');
