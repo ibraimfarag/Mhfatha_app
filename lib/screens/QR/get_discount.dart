@@ -27,6 +27,37 @@ class _GetDiscountState extends State<GetDiscount> {
     Map<String, dynamic> discount = data['discount'];
 
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
+
+void _showSuccessDialog() {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(
+          isEnglish ? 'Congratulations' : 'تهانينا',
+        ),
+        content: Text(
+          isEnglish
+              ? 'You have successfully applied the discount. Please pay for the vendor.'
+              : 'لقد قمت بتطبيق الخصم بنجاح. يرجى دفع المبلغ للبائع.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              // You can navigate to the next screen or perform other actions here
+            },
+            child: Text(
+              isEnglish ? 'OK' : 'حسنا',
+            ),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+
 void _postDiscountDetails() async {
   int userID = Provider.of<AuthProvider>(context, listen: false).userId!;
   int storeID = store['id'];
@@ -34,7 +65,7 @@ void _postDiscountDetails() async {
   double totalPayment = double.tryParse(_costController.text) ?? 0.0; // Replace 0.0 with a default value or handle it as needed
   String lang = Provider.of<AppState>(context, listen: false).display;
 
-  bool success = await Api().postDiscountDetails(
+  Map<String, dynamic> result = await Api().postDiscountDetails(
     Provider.of<AuthProvider>(context, listen: false),
     userID,
     storeID,
@@ -43,41 +74,42 @@ void _postDiscountDetails() async {
     lang,
   );
 
-  if (success) {
+  if (result['success']) {
     // If the API call is successful, update the state and move to the next screen
     setState(() {
       _currentScreen = 2;
     });
+    dynamic responseData = result['data'];
+    // _showSuccessDialog();
   } else {
     // Handle the case when the API call fails (optional)
     // You might want to show an error message or take appropriate action
-showDialog(
-  context: context,
-  builder: (BuildContext context) {
-    return AlertDialog(
-      title: Text(
-        isEnglish ? 'Error' : 'خطأ',
-      ),
-      content: Text(
-        isEnglish
-            ? 'Failed to get discount . Please try again.'
-            : 'فشل في الحصول على الخصم. الرجاء المحاولة مرة أخرى.',
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text(isEnglish
-            ? 'OK':'حسنا'),
-        ),
-      ],
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            isEnglish ? 'Error' : 'خطأ',
+          ),
+          content: Text(
+            isEnglish
+                ? 'Failed to get discount . Please try again.'
+                : 'فشل في الحصول على الخصم. الرجاء المحاولة مرة أخرى.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(isEnglish ? 'OK' : 'حسنا'),
+            ),
+          ],
+        );
+      },
     );
-  },
-);
-
   }
 }
+
 
 
     Future<void> _showConfirmationDialog() async {
@@ -116,34 +148,6 @@ showDialog(
         _postDiscountDetails();
       }
     }
-void _showSuccessDialog() {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text(
-          isEnglish ? 'Congratulations' : 'تهانينا',
-        ),
-        content: Text(
-          isEnglish
-              ? 'You have successfully applied the discount. Please pay for the vendor.'
-              : 'لقد قمت بتطبيق الخصم بنجاح. يرجى دفع المبلغ للبائع.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              // You can navigate to the next screen or perform other actions here
-            },
-            child: Text(
-              isEnglish ? 'OK' : 'حسنا',
-            ),
-          ),
-        ],
-      );
-    },
-  );
-}
 
     return DirectionalityWrapper(
       child: Scaffold(
@@ -253,40 +257,54 @@ void _showSuccessDialog() {
                         ),
                       ],
                     ),
-                  if (_currentScreen == 2)
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Display text in the center
-                        Text(
-                          isEnglish
-                              ? 'Do you accept the cost?'
-                              : 'هل تقبل التكلفة؟',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        SizedBox(height: 16),
-                        // Buttons for accepting or canceling
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                // Perform action for accepting
-                              },
-                              child: Text(isEnglish ? 'Accept' : 'قبول'),
-                            ),
-                            SizedBox(width: 16),
-                            ElevatedButton(
-                              onPressed: () {
-                                // Perform action for canceling
-                              },
-                              child: Text(isEnglish ? 'Cancel' : 'إلغاء'),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+
+
+      /* -------------------------------------------------------------------------- */
+/* ----------------------------- SCREEN SUCCESS ----------------------------- */
+/* -------------------------------------------------------------------------- */
+
+if (_currentScreen == 2)
+  Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      // Display congratulatory message
+      Text(
+        isEnglish
+            ? 'Congratulations! You have earned a discount of ${discount['category']} from ${store['name']}.'
+            : 'تهانينا! لقد حصلت على خصم ${discount['category']} من ${store['name']}.',
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 18),
+      ),
+      SizedBox(height: 16),
+      // Buttons for accepting or canceling
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              // Perform action for accepting
+            },
+            child: Text(isEnglish ? 'Accept' : 'قبول'),
+          ),
+          SizedBox(width: 16),
+          ElevatedButton(
+            onPressed: () {
+              // Perform action for canceling
+            },
+            child: Text(isEnglish ? 'Cancel' : 'إلغاء'),
+          ),
+        ],
+      ),
+      SizedBox(height: 16),
+      // Add your asset image here
+      Image.asset(
+        'images/asse.png', // Replace with the actual asset image path
+        height: 60, // Set your desired height
+        fit: BoxFit.cover, // Adjust the fit as needed
+      ),
+    ],
+  ),
+
                   // Add more screens if needed
                 ],
               ),

@@ -163,39 +163,38 @@ class Api {
 
 
 
-  Future<bool> postDiscountDetails(AuthProvider authProvider, int userID, int storeID, int discountID, double totalPayment,String lang) async {
-    final url = Uri.parse('$baseUrl/discounts-post');
+Future<Map<String, dynamic>> postDiscountDetails(AuthProvider authProvider, int userID, int storeID, int discountID, double totalPayment, String lang) async {
+  final url = Uri.parse('$baseUrl/discounts-post');
 
-    try {
-      final response = await http.post(
-        url,
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ${authProvider.token}',
-        },
-        body: jsonEncode(<String, dynamic>{
-          'user_id': userID,
-          'store_id': storeID,
-          'discount_id': discountID,
-          'total_payment': totalPayment,
-          'lang': lang
- 
-         }),
-      );
+  try {
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${authProvider.token}',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'user_id': userID,
+        'store_id': storeID,
+        'discount_id': discountID,
+        'total_payment': totalPayment,
+        'lang': lang,
+      }),
+    );
 
-        if (response.statusCode == 200) {
+    if (response.statusCode == 200) {
       final jsonResponse = jsonDecode(response.body);
       print('Discount Details Response Data: $jsonResponse');
-      return true; // Indicate success
+      return {'success': true, 'data': jsonResponse}; // Include jsonResponse with success flag
     } else {
       print('Failed to post discount details. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
-      return false; // Indicate failure
+      return {'success': false, 'error': 'Failed to post discount details'}; // Include error message with failure flag
     }
   } catch (e) {
     print('Error during posting discount details: $e');
-    return false; // Indicate failure
+    return {'success': false, 'error': 'Error during posting discount details'}; // Include error message with failure flag
   }
-  }
+}
 
 
 
