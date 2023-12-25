@@ -102,8 +102,16 @@ export'package:geolocator/geolocator.dart';
 
 export 'package:url_launcher/url_launcher.dart';
 
-// QR
+// /* ----------------------------------- QR ----------------------------------- */
+
 export 'package:qr_code_scanner/qr_code_scanner.dart';
+
+
+// /* ------------------------------ image_picker ------------------------------ */
+export 'package:image_picker/image_picker.dart';
+
+
+
 // /* -------------------------------------------------------------------------- */
 // /* --------------------------------- Widgets -------------------------------- */
 // /* -------------------------------------------------------------------------- */
@@ -112,4 +120,21 @@ export 'package:mhfatha/widgets/region_selection.dart';
 // /* ----------------------------- StoresCarousel ----------------------------- */
 
 export 'package:mhfatha/widgets/StoresCarousel.dart';
+
+// /* ----------------------------- CustomTextField ---------------------------- */
+export 'package:mhfatha/widgets/Textfield.dart';
+
+// /* ---------------------------- Gender Selection ---------------------------- */
+export 'package:mhfatha/widgets/GenderSelection.dart';
+
+// /* ------------------------------- Date Picker ------------------------------ */
+export 'package:mhfatha/widgets/DatePicker.dart';
+
+
+// /* ------------------------------ Profile Photo ----------------------------- */
+export 'package:mhfatha/widgets/ProfilePhoto.dart';
+
+// /* ------------------------------- VendorJoin ------------------------------- */
+export 'package:mhfatha/widgets/VendorJoin.dart';
+
 

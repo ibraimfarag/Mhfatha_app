@@ -262,9 +262,9 @@ if (authProvider.isAuthenticated && authProvider.user != null) {
     ),
   ],
 ),
-
+ 
                     SizedBox(
-                      height: 66,
+                      height: 45,
                     ),
                     Row(
   mainAxisAlignment: MainAxisAlignment.center,

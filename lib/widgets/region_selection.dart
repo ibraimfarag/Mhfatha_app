@@ -81,9 +81,13 @@ Color colors = Color.fromARGB(220, 255, 255, 255);
     ];
 
     return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+
       children: [
-        SizedBox(height: 40),
+        SizedBox(height: 20),
          Container(
+                                        margin: EdgeInsets.only(left: 45, right: 45),
+
                                 width: 50,
                                 alignment: isEnglish
                                     ? Alignment.centerLeft
