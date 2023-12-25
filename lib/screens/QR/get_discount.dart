@@ -316,29 +316,5 @@ if (_currentScreen == 2)
     );
   }
 
-Widget _buildScreen2() {
-      bool isEnglish = Provider.of<AppState>(context).isEnglish;
-
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Text(
-        isEnglish
-            ? 'Congratulations! You have a successful discount.'
-            : 'تهانينا! لديك خصم ناجح.',
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 18),
-      ),
-      SizedBox(height: 16),
-      ElevatedButton(
-        onPressed: () {
-          // Navigate to the next screen or perform other actions
-        },
-        child: Text(isEnglish ? 'Pay for Vendor' : 'ادفع للبائع'),
-      ),
-    ],
-  );
-}
-
 
 }
