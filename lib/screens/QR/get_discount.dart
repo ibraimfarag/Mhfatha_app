@@ -79,8 +79,6 @@ void _postDiscountDetails() async {
       _currentScreen = 2;
     });
   } else {
-    // Handle the case when the API call fails (optional)
-    // You might want to show an error message or take appropriate action
 showDialog(
   context: context,
   builder: (BuildContext context) {
