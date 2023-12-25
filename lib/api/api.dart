@@ -163,7 +163,7 @@ class Api {
 
 
 
-Future<bool> postDiscountDetails(AuthProvider authProvider, int userID, int storeID, int discountID, double totalPayment,String lang) async {
+Future<bool> DiscountDetails(AuthProvider authProvider, int userID, int storeID, int discountID, double totalPayment,String lang) async {
   final url = Uri.parse('$baseUrl/discounts-post');
 
   try {

@@ -11,6 +11,7 @@ class GetDiscount extends StatefulWidget {
 class _GetDiscountState extends State<GetDiscount> {
   // Define a text controller for the cost input
   final TextEditingController _costController = TextEditingController();
+  String _discountDetailsResponse = '';
 
   // Variable to track the current screen
   int _currentScreen = 1;
@@ -27,6 +28,14 @@ class _GetDiscountState extends State<GetDiscount> {
     Map<String, dynamic> discount = data['discount'];
 
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
+
+
+    
+  int userID = Provider.of<AuthProvider>(context, listen: false).userId!;
+  int storeID = store['id'];
+  int discountID = discount['id'];
+  double totalPayment = double.tryParse(_costController.text) ?? 0.0; // Replace 0.0 with a default value or handle it as needed
+  String lang = Provider.of<AppState>(context, listen: false).display;
 
 void _showSuccessDialog() {
   showDialog(
@@ -58,13 +67,8 @@ void _showSuccessDialog() {
 }
 
 void _postDiscountDetails() async {
-  int userID = Provider.of<AuthProvider>(context, listen: false).userId!;
-  int storeID = store['id'];
-  int discountID = discount['id'];
-  double totalPayment = double.tryParse(_costController.text) ?? 0.0; // Replace 0.0 with a default value or handle it as needed
-  String lang = Provider.of<AppState>(context, listen: false).display;
 
-  bool success = await Api().postDiscountDetails(
+  bool success = await Api().DiscountDetails(
     Provider.of<AuthProvider>(context, listen: false),
     userID,
     storeID,
