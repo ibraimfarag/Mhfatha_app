@@ -163,7 +163,7 @@ class Api {
 
 
 
-Future<Map<String, dynamic>> postDiscountDetails(AuthProvider authProvider, int userID, int storeID, int discountID, double totalPayment, String lang) async {
+Future<bool> postDiscountDetails(AuthProvider authProvider, int userID, int storeID, int discountID, double totalPayment,String lang) async {
   final url = Uri.parse('$baseUrl/discounts-post');
 
   try {
@@ -185,14 +185,14 @@ Future<Map<String, dynamic>> postDiscountDetails(AuthProvider authProvider, int 
     if (response.statusCode == 200) {
       final jsonResponse = jsonDecode(response.body);
       print('Discount Details Response Data: $jsonResponse');
-      return {'success': true, 'data': jsonResponse}; // Include jsonResponse with success flag
+      return true; // Include jsonResponse with success flag
     } else {
       print('Failed to post discount details. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
-      return {'success': false, 'error': 'Failed to post discount details'}; // Include error message with failure flag
+      return  false; // Include error message with failure flag
     }
   } catch (e) {
     print('Error during posting discount details: $e');
-    return {'success': false, 'error': 'Error during posting discount details'}; // Include error message with failure flag
+      return  false; // Include error message with failure flag
   }
 }
 

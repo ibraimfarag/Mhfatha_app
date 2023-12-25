@@ -57,7 +57,6 @@ void _showSuccessDialog() {
   );
 }
 
-
 void _postDiscountDetails() async {
   int userID = Provider.of<AuthProvider>(context, listen: false).userId!;
   int storeID = store['id'];
@@ -65,7 +64,7 @@ void _postDiscountDetails() async {
   double totalPayment = double.tryParse(_costController.text) ?? 0.0; // Replace 0.0 with a default value or handle it as needed
   String lang = Provider.of<AppState>(context, listen: false).display;
 
-  Map<String, dynamic> result = await Api().postDiscountDetails(
+  bool success = await Api().postDiscountDetails(
     Provider.of<AuthProvider>(context, listen: false),
     userID,
     storeID,
@@ -74,41 +73,42 @@ void _postDiscountDetails() async {
     lang,
   );
 
-  if (result['success']) {
+  if (success) {
     // If the API call is successful, update the state and move to the next screen
     setState(() {
       _currentScreen = 2;
     });
-    dynamic responseData = result['data'];
-    // _showSuccessDialog();
   } else {
     // Handle the case when the API call fails (optional)
     // You might want to show an error message or take appropriate action
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            isEnglish ? 'Error' : 'خطأ',
-          ),
-          content: Text(
-            isEnglish
-                ? 'Failed to get discount . Please try again.'
-                : 'فشل في الحصول على الخصم. الرجاء المحاولة مرة أخرى.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text(isEnglish ? 'OK' : 'حسنا'),
-            ),
-          ],
-        );
-      },
+showDialog(
+  context: context,
+  builder: (BuildContext context) {
+    return AlertDialog(
+      title: Text(
+        isEnglish ? 'Error' : 'خطأ',
+      ),
+      content: Text(
+        isEnglish
+            ? 'Failed to get discount . Please try again.'
+            : 'فشل في الحصول على الخصم. الرجاء المحاولة مرة أخرى.',
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text(isEnglish
+            ? 'OK':'حسنا'),
+        ),
+      ],
     );
+  },
+);
+
   }
 }
+
 
 
 
@@ -275,6 +275,7 @@ if (_currentScreen == 2)
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: 18),
       ),
+     
       SizedBox(height: 16),
       // Buttons for accepting or canceling
       Row(
