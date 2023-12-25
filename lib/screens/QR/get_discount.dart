@@ -1,5 +1,7 @@
 // lib\screens\QR\get_discount.dart
 
+import 'dart:convert';
+
 import 'package:flutter/services.dart';
 import 'package:mhfatha/settings/imports.dart';
 
@@ -11,7 +13,7 @@ class GetDiscount extends StatefulWidget {
 class _GetDiscountState extends State<GetDiscount> {
   // Define a text controller for the cost input
   final TextEditingController _costController = TextEditingController();
-  String _discountDetailsResponse = '';
+  String _discountResponseMessage = ''; // Add this line
 
   // Variable to track the current screen
   int _currentScreen = 1;
@@ -67,51 +69,64 @@ void _showSuccessDialog() {
 }
 
 void _postDiscountDetails() async {
-
-  bool success = await Api().DiscountDetails(
-    Provider.of<AuthProvider>(context, listen: false),
-    userID,
-    storeID,
-    discountID,
-    totalPayment,
-    lang,
-  );
-
-  if (success) {
-    // If the API call is successful, update the state and move to the next screen
-    setState(() {
-      _currentScreen = 2;
-    });
-  } else {
-showDialog(
-  context: context,
-  builder: (BuildContext context) {
-    return AlertDialog(
-      title: Text(
-        isEnglish ? 'Error' : 'خطأ',
-      ),
-      content: Text(
-        isEnglish
-            ? 'Failed to get discount . Please try again.'
-            : 'فشل في الحصول على الخصم. الرجاء المحاولة مرة أخرى.',
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text(isEnglish
-            ? 'OK':'حسنا'),
-        ),
-      ],
+  try {
+    Response response = await Api().scannedstore(
+      Provider.of<AuthProvider>(context, listen: false),
+      userID,
+      storeID,
+      discountID,
+      totalPayment,
+      lang,
     );
-  },
-);
 
+    // Parse the response as JSON
+    dynamic responseBody = response.body;
+
+    // Check if the response body is a string, and parse it accordingly
+    Map<String, dynamic> jsonResponse = responseBody is String
+        ? json.decode(responseBody)
+        : {'message': 'Unexpected response format', 'after_discount': 0};
+
+if (response.statusCode == 200 ) {
+  // The response contains the expected fields
+  setState(() {
+    _discountResponseMessage = jsonResponse['after_discount'].toString();
+    _currentScreen = 2;
+  });
+    } else {
+      // The response is not in the expected format
+      // _showErrorDialog();
+    }
+
+  } catch (e) {
+    // Print the caught exception for debugging
+    print('Caught exception during _postDiscountDetails: $e');
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            isEnglish ? 'Error' : 'خطأ',
+          ),
+          content: Text(
+            isEnglish
+                ? 'Failed to get discount. Please try again.'
+                : 'فشل في الحصول على الخصم. الرجاء المحاولة مرة أخرى.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text(isEnglish ? 'OK' : 'حسنا'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
-
-
 
 
     Future<void> _showConfirmationDialog() async {
@@ -276,6 +291,12 @@ if (_currentScreen == 2)
             : 'تهانينا! لقد حصلت على خصم ${discount['category']} من ${store['name']}.',
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: 18),
+      ),
+        // Display the response message
+      Text(
+        _discountResponseMessage,
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 16),
       ),
      
       SizedBox(height: 16),
