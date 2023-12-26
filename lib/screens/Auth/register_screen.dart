@@ -1,5 +1,6 @@
 // lib\screens\Auth\login_screen.dart
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:intl/intl.dart';
@@ -16,12 +17,14 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   Color colors = Color.fromARGB(220, 255, 255, 255);
   Color backgroundColor = Color(0xFF05204a);
-  String selectedGender = 'male'; // Default gender selection
+  String selectedGender = ''; // Default gender selection
+  String selectedVendor = ''; // Default gender selection
+  
   DateTime? selectedDate;
 // Declare variables to store selected region and city
 
-  String selectedRegion = 'riyadh';
-  XFile? _imageFile;
+  String selectedRegion = '';
+String? _selectedProfileImagePath;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController familyNameController = TextEditingController();
@@ -34,6 +37,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
     Size size = MediaQuery.of(context).size;
+            String lang = Provider.of<AppState>(context, listen: false).display;
 
     return DirectionalityWrapper(
       child: Scaffold(
@@ -136,15 +140,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             // /* -------------------------------------------------------------------------- */
                             // /* ----------------------------- GenderSelection ---------------------------- */
                             // /* -------------------------------------------------------------------------- */
-                            GenderSelection(
-                              isEnglish: isEnglish,
-                              selectedGender: selectedGender,
-                              onGenderSelected: (value) {
-                                setState(() {
-                                  selectedGender = value;
-                                });
-                              },
-                            ),
+                    GenderSelection(
+  isEnglish: isEnglish,
+  selectedGender: selectedGender,
+  onGenderSelected: (value) {
+    setState(() {
+      selectedGender = value;
+    });
+  },
+),
 
                             // /* -------------------------------------------------------------------------- */
                             // /* ---------------------------- Birthday selection ---------------------------- */
@@ -174,10 +178,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               changePhotoText:
                                   isEnglish ? 'Change Photo' : 'تغير  الصورة',
                               removeText: isEnglish ? 'Remove' : 'إزالة',
-                              onPhotoSelected: (path) {
-                                // Handle the selected photo path
-                              },
-                            ),
+onPhotoSelected: (path) {
+    setState(() {
+      _selectedProfileImagePath = path;
+    });
+  },
+                         ),
+
+                         
 
                             // /* -------------------------------------------------------------------------- */
                             // /* ----------------------------- city and region ---------------------------- */
@@ -238,18 +246,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             // /* -------------------------------------------------------------------------- */
                             // /* ------------------------------- Vendor Join ------------------------------ */
                             // /* -------------------------------------------------------------------------- */
-                            VendorJoinWidget(
-                              isEnglish: isEnglish,
-                              labelText: isEnglish
-                                  ? 'Are you want to join as Vendor?'
-                                  : 'هل تريد الانضمام كـ تاجر؟',
-                              yesText: isEnglish ? 'yes' : 'نعم',
-                              noText: isEnglish ? 'no' : 'لا',
-                              onSelectionChanged: (isVendor) {
-                                // Handle the selection
-                              },
-                            ),
-
+VendorJoinWidget(
+  isEnglish: isEnglish,
+  labelText: isEnglish
+      ? 'Are you want to join as Vendor?'
+      : 'هل تريد الانضمام كـ تاجر؟',
+  yesText: isEnglish ? 'yes' : 'نعم',
+  noText: isEnglish ? 'no' : 'لا',
+  onSelectionChanged: (isVendor) {
+    // Handle the selection
+    setState(() {
+      selectedVendor = isVendor ? '1' : '0'; // Set '1' for yes, '0' for no
+    });
+  },
+),
                             // /* -------------------------------------------------------------------------- */
                             // /* ------------------------------ submit button ----------------------------- */
                             // /* -------------------------------------------------------------------------- */
@@ -260,28 +270,53 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               children: [
                                 Container(
                                   height: 50,
-                                  width: 100,
-                                  margin: EdgeInsets.only(left: 40, right: 40),
+                                  width: 150,
+                                  margin: EdgeInsets.only(left: 40, right: 40,top: 50),
                                   child: ElevatedButton(
-                                    onPressed: () {
-                                      // Implement your logic when the button is pressed
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      primary:
-                                          backgroundColor, // Set the background color
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      isEnglish ? "SIGN UP" : "تسجيل",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ),
+  onPressed: () async {
+    // Assuming you have controllers for the registration form fields
+    bool success = await Api().registerUser(
+      context: context,
+      lang: lang,
+      firstName: nameController.text,
+      lastName: familyNameController.text,
+      gender: selectedGender,
+      birthday: selectedDate != null ? DateFormat('yyyy-MM-dd').format(selectedDate!) : '',
+      region: selectedRegion,
+      mobile: mobileController.text,
+      email: mailController.text,
+      password: passwordController.text,
+      confirmPasswordController:confirmPasswordController.text,
+      isVendor: selectedVendor == '1' ? 1 : 0, // Convert '1' or '0' to int
+      imageFile: File(_selectedProfileImagePath!), // Assuming _selectedProfileImagePath is the file path
+
+    );
+
+    if (success) {
+      // Handle successful registration, e.g., navigate to the home screen
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+    } else {
+
+
+
+    }
+  },
+  child: Text(
+    isEnglish ? "REGISTER" : "تسجيل",
+    style: TextStyle(
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+      fontSize: 16,
+    ),
+  ),
+  style: ElevatedButton.styleFrom(
+    primary: backgroundColor,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10),
+    ),
+  ),
+),
+
                                 ),
                               ],
                             ),

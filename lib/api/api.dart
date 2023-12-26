@@ -1,6 +1,8 @@
 // lib\api\api.dart
 
 
+import 'dart:io';
+
 import 'package:mhfatha/settings/imports.dart';
 
 import 'dart:convert';
@@ -201,6 +203,141 @@ Future scannedstore(AuthProvider authProvider, int userID, int storeID, int disc
   }
 }
 
+  // /* -------------------------------------------------------------------------- */
+  // /* ------------------------------ User Registration ------------------------ */
+  // /* -------------------------------------------------------------------------- */
+Future<bool> registerUser({
+  required BuildContext context,
+  required String lang,
+  required String firstName,
+  required String lastName,
+  required String gender,
+  required String birthday,
+  required String region,
+  required String mobile,
+  required String email,
+  required String password,
+  required String confirmPasswordController,
+  required int isVendor,
+  required File imageFile
+}) async {
+  final url = Uri.parse('$baseUrl/register-post');
+bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
+
+  try {
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'lang': lang,
+        'first_name': firstName,
+        'last_name': lastName,
+        'gender': gender,
+        'birthday': birthday,
+        'region': region,
+        'mobile': mobile,
+        'email': email,
+        'password': password,
+        'password_confirmation': password,
+        'is_vendor': isVendor,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      print('Registration Response Data: $jsonResponse');
+
+      if (jsonResponse['success'] == false) {
+        // Extract and display individual error messages
+        List<String> errorMessages = [];
+        Map<String, dynamic> messages = jsonResponse['messages'];
+        messages.forEach((field, errors) {
+          errors.forEach((error) {
+            errorMessages.add(error);
+          });
+        });
+
+        // Show dialog for unsuccessful registration with individual error messages
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Registration Failed'),
+              content: Column(
+ crossAxisAlignment: isEnglish
+              ? CrossAxisAlignment.start
+              : CrossAxisAlignment.end,                children: errorMessages.map((error) => Text(error)).toList(),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+
+      return jsonResponse['success'];
+    } else {
+            final jsonResponse = jsonDecode(response.body);
+
+  List<String> errorMessages = [];
+        dynamic messages = jsonResponse['messages'];
+
+ if (messages is Map<String, dynamic>) {
+          // Handle the case where 'messages' is a map
+          messages.forEach((field, errors) {
+            if (errors is List) {
+              errors.forEach((error) {
+                errorMessages.add('$error');
+              });
+            }
+          });
+        } else if (messages is List<dynamic>) {
+          // Handle the case where 'messages' is a list
+          errorMessages.addAll(messages.map((error) => '$error'));
+        }
+
+
+        // Show dialog for unsuccessful registration
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(isEnglish
+              ? 'Registration Failed':'خطأ اثناء التسجيل',textAlign: isEnglish?TextAlign.left:TextAlign.right),
+              content: Column(
+                crossAxisAlignment: isEnglish
+              ? CrossAxisAlignment.start
+              : CrossAxisAlignment.end,   
+                mainAxisSize: MainAxisSize.min,
+                children: errorMessages.map((message) => Text(message)).toList(),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      
+      throw Exception('Failed to register. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
+    }
+  } catch (e) {
+    print('Error during registration: $e');
+    return false;
+  }
+}
 
 
 }
