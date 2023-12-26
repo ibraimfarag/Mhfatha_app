@@ -288,7 +288,7 @@ VendorJoinWidget(
       password: passwordController.text,
       confirmPasswordController:confirmPasswordController.text,
       isVendor: selectedVendor == '1' ? 1 : 0, // Convert '1' or '0' to int
-      imageFile: File(_selectedProfileImagePath!), // Assuming _selectedProfileImagePath is the file path
+      imageFile: File(_selectedProfileImagePath??''), // Assuming _selectedProfileImagePath is the file path
 
     );
 
