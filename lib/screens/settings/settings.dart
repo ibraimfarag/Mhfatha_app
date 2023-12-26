@@ -26,7 +26,7 @@ class SettingsScreen extends StatelessWidget {
                 CircleAvatar(
                   radius: 30,
                   // Add your profile image here
-                  backgroundImage: AssetImage('assets/profile/profile_img.jpg'),
+                  backgroundImage: NetworkImage('https://mhfatha.net/FrontEnd/assets/images/user_images/${authProvider.user!['photo']}'),
                 ),
                 SizedBox(width: 10),
                 Column(

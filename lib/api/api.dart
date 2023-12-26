@@ -222,31 +222,28 @@ Future<bool> registerUser({
   required File imageFile
 }) async {
   final url = Uri.parse('$baseUrl/register-post');
-bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
+  bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
 
   try {
-    final response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(<String, dynamic>{
-        'lang': lang,
-        'first_name': firstName,
-        'last_name': lastName,
-        'gender': gender,
-        'birthday': birthday,
-        'region': region,
-        'mobile': mobile,
-        'email': email,
-        'password': password,
-        'password_confirmation': password,
-        'is_vendor': isVendor,
-      }),
-    );
+    final request = http.MultipartRequest('POST', url)
+      ..fields['lang'] = lang
+      ..fields['first_name'] = firstName
+      ..fields['last_name'] = lastName
+      ..fields['gender'] = gender
+      ..fields['birthday'] = birthday
+      ..fields['region'] = region
+      ..fields['mobile'] = mobile
+      ..fields['email'] = email
+      ..fields['password'] = password
+      ..fields['password_confirmation'] = confirmPasswordController
+      ..fields['is_vendor'] = isVendor.toString()
+      // Use the correct field name for the file, in this case, 'photo'
+      ..files.add(await http.MultipartFile.fromPath('photo', imageFile.path));
+
+    final response = await request.send();
 
     if (response.statusCode == 200) {
-      final jsonResponse = jsonDecode(response.body);
+      final jsonResponse = jsonDecode(await response.stream.bytesToString());
       print('Registration Response Data: $jsonResponse');
 
       if (jsonResponse['success'] == false) {
@@ -266,9 +263,10 @@ bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
             return AlertDialog(
               title: Text('Registration Failed'),
               content: Column(
- crossAxisAlignment: isEnglish
-              ? CrossAxisAlignment.start
-              : CrossAxisAlignment.end,                children: errorMessages.map((error) => Text(error)).toList(),
+                crossAxisAlignment: isEnglish
+                    ? CrossAxisAlignment.start
+                    : CrossAxisAlignment.end,
+                children: errorMessages.map((error) => Text(error)).toList(),
               ),
               actions: <Widget>[
                 TextButton(
@@ -285,7 +283,7 @@ bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
 
       return jsonResponse['success'];
     } else {
-            final jsonResponse = jsonDecode(response.body);
+      final jsonResponse = jsonDecode(await response.stream.bytesToString());
 
   List<String> errorMessages = [];
         dynamic messages = jsonResponse['messages'];
@@ -331,7 +329,9 @@ bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
           },
         );
       
-      throw Exception('Failed to register. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
+      throw Exception(
+          'Failed to register. Server responded with status code: ${response.statusCode}');
+    
     }
   } catch (e) {
     print('Error during registration: $e');
