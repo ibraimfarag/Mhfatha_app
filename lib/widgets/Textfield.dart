@@ -1,4 +1,5 @@
 
+import 'package:flutter/services.dart';
 import 'package:mhfatha/settings/imports.dart';
 
 
@@ -8,17 +9,21 @@ class CustomTextField extends StatelessWidget {
   final String label;
   final bool isPassword;
   final TextEditingController controller;
+  final bool isNumeric;
+  final int maxLength;
 
   const CustomTextField({
     Key? key,
     required this.label,
     this.isPassword = false,
     required this.controller,
+    this.isNumeric = false,
+    this.maxLength = 10,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-      bool isEnglish = Provider.of<AppState>(context).isEnglish;
+    bool isEnglish = Provider.of<AppState>(context).isEnglish;
     Size size = MediaQuery.of(context).size;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,6 +48,11 @@ class CustomTextField extends StatelessWidget {
           child: TextField(
             obscureText: isPassword,
             controller: controller,
+            keyboardType: isNumeric ? TextInputType.number : TextInputType.text,
+            inputFormatters: isNumeric
+                ? [FilteringTextInputFormatter.digitsOnly]
+                : null, // Allow only numeric input
+            maxLength: maxLength,
             style: TextStyle(fontSize: 16, color: Colors.white),
             decoration: InputDecoration(
               hintStyle: TextStyle(color: Colors.grey.shade700),
