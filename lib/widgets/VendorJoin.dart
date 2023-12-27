@@ -30,6 +30,7 @@ class _VendorJoinWidgetState extends State<VendorJoinWidget> {
       margin: EdgeInsets.only(left: 40, right: 40, top: 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             widget.isEnglish ? widget.labelText : 'هل تريد الانضمام كـ تاجر؟ ',

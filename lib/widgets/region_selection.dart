@@ -2,8 +2,6 @@ import 'package:intl/intl.dart';
 import 'package:mhfatha/settings/imports.dart';
 import 'package:flutter/cupertino.dart';
 
-
-
 // region_selection.dart
 
 import 'package:flutter/material.dart';
@@ -11,7 +9,8 @@ import 'package:flutter/material.dart';
 class RegionSelection extends StatefulWidget {
   final ValueChanged<String> onRegionSelected;
 
-  const RegionSelection({Key? key, required this.onRegionSelected}) : super(key: key);
+  const RegionSelection({Key? key, required this.onRegionSelected})
+      : super(key: key);
 
   @override
   State<RegionSelection> createState() => _RegionSelectionState();
@@ -19,13 +18,13 @@ class RegionSelection extends StatefulWidget {
 
 class _RegionSelectionState extends State<RegionSelection> {
   String selectedRegion = 'riyadh';
-Color colors = Color.fromARGB(220, 255, 255, 255);
+  Color colors = Color.fromARGB(220, 255, 255, 255);
   Color backgroundColor = Color(0xFF05204a);
   @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
 
-  List<DropdownMenuItem<String>> citiesDropdownItems = [
+    List<DropdownMenuItem<String>> citiesDropdownItems = [
       DropdownMenuItem(
         value: 'riyadh',
         child: Text(isEnglish ? 'Riyadh' : 'الرياض'),
@@ -81,26 +80,23 @@ Color colors = Color.fromARGB(220, 255, 255, 255);
     ];
 
     return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 20),
-         Container(
-                                        margin: EdgeInsets.only(left: 45, right: 45),
+        Container(
+          margin: EdgeInsets.only(left: 45, right: 45),
 
-                                width: 50,
-                                alignment: isEnglish
-                                    ? Alignment.centerLeft
-                                    : Alignment.centerRight,
-                                child: Text(
-                                  isEnglish ? 'Region' : 'المنطقة',
-                                  style: TextStyle(
-                                    color: colors,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                ),
-                              ),
+          // width: 100,
+          alignment: isEnglish ? Alignment.centerLeft : Alignment.centerRight,
+          child: Text(
+            isEnglish ? 'Region' : 'المنطقة',
+            style: TextStyle(
+              color: colors,
+              fontSize: 16,
+              fontWeight: FontWeight.normal,
+            ),
+          ),
+        ),
         SizedBox(height: 14),
         Container(
           margin: EdgeInsets.only(left: 45, right: 45),
@@ -116,13 +112,12 @@ Color colors = Color.fromARGB(220, 255, 255, 255);
                 widget.onRegionSelected(selectedRegion);
               });
             },
-            items: citiesDropdownItems
-                .map((DropdownMenuItem<String> item) {
+            items: citiesDropdownItems.map((DropdownMenuItem<String> item) {
               return DropdownMenuItem<String>(
                 value: item.value,
                 child: Container(
                   padding: EdgeInsets.only(right: 10, left: 10),
-                  width: 100,
+                  // width: 100,
                   alignment: Alignment.center,
                   child: item.child,
                 ),
@@ -130,7 +125,8 @@ Color colors = Color.fromARGB(220, 255, 255, 255);
             }).toList(),
             style: TextStyle(color: Colors.white),
             underline: Container(),
-            dropdownColor: backgroundColor, // Set the background color for the dropdown menu items
+            dropdownColor:
+                backgroundColor, // Set the background color for the dropdown menu items
           ),
         ),
       ],

@@ -19,12 +19,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Color backgroundColor = Color(0xFF05204a);
   String selectedGender = ''; // Default gender selection
   String selectedVendor = ''; // Default gender selection
-  
+
   DateTime? selectedDate;
 // Declare variables to store selected region and city
 
   String selectedRegion = '';
-String? _selectedProfileImagePath;
+  String? _selectedProfileImagePath;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController familyNameController = TextEditingController();
@@ -37,7 +37,7 @@ String? _selectedProfileImagePath;
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
     Size size = MediaQuery.of(context).size;
-            String lang = Provider.of<AppState>(context, listen: false).display;
+    String lang = Provider.of<AppState>(context, listen: false).display;
 
     return DirectionalityWrapper(
       child: Scaffold(
@@ -140,15 +140,15 @@ String? _selectedProfileImagePath;
                             // /* -------------------------------------------------------------------------- */
                             // /* ----------------------------- GenderSelection ---------------------------- */
                             // /* -------------------------------------------------------------------------- */
-                    GenderSelection(
-  isEnglish: isEnglish,
-  selectedGender: selectedGender,
-  onGenderSelected: (value) {
-    setState(() {
-      selectedGender = value;
-    });
-  },
-),
+                            GenderSelection(
+                              isEnglish: isEnglish,
+                              selectedGender: selectedGender,
+                              onGenderSelected: (value) {
+                                setState(() {
+                                  selectedGender = value;
+                                });
+                              },
+                            ),
 
                             // /* -------------------------------------------------------------------------- */
                             // /* ---------------------------- Birthday selection ---------------------------- */
@@ -178,14 +178,12 @@ String? _selectedProfileImagePath;
                               changePhotoText:
                                   isEnglish ? 'Change Photo' : 'تغير  الصورة',
                               removeText: isEnglish ? 'Remove' : 'إزالة',
-onPhotoSelected: (path) {
-    setState(() {
-      _selectedProfileImagePath = path;
-    });
-  },
-                         ),
-
-                         
+                              onPhotoSelected: (path) {
+                                setState(() {
+                                  _selectedProfileImagePath = path;
+                                });
+                              },
+                            ),
 
                             // /* -------------------------------------------------------------------------- */
                             // /* ----------------------------- city and region ---------------------------- */
@@ -246,20 +244,22 @@ onPhotoSelected: (path) {
                             // /* -------------------------------------------------------------------------- */
                             // /* ------------------------------- Vendor Join ------------------------------ */
                             // /* -------------------------------------------------------------------------- */
-VendorJoinWidget(
-  isEnglish: isEnglish,
-  labelText: isEnglish
-      ? 'Are you want to join as Vendor?'
-      : 'هل تريد الانضمام كـ تاجر؟',
-  yesText: isEnglish ? 'yes' : 'نعم',
-  noText: isEnglish ? 'no' : 'لا',
-  onSelectionChanged: (isVendor) {
-    // Handle the selection
-    setState(() {
-      selectedVendor = isVendor ? '1' : '0'; // Set '1' for yes, '0' for no
-    });
-  },
-),
+                            VendorJoinWidget(
+                              isEnglish: isEnglish,
+                              labelText: isEnglish
+                                  ? 'Are you want to join as Vendor?'
+                                  : 'هل تريد الانضمام كـ تاجر؟',
+                              yesText: isEnglish ? 'yes' : 'نعم',
+                              noText: isEnglish ? 'no' : 'لا',
+                              onSelectionChanged: (isVendor) {
+                                // Handle the selection
+                                setState(() {
+                                  selectedVendor = isVendor
+                                      ? '1'
+                                      : '0'; // Set '1' for yes, '0' for no
+                                });
+                              },
+                            ),
                             // /* -------------------------------------------------------------------------- */
                             // /* ------------------------------ submit button ----------------------------- */
                             // /* -------------------------------------------------------------------------- */
@@ -271,52 +271,54 @@ VendorJoinWidget(
                                 Container(
                                   height: 50,
                                   width: 150,
-                                  margin: EdgeInsets.only(left: 40, right: 40,top: 50),
+                                  margin: EdgeInsets.only(
+                                      left: 40, right: 40, top: 50),
                                   child: ElevatedButton(
-  onPressed: () async {
-    // Assuming you have controllers for the registration form fields
-    bool success = await Api().registerUser(
-      context: context,
-      lang: lang,
-      firstName: nameController.text,
-      lastName: familyNameController.text,
-      gender: selectedGender,
-      birthday: selectedDate != null ? DateFormat('yyyy-MM-dd').format(selectedDate!) : '',
-      region: selectedRegion,
-      mobile: mobileController.text,
-      email: mailController.text,
-      password: passwordController.text,
-      confirmPasswordController:confirmPasswordController.text,
-      isVendor: selectedVendor == '1' ? 1 : 0, // Convert '1' or '0' to int
-      imageFile: File(_selectedProfileImagePath??''), // Assuming _selectedProfileImagePath is the file path
+                                    onPressed: () async {
+                                      // Assuming you have controllers for the registration form fields
+                                      bool success = await Api().registerUser(
+                                        context: context,
+                                        lang: lang,
+                                        firstName: nameController.text,
+                                        lastName: familyNameController.text,
+                                        gender: selectedGender,
+                                        birthday: selectedDate != null
+                                            ? DateFormat('yyyy-MM-dd')
+                                                .format(selectedDate!)
+                                            : '',
+                                        region: selectedRegion,
+                                        mobile: mobileController.text,
+                                        email: mailController.text,
+                                        password: passwordController.text,
+                                        confirmPasswordController:
+                                            confirmPasswordController.text,
+                                        isVendor: selectedVendor == '1'
+                                            ? 1
+                                            : 0, // Convert '1' or '0' to int
+                                        // imageFile: File(_selectedProfileImagePath ??''), 
+                                        imageFile: _selectedProfileImagePath != null
+      ? File(_selectedProfileImagePath ??'')
+      : null, // Pass null if no profile image
 
-    );
+                                      );
 
-    if (success) {
-      // Handle successful registration, e.g., navigate to the home screen
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
-    } else {
-
-
-
-    }
-  },
-  child: Text(
-    isEnglish ? "REGISTER" : "تسجيل",
-    style: TextStyle(
-      color: Colors.white,
-      fontWeight: FontWeight.bold,
-      fontSize: 16,
-    ),
-  ),
-  style: ElevatedButton.styleFrom(
-    primary: backgroundColor,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(10),
-    ),
-  ),
-),
-
+                                    
+                                    },
+                                    child: Text(
+                                      isEnglish ? "REGISTER" : "تسجيل",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      primary: backgroundColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),

@@ -110,6 +110,8 @@ export 'package:qr_code_scanner/qr_code_scanner.dart';
 // /* ------------------------------ image_picker ------------------------------ */
 export 'package:image_picker/image_picker.dart';
 
+// /* ------------------------ flutter_animate_on_scroll ----------------------- */
+export  'package:animate_do/animate_do.dart';
 
 
 // /* -------------------------------------------------------------------------- */
