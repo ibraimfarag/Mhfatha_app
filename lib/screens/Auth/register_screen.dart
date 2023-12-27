@@ -63,40 +63,55 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               borderRadius: BorderRadius.circular(15),
                             ),
                             padding: EdgeInsets.all(1),
-                            child: Row(
-                              children: [
-                                PopupMenuButton<String>(
-                                  icon: Icon(Icons.language,
-                                      color:
-                                          Color.fromARGB(146, 255, 255, 255)),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  onSelected: (String value) {
-                                    if (value == 'en' || value == 'ar') {
-                                      Provider.of<AppState>(context,
-                                              listen: false)
-                                          .toggleLanguage();
-                                    }
-                                  },
-                                  itemBuilder: (BuildContext context) {
-                                    return <PopupMenuEntry<String>>[
-                                      PopupMenuItem<String>(
-                                        value: 'en',
-                                        child: Text('English'),
-                                      ),
-                                      PopupMenuItem<String>(
-                                        value: 'ar',
-                                        child: Text('العربية'),
-                                      ),
-                                      // Add more languages as needed
-                                    ];
-                                  },
-                                ),
-                              ],
-                            ),
+                          child: Row(
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  children: [
+    // The "العودة" button
+    TextButton(
+      onPressed: () {
+Navigator.pushNamed(context, '/login');      },
+      child: Text(
+        isEnglish?'Back':'العودة',
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+        ),
+      ),
+    ),
+
+    // The existing language selection PopupMenuButton on the right
+    PopupMenuButton<String>(
+      icon: Icon(Icons.language, color: Color.fromARGB(146, 255, 255, 255)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      onSelected: (String value) {
+        if (value == 'en' || value == 'ar') {
+          Provider.of<AppState>(context, listen: false).toggleLanguage();
+        }
+      },
+      itemBuilder: (BuildContext context) {
+        return <PopupMenuEntry<String>>[
+          PopupMenuItem<String>(
+            value: 'en',
+            child: Text('English'),
+          ),
+          PopupMenuItem<String>(
+            value: 'ar',
+            child: Text('العربية'),
+          ),
+          // Add more languages as needed
+        ];
+      },
+    ),
+  ],
+),
+
                           ),
                         ),
+
+                            BounceInDown (
+                      child:
                         Column(
                           // mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
@@ -262,7 +277,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                             // /* -------------------------------------------------------------------------- */
                             // /* ------------------------------ submit button ----------------------------- */
-                            // /* -------------------------------------------------------------------------- */
+//                             // /* -------------------------------------------------------------------------- */
+//     TextButton(
+//       onPressed: () {
+// Navigator.pushNamed(context, '/login');      },
+//       child: Text(
+//         isEnglish?'Back':'',
+//         style: TextStyle(
+//           color: Colors.white,
+//           fontSize: 16,
+//         ),
+//       ),
+//     ),
 
                             Row(
                               mainAxisAlignment: MainAxisAlignment
@@ -327,6 +353,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ],
                         ),
+                        ),
+
+
                       ],
                     ),
                   ],
