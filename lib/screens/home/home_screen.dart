@@ -460,6 +460,31 @@ children: (store?['discounts'] is List<dynamic>
                 SizedBox(
                   height: 100,
                 ),
+                              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                child: TextField(
+            decoration: InputDecoration(
+              hintStyle: TextStyle(color: Colors.grey.shade700),
+              filled: true,
+              hintText: isEnglish ? 'Search stores' : 'ابحث عن متجر',
+                    prefixIcon: Icon(Icons.search),
+              fillColor:  Color.fromARGB(255, 225, 226, 228),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: Color.fromARGB(255, 225, 226, 228)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: Color.fromARGB(255, 225, 226, 228)),
+              ),
+            ),
+                  onChanged: (query) {
+                    // Implement your search logic here
+                    // Update the state or perform actions based on the search query
+                  },
+                ),
+              ),
+
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                   alignment:
