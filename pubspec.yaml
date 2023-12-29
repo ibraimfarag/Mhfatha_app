@@ -54,6 +54,8 @@ dependencies:
   qr_code_scanner: ^1.0.1
   image_picker: ^1.0.5
   animate_do: ^3.1.2
+  dropdown_search: ^5.0.6
+  drop_down_search_field: ^1.0.0
 
 
 dev_dependencies:

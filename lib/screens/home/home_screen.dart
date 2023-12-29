@@ -15,11 +15,17 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   double? latitude;
   double? longitude;
- // Declare a GlobalKey for the QR code scanner
+  // Declare a GlobalKey for the QR code scanner
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-
+  Api api = Api();
   // Declare a controller for the QR code scanner
   late QRViewController controller;
+
+
+
+
+List<Map<String, dynamic>> storeList = [];
+
 
   List<Map<String, dynamic>> filteredStores = [];
 
@@ -28,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _getLocation();
   }
+
   int calculateDaysRemaining(String endDate) {
     DateTime endDateTime = DateTime.parse(endDate);
     DateTime now = DateTime.now();
@@ -39,9 +46,11 @@ class _HomeScreenState extends State<HomeScreen> {
   String getArabicDaysWord(int days) {
     return days > 10 ? 'يوم' : 'أيام';
   }
+
   String getEnglishDaysWord(int days) {
     return days > 1 ? 'Days' : 'Day';
   }
+
   Future<void> _getLocation() async {
     // Check if permission is granted
     var status = await Permission.locationWhenInUse.status;
@@ -147,8 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   // Handle "Info about this store" option
                   Navigator.pop(context); // Close the bottom sheet
                   // Add your logic to show store info
-Navigator.pushNamed(context, '/store-info', arguments: store);
-
+                  Navigator.pushNamed(context, '/store-info', arguments: store);
                 },
                 child: Text(
                   isEnglish ? 'Info about this store' : 'معلومات عن هذا المتجر',
@@ -202,102 +210,126 @@ Navigator.pushNamed(context, '/store-info', arguments: store);
     );
   }
 
-  void _showSubContextBottomMenu(BuildContext context, Map<String, dynamic> store) {
-  showModalBottomSheet(
-    context: context,
-    builder: (BuildContext context) {
-      bool isEnglish = Provider.of<AppState>(context).isEnglish;
-      AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+  void _showSubContextBottomMenu(
+      BuildContext context, Map<String, dynamic> store) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        bool isEnglish = Provider.of<AppState>(context).isEnglish;
+        AuthProvider authProvider =
+            Provider.of<AuthProvider>(context, listen: false);
 
-      return Container(
-        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: isEnglish ? CrossAxisAlignment.start : CrossAxisAlignment.end,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                isEnglish
-                  ? 'Discounts ${store['name']}'
-                  : 'خصومات  ${store['name']}',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              if (store['discounts'] == null || store['discounts'].isEmpty)
+        return Container(
+          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment:
+                  isEnglish ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              children: [
                 Text(
-                  isEnglish ? 'No discounts available now' : 'لا توجد خصومات متاحة الآن',
-                  style: TextStyle(fontSize: 16),
-                )
-              else
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Column(
-                    // children: store['discounts'].entries.map<Widget>((entry) {
-                    //   Map<String, dynamic> discount = entry.value as Map<String, dynamic>;
-children: (store?['discounts'] is List<dynamic>
-  ? (store?['discounts'] as List<dynamic>)
-  : [])
-  .map<Widget>((discount) {                      return Container(
-                        width: MediaQuery.of(context).size.width - 100,
-                        margin: const EdgeInsets.all(10),
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child:  Column(children: [
-                                Row(children: [Text(
-                                isEnglish
-                                    ? 'Discount on: ${discount['category']} '
-                                    : 'خصم على : ${discount['category']} ',
-                                style: TextStyle(fontSize: 14),
-                                textAlign: isEnglish ? TextAlign.left : TextAlign.right,
-                              )],),
-                                Row(children: [Text(
-                                isEnglish
-                                    ? 'Percent: ${discount['percent']}%'
-                                    : 'نسبة الخصم : ${discount['percent']}% ',
-                                style: TextStyle(fontSize: 14),
-                                textAlign: isEnglish ? TextAlign.left : TextAlign.right,
-                              ),],),
-                              Row(children: [Text(
-                                    isEnglish
-                                      ? 'Days Remaining: ${calculateDaysRemaining(discount['end_date'])} ${getEnglishDaysWord(calculateDaysRemaining(discount['end_date']))}'
-                                        : 'الأيام المتبقية: ${calculateDaysRemaining(discount['end_date'])} ${getArabicDaysWord(calculateDaysRemaining(discount['end_date']))}',
-                                    style: TextStyle(fontSize: 12, color: Colors.blue),
-                                    textAlign: isEnglish ? TextAlign.left : TextAlign.right,
-                                  ),],)
-                              ],) 
-                      );
-                    }).toList(),
+                  isEnglish
+                      ? 'Discounts ${store['name']}'
+                      : 'خصومات  ${store['name']}',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-
-              SizedBox(height: 20),
-              Align(
-                alignment: isEnglish ? Alignment.bottomRight : Alignment.bottomLeft,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    _showStoreOptions(context, store);
-                  },
-                  child: Text(
-                    isEnglish ? 'Back' : 'العودة',
+                if (store['discounts'] == null || store['discounts'].isEmpty)
+                  Text(
+                    isEnglish
+                        ? 'No discounts available now'
+                        : 'لا توجد خصومات متاحة الآن',
                     style: TextStyle(fontSize: 16),
+                  )
+                else
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Column(
+                      // children: store['discounts'].entries.map<Widget>((entry) {
+                      //   Map<String, dynamic> discount = entry.value as Map<String, dynamic>;
+                      children: (store?['discounts'] is List<dynamic>
+                              ? (store?['discounts'] as List<dynamic>)
+                              : [])
+                          .map<Widget>((discount) {
+                        return Container(
+                            width: MediaQuery.of(context).size.width - 100,
+                            margin: const EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      isEnglish
+                                          ? 'Discount on: ${discount['category']} '
+                                          : 'خصم على : ${discount['category']} ',
+                                      style: TextStyle(fontSize: 14),
+                                      textAlign: isEnglish
+                                          ? TextAlign.left
+                                          : TextAlign.right,
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      isEnglish
+                                          ? 'Percent: ${discount['percent']}%'
+                                          : 'نسبة الخصم : ${discount['percent']}% ',
+                                      style: TextStyle(fontSize: 14),
+                                      textAlign: isEnglish
+                                          ? TextAlign.left
+                                          : TextAlign.right,
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      isEnglish
+                                          ? 'Days Remaining: ${calculateDaysRemaining(discount['end_date'])} ${getEnglishDaysWord(calculateDaysRemaining(discount['end_date']))}'
+                                          : 'الأيام المتبقية: ${calculateDaysRemaining(discount['end_date'])} ${getArabicDaysWord(calculateDaysRemaining(discount['end_date']))}',
+                                      style: TextStyle(
+                                          fontSize: 12, color: Colors.blue),
+                                      textAlign: isEnglish
+                                          ? TextAlign.left
+                                          : TextAlign.right,
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ));
+                      }).toList(),
+                    ),
+                  ),
+                SizedBox(height: 20),
+                Align(
+                  alignment:
+                      isEnglish ? Alignment.bottomRight : Alignment.bottomLeft,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      _showStoreOptions(context, store);
+                    },
+                    child: Text(
+                      isEnglish ? 'Back' : 'العودة',
+                      style: TextStyle(fontSize: 16),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      );
-    },
-  );
-}
-
+        );
+      },
+    );
+  }
 
   List<Widget> buildStoreContainers() {
     return filteredStores.map((store) {
@@ -355,26 +387,27 @@ children: (store?['discounts'] is List<dynamic>
                       ),
                     ),
                     // Text widget for store name
-                  Container(
-  padding: const EdgeInsets.symmetric(horizontal: 15 ,vertical: 5),
-  child: Align(
-    alignment: Provider.of<AppState>(context).isEnglish
-        ? Alignment.centerLeft
-        : Alignment.centerRight,
-    child: Text(
-      ' ${store['name']}',
-      style: TextStyle(
-        color: Colors.white,
-        fontWeight: FontWeight.bold,
-        fontFamily: AppVariables.serviceFontFamily,
-        fontSize: 14,
-      ),
-      textAlign: Provider.of<AppState>(context).isEnglish
-          ? TextAlign.left
-          : TextAlign.right,
-    ),
-  ),
-),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 5),
+                      child: Align(
+                        alignment: Provider.of<AppState>(context).isEnglish
+                            ? Alignment.centerLeft
+                            : Alignment.centerRight,
+                        child: Text(
+                          ' ${store['name']}',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: AppVariables.serviceFontFamily,
+                            fontSize: 14,
+                          ),
+                          textAlign: Provider.of<AppState>(context).isEnglish
+                              ? TextAlign.left
+                              : TextAlign.right,
+                        ),
+                      ),
+                    ),
 
                     // Row for buttons with icons
                     Container(
@@ -392,14 +425,13 @@ children: (store?['discounts'] is List<dynamic>
                                   // Handle onPressed for "يبعد 5 كم" button
                                 },
                                 child: Text(
-  '${Provider.of<AppState>(context).isEnglish ? 'Distance: ' : 'يبعد '}${store['distance']}',
-  style: TextStyle(
-    color: Colors.white,
-    fontSize: 12,
-    fontFamily: AppVariables.serviceFontFamily,
-  ),
-),
-
+                                  '${Provider.of<AppState>(context).isEnglish ? 'Distance: ' : 'يبعد '}${store['distance']}',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontFamily: AppVariables.serviceFontFamily,
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -415,7 +447,8 @@ children: (store?['discounts'] is List<dynamic>
       );
     }).toList();
   }
- // Function to show the QR code scanner
+
+  // Function to show the QR code scanner
   void _showQRScanner() {
     showModalBottomSheet(
       context: context,
@@ -442,53 +475,85 @@ children: (store?['discounts'] is List<dynamic>
       // For example, you can navigate to a new screen or perform an action based on the data.
     });
   }
+
   @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
     Size size = MediaQuery.of(context).size;
+    String lang = Provider.of<AppState>(context, listen: false).display;
 
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
 
-    return DirectionalityWrapper(
-      child: Scaffold(
-        body: Container(
-          width: size.width, // Set the width of the container
-          child: SingleChildScrollView(
-            child: Column(
+   return DirectionalityWrapper(
+  child: GestureDetector(
+    onTap: () {
+           FocusScope.of(context).unfocus();
+
+      setState(() {
+        // searchSuggestions = [];
+      });
+    },
+    child:  Scaffold(
+    body: Container(
+      width: size.width, // Set the width of the container
+      child: SingleChildScrollView(
+        child: Stack(
+          children: [
+            Column(
               children: [
                 SizedBox(
                   height: 100,
                 ),
-                              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                child: TextField(
-            decoration: InputDecoration(
-              hintStyle: TextStyle(color: Colors.grey.shade700),
-              filled: true,
-              hintText: isEnglish ? 'Search stores' : 'ابحث عن متجر',
-                    prefixIcon: Icon(Icons.search),
-              fillColor:  Color.fromARGB(255, 225, 226, 228),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: Color.fromARGB(255, 225, 226, 228)),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: Color.fromARGB(255, 225, 226, 228)),
-              ),
-            ),
-                  onChanged: (query) {
-                    // Implement your search logic here
-                    // Update the state or perform actions based on the search query
-                  },
-                ),
-              ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  child: Column(
+                    children: [
+                      TextField(
+                        decoration: InputDecoration(
+                          hintStyle: TextStyle(color: Colors.grey.shade700),
+                          filled: true,
+                          hintText: isEnglish ? 'Search stores' : 'ابحث عن متجر',
+                          prefixIcon: Icon(Icons.search),
+                          fillColor: Color.fromARGB(255, 225, 226, 228),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Color.fromARGB(255, 225, 226, 228)),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Color.fromARGB(255, 225, 226, 228)),
+                          ),
+                        ),
+                        onChanged: (query) {
+                          // Call the API method to search stores with the entered query
+                          api.searchStores(authProvider, query, lang).then((result) {
+                            // print('Search Result: $result');
 
+                            // Parse the JSON response
+                            Map<String, dynamic> jsonResponse = jsonDecode(result);
+
+                            // Check if 'stores' key exists and its type is correct
+                            if (jsonResponse.containsKey('stores') && jsonResponse['stores'] is List<dynamic>) {
+                              List<dynamic> stores = jsonResponse['stores'];
+
+                              // Convert each item in the list to a Map
+                              // List<Map<String, dynamic>> storeList = stores.whereType<Map<String, dynamic>>().toList();
+                              
+                        storeList = stores.whereType<Map<String, dynamic>>().toList();
+      setState(() {});
+
+
+                            }
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                  alignment:
-                      isEnglish ? Alignment.centerLeft : Alignment.centerRight,
+                  alignment: isEnglish ? Alignment.centerLeft : Alignment.centerRight,
                   child: Row(
                     children: [
                       Icon(Icons.store, color: Colors.black, size: 24),
@@ -524,47 +589,108 @@ children: (store?['discounts'] is List<dynamic>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      buildIconWithText(Icons.qr_code, 'Scan QR', 'فحص كود',() {Navigator.pushNamed(context, '/qr-scanner');}),
-                      buildIconWithText(Icons.store, 'Nearby', 'قريبة',() {}),
-                      buildIconWithText(Icons.search, 'Search', 'البحث',() {}),
+                      buildIconWithText(Icons.qr_code, 'Scan QR', 'فحص كود',
+                          () {
+                        Navigator.pushNamed(context, '/qr-scanner');
+                      }),
+                      buildIconWithText(Icons.store, 'Nearby', 'قريبة', () {}),
+                      buildIconWithText(Icons.search, 'Search', 'البحث', () {}),
                       buildIconWithText(
-                          Icons.local_offer, 'Top Discount', 'أعلى خصم',() {}),
+                          Icons.local_offer, 'Top Discount', 'أعلى خصم', () {}),
                     ],
                   ),
                 ),
               ],
             ),
-          ),
+  
+if (storeList.isNotEmpty)
+  Positioned(
+    top: 160, // Adjust the top position as needed
+    left: 20, // Adjust the left position as needed
+    child: Container(
+      constraints: BoxConstraints(maxHeight: 200),
+      width: size.width - 40,
+      decoration: BoxDecoration(
+        color: Color.fromARGB(255, 225, 226, 228),
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: ListView.builder(
+        shrinkWrap: true,
+        physics: ClampingScrollPhysics(),
+        itemCount: storeList.length,
+        itemBuilder: (context, index) {
+          // Check if the index is within the valid range
+          if (index >= 0 && index < storeList.length) {
+            // Access individual store information using storeList[index]
+            Map<String, dynamic> stores = storeList[index];
+            String name = stores['name'].toString();
+            String id = stores['id'].toString();
+
+            // Wrap the ListTile with GestureDetector to make it tappable
+            return GestureDetector(
+              onTap: () async {
+                // Handle the tap action here, e.g., navigate to a new screen
+                print('Tapped on item with id: $id');
+ String storeDetails =
+                      await Api().getStoreDetails(authProvider, stores['id']);
+
+                  // Parse the store details JSON
+                  Map<String, dynamic> storeDetailsMap =
+                      jsonDecode(storeDetails);
+                Map<String, dynamic> store = storeDetailsMap['store'];
+                Navigator.pushNamed(context, '/store-info', arguments: store);
+
+print(store);
+              },
+              child: ListTile(
+                title: Text(name),
+                // subtitle: Text(store['description']),  // Replace 'description' with the actual key
+                // Add more widgets to display additional information as needed
+              ),
+            );
+          } else {
+            // Handle the case where the index is out of bounds
+            return SizedBox.shrink();
+          }
+        },
+      ),
+    ),
+  ),
+          ],
         ),
-        bottomNavigationBar: BottomNav(initialIndex: 0),
+      ),
+    ),
+    bottomNavigationBar: BottomNav(initialIndex: 0),
+  ),
+  ),
+);
+
+  }
+
+  Widget buildIconWithText(IconData icon, String englishText, String arabicText,
+      VoidCallback onTap) {
+    final isEnglish = Provider.of<AppState>(context).isEnglish;
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          CircleAvatar(
+            radius: 30,
+            backgroundColor: Colors.blue,
+            child: Icon(
+              icon,
+              color: Colors.white,
+              size: 30,
+            ),
+          ),
+          SizedBox(height: 8),
+          Text(
+            isEnglish ? englishText : arabicText,
+            style: TextStyle(fontSize: 14),
+          ),
+        ],
       ),
     );
   }
-
-Widget buildIconWithText(
-  IconData icon, String englishText, String arabicText, VoidCallback onTap) {
-  final isEnglish = Provider.of<AppState>(context).isEnglish;
-
-  return GestureDetector(
-    onTap: onTap,
-    child: Column(
-      children: [
-        CircleAvatar(
-          radius: 30,
-          backgroundColor: Colors.blue,
-          child: Icon(
-            icon,
-            color: Colors.white,
-            size: 30,
-          ),
-        ),
-        SizedBox(height: 8),
-        Text(
-          isEnglish ? englishText : arabicText,
-          style: TextStyle(fontSize: 14),
-        ),
-      ],
-    ),
-  );
-}
 }

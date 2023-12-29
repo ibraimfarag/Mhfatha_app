@@ -377,6 +377,40 @@ if (response.statusCode == 200) {
       return false;
     }
   }
+  Future<String> searchStores(AuthProvider authProvider,String query, String lang) async {
+  final url = Uri.parse('$baseUrl/stores/search-by-name');
+
+  try {
+    final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${authProvider.token}',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'search_term': query,
+          'lang': lang,
+        }),
+      );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      // print('Search Response Data: $jsonResponse');
+
+      // Convert the response data to a JSON string
+      String jsonString = jsonEncode(jsonResponse);
+
+      return jsonString;
+    } else {
+      throw Exception(
+          'Failed to search stores. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
+    }
+  } catch (e) {
+    print('Error during store search: $e');
+    return ''; // Return an empty string or handle the error as needed
+  }
+}
+
 }
 
 void _showLoadingDialog(BuildContext context) {
