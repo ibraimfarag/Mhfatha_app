@@ -491,7 +491,7 @@ List<Map<String, dynamic>> storeList = [];
            FocusScope.of(context).unfocus();
 
       setState(() {
-        // searchSuggestions = [];
+        storeList = [];
       });
     },
     child:  Scaffold(
