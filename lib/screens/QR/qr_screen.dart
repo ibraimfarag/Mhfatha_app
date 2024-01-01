@@ -53,10 +53,7 @@ class _QrScannerState extends State<QrScanner> {
                 ),
               ),
               SizedBox(height: 16),
-              Text(
-                'Scanned Data: ${scannedData?.code ?? "No data"}',
-                style: TextStyle(fontSize: 16),
-              ),
+           
             ],
           ),
         ),

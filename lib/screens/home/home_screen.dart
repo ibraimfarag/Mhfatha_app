@@ -177,7 +177,7 @@ List<Map<String, dynamic>> storeList = [];
 
                   // Call the API to get store details
                   String storeDetails =
-                      await Api().getStoreDetails(authProvider, store['id']);
+                      await Api().getStoreDetails(authProvider, store['id'],latitude!,longitude!);
 
                   // Parse the store details JSON
                   Map<String, dynamic> storeDetailsMap =
@@ -632,7 +632,7 @@ if (storeList.isNotEmpty)
                 // Handle the tap action here, e.g., navigate to a new screen
                 print('Tapped on item with id: $id');
  String storeDetails =
-                      await Api().getStoreDetails(authProvider, stores['id']);
+                      await Api().getStoreDetails(authProvider, stores['id'],latitude!,longitude!);
 
                   // Parse the store details JSON
                   Map<String, dynamic> storeDetailsMap =

@@ -127,7 +127,7 @@ class Api {
     }
   }
 
-  Future<String> getStoreDetails(AuthProvider authProvider, int storeId) async {
+  Future<String> getStoreDetails(AuthProvider authProvider, int storeId,double latitude, double longitude) async {
     final url = Uri.parse('$baseUrl/store');
 
     try {
@@ -139,6 +139,8 @@ class Api {
         },
         body: jsonEncode(<String, dynamic>{
           'id': storeId,
+          'user_latitude':latitude,
+          'user_longitude': longitude,
         }),
       );
 
