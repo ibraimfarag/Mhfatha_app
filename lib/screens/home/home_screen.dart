@@ -21,11 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // Declare a controller for the QR code scanner
   late QRViewController controller;
 
-
-
-
-List<Map<String, dynamic>> storeList = [];
-
+  List<Map<String, dynamic>> storeList = [];
 
   List<Map<String, dynamic>> filteredStores = [];
 
@@ -176,8 +172,8 @@ List<Map<String, dynamic>> storeList = [];
                   int storeId = store['id'];
 
                   // Call the API to get store details
-                  String storeDetails =
-                      await Api().getStoreDetails(authProvider, store['id'],latitude!,longitude!);
+                  String storeDetails = await Api().getStoreDetails(
+                      authProvider, store['id'], latitude!, longitude!);
 
                   // Parse the store details JSON
                   Map<String, dynamic> storeDetailsMap =
@@ -448,33 +444,7 @@ List<Map<String, dynamic>> storeList = [];
     }).toList();
   }
 
-  // Function to show the QR code scanner
-  void _showQRScanner() {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          height: 300,
-          child: QRView(
-            key: qrKey,
-            onQRViewCreated: _onQRViewCreated,
-          ),
-        );
-      },
-    );
-  }
 
-  // Function to handle QR code view creation
-  void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      // Handle the scanned QR code data
-      print("Scanned QR code data: $scanData");
-
-      // Add your logic here to process the scanned QR code data
-      // For example, you can navigate to a new screen or perform an action based on the data.
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -484,212 +454,309 @@ List<Map<String, dynamic>> storeList = [];
 
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
+    String authName = authProvider.user![
+        'first_name']; // Replace with the actual property holding the user's name
 
-   return DirectionalityWrapper(
-  child: GestureDetector(
-    onTap: () {
-           FocusScope.of(context).unfocus();
+    return DirectionalityWrapper(
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
 
-      setState(() {
-        storeList = [];
-      });
-    },
-    child:  Scaffold(
-    body: Container(
-      width: size.width, // Set the width of the container
-      child: SingleChildScrollView(
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                SizedBox(
-                  height: 100,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                  child: Column(
+          setState(() {
+            storeList = [];
+          });
+        },
+        child: Scaffold(
+          body: Container(
+            width: size.width, // Set the width of the container
+            child: SingleChildScrollView(
+              child: Stack(
+                children: [
+                  Column(
                     children: [
-                      TextField(
-                        decoration: InputDecoration(
-                          hintStyle: TextStyle(color: Colors.grey.shade700),
-                          filled: true,
-                          hintText: isEnglish ? 'Search stores' : 'ابحث عن متجر',
-                          prefixIcon: Icon(Icons.search),
-                          fillColor: Color.fromARGB(255, 225, 226, 228),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color: Color.fromARGB(255, 225, 226, 228)),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(color: Color.fromARGB(255, 225, 226, 228)),
+                      SizedBox(
+                        height: 60,
+                      ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 25),
+                        child: Align(
+                          alignment: isEnglish
+                              ? Alignment.centerLeft
+                              : Alignment.centerRight,
+                          child: Text(
+                            isEnglish
+                                ? 'Welcome $authName'
+                                : 'مرحبًا $authName',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                        onChanged: (query) {
-                          // Call the API method to search stores with the entered query
-                          api.searchStores(authProvider, query, lang).then((result) {
-                            // print('Search Result: $result');
+                      ),
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                        child: Column(
+                          children: [
+                            TextField(
+                              decoration: InputDecoration(
+                                hintStyle:
+                                    TextStyle(color: Colors.grey.shade700),
+                                filled: true,
+                                hintText: isEnglish
+                                    ? 'Search stores'
+                                    : 'ابحث عن متجر',
+                                prefixIcon: Icon(Icons.search),
+                                fillColor: Color.fromARGB(255, 225, 226, 228),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                      color:
+                                          Color.fromARGB(255, 225, 226, 228)),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                      color:
+                                          Color.fromARGB(255, 225, 226, 228)),
+                                ),
+                              ),
+                              onChanged: (query) {
+                                // Call the API method to search stores with the entered query
+                                api
+                                    .searchStores(authProvider, query, lang)
+                                    .then((result) {
+                                  // print('Search Result: $result');
 
-                            // Parse the JSON response
-                            Map<String, dynamic> jsonResponse = jsonDecode(result);
+                                  // Parse the JSON response
+                                  Map<String, dynamic> jsonResponse =
+                                      jsonDecode(result);
 
-                            // Check if 'stores' key exists and its type is correct
-                            if (jsonResponse.containsKey('stores') && jsonResponse['stores'] is List<dynamic>) {
-                              List<dynamic> stores = jsonResponse['stores'];
+                                  // Check if 'stores' key exists and its type is correct
+                                  if (jsonResponse.containsKey('stores') &&
+                                      jsonResponse['stores'] is List<dynamic>) {
+                                    List<dynamic> stores =
+                                        jsonResponse['stores'];
 
-                              // Convert each item in the list to a Map
-                              // List<Map<String, dynamic>> storeList = stores.whereType<Map<String, dynamic>>().toList();
-                              
-                        storeList = stores.whereType<Map<String, dynamic>>().toList();
-      setState(() {});
+                                    // Convert each item in the list to a Map
+                                    // List<Map<String, dynamic>> storeList = stores.whereType<Map<String, dynamic>>().toList();
 
+                                    storeList = stores
+                                        .whereType<Map<String, dynamic>>()
+                                        .toList();
+                                    setState(() {});
+                                  }
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                        alignment: isEnglish
+                            ? Alignment.centerLeft
+                            : Alignment.centerRight,
+                        child: Row(
+                          children: [
+                            Icon(Icons.store, color: Colors.black, size: 24),
+                            SizedBox(width: 10),
+                            Text(
+                              isEnglish ? 'Nearby Stores' : 'متاجر قريبة',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (filteredStores.isNotEmpty)
+                        Container(
+                          // Add your custom properties for the CarouselSlider...
+                          child: CarouselSlider(
+                            items: buildStoreContainers(),
+                            options: CarouselOptions(
+                              autoPlay: true,
+                              aspectRatio: 22 / 12,
+                              enlargeCenterPage: false,
+                              enableInfiniteScroll: true,
+                              autoPlayCurve: Curves.fastOutSlowIn,
+                              autoPlayAnimationDuration:
+                                  Duration(milliseconds: 4000),
+                              viewportFraction: 0.5,
+                            ),
+                          ),
+                        ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            buildIconWithText(
+                              Icons.qr_code,
+                              'Scan QR',
+                              'فحص كود',
+                              'images/scan-qr.jpg', // Replace with the actual image path
+                              () {
+                                Navigator.pushNamed(context, '/qr-scanner');
+                              },
+                            ),
 
+                            buildIconWithText(Icons.store, 'Nearby stores', 'متاجر قريبة',
+                                'images/near-by.jpg', () 
+                                {
+                                    Navigator.pushNamed(context, '/nearby');
+
+                                }),
+                            // buildIconWithText(Icons.search, 'Search', 'البحث', () {}),
+                          
+                          
+                            buildIconWithText(Icons.local_offer, 'Top Discount',
+                                'أعلى خصم', 'images/best-deal.jpg', () 
+                                {
+                                    Navigator.pushNamed(context, '/nearby');
+
+                                }),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (storeList.isNotEmpty)
+                    Positioned(
+                      top: 160, // Adjust the top position as needed
+                      left: 20, // Adjust the left position as needed
+                      child: Container(
+                        constraints: BoxConstraints(maxHeight: 200),
+                        width: size.width - 40,
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 225, 226, 228),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: ClampingScrollPhysics(),
+                          itemCount: storeList.length,
+                          itemBuilder: (context, index) {
+                            // Check if the index is within the valid range
+                            if (index >= 0 && index < storeList.length) {
+                              // Access individual store information using storeList[index]
+                              Map<String, dynamic> stores = storeList[index];
+                              String name = stores['name'].toString();
+                              String id = stores['id'].toString();
+
+                              // Wrap the ListTile with GestureDetector to make it tappable
+                              return GestureDetector(
+                                onTap: () async {
+                                  // Handle the tap action here, e.g., navigate to a new screen
+                                  print('Tapped on item with id: $id');
+                                  String storeDetails = await Api()
+                                      .getStoreDetails(authProvider,
+                                          stores['id'], latitude!, longitude!);
+
+                                  // Parse the store details JSON
+                                  Map<String, dynamic> storeDetailsMap =
+                                      jsonDecode(storeDetails);
+                                  Map<String, dynamic> store =
+                                      storeDetailsMap['store'];
+                                  Navigator.pushNamed(context, '/store-info',
+                                      arguments: store);
+
+                                  print(store);
+                                },
+                                child: ListTile(
+                                  title: Text(name),
+                                  // subtitle: Text(store['description']),  // Replace 'description' with the actual key
+                                  // Add more widgets to display additional information as needed
+                                ),
+                              );
+                            } else {
+                              // Handle the case where the index is out of bounds
+                              return SizedBox.shrink();
                             }
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                  alignment: isEnglish ? Alignment.centerLeft : Alignment.centerRight,
-                  child: Row(
-                    children: [
-                      Icon(Icons.store, color: Colors.black, size: 24),
-                      SizedBox(width: 10),
-                      Text(
-                        isEnglish ? 'Nearby Stores' : 'متاجر قريبة',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                          },
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                if (filteredStores.isNotEmpty)
-                  Container(
-                    // Add your custom properties for the CarouselSlider...
-                    child: CarouselSlider(
-                      items: buildStoreContainers(),
-                      options: CarouselOptions(
-                        autoPlay: true,
-                        aspectRatio: 22 / 12,
-                        enlargeCenterPage: false,
-                        enableInfiniteScroll: true,
-                        autoPlayCurve: Curves.fastOutSlowIn,
-                        autoPlayAnimationDuration: Duration(milliseconds: 4000),
-                        viewportFraction: 0.5,
                       ),
                     ),
-                  ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      buildIconWithText(Icons.qr_code, 'Scan QR', 'فحص كود',
-                          () {
-                        Navigator.pushNamed(context, '/qr-scanner');
-                      }),
-                      buildIconWithText(Icons.store, 'Nearby', 'قريبة', () {}),
-                      buildIconWithText(Icons.search, 'Search', 'البحث', () {}),
-                      buildIconWithText(
-                          Icons.local_offer, 'Top Discount', 'أعلى خصم', () {}),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-  
-if (storeList.isNotEmpty)
-  Positioned(
-    top: 160, // Adjust the top position as needed
-    left: 20, // Adjust the left position as needed
-    child: Container(
-      constraints: BoxConstraints(maxHeight: 200),
-      width: size.width - 40,
-      decoration: BoxDecoration(
-        color: Color.fromARGB(255, 225, 226, 228),
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: ListView.builder(
-        shrinkWrap: true,
-        physics: ClampingScrollPhysics(),
-        itemCount: storeList.length,
-        itemBuilder: (context, index) {
-          // Check if the index is within the valid range
-          if (index >= 0 && index < storeList.length) {
-            // Access individual store information using storeList[index]
-            Map<String, dynamic> stores = storeList[index];
-            String name = stores['name'].toString();
-            String id = stores['id'].toString();
-
-            // Wrap the ListTile with GestureDetector to make it tappable
-            return GestureDetector(
-              onTap: () async {
-                // Handle the tap action here, e.g., navigate to a new screen
-                print('Tapped on item with id: $id');
- String storeDetails =
-                      await Api().getStoreDetails(authProvider, stores['id'],latitude!,longitude!);
-
-                  // Parse the store details JSON
-                  Map<String, dynamic> storeDetailsMap =
-                      jsonDecode(storeDetails);
-                Map<String, dynamic> store = storeDetailsMap['store'];
-                Navigator.pushNamed(context, '/store-info', arguments: store);
-
-print(store);
-              },
-              child: ListTile(
-                title: Text(name),
-                // subtitle: Text(store['description']),  // Replace 'description' with the actual key
-                // Add more widgets to display additional information as needed
+                ],
               ),
-            );
-          } else {
-            // Handle the case where the index is out of bounds
-            return SizedBox.shrink();
-          }
-        },
-      ),
-    ),
-  ),
-          ],
+            ),
+          ),
+          bottomNavigationBar: BottomNav(initialIndex: 0),
         ),
       ),
-    ),
-    bottomNavigationBar: BottomNav(initialIndex: 0),
-  ),
-  ),
-);
-
+    );
   }
 
   Widget buildIconWithText(IconData icon, String englishText, String arabicText,
-      VoidCallback onTap) {
+      String imagePath, VoidCallback onTap) {
     final isEnglish = Provider.of<AppState>(context).isEnglish;
 
     return GestureDetector(
       onTap: onTap,
-      child: Column(
-        children: [
-          CircleAvatar(
-            radius: 30,
-            backgroundColor: Colors.blue,
-            child: Icon(
-              icon,
-              color: Colors.white,
-              size: 30,
+      child: Container(
+        width: 110, // Adjust the width as needed
+        margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+        decoration: BoxDecoration(
+          color: Color.fromARGB(255, 238, 238, 238),
+            border: Border.all(
+          color: Color.fromARGB(5, 0, 0, 0), // You can customize the border color
+          width: 2, // You can customize the border width
+        ),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Column(
+          children: [
+            Container(
+              height: 100,
+              width: 180,
+              child: ClipRRect(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(15),
+                  topRight: Radius.circular(15),
+                ),
+                child: ShaderMask(
+                  shaderCallback: (Rect bounds) {
+                    return LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [
+                        Colors.transparent,
+                        const Color.fromARGB(255, 238, 238, 238).withOpacity(0.8),
+                      ],
+                      stops: [0.0, 1.0],
+                    ).createShader(bounds);
+                  },
+                  blendMode: BlendMode.dstIn,
+                  child: Image.asset(
+                    imagePath, // Use the provided image path
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
             ),
-          ),
-          SizedBox(height: 8),
-          Text(
-            isEnglish ? englishText : arabicText,
-            style: TextStyle(fontSize: 14),
-          ),
-        ],
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+              child: Align(
+                alignment:
+                    isEnglish ? Alignment.centerLeft : Alignment.centerRight,
+                child: Text(
+                  isEnglish ? englishText : arabicText,
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: AppVariables.serviceFontFamily,
+                    fontSize: 14,
+                  ),
+                  textAlign: isEnglish ? TextAlign.left : TextAlign.right,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
