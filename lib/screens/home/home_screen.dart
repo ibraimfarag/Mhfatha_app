@@ -606,7 +606,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
 
                             buildIconWithText(Icons.store, 'Nearby stores', 'متاجر قريبة',
-                                'images/near-by.jpg', () 
+                                'images/near-by.jpg', ()
                                 {
                                     Navigator.pushNamed(context, '/nearby');
 
@@ -698,7 +698,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 110, // Adjust the width as needed
+        width: 100, // Adjust the width as needed
         margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
         decoration: BoxDecoration(
           color: Color.fromARGB(255, 238, 238, 238),
