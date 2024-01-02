@@ -44,11 +44,79 @@ class MhfathaApp extends StatefulWidget {
 
 class _MhfathaAppState extends State<MhfathaApp> {
   // Assume you have a variable to track the selected language
+    double? latitude;
+  double? longitude;
   @override
   void initState() {
     super.initState();
     Provider.of<AuthProvider>(context, listen: false).loadAuthData();
+        _getLocation();
+
   }
+
+
+
+  Future<void> _getLocation() async {
+  // Check if the widget is still mounted
+  if (!mounted) {
+    return;
+  }
+
+  // Check if locationWhenInUse permission is granted
+  var status = await Permission.locationWhenInUse.status;
+
+  if (status.isDenied) {
+    // Request locationWhenInUse permission if not granted
+    status = await Permission.locationWhenInUse.request();
+
+    if (!mounted) {
+      return;
+    }
+
+    if (status.isDenied) {
+      // Handle case when locationWhenInUse permission is still not granted
+      print('Location permission is denied.');
+      return;
+    }
+  }
+
+  // Check if locationAlways permission is granted
+var statues = await Permission.locationAlways.status;
+
+if (statues.isDenied) {
+  // Request locationAlways permission
+  status = await Permission.locationAlways.request();
+
+  if (statues.isDenied) {
+    // Handle case when locationAlways permission is still not granted
+    print('Location permission for background use is denied.');
+    return;
+  }
+}
+
+  try {
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+
+    // Check if the widget is still mounted before updating the state
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      latitude = position.latitude;
+      longitude = position.longitude;
+    });
+
+    // Call the method to send location when the coordinates are available
+  
+  } catch (e) {
+    print("Error getting location: $e");
+  }
+}
+
+
   @override
   Widget build(BuildContext context) {
     Provider.of<AppState>(context, listen: false).loadLanguage();

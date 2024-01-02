@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:mhfatha/settings/imports.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'dart:async';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -24,11 +25,51 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Map<String, dynamic>> storeList = [];
 
   List<Map<String, dynamic>> filteredStores = [];
+  Timer? locationTimer;
 
   @override
   void initState() {
     super.initState();
     _getLocation();
+
+    // Set up a timer to check location changes every 90 seconds
+    locationTimer = Timer.periodic(Duration(seconds: 10), (Timer timer) async {
+      await _checkAndSendLocation();
+    });
+  }
+//  @override
+// void dispose() {
+  // Cancel the timer when the widget is disposed
+  // locationTimer?.cancel();
+  // super.dispose();
+// }
+
+  Future<void> _checkAndSendLocation() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      // Check if the widget is still mounted before updating the state
+      if (!mounted) {
+        return;
+      }
+
+      // Check if the location has changed significantly
+      if (latitude != position.latitude || longitude != position.longitude) {
+        setState(() {
+          latitude = position.latitude;
+          longitude = position.longitude;
+        });
+
+        // Call the method to send location when the coordinates are available
+        if (latitude != null && longitude != null) {
+          await _sendLocation();
+        }
+      }
+    } catch (e) {
+      print("Error getting location: $e");
+    }
   }
 
   int calculateDaysRemaining(String endDate) {
@@ -48,26 +89,43 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _getLocation() async {
-    // Check if permission is granted
+    // Check if the widget is still mounted
+    if (!mounted) {
+      return;
+    }
+
+    // Check if locationWhenInUse permission is granted
     var status = await Permission.locationWhenInUse.status;
 
     if (status.isDenied) {
-      // Request permission if not granted
-
+      // Request locationWhenInUse permission if not granted
       status = await Permission.locationWhenInUse.request();
 
-      // status = await Permission.location.request();
-// await requestLocationPermission();
-      // await Permission.location.request();
-      //  bool isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
-
-      // await Geolocator.checkPermission();
-      await Geolocator.requestPermission();
+      if (!mounted) {
+        return;
+      }
 
       if (status.isDenied) {
-        // Handle case when permission is still not granted
+        // Handle case when locationWhenInUse permission is still not granted
         print('Location permission is denied.');
+        return;
+      }
+    }
 
+    // Check if locationAlways permission is granted
+    status = await Permission.locationAlways.status;
+
+    if (status.isDenied) {
+      // Request locationAlways permission if not granted
+      status = await Permission.locationAlways.request();
+
+      if (!mounted) {
+        return;
+      }
+
+      if (status.isDenied) {
+        // Handle case when locationAlways permission is still not granted
+        print('Location permission for background use is denied.');
         return;
       }
     }
@@ -76,8 +134,11 @@ class _HomeScreenState extends State<HomeScreen> {
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
-      LocationPermission permission;
-      permission = await Geolocator.requestPermission();
+
+      // Check if the widget is still mounted before updating the state
+      if (!mounted) {
+        return;
+      }
 
       setState(() {
         latitude = position.latitude;
@@ -444,8 +505,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }).toList();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
@@ -605,21 +664,17 @@ class _HomeScreenState extends State<HomeScreen> {
                               },
                             ),
 
-                            buildIconWithText(Icons.store, 'Nearby stores', 'متاجر قريبة',
-                                'images/near-by.jpg', ()
-                                {
-                                    Navigator.pushNamed(context, '/nearby');
-
-                                }),
+                            buildIconWithText(Icons.store, 'Nearby stores',
+                                'متاجر قريبة', 'images/near-by.jpg', () {
+                              Navigator.pushNamed(context, '/nearby',
+                                  arguments: filteredStores);
+                            }),
                             // buildIconWithText(Icons.search, 'Search', 'البحث', () {}),
-                          
-                          
-                            buildIconWithText(Icons.local_offer, 'Top Discount',
-                                'أعلى خصم', 'images/best-deal.jpg', () 
-                                {
-                                    Navigator.pushNamed(context, '/nearby');
 
-                                }),
+                            buildIconWithText(Icons.local_offer, 'Top Discount',
+                                'أعلى خصم', 'images/best-deal.jpg', () {
+                              // Navigator.pushNamed(context, '');
+                            }),
                           ],
                         ),
                       ),
@@ -702,10 +757,11 @@ class _HomeScreenState extends State<HomeScreen> {
         margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
         decoration: BoxDecoration(
           color: Color.fromARGB(255, 238, 238, 238),
-            border: Border.all(
-          color: Color.fromARGB(5, 0, 0, 0), // You can customize the border color
-          width: 2, // You can customize the border width
-        ),
+          border: Border.all(
+            color: Color.fromARGB(
+                5, 0, 0, 0), // You can customize the border color
+            width: 2, // You can customize the border width
+          ),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Column(
@@ -725,7 +781,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       end: Alignment.topCenter,
                       colors: [
                         Colors.transparent,
-                        const Color.fromARGB(255, 238, 238, 238).withOpacity(0.8),
+                        const Color.fromARGB(255, 238, 238, 238)
+                            .withOpacity(0.8),
                       ],
                       stops: [0.0, 1.0],
                     ).createShader(bounds);

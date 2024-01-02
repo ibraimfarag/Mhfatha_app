@@ -9,6 +9,7 @@ class GetDiscount extends StatefulWidget {
   @override
   _GetDiscountState createState() => _GetDiscountState();
 }
+Color themeColor = const Color(0xFF43D19E);
 
 class _GetDiscountState extends State<GetDiscount> {
   // Define a text controller for the cost input
@@ -19,6 +20,7 @@ class _GetDiscountState extends State<GetDiscount> {
   int _currentScreen = 1;
   Color backgroundColor = Color.fromARGB(255, 236, 236, 236);
   bool _isNextButtonEnabled = false;
+  Color textColor = const Color(0xFF32567A);
 
   @override
   Widget build(BuildContext context) {
@@ -39,34 +41,7 @@ class _GetDiscountState extends State<GetDiscount> {
   double totalPayment = double.tryParse(_costController.text) ?? 0.0; // Replace 0.0 with a default value or handle it as needed
   String lang = Provider.of<AppState>(context, listen: false).display;
 
-void _showSuccessDialog() {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text(
-          isEnglish ? 'Congratulations' : 'تهانينا',
-        ),
-        content: Text(
-          isEnglish
-              ? 'You have successfully applied the discount. Please pay for the vendor.'
-              : 'لقد قمت بتطبيق الخصم بنجاح. يرجى دفع المبلغ للبائع.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              // You can navigate to the next screen or perform other actions here
-            },
-            child: Text(
-              isEnglish ? 'OK' : 'حسنا',
-            ),
-          ),
-        ],
-      );
-    },
-  );
-}
+ 
 
 void _postDiscountDetails() async {
   try {
@@ -128,63 +103,47 @@ if (response.statusCode == 200 ) {
   }
 }
 
+Future<void> _showConfirmationDialog() async {
+  bool confirm = await 
+QuickAlert.show(
+ context: context,
+ type: QuickAlertType.confirm,
+ text:             isEnglish
+                ? 'Are you sure you want to proceed?'
+                : 'هل أنت متأكد أنك تريد المتابعة؟',
+ confirmBtnText: isEnglish ? 'Yes' : 'نعم',
+ cancelBtnText: isEnglish ? 'No' : 'لا',
+ confirmBtnColor: Colors.green,
 
-    Future<void> _showConfirmationDialog() async {
-      bool confirm = await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-  title: Text(
-    isEnglish ? 'Confirmation' : 'تأكيد',
-  ),
-  content: Text(
-    isEnglish
-        ? 'Are you sure you want to proceed?'
-        : 'هل أنت متأكد أنك تريد المتابعة؟',
-  ),
-  actions: [
-    TextButton(
-      onPressed: () {
-        Navigator.of(context).pop(false); // No
-      },
-      child: Text(isEnglish ? 'No' : 'لا'),
-    ),
-    TextButton(
-      onPressed: () {
-        Navigator.of(context).pop(true); // Yes
-      },
-      child: Text(isEnglish ? 'Yes' : 'نعم'),
-    ),
-  ],
+   onConfirmBtnTap: () async {     Navigator.of(context).pop(true); }
 );
+                // Navigator.of(context).pop(false); // No
 
-        },
-      );
+  if (confirm == true) {
+    _postDiscountDetails();
+  }
+}
 
-      if (confirm == true) {
-        _postDiscountDetails();
-      }
-    }
 
     return DirectionalityWrapper(
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          actions: [
+          // actions: [
             // Show the back button only on screen 2 and 3
-            if (_currentScreen > 1)
-              IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  // Navigate back to the previous screen
-                  setState(() {
-                    _currentScreen--;
-                  });
-                },
-                color: Color.fromARGB(255, 7, 0, 34),
-              ),
-          ],
+            // if (_currentScreen > 1)
+              // IconButton(
+              //   icon: Icon(Icons.arrow_back),
+              //   onPressed: () {
+              //     // Navigate back to the previous screen
+              //     setState(() {
+              //       _currentScreen--;
+              //     });
+              //   },
+              //   color: Color.fromARGB(255, 7, 0, 34),
+              // ),
+          // ],
         ),
         body: SingleChildScrollView(
             child: Column(
@@ -210,11 +169,19 @@ if (response.statusCode == 200 ) {
                       children: [
                         Text(
                           isEnglish
-                              ? 'You have chosen discount on: ${discount['category']} from ${store['name']}'
-                              : 'لقد اخترت خصم على: ${discount['category']} من  ${store['name']}',
-                          style: TextStyle(fontSize: 14),
+                              ? 'You have chosen discount on'
+                              : 'لقد اخترت خصم على',
+                          style: TextStyle(fontSize: 18),
                           textAlign:
-                              isEnglish ? TextAlign.left : TextAlign.right,
+                              isEnglish ? TextAlign.center : TextAlign.center,
+                        ),
+                        Text(
+                          isEnglish
+                              ? ' ${discount['category']} from ${store['name']}'
+                              : '${discount['category']} من  ${store['name']}',
+                          style: TextStyle(fontSize: 18),
+                          textAlign:
+                              isEnglish ? TextAlign.center : TextAlign.center,
                         ),
 
                         SizedBox(height: 16),
@@ -279,55 +246,130 @@ if (response.statusCode == 200 ) {
       /* -------------------------------------------------------------------------- */
 /* ----------------------------- SCREEN SUCCESS ----------------------------- */
 /* -------------------------------------------------------------------------- */
-
 if (_currentScreen == 2)
   Column(
     mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.center,
     children: [
-      // Display congratulatory message
+      Container(
+        height: 170,
+        padding: EdgeInsets.all(35),
+        decoration: BoxDecoration(
+          color: themeColor,
+          shape: BoxShape.circle,
+        ),
+        child: Image.asset(
+          "images/card.png",
+          fit: BoxFit.contain,
+        ),
+      ),
+      SizedBox(height: MediaQuery.of(context).size.height * 0.1),
       Text(
         isEnglish
-            ? 'Congratulations! You have earned a discount of ${discount['category']} from ${store['name']}.'
-            : 'تهانينا! لقد حصلت على خصم ${discount['category']} من ${store['name']}.',
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 18),
+            ? 'Congratulations! '
+            : 'تهانينا!',
+        style: TextStyle(
+          color: themeColor,
+          fontWeight: FontWeight.w600,
+          fontSize: 36,
+        ),
       ),
-        // Display the response message
+      SizedBox(height: MediaQuery.of(context).size.height * 0.01),
       Text(
-        _discountResponseMessage,
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 16),
+        isEnglish
+            ? ' You have earned a discount of '
+            : 'لقد حصلت على خصم ',
+        style: TextStyle(
+          color: Colors.black87,
+          fontWeight: FontWeight.w400,
+          fontSize: 17,
+        ),
       ),
-     
-      SizedBox(height: 16),
-      // Buttons for accepting or canceling
+      Text(
+        isEnglish
+            ? ' ${discount['category']} from ${store['name']}.'
+            : '${discount['category']} من ${store['name']}.',
+        style: TextStyle(
+          color: Colors.black87,
+          fontWeight: FontWeight.w400,
+          fontSize: 17,
+        ),
+      ),
+      SizedBox(height: MediaQuery.of(context).size.height * 0.02),
+      Text(
+        isEnglish
+            ? "Please pay ${_discountResponseMessage} SAR to the merchant"
+            : " يرجى دفع ${_discountResponseMessage} ريال للتاجر",
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Colors.black54,
+          fontWeight: FontWeight.w400,
+          fontSize: 16,
+        ),
+      ),
+      SizedBox(height: MediaQuery.of(context).size.height * 0.06),
+      // Row for buttons
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ElevatedButton(
             onPressed: () {
-              // Perform action for accepting
+
+QuickAlert.show(
+ context: context,
+ type: QuickAlertType.success,
+ text: isEnglish? 'Thank you, the discount has been successfully registered with the merchant':'شكرا لك , لقد تم تسجيل الخصم بنجاح عند التاجر ',
+ confirmBtnText : isEnglish? 'Back to home ':'العودة للرئيسية',
+onConfirmBtnTap: () async {Navigator.pushNamed(context, '/home',);},
+confirmBtnColor:themeColor
+);
+
             },
-            child: Text(isEnglish ? 'Accept' : 'قبول'),
+            child: Text(
+              isEnglish ? 'Accepted' : 'مقبولة',
+              style: TextStyle(color: Colors.white),
+            ),
+            style: ElevatedButton.styleFrom(
+              primary: themeColor, // Set your desired color for accept button
+               shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20), // Adjust the radius as needed
+        ),
+            ),
+            
           ),
           SizedBox(width: 16),
           ElevatedButton(
             onPressed: () {
-              // Perform action for canceling
+            
+QuickAlert.show(
+ context: context,
+ type: QuickAlertType.warning,
+ text: isEnglish? 'Are you sure there is an error in the process of obtaining a discount? If you choose yes, you will send a complaint to the administration.':'هل انت متاكد ان هناك خطأ في عملية الحصول على خصم؟  في حالة اختيار نعم سوف تقوم بارسال شكوي الي الادارة',
+ confirmBtnText : isEnglish? 'yes ':'نعم',
+cancelBtnText : isEnglish? 'no ':'لا',
+onConfirmBtnTap: () async { Navigator.pop(context);
+Navigator.pushNamed(context, '/report', arguments: store);
+
+},
+// confirmBtnColor:themeColor
+);
             },
-            child: Text(isEnglish ? 'Cancel' : 'إلغاء'),
+            child: Text(
+              isEnglish ? 'Canceled' : 'غير مقبولة',
+              style: TextStyle(color: Colors.white),
+            ),
+            style: ElevatedButton.styleFrom(
+              primary: Colors.red, // Set your desired color for cancel button
+               shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20), // Adjust the radius as needed
+        ),
+            ),
           ),
         ],
       ),
-      SizedBox(height: 16),
-      // Add your asset image here
-      Image.asset(
-        'images/asse.png', // Replace with the actual asset image path
-        height: 60, // Set your desired height
-        fit: BoxFit.cover, // Adjust the fit as needed
-      ),
     ],
   ),
+
 
                   // Add more screens if needed
                 ],

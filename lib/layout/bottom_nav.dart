@@ -18,6 +18,8 @@ class _BottomNavState extends State<BottomNav> {
 
   @override
   Widget build(BuildContext context) {
+        bool isEnglish = Provider.of<AppState>(context).isEnglish;
+
     return DefaultTextStyle(
       // Set the default text style for the entire BottomNavigationBar
       style: TextStyle(
@@ -40,18 +42,26 @@ class _BottomNavState extends State<BottomNav> {
             case 1:
               Navigator.pushReplacementNamed(context, '/settings');
               break;
+            case 2:
+              Navigator.pushReplacementNamed(context, '/requests');
+              break;
             
           }
         },
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'الرئيسية',
+            label:isEnglish?  'Home':'الرئيسية' ,
           ),
         
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
-            label: 'الاعدادات',
+            label: isEnglish?'settings':'الاعدادات',
+          ),
+
+          BottomNavigationBarItem(
+            icon: Icon(Icons.wallet),
+            label:isEnglish? 'requets':'طلباتي',
           ),
          
         ],

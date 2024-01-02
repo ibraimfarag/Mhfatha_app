@@ -40,6 +40,13 @@ export 'package:mhfatha/screens/QR/qr_response.dart';
 export 'package:mhfatha/screens/QR/get_discount.dart';
 
 
+export 'package:mhfatha/screens/QR/report.dart';
+
+// /* -------------------------------- Requests -------------------------------- */
+
+export 'package:mhfatha/screens/requests/main.dart';
+
+
 // /* -------------------------------- settings -------------------------------- */
 export 'package:mhfatha/layout/DirectionalityWrapper.dart';
 
@@ -115,6 +122,11 @@ export 'package:image_picker/image_picker.dart';
 export  'package:animate_do/animate_do.dart';
 
 // /* ------------------------ flutter_animate_on_scroll ----------------------- */
+export 'package:quickalert/quickalert.dart';
+
+// /* ----------------------------------- SVG ---------------------------------- */
+// export package:flutter_svg/svg.dart';
+
 
 // /* -------------------------------------------------------------------------- */
 // /* --------------------------------- Widgets -------------------------------- */

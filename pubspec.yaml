@@ -1,5 +1,5 @@
 name: mhfatha
-description: A new Flutter project.
+description: Discountes app
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -56,6 +56,8 @@ dependencies:
   animate_do: ^3.1.2
   dropdown_search: ^5.0.6
   drop_down_search_field: ^1.0.0
+  quickalert: ^1.0.2
+  flutter_svg: ^2.0.9
 
 
 dev_dependencies:
@@ -126,20 +128,20 @@ flutter:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/icon/logo.png"
+  image_path: "assets/icon/lo_go.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
   web:
     generate: true
-    image_path: "assets/icon/logo.png"
+    image_path: "assets/icon/lo_go.png"
     background_color: "#hexcode"
     theme_color: "#hexcode"
   windows:
     generate: true
-    image_path: "assets/icon/logo.png"
+    image_path: "assets/icon/lo_go.png"
     icon_size: 48 # min:48, max:256, default: 48
   macos:
     generate: true
-    image_path: "assets/icon/logo.png"
+    image_path: "assets/icon/lo_go.png"
     # RUN BELOW COMMAND 
 # flutter pub run flutter_launcher_icons
 # 
