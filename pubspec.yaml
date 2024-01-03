@@ -128,20 +128,20 @@ flutter:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/icon/lo_go.png"
+  image_path: "assets/icon/logoR.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
   web:
     generate: true
-    image_path: "assets/icon/lo_go.png"
+    image_path: "assets/icon/logoR.png"
     background_color: "#hexcode"
     theme_color: "#hexcode"
   windows:
     generate: true
-    image_path: "assets/icon/lo_go.png"
+    image_path: "assets/icon/logoR.png"
     icon_size: 48 # min:48, max:256, default: 48
   macos:
     generate: true
-    image_path: "assets/icon/lo_go.png"
+    image_path: "assets/icon/logoR.png"
     # RUN BELOW COMMAND 
 # flutter pub run flutter_launcher_icons
 # 

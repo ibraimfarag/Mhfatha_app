@@ -413,6 +413,41 @@ if (response.statusCode == 200) {
   }
 }
 
+Future<String> getUserDiscounts(    BuildContext context,
+) async {
+  final url = Uri.parse('$baseUrl/user-discounts');
+  bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
+  String lang = Provider.of<AppState>(context, listen: false).display;
+  AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+  try {
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${authProvider.token}',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'lang': lang,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      // Convert the response data to a JSON string
+      String jsonString = jsonEncode(jsonResponse);
+
+      return jsonString;
+    } else {
+      throw Exception(
+          'Failed to get user discounts. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
+    }
+  } catch (e) {
+    print('Error getting user discounts: $e');
+    return ''; // Return an empty string or handle the error as needed
+  }
+}
+
+
 }
 
 void _showLoadingDialog(BuildContext context) {

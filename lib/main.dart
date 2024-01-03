@@ -6,18 +6,44 @@ import 'package:permission_handler/permission_handler.dart';
 
 // Function to request location permissions
 Future<void> requestLocationPermission() async {
-  var status = await Permission.location.request();
-  if (status.isGranted) {
-    // Location permission granted, you can proceed with location access
-  } else {
-    // Location permission denied
-    // Handle the case where the user denies location permissions
+     var status = await Permission.locationWhenInUse.status;
+if(!status.isGranted){
+  var status = await Permission.locationWhenInUse.request();
+  if(status.isGranted){
+    var status = await Permission.locationAlways.request();
+    if(status.isGranted){
+      //Do some stuff
+    }else{
+      //Do another stuff
+    }
+  }else{
+    //The user deny the permission
   }
+  if(status.isPermanentlyDenied){
+    //When the user previously rejected the permission and select never ask again
+    //Open the screen of settings
+    bool res = await openAppSettings();
+  }
+}else{
+  //In use is available, check the always in use
+  var status = await Permission.locationAlways.status;
+  if(!status.isGranted){
+    var status = await Permission.locationAlways.request();
+    if(status.isGranted){
+      //Do some stuff
+    }else{
+      //Do another stuff
+    }
+  }else{
+    //previously available, do some stuff or nothing
+  }
+}
+
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+requestLocationPermission();
   await Future.wait([
     SharedPreferences.getInstance(),
   ]);

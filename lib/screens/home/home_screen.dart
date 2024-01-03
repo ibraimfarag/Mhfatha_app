@@ -544,7 +544,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               : Alignment.centerRight,
                           child: Text(
                             isEnglish
-                                ? 'Welcome $authName'
+                                ? 'Welcome back $authName'
                                 : 'مرحبًا $authName',
                             style: TextStyle(
                               fontSize: 14,
@@ -639,7 +639,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             items: buildStoreContainers(),
                             options: CarouselOptions(
                               autoPlay: true,
-                              aspectRatio: 22 / 12,
+                              aspectRatio: 9/5,
                               enlargeCenterPage: false,
                               enableInfiniteScroll: true,
                               autoPlayCurve: Curves.fastOutSlowIn,
