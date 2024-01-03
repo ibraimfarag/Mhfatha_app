@@ -5,45 +5,9 @@ import 'package:permission_handler/permission_handler.dart';
 
 
 // Function to request location permissions
-Future<void> requestLocationPermission() async {
-     var status = await Permission.locationWhenInUse.status;
-if(!status.isGranted){
-  var status = await Permission.locationWhenInUse.request();
-  if(status.isGranted){
-    var status = await Permission.locationAlways.request();
-    if(status.isGranted){
-      //Do some stuff
-    }else{
-      //Do another stuff
-    }
-  }else{
-    //The user deny the permission
-  }
-  if(status.isPermanentlyDenied){
-    //When the user previously rejected the permission and select never ask again
-    //Open the screen of settings
-    bool res = await openAppSettings();
-  }
-}else{
-  //In use is available, check the always in use
-  var status = await Permission.locationAlways.status;
-  if(!status.isGranted){
-    var status = await Permission.locationAlways.request();
-    if(status.isGranted){
-      //Do some stuff
-    }else{
-      //Do another stuff
-    }
-  }else{
-    //previously available, do some stuff or nothing
-  }
-}
-
-}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-requestLocationPermission();
   await Future.wait([
     SharedPreferences.getInstance(),
   ]);
@@ -83,6 +47,37 @@ class _MhfathaAppState extends State<MhfathaApp> {
 
 
   Future<void> _getLocation() async {
+     bool serviceEnabled;
+  LocationPermission permission;
+
+  // Test if location services are enabled.
+  serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) {
+    // Location services are not enabled don't continue
+    // accessing the position and request users of the 
+    // App to enable the location services.
+    return Future.error('Location services are disabled.');
+  }
+    permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      // Permissions are denied, next time you could try
+      // requesting permissions again (this is also where
+      // Android's shouldShowRequestPermissionRationale 
+      // returned true. According to Android guidelines
+      // your App should show an explanatory UI now.
+      return Future.error('Location permissions are denied');
+    }
+  }
+  
+  if (permission == LocationPermission.deniedForever) {
+    // Permissions are denied forever, handle appropriately. 
+    return Future.error(
+      'Location permissions are permanently denied, we cannot request permissions.');
+  } 
+
+
   // Check if the widget is still mounted
   if (!mounted) {
     return;
@@ -107,18 +102,6 @@ class _MhfathaAppState extends State<MhfathaApp> {
   }
 
   // Check if locationAlways permission is granted
-var statues = await Permission.locationAlways.status;
-
-if (statues.isDenied) {
-  // Request locationAlways permission
-  status = await Permission.locationAlways.request();
-
-  if (statues.isDenied) {
-    // Handle case when locationAlways permission is still not granted
-    print('Location permission for background use is denied.');
-    return;
-  }
-}
 
   try {
     Position position = await Geolocator.getCurrentPosition(

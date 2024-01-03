@@ -16,10 +16,9 @@ class _NearByState extends State<NearBy> {
 
     return DirectionalityWrapper(
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-            // leading: 
+appBar: AppBar(
+  backgroundColor: Colors.transparent,
+  elevation: 0,
           actions: [
             IconButton(
               icon: Icon(Icons.arrow_forward),
@@ -28,32 +27,45 @@ class _NearByState extends State<NearBy> {
               },
               color: Color.fromARGB(255, 7, 0, 34),
             ),
-            
           ],
         ),
         body: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 0),
+            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+            color: Color(0xFF080E27),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
+                SizedBox(height: 20),
                 Container(
-              // width: 320,
-            // padding: const EdgeInsets.all(1.0),
-            margin: EdgeInsets.symmetric(horizontal:20 ,vertical:10 ),
-            child: Text(
-                isEnglish ? 'Near by Stores' : ' المتاجر القريبة',  
-              style: TextStyle(
-                color: Color.fromARGB(255, 7, 0, 34),
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
+                  // width: 320,
+                  // padding: const EdgeInsets.all(1.0),
+                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: Text(
+                    isEnglish ? 'Near by Stores' : ' المتاجر القريبة',
+                    style: TextStyle(
+                      color: Color(0xFFF3F4F7),
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
                 SizedBox(height: 16),
                 // Build containers dynamically based on filteredStores
-                for (var store in filteredStores) buildStoreContainer(store),
+                Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFF3F4F7),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(40),
+                        topRight: Radius.circular(40),
+                      ),
+                    ),
+                    child: Column(children: [
+                      SizedBox(height: 20,),
+                      for (var store in filteredStores)
+                        buildStoreContainer(store),
+                    ])),
               ],
             ),
           ),
@@ -71,9 +83,10 @@ class _NearByState extends State<NearBy> {
       onTap: () async {
         Navigator.pushNamed(context, '/store-info', arguments: store);
       },
-      child:   FadeInRight(
-                      child: Container(
-        width: 100,
+      child: FadeInRight(
+          child: Container(
+  // width: MediaQuery.of(context).size.width * 0.9, // 90% of screen width
+  width: MediaQuery.of(context).size.width ,
         margin: const EdgeInsets.fromLTRB(8, 10, 8, 10),
         decoration: BoxDecoration(
           color: Color.fromARGB(255, 238, 238, 238),
@@ -81,7 +94,7 @@ class _NearByState extends State<NearBy> {
             color: Color.fromARGB(5, 0, 0, 0),
             width: 2,
           ),
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(30),
         ),
         child: Column(
           children: [
@@ -90,8 +103,8 @@ class _NearByState extends State<NearBy> {
               width: double.infinity,
               child: ClipRRect(
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(15),
-                  topRight: Radius.circular(15),
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
                 ),
                 child: ShaderMask(
                   shaderCallback: (Rect bounds) {
@@ -150,8 +163,7 @@ class _NearByState extends State<NearBy> {
             ),
           ],
         ),
-      )
-      ),
+      )),
     );
   }
 }
