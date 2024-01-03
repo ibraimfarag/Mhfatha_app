@@ -1,34 +1,7 @@
-
-<!-- ios/Runner/Info.plist -->
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-
-
-<key>NSPhotoLibraryUsageDescription</key>
-<string>We need access to your photo library for selecting profile photos.</string>
-<key>NSCameraUsageDescription</key>
-<string>We need access to your camera for taking profile photos.</string>
-
-	<key>LSApplicationQueriesSchemes</key>
-<array>
-    <string>tel</string>
-</array>
-<key>io.flutter.embedded_views_preview</key>
-<true/>
-<key>NSCameraUsageDescription</key>
-<string>This app needs camera access to scan QR codes</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>We need your location to provide better service.</string>
-    <key>NSLocationUsageDescription</key>
-    <string>We need your location to provide better service.</string>
-    <key>NSCameraUsageDescription</key>
-    <string>We need access to your camera for taking photos.</string>
-    <key>NSPhotoLibraryAddUsageDescription</key>
-    <string>We need access to your photo library to save images.</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>We need access to your photo library to save images.</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -51,8 +24,22 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>tel</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>We need access to your camera for taking photos.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>We need your location to provide better service.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need your location to provide better service.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>We need access to your photo library to save images.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to your photo library to save images.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -72,5 +59,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
 </dict>
 </plist>
