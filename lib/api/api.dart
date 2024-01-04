@@ -10,6 +10,32 @@ import 'package:http/http.dart' as http;
 class Api {
   static const String baseUrl = 'https://mhfatha.net/api';
 
+
+
+// /* -------------------------------------------------------------------------- */
+// /* ----------------------------- check internet ----------------------------- */
+// /* -------------------------------------------------------------------------- */
+Future<String> checkInternetConnection(BuildContext context) async {
+  try {
+    final response = await http.get(Uri.parse('$baseUrl/check-network'));
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> data = json.decode(response.body);
+
+      // You can add your logic here when the internet is connected
+      print('Internet connected');
+      return 'Online';
+    } else {
+      print('Failed to check internet connection. Status code: ${response.statusCode}');
+      return 'Offline';
+    }
+  } catch (e) {
+    print('Error checking internet connection: $e');
+    return 'Offline';
+  }
+}
+
+
   // /* -------------------------------------------------------------------------- */
   // /* -------------------------------- Login api ------------------------------- */
   // /* -------------------------------------------------------------------------- */

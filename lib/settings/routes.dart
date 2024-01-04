@@ -13,6 +13,7 @@ class Routes {
   static String nearby = '/nearby';
   static String report = '/report';
   static String request= '/requests';
+  static String nonetwork= '/nointernet ';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -27,6 +28,7 @@ class Routes {
       nearby: (context) => NearBy(),
       report: (context) => ReportScreen(),
       request: (context) => RequestsScreen(),
+      nonetwork: (context) => Nointernet(),
 
       
     };

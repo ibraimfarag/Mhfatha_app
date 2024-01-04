@@ -39,10 +39,10 @@ class _BottomNavState extends State<BottomNav> {
             case 0:
               Navigator.pushReplacementNamed(context, '/home');
               break;
-            case 2:
+            case 1:
               Navigator.pushReplacementNamed(context, '/requests');
               break;
-            case 1:
+            case 2:
               Navigator.pushReplacementNamed(context, '/settings');
               break;
             

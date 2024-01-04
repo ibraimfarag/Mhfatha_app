@@ -5,6 +5,7 @@ import 'package:mhfatha/settings/imports.dart';
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'dart:async';
 
 
 
@@ -19,6 +20,27 @@ class AppState with ChangeNotifier {
     bool _isDarkMode = false;
 
   bool get isDarkMode => _isDarkMode;
+
+
+  AppState(BuildContext context) {
+
+      network(context);
+
+  }
+ 
+
+
+  Future<void> network(BuildContext context) async {
+    bool result = await InternetConnectionChecker().hasConnection;
+    if (result == true) {
+      print('YAY! Free cute dog pics!');
+    } else {
+      print('No internet :( ');
+      // You can safely use the context here to navigate
+      Navigator.pushNamed(context, '/nointernet');
+    }
+  }
+
 
   Future<void> toggleDarkMode() async {
     _isDarkMode = !_isDarkMode;
@@ -55,3 +77,5 @@ class AppState with ChangeNotifier {
   }
 
 }
+
+

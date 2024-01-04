@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:mhfatha/settings/imports.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -16,7 +18,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => AppState()),
+        ChangeNotifierProvider(create: (context) => AppState( context)),
         ChangeNotifierProvider(create: (context) => DarkModeProvider()), // Add DarkModeProvider
         ChangeNotifierProvider(create: (context) => AuthProvider()), // Add DarkModeProvider
       ],
@@ -36,11 +38,18 @@ class _MhfathaAppState extends State<MhfathaApp> {
   // Assume you have a variable to track the selected language
     double? latitude;
   double? longitude;
+    Api api = Api(); // Create an instance of the Api class
+  late Timer _timer; // Declare a timer variable
+
   @override
   void initState() {
     super.initState();
     Provider.of<AuthProvider>(context, listen: false).loadAuthData();
         _getLocation();
+    //   _timer = Timer.periodic(Duration(seconds: 2), (timer) async {
+    //   await Api().checkInternetConnection();
+    // });
+    
 
   }
 

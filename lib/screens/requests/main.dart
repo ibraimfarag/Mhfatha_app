@@ -241,7 +241,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
             ),
           ),
         ),
-        bottomNavigationBar: BottomNav(initialIndex: 2),
+        bottomNavigationBar: BottomNav(initialIndex: 1),
       ),
     );
   }

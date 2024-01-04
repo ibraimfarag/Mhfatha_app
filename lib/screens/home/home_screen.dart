@@ -26,11 +26,11 @@ bool isLoading = true;
   List<Map<String, dynamic>> filteredStores = [];
   Timer? locationTimer;
   Timer? reloadTimer;
+late Timer network;
   @override
   void initState() {
     super.initState();
     _getLocation();
-
     // Set up a timer to check location changes every 90 seconds
     locationTimer = Timer.periodic(Duration(seconds: 10), (Timer timer) async {
       await _checkAndSendLocation();
@@ -42,7 +42,7 @@ bool isLoading = true;
       }
     });
 
-     Timer(Duration(seconds: 5), () {
+     Timer(Duration(seconds: 3), () {
     if (mounted) {
       setState(() {
         isLoading = false;
@@ -724,7 +724,8 @@ Future<void> _reloadFilteredStores() async {
 
                             buildIconWithText(Icons.local_offer, 'Top Discount',
                                 'أعلى خصم', 'images/best-deal.jpg', () {
-                              // Navigator.pushNamed(context, '');
+                                    Navigator.pushNamed(context, '/nointernet');
+
                             }),
                           ],
                         ),

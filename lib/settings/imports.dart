@@ -53,6 +53,9 @@ export 'package:mhfatha/layout/DirectionalityWrapper.dart';
 /* ------------------------------ AppVariables ------------------------------ */
 export 'package:mhfatha/settings/AppVariables.dart';
 
+// /* ------------------------------- no internt ------------------------------- */
+export 'package:mhfatha/screens/Auth/noInternet.dart';
+
 
 // /* ------------------------------ Configuration ----------------------------- */
 export 'package:mhfatha/settings/languages.dart';
@@ -124,8 +127,8 @@ export  'package:animate_do/animate_do.dart';
 // /* ------------------------ flutter_animate_on_scroll ----------------------- */
 export 'package:quickalert/quickalert.dart';
 
-// /* ----------------------------------- SVG ---------------------------------- */
-// export package:flutter_svg/svg.dart';
+// /* ----------------------------------- connectivity_plus ---------------------------------- */
+export 'package:internet_connection_checker/internet_connection_checker.dart';
 
 // ─── Location ────────────────────────────────────────────────────────────────
 
