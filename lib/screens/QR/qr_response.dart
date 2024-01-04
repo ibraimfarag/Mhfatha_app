@@ -13,7 +13,7 @@ class QrResponse extends StatefulWidget {
 }
 
 class _QrResponseState extends State<QrResponse> {
-    int calculateDaysRemaining(String endDate) {
+  int calculateDaysRemaining(String endDate) {
     DateTime endDateTime = DateTime.parse(endDate);
     DateTime now = DateTime.now();
     Duration difference = endDateTime.difference(now);
@@ -24,9 +24,11 @@ class _QrResponseState extends State<QrResponse> {
   String getArabicDaysWord(int days) {
     return days > 10 ? 'يوم' : 'أيام';
   }
+
   String getEnglishDaysWord(int days) {
     return days > 1 ? 'Days' : 'Day';
   }
+
   @override
   Widget build(BuildContext context) {
     // Parse the JSON response data
@@ -42,112 +44,175 @@ class _QrResponseState extends State<QrResponse> {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
     return DirectionalityWrapper(
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.arrow_forward),
-              onPressed: () {
-                // Navigate back to the previous screen
-                Navigator.pop(context);
-              },
-              // Change the color of the back button icon
-              color: Color.fromARGB(255, 7, 0, 34),
+        body: SingleChildScrollView(
+          // Wrap the Column with SingleChildScrollView
+          child: Container(
+            decoration: BoxDecoration(
+              color: Color(0xFF080E27), // Set your desired background color
             ),
-          ],
-        ),
-        body: SingleChildScrollView( // Wrap the Column with SingleChildScrollView
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            // padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Display the "Discount for Store" text
+                  CustomAppBar(
+                      onBackTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
                 Row(
                   children: [
-                    Center(
-                      child: Text(
-                        isEnglish ? 'Discount for Store' : 'خصومات متجر',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Center(
-                      child: Text(
-                        storeName,
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Display the discounts' category and percent
-                    for (var discount in discounts)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child:GestureDetector(
-   onTap: () {
-    // Create a Map to hold both store and discount data
-    Map<String, dynamic> data = {
-      'store': store,
-      'discount': discount,
-    };
-
-    // Navigate to the new screen when the Container is tapped
-    Navigator.pushNamed(
-      context,
-      '/get-discount',
-      arguments: data, // Pass the combined data to the new screen
-    );
-  },
-      child: Row(
+                  
+                    Container(
+                      // width: 320,
+                      // padding: const EdgeInsets.all(1.0),
+                      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
+                      child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              width: 300,
-                              margin: const EdgeInsets.all(10),
-                              padding: const EdgeInsets.all(20),
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child:Column(children: [
-                                Row(children: [Text(
-                                isEnglish
-                                    ? 'Discount on: ${discount['category']} '
-                                    : 'خصم على : ${discount['category']} ',
-                                style: TextStyle(fontSize: 14),
-                                textAlign: isEnglish ? TextAlign.left : TextAlign.right,
-                              )],),
-                                Row(children: [Text(
-                                isEnglish
-                                    ? 'Percent: ${discount['percent']}%'
-                                    : 'نسبة الخصم : ${discount['percent']}% ',
-                                style: TextStyle(fontSize: 14),
-                                textAlign: isEnglish ? TextAlign.left : TextAlign.right,
-                              ),],),
-                                Row(children: [Text(
-                                    isEnglish
-                                      ? 'Days Remaining: ${calculateDaysRemaining(discount['end_date'])} ${getEnglishDaysWord(calculateDaysRemaining(discount['end_date']))}'
-                                        : 'الأيام المتبقية: ${calculateDaysRemaining(discount['end_date'])} ${getArabicDaysWord(calculateDaysRemaining(discount['end_date']))}',
-                                    style: TextStyle(fontSize: 12, color: Colors.blue),
-                                    textAlign: isEnglish ? TextAlign.left : TextAlign.right,
-                                  ),],)
-                              ],) 
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  isEnglish
+                                      ? 'Discount for Store'
+                                      : 'خصومات متجر',
+                                  style: TextStyle(
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                                Text(
+                                  storeName,
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        ),
-                      ),
+                            SizedBox(
+                              width: 30,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                // Image.asset(
+                                //   'images/nearby.gif', // Replace with the actual path to your GIF image
+                                //   height: 50, // Adjust the height as needed
+                                // ),
+                              ],
+                            ),
+                          ]),
+                    ),
+                    SizedBox(height: 16),
                   ],
                 ),
+
+                SizedBox(height: 16),
+                Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFF3F4F7),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(40),
+                        topRight: Radius.circular(40),
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Display the discounts' category and percent
+                        for (var discount in discounts)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                // Create a Map to hold both store and discount data
+                                Map<String, dynamic> data = {
+                                  'store': store,
+                                  'discount': discount,
+                                };
+
+                                // Navigate to the new screen when the Container is tapped
+                                Navigator.pushNamed(
+                                  context,
+                                  '/get-discount',
+                                  arguments:
+                                      data, // Pass the combined data to the new screen
+                                );
+                              },
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                      width: 300,
+                                      margin: const EdgeInsets.all(10),
+                                      padding: const EdgeInsets.all(20),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                isEnglish
+                                                    ? 'Discount on: ${discount['category']} '
+                                                    : 'خصم على : ${discount['category']} ',
+                                                style: TextStyle(fontSize: 14),
+                                                textAlign: isEnglish
+                                                    ? TextAlign.left
+                                                    : TextAlign.right,
+                                              )
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                isEnglish
+                                                    ? 'Percent: ${discount['percent']}%'
+                                                    : 'نسبة الخصم : ${discount['percent']}% ',
+                                                style: TextStyle(fontSize: 14),
+                                                textAlign: isEnglish
+                                                    ? TextAlign.left
+                                                    : TextAlign.right,
+                                              ),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                isEnglish
+                                                    ? 'Days Remaining: ${calculateDaysRemaining(discount['end_date'])} ${getEnglishDaysWord(calculateDaysRemaining(discount['end_date']))}'
+                                                    : 'الأيام المتبقية: ${calculateDaysRemaining(discount['end_date'])} ${getArabicDaysWord(calculateDaysRemaining(discount['end_date']))}',
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: Colors.blue),
+                                                textAlign: isEnglish
+                                                    ? TextAlign.left
+                                                    : TextAlign.right,
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      )),
+                                ],
+                              ),
+                            ),
+                          ),
+                      ],
+                    )),
               ],
             ),
           ),

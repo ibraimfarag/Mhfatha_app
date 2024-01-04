@@ -22,10 +22,10 @@ class _HomeScreenState extends State<HomeScreen> {
   late QRViewController controller;
 
   List<Map<String, dynamic>> storeList = [];
-
+bool isLoading = true;
   List<Map<String, dynamic>> filteredStores = [];
   Timer? locationTimer;
-
+  Timer? reloadTimer;
   @override
   void initState() {
     super.initState();
@@ -35,6 +35,20 @@ class _HomeScreenState extends State<HomeScreen> {
     locationTimer = Timer.periodic(Duration(seconds: 10), (Timer timer) async {
       await _checkAndSendLocation();
     });
+
+    reloadTimer = Timer.periodic(Duration(seconds: 5), (Timer timer) {
+      if (filteredStores.isEmpty) {
+        _reloadFilteredStores();
+      }
+    });
+
+     Timer(Duration(seconds: 5), () {
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  });
   }
 //  @override
 // void dispose() {
@@ -165,7 +179,15 @@ class _HomeScreenState extends State<HomeScreen> {
       print("Error getting location: $e");
     }
   }
+Future<void> _reloadFilteredStores() async {
+  // Check if the widget is still mounted before proceeding
+  if (!mounted) {
+    return;
+  }
 
+  // Add logic to reload filteredStores
+  await _sendLocation();
+}
   Future<void> _sendLocation() async {
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
@@ -644,24 +666,41 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-                      if (filteredStores.isNotEmpty)
-                        Container(
-                          // Add your custom properties for the CarouselSlider...
-                          child: CarouselSlider(
-                            items: buildStoreContainers(),
-                            options: CarouselOptions(
-                              autoPlay: true,
-                              aspectRatio: 9/5,
-                              enlargeCenterPage: false,
-                              enableInfiniteScroll: true,
-                              autoPlayCurve: Curves.fastOutSlowIn,
-                              autoPlayAnimationDuration:
-                                  Duration(milliseconds: 4000),
-                              viewportFraction: 0.5,
-                            ),
-                          ),
-                        ),
-                      Padding(
+   if (isLoading)
+        Center(
+          child: CircularProgressIndicator(), // Loading indicator
+        )
+      else if (filteredStores.isNotEmpty)
+        Container(
+          // Add your custom properties for the CarouselSlider...
+          child: CarouselSlider(
+            items: buildStoreContainers(),
+            options: CarouselOptions(
+              autoPlay: true,
+              aspectRatio: 9 / 5,
+              enlargeCenterPage: false,
+              enableInfiniteScroll: true,
+              autoPlayCurve: Curves.fastOutSlowIn,
+              autoPlayAnimationDuration: Duration(milliseconds: 4000),
+              viewportFraction: 0.5,
+            ),
+          ),
+        )
+      else
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            isEnglish
+                ? "Unfortunately, there are no stores near you at the moment."
+                : "للأسف لا توجد متاجر في الوقت الحالي بالقرب منك",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.red, // Customize the color as needed
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),                      Padding(
                         padding: EdgeInsets.symmetric(vertical: 20),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

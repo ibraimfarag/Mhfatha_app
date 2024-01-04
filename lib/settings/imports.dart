@@ -154,5 +154,7 @@ export 'package:mhfatha/widgets/ProfilePhoto.dart';
 
 // /* ------------------------------- VendorJoin ------------------------------- */
 export 'package:mhfatha/widgets/VendorJoin.dart';
+// ─── appBar ────────────────────────────────────────────────────────────────
+export 'package:mhfatha/widgets/appbar.dart';
 
 

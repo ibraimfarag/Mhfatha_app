@@ -39,11 +39,11 @@ class _BottomNavState extends State<BottomNav> {
             case 0:
               Navigator.pushReplacementNamed(context, '/home');
               break;
-            case 1:
-              Navigator.pushReplacementNamed(context, '/settings');
-              break;
             case 2:
               Navigator.pushReplacementNamed(context, '/requests');
+              break;
+            case 1:
+              Navigator.pushReplacementNamed(context, '/settings');
               break;
             
           }
@@ -54,16 +54,16 @@ class _BottomNavState extends State<BottomNav> {
             label:isEnglish?  'Home':'الرئيسية' ,
           ),
         
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: isEnglish?'settings':'الاعدادات',
-          ),
 
           BottomNavigationBarItem(
             icon: Icon(Icons.wallet),
             label:isEnglish? 'requets':'طلباتي',
           ),
          
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: isEnglish?'settings':'الاعدادات',
+          ),
         ],
       ),
     );

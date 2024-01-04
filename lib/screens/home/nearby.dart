@@ -16,61 +16,93 @@ class _NearByState extends State<NearBy> {
 
     return DirectionalityWrapper(
       child: Scaffold(
-appBar: AppBar(
-  backgroundColor: Colors.transparent,
-  elevation: 0,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.arrow_forward),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              color: Color.fromARGB(255, 7, 0, 34),
+        body:  Container(
+            decoration: BoxDecoration(
+              color: Color(0xFF080E27), // Set your desired background color
             ),
-          ],
-        ),
-        body: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-            color: Color(0xFF080E27),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(height: 20),
-                Container(
-                  // width: 320,
-                  // padding: const EdgeInsets.all(1.0),
-                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Text(
-                    isEnglish ? 'Near by Stores' : ' المتاجر القريبة',
-                    style: TextStyle(
-                      color: Color(0xFFF3F4F7),
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
+            child: SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                color: Color(0xFF080E27),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                     CustomAppBar(
+            onBackTap: () {
+              Navigator.pop(context);
+            },
+          ),
+                    // SizedBox(height: 3),
+                    Container(
+                      // width: 320,
+                      // padding: const EdgeInsets.all(1.0),
+                      margin:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 1),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  isEnglish
+                                      ? 'Near by Stores'
+                                      : ' المتاجر القريبة',
+                                  style: TextStyle(
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              width: 30,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Image.asset(
+                                  'images/nearby.gif', // Replace with the actual path to your GIF image
+                                  height: 100, // Adjust the height as needed
+                                ),
+                              ],
+                            ),
+                          ]),
                     ),
-                  ),
+                    SizedBox(height: 16),
+                    // Build containers dynamically based on filteredStores
+                    Container(
+                        decoration: BoxDecoration(
+                          color: Color(0xFFF3F4F7),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(40),
+                            topRight: Radius.circular(40),
+                          ),
+                        ),
+                        child: Column(children: [
+                          SizedBox(
+                            height: 20,
+                          ),
+                          for (var store in filteredStores)
+                            buildStoreContainer(store),
+                        ])),
+                  ],
                 ),
-                SizedBox(height: 16),
-                // Build containers dynamically based on filteredStores
-                Container(
-                    decoration: BoxDecoration(
-                      color: Color(0xFFF3F4F7),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(40),
-                        topRight: Radius.circular(40),
-                      ),
-                    ),
-                    child: Column(children: [
-                      SizedBox(height: 20,),
-                      for (var store in filteredStores)
-                        buildStoreContainer(store),
-                    ])),
-              ],
+              ),
             ),
           ),
-        ),
-        bottomNavigationBar: BottomNav(initialIndex: 1),
+       
+        bottomNavigationBar: BottomNav(initialIndex: 0),
       ),
     );
   }
@@ -85,8 +117,8 @@ appBar: AppBar(
       },
       child: FadeInRight(
           child: Container(
-  // width: MediaQuery.of(context).size.width * 0.9, // 90% of screen width
-  width: MediaQuery.of(context).size.width ,
+        // width: MediaQuery.of(context).size.width * 0.9, // 90% of screen width
+        width: MediaQuery.of(context).size.width,
         margin: const EdgeInsets.fromLTRB(8, 10, 8, 10),
         decoration: BoxDecoration(
           color: Color.fromARGB(255, 238, 238, 238),
@@ -138,7 +170,7 @@ appBar: AppBar(
                     color: Colors.black87,
                     fontWeight: FontWeight.bold,
                     fontFamily: AppVariables.serviceFontFamily,
-                    fontSize: 14,
+                    fontSize: 17,
                   ),
                   textAlign: isEnglish ? TextAlign.left : TextAlign.right,
                 ),
