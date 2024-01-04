@@ -724,7 +724,7 @@ Future<void> _reloadFilteredStores() async {
 
                             buildIconWithText(Icons.local_offer, 'Top Discount',
                                 'أعلى خصم', 'images/best-deal.jpg', () {
-                                    Navigator.pushNamed(context, '/nointernet');
+                                    Navigator.pushNamed(context, '/nonet');
 
                             }),
                           ],

@@ -37,7 +37,7 @@ class AppState with ChangeNotifier {
     } else {
       print('No internet :( ');
       // You can safely use the context here to navigate
-      Navigator.pushNamed(context, '/nointernet');
+      Navigator.pushNamed(context, '/nonet');
     }
   }
 

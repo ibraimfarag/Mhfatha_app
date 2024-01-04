@@ -13,7 +13,7 @@ class Routes {
   static String nearby = '/nearby';
   static String report = '/report';
   static String request= '/requests';
-  static String nonetwork= '/nointernet ';
+  static String nonetwork= '/nonet';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
