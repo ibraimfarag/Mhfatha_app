@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:mhfatha/settings/imports.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:async';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -22,11 +23,11 @@ class _HomeScreenState extends State<HomeScreen> {
   late QRViewController controller;
 
   List<Map<String, dynamic>> storeList = [];
-bool isLoading = true;
+  bool isLoading = true;
   List<Map<String, dynamic>> filteredStores = [];
   Timer? locationTimer;
   Timer? reloadTimer;
-late Timer network;
+  late Timer network;
   @override
   void initState() {
     super.initState();
@@ -42,13 +43,13 @@ late Timer network;
       }
     });
 
-     Timer(Duration(seconds: 3), () {
-    if (mounted) {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  });
+    Timer(Duration(seconds: 3), () {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    });
   }
 //  @override
 // void dispose() {
@@ -102,35 +103,35 @@ late Timer network;
   }
 
   Future<void> _getLocation() async {
-      bool serviceEnabled;
-  LocationPermission permission;
+    bool serviceEnabled;
+    LocationPermission permission;
 
-  // Test if location services are enabled.
-  serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  if (!serviceEnabled) {
-    // Location services are not enabled don't continue
-    // accessing the position and request users of the 
-    // App to enable the location services.
-    return Future.error('Location services are disabled.');
-  }
-    permission = await Geolocator.checkPermission();
-  if (permission == LocationPermission.denied) {
-    permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.denied) {
-      // Permissions are denied, next time you could try
-      // requesting permissions again (this is also where
-      // Android's shouldShowRequestPermissionRationale 
-      // returned true. According to Android guidelines
-      // your App should show an explanatory UI now.
-      return Future.error('Location permissions are denied');
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      return Future.error('Location services are disabled.');
     }
-  }
-  
-  if (permission == LocationPermission.deniedForever) {
-    // Permissions are denied forever, handle appropriately. 
-    return Future.error(
-      'Location permissions are permanently denied, we cannot request permissions.');
-  } 
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
 
     // Check if the widget is still mounted
     if (!mounted) {
@@ -155,7 +156,6 @@ late Timer network;
       }
     }
 
-
     try {
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
@@ -179,15 +179,17 @@ late Timer network;
       print("Error getting location: $e");
     }
   }
-Future<void> _reloadFilteredStores() async {
-  // Check if the widget is still mounted before proceeding
-  if (!mounted) {
-    return;
+
+  Future<void> _reloadFilteredStores() async {
+    // Check if the widget is still mounted before proceeding
+    if (!mounted) {
+      return;
+    }
+
+    // Add logic to reload filteredStores
+    await _sendLocation();
   }
 
-  // Add logic to reload filteredStores
-  await _sendLocation();
-}
   Future<void> _sendLocation() async {
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
@@ -230,6 +232,9 @@ Future<void> _reloadFilteredStores() async {
 
   void _showStoreOptions(BuildContext context, Map<String, dynamic> store) {
     showModalBottomSheet(
+      backgroundColor:
+          Colors.transparent, // Set background color to transparent
+
       context: context,
       builder: (BuildContext context) {
         bool isEnglish = Provider.of<AppState>(context).isEnglish;
@@ -238,60 +243,131 @@ Future<void> _reloadFilteredStores() async {
 
         return Container(
           padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+          decoration: BoxDecoration(
+            color: Color(0xFFF0F0F0),
+            border: Border.all(
+              color: Color.fromARGB(
+                  5, 0, 0, 0), // You can customize the border color
+              width: 2, // You can customize the border width
+            ),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(40),
+              topRight: Radius.circular(40),
+            ),
+          ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            // crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.min,
             children: [
-              ElevatedButton(
-                onPressed: () {
-                  // Handle "Info about this store" option
-                  Navigator.pop(context); // Close the bottom sheet
-                  // Add your logic to show store info
-                  Navigator.pushNamed(context, '/store-info', arguments: store);
-                },
-                child: Text(
-                  isEnglish ? 'Info about this store' : 'معلومات عن هذا المتجر',
+              Container(
+                decoration: BoxDecoration(
+                  color: Color(0xFFF0F0F0),
+                  borderRadius: BorderRadius.circular(30),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context); // Close the bottom sheet
+                    Navigator.pushNamed(context, '/store-info',
+                        arguments: store);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.white, // Change the button color
+                    minimumSize:
+                        Size(180, 50), // Set the minimum width and height
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 10), // Adjust horizontal padding as needed
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          30), // Adjust the border radius as needed
+                    ),
+                  ),
+                  child: Text(
+                    isEnglish ? 'Visit store' : 'زيارة المتجر',
+                    style: TextStyle(
+                      color: Color.fromARGB(
+                          241, 114, 113, 113), // Change the text color
+                      fontSize: 16, // Adjust the font size as needed
+                    ),
+                  ),
                 ),
               ),
               SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: () async {
-                  // Handle "Show discounts" option
-                  Navigator.pop(context); // Close the bottom sheet
+              Container(
+                decoration: BoxDecoration(
+                  color: Color(0xFFF0F0F0),
+                  borderRadius: BorderRadius.circular(30),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    // Handle "Show discounts" option
+                    Navigator.pop(context); // Close the bottom sheet
 
-                  // Display sub-context bottom menu
-                  _showSubContextBottomMenu(context, store);
-                  // Add the logic to get store details by calling the API
+                    // Display sub-context bottom menu
+                    _showSubContextBottomMenu(context, store);
+                    // Add the logic to get store details by calling the API
 
-                  // Get store ID
-                  int storeId = store['id'];
+                    // Get store ID
+                    int storeId = store['id'];
 
-                  // Call the API to get store details
-                  String storeDetails = await Api().getStoreDetails(
-                      authProvider, store['id'], latitude!, longitude!);
+                    // Call the API to get store details
+                    String storeDetails = await Api().getStoreDetails(
+                        authProvider, store['id'], latitude!, longitude!);
 
-                  // Parse the store details JSON
-                  Map<String, dynamic> storeDetailsMap =
-                      jsonDecode(storeDetails);
+                    // Parse the store details JSON
+                    Map<String, dynamic> storeDetailsMap =
+                        jsonDecode(storeDetails);
 
-                  // Access the "discounts" list
-                  List<dynamic> discounts =
-                      storeDetailsMap['store']['discounts'];
+                    // Access the "discounts" list
+                    List<dynamic> discounts =
+                        storeDetailsMap['store']['discounts'];
 
-                  // Iterate over each discount
-                  for (var discount in discounts) {
-                    // Access discount properties
-                    int id = discount['id'];
-                    double percent = double.parse(discount['percent']);
-                    String category = discount['category'];
-                    // ... access other properties as needed
+                    // Iterate over each discount
+                    for (var discount in discounts) {
+                      // Access discount properties
+                      int id = discount['id'];
+                      double percent = double.parse(discount['percent']);
+                      String category = discount['category'];
+                      // ... access other properties as needed
 
-                    // Now, you can use these properties as needed.
-                    // print('Discount ID: $id, Percent: $percent, Category: $category');
-                  }
-                },
-                child: Text(
-                  isEnglish ? 'Show discounts' : 'عرض الخصومات',
+                      // Now, you can use these properties as needed.
+                      // print('Discount ID: $id, Percent: $percent, Category: $category');
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.white, // Change the button color
+                    minimumSize:
+                        Size(180, 50), // Set the minimum width and height
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 10), // Adjust horizontal padding as needed
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                          30), // Adjust the border radius as needed
+                    ),
+                  ),
+                  child: Text(
+                    isEnglish ? 'Show discounts' : 'عرض الخصومات',
+                    style: TextStyle(
+                      color: Color.fromARGB(
+                          241, 114, 113, 113), // Change the text color
+                      fontSize: 16, // Adjust the font size as needed
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -304,6 +380,9 @@ Future<void> _reloadFilteredStores() async {
   void _showSubContextBottomMenu(
       BuildContext context, Map<String, dynamic> store) {
     showModalBottomSheet(
+      backgroundColor:
+          Colors.transparent, // Set background color to transparent
+
       context: context,
       builder: (BuildContext context) {
         bool isEnglish = Provider.of<AppState>(context).isEnglish;
@@ -311,7 +390,15 @@ Future<void> _reloadFilteredStores() async {
             Provider.of<AuthProvider>(context, listen: false);
 
         return Container(
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
+          padding: EdgeInsets.symmetric(vertical: 30, horizontal: 40),
+           decoration: BoxDecoration(
+    color: Color(0xFFF0F0F0),
+         borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(40),
+              topRight: Radius.circular(40),
+            )
+   
+  ),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment:
@@ -403,17 +490,50 @@ Future<void> _reloadFilteredStores() async {
                 Align(
                   alignment:
                       isEnglish ? Alignment.bottomRight : Alignment.bottomLeft,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      _showStoreOptions(context, store);
-                    },
-                    child: Text(
-                      isEnglish ? 'Back' : 'العودة',
-                      style: TextStyle(fontSize: 16),
+                  child: Container(
+                    margin: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Color(0xFFF0F0F0),
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        _showStoreOptions(context, store);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.white, // Change the button color
+                        minimumSize:
+                            Size(100, 50), // Set the minimum width and height
+                        padding: EdgeInsets.symmetric(
+                            horizontal:
+                                10), // Adjust horizontal padding as needed
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              30), // Adjust the border radius as needed
+                        ),
+                      ),
+                      child: Text(
+                        isEnglish ? 'Back' : 'العودة',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color.fromARGB(
+                              241, 114, 113, 113), // Change the text color
+                        ),
+                      ),
                     ),
                   ),
                 ),
+                                SizedBox(height: 20),
+
               ],
             ),
           ),
@@ -561,7 +681,23 @@ Future<void> _reloadFilteredStores() async {
         },
         child: Scaffold(
           body: Container(
-            width: size.width, // Set the width of the container
+            width: size.width,
+            height: size.height,
+            decoration: BoxDecoration(
+              // color: Color(0xFFF3F4F7),
+              image: DecorationImage(
+                image: AssetImage(
+                    'images/abstract.jpg'), // Replace 'your_image_path.jpg' with the actual path to your image asset
+                fit: BoxFit
+                    .cover, // You can adjust the fit as per your requirement
+              ),
+
+              borderRadius: BorderRadius.only(
+
+                  // topLeft: Radius.circular(40),
+                  // topRight: Radius.circular(40),
+                  ),
+            ), // Set the width of the container
             child: SingleChildScrollView(
               child: Stack(
                 children: [
@@ -571,78 +707,118 @@ Future<void> _reloadFilteredStores() async {
                         height: 60,
                       ),
                       Container(
-                        margin: EdgeInsets.symmetric(horizontal: 25),
-                        child: Align(
-                          alignment: isEnglish
-                              ? Alignment.centerLeft
-                              : Alignment.centerRight,
-                          child: Text(
-                            isEnglish
-                                ? 'Welcome back $authName'
-                                : 'مرحبًا $authName',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
+                      margin: EdgeInsets.symmetric(horizontal: 25),
+                      
+                        child: Row(
+
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+
+                          children: [
+                            // Add your logo here
+                            Image.asset(
+                              'images/logoDark.png', // Replace with your actual logo image
+                              width: 200,
+                              // height: 80,
+                              // You can customize the width and height as needed
                             ),
-                          ),
-                        ),
+                          ]
+                            ),
+                            ),
+                            
+                           SizedBox(
+                        height: 20,
                       ),
+                      // Container(
+                      //   margin: EdgeInsets.symmetric(horizontal: 25),
+                      //   child: Align(
+                      //     alignment: isEnglish
+                      //         ? Alignment.centerLeft
+                      //         : Alignment.centerRight,
+                      //     child: Text(
+                      //       isEnglish
+                      //           ? 'Welcome back $authName'
+                      //           : 'مرحبًا $authName',
+                      //       style: TextStyle(
+                      //         fontSize: 14,
+                      //         fontWeight: FontWeight.bold,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                       Padding(
                         padding:
                             EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                         child: Column(
                           children: [
-                            TextField(
-                              decoration: InputDecoration(
-                                hintStyle:
-                                    TextStyle(color: Colors.grey.shade700),
-                                filled: true,
-                                hintText: isEnglish
-                                    ? 'Search stores'
-                                    : 'ابحث عن متجر',
-                                prefixIcon: Icon(Icons.search),
-                                fillColor: Color.fromARGB(255, 225, 226, 228),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                      color:
-                                          Color.fromARGB(255, 225, 226, 228)),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide(
-                                      color:
-                                          Color.fromARGB(255, 225, 226, 228)),
-                                ),
+                            Container(
+                              padding: EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                color: Color(0xFFF0F0F0),
+                                borderRadius: BorderRadius.circular(30),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius:
+                                        5, // Negative spreadRadius makes the shadow inside
+                                    blurRadius: 7,
+                                    offset: Offset(0,
+                                        3), // changes the position of the shadow
+                                  ),
+                                ],
                               ),
-                              onChanged: (query) {
-                                // Call the API method to search stores with the entered query
-                                api
-                                    .searchStores(authProvider, query, lang)
-                                    .then((result) {
-                                  // print('Search Result: $result');
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  hintStyle:
+                                      TextStyle(color: Color(0xFFA9A7B2)),
+                                  filled: true,
+                                  hintText: isEnglish
+                                      ? 'Search stores'
+                                      : 'ابحث عن متجر',
+                                  prefixIcon: Icon(Icons.search),
+                                  fillColor: Color(0xFFF0F0F0),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                    borderSide: BorderSide(
+                                      color: Color.fromARGB(0, 225, 226, 228),
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                    borderSide: BorderSide(
+                                      color: Color.fromARGB(0, 225, 226, 228),
+                                    ),
+                                  ),
+                                ),
+                                onChanged: (query) {
+                                  // Call the API method to search stores with the entered query
+                                  api
+                                      .searchStores(authProvider, query, lang)
+                                      .then((result) {
+                                    // print('Search Result: $result');
 
-                                  // Parse the JSON response
-                                  Map<String, dynamic> jsonResponse =
-                                      jsonDecode(result);
+                                    // Parse the JSON response
+                                    Map<String, dynamic> jsonResponse =
+                                        jsonDecode(result);
 
-                                  // Check if 'stores' key exists and its type is correct
-                                  if (jsonResponse.containsKey('stores') &&
-                                      jsonResponse['stores'] is List<dynamic>) {
-                                    List<dynamic> stores =
-                                        jsonResponse['stores'];
+                                    // Check if 'stores' key exists and its type is correct
+                                    if (jsonResponse.containsKey('stores') &&
+                                        jsonResponse['stores']
+                                            is List<dynamic>) {
+                                      List<dynamic> stores =
+                                          jsonResponse['stores'];
 
-                                    // Convert each item in the list to a Map
-                                    // List<Map<String, dynamic>> storeList = stores.whereType<Map<String, dynamic>>().toList();
+                                      // Convert each item in the list to a Map
+                                      // List<Map<String, dynamic>> storeList = stores.whereType<Map<String, dynamic>>().toList();
 
-                                    storeList = stores
-                                        .whereType<Map<String, dynamic>>()
-                                        .toList();
-                                    setState(() {});
-                                  }
-                                });
-                              },
-                            ),
+                                      storeList = stores
+                                          .whereType<Map<String, dynamic>>()
+                                          .toList();
+                                      setState(() {});
+                                    }
+                                  });
+                                },
+                              ),
+                            )
                           ],
                         ),
                       ),
@@ -652,6 +828,7 @@ Future<void> _reloadFilteredStores() async {
                         alignment: isEnglish
                             ? Alignment.centerLeft
                             : Alignment.centerRight,
+                            
                         child: Row(
                           children: [
                             Icon(Icons.store, color: Colors.black, size: 24),
@@ -666,41 +843,45 @@ Future<void> _reloadFilteredStores() async {
                           ],
                         ),
                       ),
-   if (isLoading)
-        Center(
-          child: CircularProgressIndicator(), // Loading indicator
-        )
-      else if (filteredStores.isNotEmpty)
-        Container(
-          // Add your custom properties for the CarouselSlider...
-          child: CarouselSlider(
-            items: buildStoreContainers(),
-            options: CarouselOptions(
-              autoPlay: true,
-              aspectRatio: 9 / 5,
-              enlargeCenterPage: false,
-              enableInfiniteScroll: true,
-              autoPlayCurve: Curves.fastOutSlowIn,
-              autoPlayAnimationDuration: Duration(milliseconds: 4000),
-              viewportFraction: 0.5,
-            ),
-          ),
-        )
-      else
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(
-            isEnglish
-                ? "Unfortunately, there are no stores near you at the moment."
-                : "للأسف لا توجد متاجر في الوقت الحالي بالقرب منك",
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.red, // Customize the color as needed
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),                      Padding(
+                      if (isLoading)
+                        Center(
+                          child:
+                              CircularProgressIndicator(), // Loading indicator
+                        )
+                      else if (filteredStores.isNotEmpty)
+                        Container(
+                          // Add your custom properties for the CarouselSlider...
+                          child: CarouselSlider(
+                            items: buildStoreContainers(),
+                            options: CarouselOptions(
+                              autoPlay: true,
+                              aspectRatio: 9 / 5,
+                              enlargeCenterPage: false,
+                              enableInfiniteScroll: true,
+                              autoPlayCurve: Curves.fastOutSlowIn,
+                              autoPlayAnimationDuration:
+                                  Duration(milliseconds: 4000),
+                              viewportFraction: 0.5,
+                            ),
+                          ),
+                        )
+                      else
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            isEnglish
+                                ? "Unfortunately, there are no stores near you at the moment."
+                                : "للأسف لا توجد متاجر في الوقت الحالي بالقرب منك",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color:
+                                  Colors.red, // Customize the color as needed
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      Padding(
                         padding: EdgeInsets.symmetric(vertical: 20),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -724,8 +905,7 @@ Future<void> _reloadFilteredStores() async {
 
                             buildIconWithText(Icons.local_offer, 'Top Discount',
                                 'أعلى خصم', 'images/best-deal.jpg', () {
-                                    Navigator.pushNamed(context, '/nonet');
-
+                              // Navigator.pushNamed(context, '/nonet');
                             }),
                           ],
                         ),
@@ -734,14 +914,27 @@ Future<void> _reloadFilteredStores() async {
                   ),
                   if (storeList.isNotEmpty)
                     Positioned(
-                      top: 130, // Adjust the top position as needed
+                      top: 135, // Adjust the top position as needed
                       left: 20, // Adjust the left position as needed
                       child: Container(
                         constraints: BoxConstraints(maxHeight: 200),
                         width: size.width - 40,
                         decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 225, 226, 228),
-                          borderRadius: BorderRadius.circular(5),
+                          color: Color(0xFFF0F0F0),
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(30),
+                            bottomRight: Radius.circular(30),
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius:
+                                  -5, // Negative spreadRadius makes the shadow inside
+                              blurRadius: 7,
+                              offset: Offset(
+                                  0, 3), // changes the position of the shadow
+                            ),
+                          ],
                         ),
                         child: ListView.builder(
                           shrinkWrap: true,
@@ -806,15 +999,24 @@ Future<void> _reloadFilteredStores() async {
       onTap: onTap,
       child: Container(
         width: 100, // Adjust the width as needed
+        height: 150, // Adjust the width as needed
         margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
         decoration: BoxDecoration(
-          color: Color.fromARGB(255, 238, 238, 238),
+          color: Color(0xFFF0F0F0),
           border: Border.all(
             color: Color.fromARGB(
                 5, 0, 0, 0), // You can customize the border color
             width: 2, // You can customize the border width
           ),
           borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 5, // Negative spreadRadius makes the shadow inside
+              blurRadius: 7,
+              offset: Offset(0, 3), // changes the position of the shadow
+            ),
+          ],
         ),
         child: Column(
           children: [

@@ -7,6 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 
 // Function to request location permissions
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +19,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => AppState(  context)),
+        ChangeNotifierProvider(create: (context) => AppState(context)),
         ChangeNotifierProvider(create: (context) => DarkModeProvider()), // Add DarkModeProvider
         ChangeNotifierProvider(create: (context) => AuthProvider()), // Add DarkModeProvider
       ],
@@ -35,104 +36,15 @@ class MhfathaApp extends StatefulWidget {
 }
 
 class _MhfathaAppState extends State<MhfathaApp> {
-  // Assume you have a variable to track the selected language
-    double? latitude;
-  double? longitude;
-    Api api = Api(); // Create an instance of the Api class
-  late Timer _timer; // Declare a timer variable
+
 
   @override
   void initState() {
     super.initState();
     Provider.of<AuthProvider>(context, listen: false).loadAuthData();
-        _getLocation();
-    //   _timer = Timer.periodic(Duration(seconds: 2), (timer) async {
-    //   await Api().checkInternetConnection();
-    // });
-    
 
   }
 
-
-
-  Future<void> _getLocation() async {
-     bool serviceEnabled;
-  LocationPermission permission;
-
-  // Test if location services are enabled.
-  serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  if (!serviceEnabled) {
-    // Location services are not enabled don't continue
-    // accessing the position and request users of the 
-    // App to enable the location services.
-    return Future.error('Location services are disabled.');
-  }
-    permission = await Geolocator.checkPermission();
-  if (permission == LocationPermission.denied) {
-    permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.denied) {
-      // Permissions are denied, next time you could try
-      // requesting permissions again (this is also where
-      // Android's shouldShowRequestPermissionRationale 
-      // returned true. According to Android guidelines
-      // your App should show an explanatory UI now.
-      return Future.error('Location permissions are denied');
-    }
-  }
-  
-  if (permission == LocationPermission.deniedForever) {
-    // Permissions are denied forever, handle appropriately. 
-    return Future.error(
-      'Location permissions are permanently denied, we cannot request permissions.');
-  } 
-
-
-  // Check if the widget is still mounted
-  if (!mounted) {
-    return;
-  }
-
-  // Check if locationWhenInUse permission is granted
-  var status = await Permission.locationWhenInUse.status;
-
-  if (status.isDenied) {
-    // Request locationWhenInUse permission if not granted
-    status = await Permission.locationWhenInUse.request();
-
-    if (!mounted) {
-      return;
-    }
-
-    if (status.isDenied) {
-      // Handle case when locationWhenInUse permission is still not granted
-      print('Location permission is denied.');
-      return;
-    }
-  }
-
-  // Check if locationAlways permission is granted
-
-  try {
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
-
-    // Check if the widget is still mounted before updating the state
-    if (!mounted) {
-      return;
-    }
-
-    setState(() {
-      latitude = position.latitude;
-      longitude = position.longitude;
-    });
-
-    // Call the method to send location when the coordinates are available
-  
-  } catch (e) {
-    print("Error getting location: $e");
-  }
-}
 
 
   @override
@@ -143,6 +55,8 @@ class _MhfathaAppState extends State<MhfathaApp> {
     return Consumer<AppState>(
       builder: (context, appState, child) {
         return MaterialApp(
+                    navigatorKey: navigatorKey,
+
       title: 'Mhfatha',
         theme: ThemeData.light().copyWith(
           
@@ -176,7 +90,7 @@ class _MhfathaAppState extends State<MhfathaApp> {
         // Example: return MyProvider(child: child);
         return child!;
       },
-      navigatorKey: GlobalKey(),
+      // navigatorKey: GlobalKey(),
     ); //matrial
   }
   );

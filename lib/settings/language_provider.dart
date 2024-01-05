@@ -21,34 +21,60 @@ class AppState with ChangeNotifier {
 
   bool get isDarkMode => _isDarkMode;
 
+late Timer _internetCheckTimer;
+bool _hasInternetConnection = true; // Default to true initially
+bool _isNonetworkScreenOpen = false; // Flag to track if the nonetwork screen is open
 
-  AppState(BuildContext context) {
+AppState(BuildContext context) {
+  _startInternetCheckTimer(context);
+}
 
-      network(context);
+void _startInternetCheckTimer(BuildContext context) {
+  _internetCheckTimer = Timer.periodic(Duration(seconds: 10), (timer) {
+    _checkInternetConnection(context);
+  });
+}
 
+Future<void> _checkInternetConnection(BuildContext context) async {
+  bool result = await InternetConnectionChecker().hasConnection;
+  if (result) {
+    print('You are online');
+    _setInternetConnectionState(true);
+    _closeNointernetScreen(context); // Close the Nointernet screen if it was open
+  } else {
+    print('No internet :(');
+    _setInternetConnectionState(false);
+    _navigateToNointernet(context);
   }
+}
+
+void _setInternetConnectionState(bool hasConnection) {
+  if (_hasInternetConnection != hasConnection) {
+    _hasInternetConnection = hasConnection;
+    notifyListeners(); // Notify listeners when the connection state changes
+  }
+}
+
+bool _isNointernetScreenVisible(BuildContext context) {
+  // Check if the Nointernet screen is currently on top of the stack
+  return ModalRoute.of(context)?.settings.name == Routes.nonetwork;
+}
+
+void _navigateToNointernet(BuildContext context) {
+  if (!_isNonetworkScreenOpen && !_isNointernetScreenVisible(context)) {
+    navigatorKey.currentState?.pushNamed(Routes.nonetwork);
+    _isNonetworkScreenOpen = true;
+  }
+}
+
+void _closeNointernetScreen(BuildContext context) {
+  if (_isNonetworkScreenOpen) {
+    navigatorKey.currentState?.pop();
+    _isNonetworkScreenOpen = false;
+  }
+}
+
  
-
-
-  Future<void> network( BuildContext context) async {
-    bool result = await InternetConnectionChecker().hasConnection;
-    if (result == true) {
-      print('YAY! Free cute dog pics!');
-
-      Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => Nointernet()),
-  );
-
-
-
-    } else {
-      print('No internet :( ');
-      // You can safely use the context here to navigate
-      Navigator.pushNamed(context, '/nonet');
-    }
-  }
-
 
   Future<void> toggleDarkMode() async {
     _isDarkMode = !_isDarkMode;

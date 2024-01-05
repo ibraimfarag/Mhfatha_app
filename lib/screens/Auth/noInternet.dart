@@ -8,30 +8,18 @@ class Nointernet extends StatefulWidget {
 class _NointernetState extends State<Nointernet> {
   @override
   Widget build(BuildContext context) {
+
+    bool isEnglish = Provider.of<AppState>(context).isEnglish;
+
     return DirectionalityWrapper(
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          actions: [
-            Builder(
-              builder: (BuildContext builderContext) {
-                return IconButton(
-                  icon: Icon(Icons.arrow_forward),
-                  onPressed: () {
-                    Navigator.pop(builderContext);
-                  },
-                  color: Color.fromARGB(255, 7, 0, 34),
-                );
-              },
-            ),
-          ],
-        ),
+     
         body: Center(
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,  // Centering the content vertically
               children: [
                 Image.asset(
                   'images/no-internet.jpg',
@@ -39,19 +27,30 @@ class _NointernetState extends State<Nointernet> {
                 ),
                 SizedBox(height: 16),
                 Text(
-                  'Your Title',
+                  isEnglish ? 'Opps' : 'عفوًا',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
+                  textAlign: TextAlign.center,  // Centering the text horizontally
                 ),
                 SizedBox(height: 8),
                 Text(
-                  'Your Subtitle',
+                  isEnglish ? 'You haven\'t connected to the Internet' : 'أنت غير متصل بالإنترنت',
                   style: TextStyle(
                     fontSize: 18,
-                    color: Colors.grey,
+                    color: Colors.black87,
                   ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 8),
+                Text(
+                  isEnglish ? 'Please try to connect to the Internet, and Mhfatha application will work automatically when connected to the Internet' : 'من فضلك حاول الاتصال بالانترنت و تطبيق محفظة سوف يعمل بشكل تلقائي عند الاتصال بالانترنت',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black87,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ],
             ),
