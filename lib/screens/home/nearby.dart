@@ -73,7 +73,7 @@ class _NearByState extends State<NearBy> {
                                 ),
                                 Image.asset(
                                   'images/nearby.gif', // Replace with the actual path to your GIF image
-                                  height: 100, // Adjust the height as needed
+                                  height: 80, // Adjust the height as needed
                                 ),
                               ],
                             ),

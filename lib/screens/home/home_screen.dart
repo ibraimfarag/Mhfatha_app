@@ -32,11 +32,11 @@ late Timer network;
     super.initState();
     _getLocation();
     // Set up a timer to check location changes every 90 seconds
-    locationTimer = Timer.periodic(Duration(seconds: 10), (Timer timer) async {
+    locationTimer = Timer.periodic(Duration(seconds: 3), (Timer timer) async {
       await _checkAndSendLocation();
     });
 
-    reloadTimer = Timer.periodic(Duration(seconds: 5), (Timer timer) {
+    reloadTimer = Timer.periodic(Duration(seconds: 2), (Timer timer) {
       if (filteredStores.isEmpty) {
         _reloadFilteredStores();
       }

@@ -30,10 +30,18 @@ class AppState with ChangeNotifier {
  
 
 
-  Future<void> network(BuildContext context) async {
+  Future<void> network( BuildContext context) async {
     bool result = await InternetConnectionChecker().hasConnection;
     if (result == true) {
       print('YAY! Free cute dog pics!');
+
+      Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => Nointernet()),
+  );
+
+
+
     } else {
       print('No internet :( ');
       // You can safely use the context here to navigate

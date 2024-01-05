@@ -18,7 +18,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => AppState( context)),
+        ChangeNotifierProvider(create: (context) => AppState(  context)),
         ChangeNotifierProvider(create: (context) => DarkModeProvider()), // Add DarkModeProvider
         ChangeNotifierProvider(create: (context) => AuthProvider()), // Add DarkModeProvider
       ],
