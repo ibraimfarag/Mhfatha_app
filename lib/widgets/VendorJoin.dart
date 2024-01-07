@@ -7,6 +7,7 @@ class VendorJoinWidget extends StatefulWidget {
   final String yesText;
   final String noText;
   final Function(bool) onSelectionChanged;
+  final Color labelcolor;
 
   const VendorJoinWidget({
     Key? key,
@@ -15,6 +16,7 @@ class VendorJoinWidget extends StatefulWidget {
     required this.yesText,
     required this.noText,
     required this.onSelectionChanged,
+    required this.labelcolor,
   }) : super(key: key);
 
   @override
@@ -35,7 +37,7 @@ class _VendorJoinWidgetState extends State<VendorJoinWidget> {
           Text(
             widget.isEnglish ? widget.labelText : 'هل تريد الانضمام كـ تاجر؟ ',
             style: TextStyle(
-              color: Colors.white,
+              color: widget.labelcolor,
               fontSize: 16,
               fontWeight: FontWeight.normal,
             ),
@@ -57,7 +59,7 @@ class _VendorJoinWidgetState extends State<VendorJoinWidget> {
               ),
               Text(
                 widget.isEnglish ? widget.yesText : 'نعم',
-                style: TextStyle(color: Colors.white, fontSize: 16),
+                style: TextStyle(color:widget.labelcolor, fontSize: 16),
               ),
               Radio(
                 value: false,
@@ -71,7 +73,7 @@ class _VendorJoinWidgetState extends State<VendorJoinWidget> {
               ),
               Text(
                 widget.isEnglish ? widget.noText : 'لا',
-                style: TextStyle(color: Colors.white, fontSize: 16),
+                style: TextStyle(color: widget.labelcolor, fontSize: 16),
               ),
             ],
           ),

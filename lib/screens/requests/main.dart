@@ -130,8 +130,8 @@ class _RequestsScreenState extends State<RequestsScreen> {
                             ),
                             Text(
                               isEnglish
-                                  ? '   $totalDiscount SAR'
-                                  : '  $totalDiscount ريال  ',
+                                  ? '   $totalSavings SAR'
+                                  : '  $totalSavings ريال  ',
                               style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,

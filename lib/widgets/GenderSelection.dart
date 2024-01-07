@@ -5,12 +5,16 @@ class GenderSelection extends StatelessWidget {
   final bool isEnglish;
   final String selectedGender;
   final Function(String) onGenderSelected;
+  final Color labelcolor;
 
   const GenderSelection({
     Key? key,
     required this.isEnglish,
     required this.selectedGender,
     required this.onGenderSelected,
+        required this.labelcolor,
+
+    
   }) : super(key: key);
 
   @override
@@ -23,7 +27,7 @@ class GenderSelection extends StatelessWidget {
           Text(
             isEnglish ? 'Gender: ' : 'الجنس: ',
             style: TextStyle(
-              color: Colors.white,
+              color: labelcolor,
               fontSize: 16,
               fontWeight: FontWeight.normal,
             ),
@@ -37,7 +41,7 @@ class GenderSelection extends StatelessWidget {
           ),
           Text(
             isEnglish ? 'Male' : 'ذكر',
-            style: TextStyle(color: Colors.white, fontSize: 16),
+            style: TextStyle(color:labelcolor, fontSize: 16),
           ),
           Radio(
             value: 'female',
@@ -48,7 +52,7 @@ class GenderSelection extends StatelessWidget {
           ),
           Text(
             isEnglish ? 'Female' : 'أنثى',
-            style: TextStyle(color: Colors.white, fontSize: 16),
+            style: TextStyle(color:labelcolor, fontSize: 16),
           ),
         ],
       ),

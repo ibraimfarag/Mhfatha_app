@@ -662,6 +662,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
+    bool isDark = Provider.of<AppState>(context).isDarkMode;
     Size size = MediaQuery.of(context).size;
     String lang = Provider.of<AppState>(context, listen: false).display;
 
@@ -687,7 +688,7 @@ class _HomeScreenState extends State<HomeScreen> {
               // color: Color(0xFFF3F4F7),
               image: DecorationImage(
                 image: AssetImage(
-                    'images/abstract.jpg'), // Replace 'your_image_path.jpg' with the actual path to your image asset
+                    isDark?'images/assse.png':'images/abstract.jpg'), // Replace 'your_image_path.jpg' with the actual path to your image asset
                 fit: BoxFit
                     .cover, // You can adjust the fit as per your requirement
               ),
@@ -753,11 +754,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             Container(
                               padding: EdgeInsets.all(5),
                               decoration: BoxDecoration(
-                                color: Color(0xFFF0F0F0),
+                                color: isDark? Color.fromARGB(251, 34, 34, 34):Color(0xFFF0F0F0),
                                 borderRadius: BorderRadius.circular(30),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.grey.withOpacity(0.5),
+                                    color:isDark? Color.fromARGB(250, 17, 17, 17): Colors.grey.withOpacity(0.5),
                                     spreadRadius:
                                         5, // Negative spreadRadius makes the shadow inside
                                     blurRadius: 7,
@@ -775,11 +776,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ? 'Search stores'
                                       : 'ابحث عن متجر',
                                   prefixIcon: Icon(Icons.search),
-                                  fillColor: Color(0xFFF0F0F0),
+                                  fillColor: isDark? Color.fromARGB(251, 34, 34, 34): Color(0xFFF0F0F0),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(30),
                                     borderSide: BorderSide(
-                                      color: Color.fromARGB(0, 225, 226, 228),
+                                      color: isDark? Color.fromARGB(0, 34, 34, 34):Color.fromARGB(0, 0, 0, 0),
                                     ),
                                   ),
                                   focusedBorder: OutlineInputBorder(
@@ -831,7 +832,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             
                         child: Row(
                           children: [
-                            Icon(Icons.store, color: Colors.black, size: 24),
+                            Icon(Icons.store, color:isDark? Colors.white: Colors.black, size: 24),
                             SizedBox(width: 10),
                             Text(
                               isEnglish ? 'Nearby Stores' : 'متاجر قريبة',
@@ -914,13 +915,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   if (storeList.isNotEmpty)
                     Positioned(
-                      top: 135, // Adjust the top position as needed
+                      top: 190, // Adjust the top position as needed
                       left: 20, // Adjust the left position as needed
                       child: Container(
                         constraints: BoxConstraints(maxHeight: 200),
                         width: size.width - 40,
                         decoration: BoxDecoration(
-                          color: Color(0xFFF0F0F0),
+                          color:isDark? Color.fromARGB(251, 34, 34, 34): Color(0xFFF0F0F0),
                           borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(30),
                             bottomRight: Radius.circular(30),
@@ -994,6 +995,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget buildIconWithText(IconData icon, String englishText, String arabicText,
       String imagePath, VoidCallback onTap) {
     final isEnglish = Provider.of<AppState>(context).isEnglish;
+    bool isDark = Provider.of<AppState>(context).isDarkMode;
 
     return GestureDetector(
       onTap: onTap,
@@ -1002,7 +1004,7 @@ class _HomeScreenState extends State<HomeScreen> {
         height: 150, // Adjust the width as needed
         margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
         decoration: BoxDecoration(
-          color: Color(0xFFF0F0F0),
+          color: isDark? Color.fromARGB(255, 29, 29, 29):Color(0xFFF0F0F0),
           border: Border.all(
             color: Color.fromARGB(
                 5, 0, 0, 0), // You can customize the border color
@@ -1011,7 +1013,7 @@ class _HomeScreenState extends State<HomeScreen> {
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
+              color:isDark? Color(0xFF0C0C0C).withOpacity(0.5): Colors.grey.withOpacity(0.5),
               spreadRadius: 5, // Negative spreadRadius makes the shadow inside
               blurRadius: 7,
               offset: Offset(0, 3), // changes the position of the shadow
@@ -1053,16 +1055,16 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
               child: Align(
                 alignment:
-                    isEnglish ? Alignment.centerLeft : Alignment.centerRight,
+                    isEnglish ? Alignment.center : Alignment.center,
                 child: Text(
                   isEnglish ? englishText : arabicText,
                   style: TextStyle(
-                    color: Colors.black87,
+                  color:isDark? Color(0xFFFFFFFF):Colors.black87,
                     fontWeight: FontWeight.bold,
                     fontFamily: AppVariables.serviceFontFamily,
                     fontSize: 14,
                   ),
-                  textAlign: isEnglish ? TextAlign.left : TextAlign.right,
+                  textAlign: isEnglish ? TextAlign.center : TextAlign.center,
                 ),
               ),
             ),

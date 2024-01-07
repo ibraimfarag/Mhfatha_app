@@ -8,8 +8,15 @@ import 'package:flutter/material.dart';
 
 class RegionSelection extends StatefulWidget {
   final ValueChanged<String> onRegionSelected;
+  final Color labelcolor;
+  final Color color;
 
-  const RegionSelection({Key? key, required this.onRegionSelected})
+  const RegionSelection(
+    {Key? key, 
+  required this.onRegionSelected,   
+   required this.color,
+    required this.labelcolor,})
+     
       : super(key: key);
 
   @override
@@ -18,8 +25,6 @@ class RegionSelection extends StatefulWidget {
 
 class _RegionSelectionState extends State<RegionSelection> {
   String selectedRegion = 'riyadh';
-  Color colors = Color.fromARGB(220, 255, 255, 255);
-  Color backgroundColor = Color(0xFF05204a);
   @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
@@ -91,7 +96,7 @@ class _RegionSelectionState extends State<RegionSelection> {
           child: Text(
             isEnglish ? 'Region' : 'المنطقة',
             style: TextStyle(
-              color: colors,
+              color: widget.labelcolor,
               fontSize: 16,
               fontWeight: FontWeight.normal,
             ),
@@ -101,7 +106,7 @@ class _RegionSelectionState extends State<RegionSelection> {
         Container(
           margin: EdgeInsets.only(left: 45, right: 45),
           decoration: BoxDecoration(
-            color: backgroundColor, // Set the background color as needed
+            color: widget.color, // Set the background color as needed
             borderRadius: BorderRadius.circular(10),
           ),
           child: DropdownButton<String>(
@@ -123,10 +128,10 @@ class _RegionSelectionState extends State<RegionSelection> {
                 ),
               );
             }).toList(),
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: widget.labelcolor),
             underline: Container(),
             dropdownColor:
-                backgroundColor, // Set the background color for the dropdown menu items
+                widget.color, // Set the background color for the dropdown menu items
           ),
         ),
       ],

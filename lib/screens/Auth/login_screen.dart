@@ -11,8 +11,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  Color colors = Color.fromARGB(220, 255, 255, 255);
-  Color backgroundColor = Color(0xFF05204a);
+  Color backgroundColor  = Color.fromARGB(220, 255, 255, 255);
+  Color ui  = Color.fromARGB(220, 233, 233, 233);
+  Color colors = Color(0xFF05204a);
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
@@ -20,6 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
     Size size = MediaQuery.of(context).size;
+    bool isDark = Provider.of<AppState>(context).isDarkMode;
 
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
@@ -31,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
             height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/backgound.png'),
+                image: AssetImage( isDark?'images/assse.png':'images/abstract.jpg'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -43,16 +45,26 @@ class _LoginScreenState extends State<LoginScreen> {
                   top: 60,
                   right: 20,
                   child: Container(
-                    decoration: BoxDecoration(
-                      color: backgroundColor,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
+         decoration: BoxDecoration(
+                                color: isDark? Color.fromARGB(251, 34, 34, 34):Color(0xFFF0F0F0),
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color:isDark? Color.fromARGB(250, 17, 17, 17): Colors.grey.withOpacity(0.5),
+                                    spreadRadius:
+                                        5, // Negative spreadRadius makes the shadow inside
+                                    blurRadius: 7,
+                                    offset: Offset(0,
+                                        3), // changes the position of the shadow
+                                  ),
+                                ],
+                              ),
                     padding: EdgeInsets.all(1),
                     child: Row(
                       children: [
                         PopupMenuButton<String>(
                           icon: Icon(Icons.language,
-                              color: Color.fromARGB(146, 255, 255, 255)),
+                              color: colors),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
@@ -89,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     BounceInDown(
                         child: Image.asset(
-                      'images/logo.png', // Replace with the path to your image
+                      'images/logoDark.png', // Replace with the path to your image
                       height: 50, // Adjust the height as needed
                       // width: 100, // Adjust the width as needed
                     )),
@@ -100,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Text(
                         isEnglish
                             ? 'time to get discounts'
-                            : 'وقت للحصول على الخصومات',
+                            : 'وقت الحصول على الخصومات',
                         style: TextStyle(
                             color: Colors.grey.shade500, fontSize: 16),
                       ),
@@ -121,7 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: Text(
                               isEnglish
                                   ? 'Email or mobile number'
-                                  : 'البريد الالكتروني',
+                                  : '  البريد الالكتروني او رقم الجوال',
                               style: TextStyle(
                                   color: colors,
                                   fontSize: 16,
@@ -129,23 +141,36 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                           SizedBox(height: 8), // Adjust the height as needed
-                          Container(
+                          Container(   decoration: BoxDecoration(
+                                color: isDark? Color.fromARGB(251, 34, 34, 34):Color(0xFFF0F0F0),
+                                borderRadius: BorderRadius.circular(30),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color:isDark? Color.fromARGB(250, 17, 17, 17): Colors.grey.withOpacity(0.5),
+                                    spreadRadius:
+                                        5, // Negative spreadRadius makes the shadow inside
+                                    blurRadius: 7,
+                                    offset: Offset(0,
+                                        3), // changes the position of the shadow
+                                  ),
+                                ],
+                              ),
                             margin: EdgeInsets.only(left: 40, right: 40),
                             child: TextField(
                               controller: _emailController,
                               style:
-                                  TextStyle(fontSize: 16, color: Colors.white),
+                                  TextStyle(fontSize: 16, color: colors),
                               decoration: InputDecoration(
                                 hintStyle:
                                     TextStyle(color: Colors.grey.shade700),
                                 filled: true,
-                                fillColor: backgroundColor,
+                                fillColor: ui,
                                 enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(30),
                                     borderSide:
                                         BorderSide(color: backgroundColor)),
                                 focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(30),
                                     borderSide:
                                         BorderSide(color: backgroundColor)),
                               ),
@@ -168,7 +193,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ? Alignment.centerLeft
                                 : Alignment.centerRight,
                             child: Text(
-                              isEnglish ? "Password" : "كلمة السر",
+                              isEnglish ? "Password" : "كلمة المرور",
                               style: TextStyle(
                                   color: colors,
                                   fontSize: 16,
@@ -180,22 +205,36 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           Container(
                             margin: EdgeInsets.only(left: 40, right: 40),
+                               decoration: BoxDecoration(
+                                color: isDark? Color.fromARGB(251, 34, 34, 34):Color(0xFFF0F0F0),
+                                borderRadius: BorderRadius.circular(30),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color:isDark? Color.fromARGB(250, 17, 17, 17): Colors.grey.withOpacity(0.5),
+                                    spreadRadius:
+                                        5, // Negative spreadRadius makes the shadow inside
+                                    blurRadius: 7,
+                                    offset: Offset(0,
+                                        3), // changes the position of the shadow
+                                  ),
+                                ],
+                              ),
                             child: TextField(
                               obscureText: true,
                               controller: _passwordController,
                               style:
-                                  TextStyle(fontSize: 16, color: Colors.white),
+                                  TextStyle(fontSize: 16, color: colors),
                               decoration: InputDecoration(
                                 hintStyle:
                                     TextStyle(color: Colors.grey.shade700),
                                 filled: true,
-                                fillColor: backgroundColor,
+                                fillColor: ui,
                                 enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(30),
                                     borderSide:
                                         BorderSide(color: backgroundColor)),
                                 focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(30),
                                     borderSide:
                                         BorderSide(color: backgroundColor)),
                               ),
@@ -215,7 +254,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ? Alignment.centerRight
                           : Alignment.centerLeft,
                       child: Text(
-                        isEnglish ? "Forgot Password?" : "هل نسيت كلمة السر ؟",
+                        isEnglish ? "Forgot Password?" : "هل نسيت كلمة المرور ؟",
                         style: TextStyle(
                             color: colors,
                             fontSize: 12,
@@ -231,6 +270,20 @@ class _LoginScreenState extends State<LoginScreen> {
                             .end, // Align items to the start (left)
                         children: [
                           Container(
+                               decoration: BoxDecoration(
+                                color: isDark? Color.fromARGB(251, 34, 34, 34):Color(0xFFF0F0F0),
+                                borderRadius: BorderRadius.circular(30),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color:isDark? Color.fromARGB(250, 17, 17, 17): Colors.grey.withOpacity(0.5),
+                                    spreadRadius:
+                                        5, // Negative spreadRadius makes the shadow inside
+                                    blurRadius: 7,
+                                    offset: Offset(0,
+                                        3), // changes the position of the shadow
+                                  ),
+                                ],
+                              ),
                             height: 50,
                             width: 100,
                             margin: EdgeInsets.only(left: 40, right: 40),
@@ -270,15 +323,15 @@ class _LoginScreenState extends State<LoginScreen> {
                               },
                               style: ElevatedButton.styleFrom(
                                 primary:
-                                    backgroundColor, // Set the background color
+                                    ui, // Set the background color
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(30),
                                 ),
                               ),
                               child: Text(
                                 isEnglish ? "SIGN IN" : "دخول",
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: colors,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
                                 ),
@@ -305,7 +358,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ? "create new account"
                                   : "انشاء حساب جديد",
                               style: TextStyle(
-                                color: Colors.white,
+                                color: colors,
                                 decoration: TextDecoration
                                     .underline, // Add underline to indicate it's clickable
                               ),

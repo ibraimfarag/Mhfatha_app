@@ -5,6 +5,8 @@ class DatePickerWidget extends StatelessWidget {
   final DateTime? selectedDate;
   final Function(DateTime?) onDateSelected;
   final String label;
+  final Color labelcolor;
+  final Color color;
 
   const DatePickerWidget({
     Key? key,
@@ -12,19 +14,24 @@ class DatePickerWidget extends StatelessWidget {
     required this.selectedDate,
     required this.onDateSelected,
     required this.label,
+    required this.labelcolor,
+    required this.color,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+            bool isDark = Provider.of<AppState>(context).isDarkMode;
+
     return Container(
       margin: EdgeInsets.only(left: 40, right: 40, top: 10),
+      
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             isEnglish ? label : 'تاريخ الميلاد: ',
             style: TextStyle(
-              color: Colors.white,
+              color: labelcolor,
               fontSize: 16,
               fontWeight: FontWeight.normal,
             ),
@@ -36,17 +43,27 @@ class DatePickerWidget extends StatelessWidget {
               if (selectedDate == null)
                 Container(
                   width: 200,
-                  decoration: BoxDecoration(
-                    color:  Color(0xFF05204a),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+  decoration: BoxDecoration(
+                                // color: isDark? Color.fromARGB(251, 34, 34, 34):Color(0xFFF0F0F0),
+                                borderRadius: BorderRadius.circular(30),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color:isDark? Color.fromARGB(250, 17, 17, 17): Colors.grey.withOpacity(0.5),
+                                    spreadRadius:
+                                        5, // Negative spreadRadius makes the shadow inside
+                                    blurRadius: 7,
+                                    offset: Offset(0,
+                                        3), // changes the position of the shadow
+                                  ),
+                                ],
+                              ),
                   child: ElevatedButton(
                     onPressed: () async {
                       DateTime? pickedDate = await showDatePicker(
                         context: context,
-                        initialDate: DateTime.now(),
+                        initialDate: DateTime(2013),
                         firstDate: DateTime(1900),
-                        lastDate: DateTime.now(),
+                        lastDate: DateTime(2013),
                       );
 
                       if (pickedDate != null && pickedDate != selectedDate) {
@@ -54,15 +71,17 @@ class DatePickerWidget extends StatelessWidget {
                       }
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.transparent,
+                      primary: color,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(360),
+                              side: BorderSide(color: color, width: 0),
+
                       ),
                     ),
                     child: Text(
                       isEnglish ? 'Pick a Date' : 'اختر تاريخ',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: labelcolor,
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
@@ -77,7 +96,7 @@ class DatePickerWidget extends StatelessWidget {
                       context: context,
                       initialDate: selectedDate!,
                       firstDate: DateTime(1900),
-                      lastDate: DateTime.now(),
+                      lastDate: DateTime(2013),
                     );
 
                     if (pickedDate != null && pickedDate != selectedDate) {
@@ -87,8 +106,8 @@ class DatePickerWidget extends StatelessWidget {
                   child: Text(
                     ' ${selectedDate!.year}-${selectedDate!.month}-${selectedDate!.day}',
                     style: TextStyle(
-                      color: Colors.white,
-                      // decoration: TextDecoration.underline,
+                      color:
+                          labelcolor, // decoration: TextDecoration.underline,
                     ),
                   ),
                 ),

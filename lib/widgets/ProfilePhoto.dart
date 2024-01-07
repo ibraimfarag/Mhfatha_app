@@ -13,6 +13,8 @@ class ProfilePhotoWidget extends StatefulWidget {
   final String changePhotoText;
   final String removeText;
   final Function(String?) onPhotoSelected;
+  final Color labelcolor;
+  final Color color;
 
   const ProfilePhotoWidget({
     Key? key,
@@ -22,6 +24,9 @@ class ProfilePhotoWidget extends StatefulWidget {
     required this.changePhotoText,
     required this.removeText,
     required this.onPhotoSelected,
+    required this.labelcolor,
+    required this.color,
+
   }) : super(key: key);
 
   @override
@@ -33,11 +38,28 @@ class _ProfilePhotoWidgetState extends State<ProfilePhotoWidget> {
 
   @override
   Widget build(BuildContext context) {
+            bool isDark = Provider.of<AppState>(context).isDarkMode;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
+          //  decoration: BoxDecoration(
+                                // color: isDark? Color.fromARGB(251, 34, 34, 34):Color(0xFFF0F0F0),
+                              //   borderRadius: BorderRadius.circular(30),
+                              //   boxShadow: [
+                              //     BoxShadow(
+                              //       color:isDark? Color.fromARGB(250, 17, 17, 17): Colors.grey.withOpacity(0.5),
+                              //       spreadRadius:
+                              //           5, // Negative spreadRadius makes the shadow inside
+                              //       blurRadius: 7,
+                              //       offset: Offset(0,
+                              //           3), // changes the position of the shadow
+                              //     ),
+                              //   ],
+                              // ),
           margin: EdgeInsets.fromLTRB(45, 20, 45, 0),
+          padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,7 +67,7 @@ class _ProfilePhotoWidgetState extends State<ProfilePhotoWidget> {
               Text(
                 widget.isEnglish ? widget.label : 'الصورة الشخصية: ',
                 style: TextStyle(
-                  color: Colors.white,
+                  color:widget.labelcolor,
                   fontSize: 16,
                   fontWeight: FontWeight.normal,
                 ),
@@ -90,7 +112,7 @@ class _ProfilePhotoWidgetState extends State<ProfilePhotoWidget> {
                                 ? widget.changePhotoText
                                 : 'تغير  الصورة',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: widget.labelcolor,
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),
@@ -100,13 +122,14 @@ class _ProfilePhotoWidgetState extends State<ProfilePhotoWidget> {
                                 ? widget.selectPhotoText
                                 : 'اختر صورة',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: widget.labelcolor,
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),
                           ),
                     style: ElevatedButton.styleFrom(
-                      primary:  Color(0xFF05204a),
+                      primary:                   widget.color,
+
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),

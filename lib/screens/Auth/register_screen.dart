@@ -15,8 +15,9 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  Color colors = Color.fromARGB(220, 255, 255, 255);
-  Color backgroundColor = Color(0xFF05204a);
+  Color backgroundColor = Color.fromARGB(220, 255, 255, 255);
+  Color ui = Color.fromARGB(220, 233, 233, 233);
+  Color colors = Color(0xFF05204a);
   String selectedGender = ''; // Default gender selection
   String selectedVendor = ''; // Default gender selection
 
@@ -38,6 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
     Size size = MediaQuery.of(context).size;
     String lang = Provider.of<AppState>(context, listen: false).display;
+    bool isDark = Provider.of<AppState>(context).isDarkMode;
 
     return DirectionalityWrapper(
       child: Scaffold(
@@ -45,7 +47,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
           children: [
             Positioned.fill(
               child: Image.asset(
-                'assets/backgound.png', // Replace with your image path
+                isDark
+                    ? 'images/assse.png'
+                    : 'images/abstract.jpg', // Replace with your image path
                 fit: BoxFit.cover,
               ),
             ),
@@ -74,7 +78,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   child: Text(
                                     isEnglish ? 'Back' : 'العودة',
                                     style: TextStyle(
-                                      color: Colors.white,
+                                      color: colors,
                                       fontSize: 16,
                                     ),
                                   ),
@@ -82,9 +86,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                                 // The existing language selection PopupMenuButton on the right
                                 PopupMenuButton<String>(
-                                  icon: Icon(Icons.language,
-                                      color:
-                                          Color.fromARGB(146, 255, 255, 255)),
+                                  icon: Icon(Icons.language, color: colors),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15),
                                   ),
@@ -121,8 +123,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 height: 30,
                               ),
                               Image.asset(
-                                'images/logo.png', // Replace with the path to your image
-                                height: 20, // Adjust the height as needed
+                                'images/logoDark.png', // Replace with the path to your image
+                                height: 50, // Adjust the height as needed
                                 // width: 100, // Adjust the width as needed
                               ),
                               SizedBox(
@@ -142,25 +144,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               // /* ------------------------------- first name ------------------------------- */
                               // /* -------------------------------------------------------------------------- */
                               CustomTextField(
-                                label: isEnglish ? 'Name' : 'الاسم',
-                                controller: nameController,
-                              ),
+                                  label: isEnglish ? 'Name' : 'الاسم',
+                                  controller: nameController,
+                                  color: ui,
+                                  labelcolor: colors),
 
                               // /* -------------------------------------------------------------------------- */
                               // /* ------------------------------- Family Name ------------------------------ */
                               // /* -------------------------------------------------------------------------- */
 
                               CustomTextField(
-                                label:
-                                    isEnglish ? 'Family Name' : 'اسم العائلة',
-                                controller: familyNameController,
-                              ),
+                                  label:
+                                      isEnglish ? 'Family Name' : 'اسم العائلة',
+                                  controller: familyNameController,
+                                  color: ui,
+                                  labelcolor: colors),
                               // /* -------------------------------------------------------------------------- */
                               // /* ----------------------------- GenderSelection ---------------------------- */
                               // /* -------------------------------------------------------------------------- */
                               GenderSelection(
                                 isEnglish: isEnglish,
                                 selectedGender: selectedGender,
+                                labelcolor: colors,
                                 onGenderSelected: (value) {
                                   setState(() {
                                     selectedGender = value;
@@ -174,6 +179,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               DatePickerWidget(
                                 isEnglish: isEnglish,
                                 selectedDate: selectedDate,
+                                color: ui,
+                                labelcolor:colors,
                                 onDateSelected: (date) {
                                   setState(() {
                                     selectedDate = date;
@@ -189,6 +196,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               // /* -------------------------------------------------------------------------- */
                               ProfilePhotoWidget(
                                 isEnglish: isEnglish,
+                                                                labelcolor:colors,
+                                                                 color: ui,
+
                                 label: isEnglish
                                     ? 'Profile photo: '
                                     : 'الصورة الشخصية: ',
@@ -214,6 +224,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   Column(
                                     children: [
                                       RegionSelection(
+                                               color: ui,
+                                labelcolor:colors,
                                         onRegionSelected: (region) {
                                           setState(() {
                                             selectedRegion = region;
@@ -231,42 +243,50 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               // /* ---------------------------------- email --------------------------------- */
                               // /* -------------------------------------------------------------------------- */
                               CustomTextField(
-                                label: isEnglish ? 'Mail' : 'البريد الالكتروني',
-                                controller: mailController,
-                              ),
+                                  label:
+                                      isEnglish ? 'Mail' : 'البريد الالكتروني',
+                                  controller: mailController,
+                                  color: ui,
+                                  labelcolor: colors),
                               // /* -------------------------------------------------------------------------- */
                               // /* ------------------------------ Mobile Number ----------------------------- */
                               // /* -------------------------------------------------------------------------- */
                               CustomTextField(
-                                label:
-                                    isEnglish ? 'Mobile Number' : 'رقم الجوال',
-                                controller: mobileController,
-                                isNumeric: true,
-                                maxLength: 10,
-                              ),
+                                  label: isEnglish
+                                      ? 'Mobile Number'
+                                      : 'رقم الجوال',
+                                  controller: mobileController,
+                                  isNumeric: true,
+                                  // maxLength: 10,
+                                  color: ui,
+                                  labelcolor: colors),
                               // /* -------------------------------------------------------------------------- */
                               // /* ------------------------------ Pssword ----------------------------- */
                               // /* -------------------------------------------------------------------------- */
                               CustomTextField(
-                                label: isEnglish ? 'Password' : 'كلمة السر',
-                                isPassword: true,
-                                controller: passwordController,
-                              ),
+                                  label: isEnglish ? 'Password' : 'كلمة السر',
+                                  isPassword: true,
+                                  controller: passwordController,
+                                  color: ui,
+                                  labelcolor: colors),
 
-// /* -------------------------------------------------------------------------- */
-// /* ------------------------------ co - Pssword ----------------------------- */
-// /* -------------------------------------------------------------------------- */
+                            // /* -------------------------------------------------------------------------- */
+                            // /* ------------------------------ co - Pssword ----------------------------- */
+                            // /* -------------------------------------------------------------------------- */
                               CustomTextField(
-                                label: isEnglish
-                                    ? 'Confirm Password'
-                                    : 'تأكيد كلمة السر',
-                                isPassword: true,
-                                controller: confirmPasswordController,
-                              ),
+                                  label: isEnglish
+                                      ? 'Confirm Password'
+                                      : 'تأكيد كلمة السر',
+                                  isPassword: true,
+                                  controller: confirmPasswordController,
+                                  color: ui,
+                                  labelcolor: colors),
                               // /* -------------------------------------------------------------------------- */
                               // /* ------------------------------- Vendor Join ------------------------------ */
                               // /* -------------------------------------------------------------------------- */
                               VendorJoinWidget(
+                                                                labelcolor:colors,
+
                                 isEnglish: isEnglish,
                                 labelText: isEnglish
                                     ? 'Are you want to join as Vendor?'
@@ -302,6 +322,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     .end, // Align items to the start (left)
                                 children: [
                                   Container(
+                                     decoration: BoxDecoration(
+                                color: isDark? Color.fromARGB(251, 34, 34, 34):Color(0xFFF0F0F0),
+                                borderRadius: BorderRadius.circular(30),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color:isDark? Color.fromARGB(250, 17, 17, 17): Colors.grey.withOpacity(0.5),
+                                    spreadRadius:
+                                        5, // Negative spreadRadius makes the shadow inside
+                                    blurRadius: 7,
+                                    offset: Offset(0,
+                                        3), // changes the position of the shadow
+                                  ),
+                                ],
+                              ),
                                     height: 50,
                                     width: 150,
                                     margin: EdgeInsets.only(
@@ -340,13 +374,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       child: Text(
                                         isEnglish ? "REGISTER" : "تسجيل",
                                         style: TextStyle(
-                                          color: Colors.white,
+                                          color: colors,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16,
                                         ),
                                       ),
                                       style: ElevatedButton.styleFrom(
-                                        primary: backgroundColor,
+                                        primary: ui,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(10),
