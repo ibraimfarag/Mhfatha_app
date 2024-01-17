@@ -14,6 +14,7 @@ class Routes {
   static String report = '/report';
   static String request= '/requests';
   static String nonetwork= '/nonet';
+  static String account= '/account';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -29,6 +30,7 @@ class Routes {
       report: (context) => ReportScreen(),
       request: (context) => RequestsScreen(),
       nonetwork: (context) => Nointernet(),
+      account: (context) => AccountScreen(),
 
       
     };

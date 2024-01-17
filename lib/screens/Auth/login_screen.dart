@@ -111,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     FadeOut(
                       child: Text(
                         isEnglish
-                            ? 'time to get discounts'
+                            ? 'for discounts'
                             : 'وقت الحصول على الخصومات',
                         style: TextStyle(
                             color: Colors.grey.shade500, fontSize: 16),

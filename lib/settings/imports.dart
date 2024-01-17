@@ -30,6 +30,7 @@ export 'package:mhfatha/screens/Auth/register_screen.dart';
 
 // /* -------------------------------- settings -------------------------------- */
 export 'package:mhfatha/screens/settings/settings.dart';
+export 'package:mhfatha/screens/settings/Account.dart';
 
 /* -------------------------------- QrScreen ------------------------ */
 export 'package:mhfatha/screens/QR/qr_screen.dart';
@@ -133,6 +134,10 @@ export 'package:internet_connection_checker/internet_connection_checker.dart';
 // ─── Location ────────────────────────────────────────────────────────────────
 
 // export 'package:location/location.dart';
+
+// /* -------------------------------- flipcard -------------------------------- */
+export 'package:flip_card/flip_card.dart';
+
 // /* -------------------------------------------------------------------------- */
 // /* --------------------------------- Widgets -------------------------------- */
 // /* -------------------------------------------------------------------------- */

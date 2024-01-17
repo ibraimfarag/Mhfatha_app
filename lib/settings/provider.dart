@@ -1,7 +1,6 @@
 // lib\settings\provider.dart
 // ignore: unused_import
 import 'dart:convert';
-
 import 'package:mhfatha/settings/imports.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,7 +9,7 @@ class AuthProvider extends ChangeNotifier {
   String? _token;
   bool _isAuthenticated = false;
   Map<String, dynamic>? _user;
-
+final api = Api();
   // Getter for the token
   String? get token => _token;
 
@@ -67,6 +66,23 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Rest of your AuthProvider code...
-  
+  Future<void> updateUserData(BuildContext context) async {
+    try {
+      // Fetch user details from the API
+      Map<String, dynamic> newUserData = await api.getUserDetails(context);
+
+      // Update the local user data in AuthProvider
+      _user = newUserData;
+        // print(_user);
+      // Save the updated user data to SharedPreferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('user', jsonEncode(newUserData));
+
+      // Notify listeners to update UI
+      notifyListeners();
+    } catch (e) {
+      print('Error updating user data: $e');
+      // Handle errors or throw an exception if needed
+    }
+  }
 }

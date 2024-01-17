@@ -217,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // Convert each item in the list to a Map
           List<Map<String, dynamic>> validStores =
               stores.whereType<Map<String, dynamic>>().toList();
-
+// print('${validStores}');
           setState(() {
             filteredStores = validStores;
           });
@@ -326,7 +326,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     int storeId = store['id'];
 
                     // Call the API to get store details
-                    String storeDetails = await Api().getStoreDetails(
+                    String storeDetails = await Api().getStoreDetails(context,
                         authProvider, store['id'], latitude!, longitude!);
 
                     // Parse the store details JSON
@@ -391,14 +391,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
         return Container(
           padding: EdgeInsets.symmetric(vertical: 30, horizontal: 40),
-           decoration: BoxDecoration(
-    color: Color(0xFFF0F0F0),
-         borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(40),
-              topRight: Radius.circular(40),
-            )
-   
-  ),
+          decoration: BoxDecoration(
+              color: Color(0xFFF0F0F0),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(40),
+                topRight: Radius.circular(40),
+              )),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment:
@@ -532,8 +530,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                                SizedBox(height: 20),
-
+                SizedBox(height: 20),
               ],
             ),
           ),
@@ -543,119 +540,291 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List<Widget> buildStoreContainers() {
+    bool isEnglish = Provider.of<AppState>(context).isEnglish;
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+
     return filteredStores.map((store) {
       return GestureDetector(
-        onTap: () {
-          _showStoreOptions(context, store);
-        },
-        child: Container(
-          width: 500,
-          // height: 900,
-          margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-          decoration: BoxDecoration(
-            color: Color.fromARGB(255, 3, 12, 19),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Column(
-            children: [
-              Container(
-                width: 500,
-                // height: 900,
-                margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 3, 12, 19),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Column(
-                  children: [
-                    // Image with gradient
-                    Container(
-                      height: 100,
-                      width: 180,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          topRight: Radius.circular(15),
-                        ),
-                        child: ShaderMask(
-                          shaderCallback: (Rect bounds) {
-                            return LinearGradient(
-                              begin: Alignment.bottomCenter,
-                              end: Alignment.topCenter,
-                              colors: [
-                                Colors.transparent,
-                                Colors.black.withOpacity(0.8)
-                              ],
-                              stops: [0.0, 1.0],
-                            ).createShader(bounds);
-                          },
-                          blendMode: BlendMode.dstIn,
-                          child: Image.network(
-                            'https://mhfatha.net/FrontEnd/assets/images/store_images/${store['photo']}', // Replace with your actual image URL
-                            fit: BoxFit.cover,
+          onTap: () {
+            _showStoreOptions(context, store);
+          },
+          child: FlipCard(
+            fill: Fill
+                .fillBack, // Fill the back side of the card to make in the same size as the front.
+            direction: FlipDirection.HORIZONTAL, // default
+            side: CardSide.FRONT, // The side to initially display.
+            front: Container(
+                child: Container(
+              width: 500,
+              // height: 900,
+              margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 3, 12, 19),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    width: 500,
+                    // height: 900,
+                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 3, 12, 19),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Column(
+                      children: [
+                        // Image with gradient
+                        Container(
+                          height: 100,
+                          width: 180,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              topRight: Radius.circular(15),
+                            ),
+                            child: ShaderMask(
+                              shaderCallback: (Rect bounds) {
+                                return LinearGradient(
+                                  begin: Alignment.bottomCenter,
+                                  end: Alignment.topCenter,
+                                  colors: [
+                                    Colors.transparent,
+                                    Colors.black.withOpacity(0.8)
+                                  ],
+                                  stops: [0.0, 1.0],
+                                ).createShader(bounds);
+                              },
+                              blendMode: BlendMode.dstIn,
+                              child: Image.network(
+                                'https://mhfatha.net/FrontEnd/assets/images/store_images/${store['photo']}', // Replace with your actual image URL
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    // Text widget for store name
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 5),
-                      child: Align(
-                        alignment: Provider.of<AppState>(context).isEnglish
-                            ? Alignment.centerLeft
-                            : Alignment.centerRight,
-                        child: Text(
-                          ' ${store['name']}',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: AppVariables.serviceFontFamily,
-                            fontSize: 14,
+                        // Text widget for store name
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 5),
+                          child: Align(
+                            alignment: Provider.of<AppState>(context).isEnglish
+                                ? Alignment.centerLeft
+                                : Alignment.centerRight,
+                            child: Text(
+                              ' ${store['name']}',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: AppVariables.serviceFontFamily,
+                                fontSize: 14,
+                              ),
+                              textAlign:
+                                  Provider.of<AppState>(context).isEnglish
+                                      ? TextAlign.left
+                                      : TextAlign.right,
+                            ),
                           ),
-                          textAlign: Provider.of<AppState>(context).isEnglish
-                              ? TextAlign.left
-                              : TextAlign.right,
                         ),
-                      ),
-                    ),
 
-                    // Row for buttons with icons
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
+                        // Row for buttons with icons
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Icon(Icons.location_on,
-                                  color: Colors.white, size: 18),
-                              const SizedBox(width: 1),
-                              TextButton(
-                                onPressed: () {
-                                  // Handle onPressed for "يبعد 5 كم" button
-                                },
-                                child: Text(
-                                  '${Provider.of<AppState>(context).isEnglish ? 'Distance: ' : 'يبعد '}${store['distance']}',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontFamily: AppVariables.serviceFontFamily,
+                              Row(
+                                children: [
+                                  Icon(Icons.location_on,
+                                      color: Colors.white, size: 18),
+                                  const SizedBox(width: 1),
+                                  TextButton(
+                                    onPressed: () {
+                                      // Handle onPressed for "يبعد 5 كم" button
+                                    },
+                                    child: Text(
+                                      
+                                      '${Provider.of<AppState>(context).isEnglish ? 'Distance: ' : 'يبعد '}${store['distance']}',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontFamily:
+                                            AppVariables.serviceFontFamily,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      );
+                  )
+                ],
+              ),
+            )),
+            back: Container(
+                child: Container(
+              width: 500,
+              // height: 900,
+              margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 3, 12, 19),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    width: 500,
+                    // height: 900,
+                    margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 3, 12, 19),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 60,
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 5),
+                          child: Align(
+                            alignment: Provider.of<AppState>(context).isEnglish
+                                ? Alignment.center
+                                : Alignment.center,
+                            child: TextButton(
+                                onPressed: () async {
+                                  Navigator.pushNamed(context, '/store-info',
+                                      arguments: store);
+                                },
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons
+                                          .store, // Replace with the desired icon
+                                      color: Colors.white,
+                                      size:
+                                          20, // Adjust the size according to your preference
+                                    ),
+                                    SizedBox(
+                                        width:
+                                            8), // Adjust the spacing between icon and text
+                                    Text(
+                                      isEnglish
+                                          ? 'Visit store'
+                                          : 'زيارة المتجر',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontFamily:
+                                            AppVariables.serviceFontFamily,
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                          ),
+                        ),
+
+                        // Row for buttons with icons
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 5),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                children: [
+                                  // Icon(Icons.location_on,
+                                  //     color: Colors.white, size: 18),
+                                  // const SizedBox(width: 1),
+                                  TextButton(
+                                      onPressed: () async {
+                                        // Handle "Show discounts" option
+                                        // Navigator.pop(context); // Close the bottom sheet
+
+                                        // Display sub-context bottom menu
+                                        _showSubContextBottomMenu(
+                                            context, store);
+                                        // Add the logic to get store details by calling the API
+
+                                        // Get store ID
+                                        int storeId = store['id'];
+
+                                        // Call the API to get store details
+                                        String storeDetails = await Api()
+                                            .getStoreDetails(
+                                                context,
+                                                authProvider,
+                                                store['id'],
+                                                latitude!,
+                                                longitude!);
+
+                                        // Parse the store details JSON
+                                        Map<String, dynamic> storeDetailsMap =
+                                            jsonDecode(storeDetails);
+
+                                        // Access the "discounts" list
+                                        List<dynamic> discounts =
+                                            storeDetailsMap['store']
+                                                ['discounts'];
+
+                                        // Iterate over each discount
+                                        for (var discount in discounts) {
+                                          // Access discount properties
+                                          int id = discount['id'];
+                                          double percent =
+                                              double.parse(discount['percent']);
+                                          String category =
+                                              discount['category'];
+                                          // ... access other properties as needed
+
+                                          // Now, you can use these properties as needed.
+                                          // print('Discount ID: $id, Percent: $percent, Category: $category');
+                                        }
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons
+                                                .local_offer, // Replace with the desired icon
+                                            color: Colors.white,
+                                            size:
+                                                20, // Adjust the size according to your preference
+                                          ),
+                                          SizedBox(
+                                              width:
+                                                  8), // Adjust the spacing between icon and text
+                                          Text(
+                                            isEnglish
+                                                ? 'Show discounts'
+                                                : 'عرض الخصومات',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 14,
+                                              fontFamily: AppVariables
+                                                  .serviceFontFamily,
+                                            ),
+                                          ),
+                                        ],
+                                      )),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            )),
+          ));
     }).toList();
   }
 
@@ -687,8 +856,9 @@ class _HomeScreenState extends State<HomeScreen> {
             decoration: BoxDecoration(
               // color: Color(0xFFF3F4F7),
               image: DecorationImage(
-                image: AssetImage(
-                    isDark?'images/assse.png':'images/abstract.jpg'), // Replace 'your_image_path.jpg' with the actual path to your image asset
+                image: AssetImage(isDark
+                    ? 'images/assse.png'
+                    : 'images/abstract.jpg'), // Replace 'your_image_path.jpg' with the actual path to your image asset
                 fit: BoxFit
                     .cover, // You can adjust the fit as per your requirement
               ),
@@ -708,25 +878,21 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 60,
                       ),
                       Container(
-                      margin: EdgeInsets.symmetric(horizontal: 25),
-                      
+                        margin: EdgeInsets.symmetric(horizontal: 25),
                         child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              // Add your logo here
+                              Image.asset(
+                                'images/logoDark.png', // Replace with your actual logo image
+                                width: 200,
+                                // height: 80,
+                                // You can customize the width and height as needed
+                              ),
+                            ]),
+                      ),
 
-                                                        mainAxisAlignment: MainAxisAlignment.center,
-
-                          children: [
-                            // Add your logo here
-                            Image.asset(
-                              'images/logoDark.png', // Replace with your actual logo image
-                              width: 200,
-                              // height: 80,
-                              // You can customize the width and height as needed
-                            ),
-                          ]
-                            ),
-                            ),
-                            
-                           SizedBox(
+                      SizedBox(
                         height: 20,
                       ),
                       // Container(
@@ -754,11 +920,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             Container(
                               padding: EdgeInsets.all(5),
                               decoration: BoxDecoration(
-                                color: isDark? Color.fromARGB(251, 34, 34, 34):Color(0xFFF0F0F0),
+                                color: isDark
+                                    ? Color.fromARGB(251, 34, 34, 34)
+                                    : Color(0xFFF0F0F0),
                                 borderRadius: BorderRadius.circular(30),
                                 boxShadow: [
                                   BoxShadow(
-                                    color:isDark? Color.fromARGB(250, 17, 17, 17): Colors.grey.withOpacity(0.5),
+                                    color: isDark
+                                        ? Color.fromARGB(250, 17, 17, 17)
+                                        : Colors.grey.withOpacity(0.5),
                                     spreadRadius:
                                         5, // Negative spreadRadius makes the shadow inside
                                     blurRadius: 7,
@@ -776,11 +946,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ? 'Search stores'
                                       : 'ابحث عن متجر',
                                   prefixIcon: Icon(Icons.search),
-                                  fillColor: isDark? Color.fromARGB(251, 34, 34, 34): Color(0xFFF0F0F0),
+                                  fillColor: isDark
+                                      ? Color.fromARGB(251, 34, 34, 34)
+                                      : Color(0xFFF0F0F0),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(30),
                                     borderSide: BorderSide(
-                                      color: isDark? Color.fromARGB(0, 34, 34, 34):Color.fromARGB(0, 0, 0, 0),
+                                      color: isDark
+                                          ? Color.fromARGB(0, 34, 34, 34)
+                                          : Color.fromARGB(0, 0, 0, 0),
                                     ),
                                   ),
                                   focusedBorder: OutlineInputBorder(
@@ -829,10 +1003,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         alignment: isEnglish
                             ? Alignment.centerLeft
                             : Alignment.centerRight,
-                            
                         child: Row(
                           children: [
-                            Icon(Icons.store, color:isDark? Colors.white: Colors.black, size: 24),
+                            Icon(Icons.store,
+                                color: isDark ? Colors.white : Colors.black,
+                                size: 24),
                             SizedBox(width: 10),
                             Text(
                               isEnglish ? 'Nearby Stores' : 'متاجر قريبة',
@@ -888,6 +1063,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             buildIconWithText(
+                              width: 100,
+                              height: 150,
+
                               Icons.qr_code,
                               'Scan QR',
                               'فحص كود',
@@ -897,18 +1075,52 @@ class _HomeScreenState extends State<HomeScreen> {
                               },
                             ),
 
-                            buildIconWithText(Icons.store, 'Nearby stores',
-                                'متاجر قريبة', 'images/near-by.jpg', () {
+                            buildIconWithText(
+                                width: 100,
+                                height: 150,
+                                Icons.store,
+                                'Nearby stores',
+                                'متاجر قريبة',
+                                'images/near-by.jpg', () {
                               Navigator.pushNamed(context, '/nearby',
                                   arguments: filteredStores);
                             }),
                             // buildIconWithText(Icons.search, 'Search', 'البحث', () {}),
 
-                            buildIconWithText(Icons.local_offer, 'Top Discount',
-                                'أعلى خصم', 'images/best-deal.jpg', () {
+                            buildIconWithText(
+                                width: 100,
+                                height: 150,
+                                Icons.local_offer,
+                                'Top Discount',
+                                'أعلى خصم',
+                                'images/best-deal.jpg', () {
                               // Navigator.pushNamed(context, '/nonet');
                             }),
                           ],
+                        ),
+                      ),
+
+                      GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          width: double.infinity, // Adjust the width as needed
+                          height: 100, // Adjust the width as needed
+                          margin: EdgeInsets.fromLTRB(15, 0, 15, 10),
+                          decoration: BoxDecoration(
+                            // color: Color(0xFFF3F4F7),
+                            //  color: Color(0xFFFFFFFF),
+
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(30),
+                            child: Image.asset(
+                              'images/elegance.jpg', // Use the provided image path
+                              fit: BoxFit.cover,
+                              // width: 10,
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -921,7 +1133,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         constraints: BoxConstraints(maxHeight: 200),
                         width: size.width - 40,
                         decoration: BoxDecoration(
-                          color:isDark? Color.fromARGB(251, 34, 34, 34): Color(0xFFF0F0F0),
+                          color: isDark
+                              ? Color.fromARGB(251, 34, 34, 34)
+                              : Color(0xFFF0F0F0),
                           borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(30),
                             bottomRight: Radius.circular(30),
@@ -955,7 +1169,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   // Handle the tap action here, e.g., navigate to a new screen
                                   print('Tapped on item with id: $id');
                                   String storeDetails = await Api()
-                                      .getStoreDetails(authProvider,
+                                      .getStoreDetails(context, authProvider,
                                           stores['id'], latitude!, longitude!);
 
                                   // Parse the store details JSON
@@ -993,18 +1207,19 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget buildIconWithText(IconData icon, String englishText, String arabicText,
-      String imagePath, VoidCallback onTap) {
+      String imagePath, VoidCallback onTap,
+      {required double width, required double height}) {
     final isEnglish = Provider.of<AppState>(context).isEnglish;
     bool isDark = Provider.of<AppState>(context).isDarkMode;
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 100, // Adjust the width as needed
-        height: 150, // Adjust the width as needed
+        width: width, // Adjust the width as needed
+        height: height, // Adjust the width as needed
         margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
         decoration: BoxDecoration(
-          color: isDark? Color.fromARGB(255, 29, 29, 29):Color(0xFFF0F0F0),
+          color: isDark ? Color.fromARGB(255, 29, 29, 29) : Color(0xFFF0F0F0),
           border: Border.all(
             color: Color.fromARGB(
                 5, 0, 0, 0), // You can customize the border color
@@ -1013,7 +1228,9 @@ class _HomeScreenState extends State<HomeScreen> {
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
-              color:isDark? Color(0xFF0C0C0C).withOpacity(0.5): Colors.grey.withOpacity(0.5),
+              color: isDark
+                  ? Color(0xFF0C0C0C).withOpacity(0.5)
+                  : Colors.grey.withOpacity(0.5),
               spreadRadius: 5, // Negative spreadRadius makes the shadow inside
               blurRadius: 7,
               offset: Offset(0, 3), // changes the position of the shadow
@@ -1054,12 +1271,11 @@ class _HomeScreenState extends State<HomeScreen> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
               child: Align(
-                alignment:
-                    isEnglish ? Alignment.center : Alignment.center,
+                alignment: isEnglish ? Alignment.center : Alignment.center,
                 child: Text(
                   isEnglish ? englishText : arabicText,
                   style: TextStyle(
-                  color:isDark? Color(0xFFFFFFFF):Colors.black87,
+                    color: isDark ? Color(0xFFFFFFFF) : Colors.black87,
                     fontWeight: FontWeight.bold,
                     fontFamily: AppVariables.serviceFontFamily,
                     fontSize: 14,

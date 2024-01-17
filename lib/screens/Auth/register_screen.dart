@@ -132,7 +132,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                               Text(
                                 isEnglish
-                                    ? 'time to get discounts'
+                                    ? 'for discounts'
                                     : 'وقت الحصول على الخصومات',
                                 style: TextStyle(
                                     color: Colors.grey.shade500, fontSize: 16),
@@ -180,7 +180,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 isEnglish: isEnglish,
                                 selectedDate: selectedDate,
                                 color: ui,
-                                labelcolor:colors,
+                                labelcolor: colors,
                                 onDateSelected: (date) {
                                   setState(() {
                                     selectedDate = date;
@@ -196,9 +196,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               // /* -------------------------------------------------------------------------- */
                               ProfilePhotoWidget(
                                 isEnglish: isEnglish,
-                                                                labelcolor:colors,
-                                                                 color: ui,
-
+                                labelcolor: colors,
+                                color: ui,
                                 label: isEnglish
                                     ? 'Profile photo: '
                                     : 'الصورة الشخصية: ',
@@ -224,14 +223,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   Column(
                                     children: [
                                       RegionSelection(
-                                               color: ui,
-                                labelcolor:colors,
-                                        onRegionSelected: (region) {
-                                          setState(() {
-                                            selectedRegion = region;
-                                          });
+                                        onRegionSelected: (value) {
+                                          // Handle region selection
                                         },
-                                      ),
+                                        color: Colors.blue,
+                                        labelcolor: Colors.black,
+                                        selectedRegion: '2',
+                                      )
                                     ],
                                   ),
                                 ],
@@ -270,9 +268,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   color: ui,
                                   labelcolor: colors),
 
-                            // /* -------------------------------------------------------------------------- */
-                            // /* ------------------------------ co - Pssword ----------------------------- */
-                            // /* -------------------------------------------------------------------------- */
+                              // /* -------------------------------------------------------------------------- */
+                              // /* ------------------------------ co - Pssword ----------------------------- */
+                              // /* -------------------------------------------------------------------------- */
                               CustomTextField(
                                   label: isEnglish
                                       ? 'Confirm Password'
@@ -285,8 +283,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               // /* ------------------------------- Vendor Join ------------------------------ */
                               // /* -------------------------------------------------------------------------- */
                               VendorJoinWidget(
-                                                                labelcolor:colors,
-
+                                labelcolor: colors,
                                 isEnglish: isEnglish,
                                 labelText: isEnglish
                                     ? 'Are you want to join as Vendor?'
@@ -322,20 +319,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     .end, // Align items to the start (left)
                                 children: [
                                   Container(
-                                     decoration: BoxDecoration(
-                                color: isDark? Color.fromARGB(251, 34, 34, 34):Color(0xFFF0F0F0),
-                                borderRadius: BorderRadius.circular(30),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color:isDark? Color.fromARGB(250, 17, 17, 17): Colors.grey.withOpacity(0.5),
-                                    spreadRadius:
-                                        5, // Negative spreadRadius makes the shadow inside
-                                    blurRadius: 7,
-                                    offset: Offset(0,
-                                        3), // changes the position of the shadow
-                                  ),
-                                ],
-                              ),
+                                    decoration: BoxDecoration(
+                                      color: isDark
+                                          ? Color.fromARGB(251, 34, 34, 34)
+                                          : Color(0xFFF0F0F0),
+                                      borderRadius: BorderRadius.circular(30),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: isDark
+                                              ? Color.fromARGB(250, 17, 17, 17)
+                                              : Colors.grey.withOpacity(0.5),
+                                          spreadRadius:
+                                              5, // Negative spreadRadius makes the shadow inside
+                                          blurRadius: 7,
+                                          offset: Offset(0,
+                                              3), // changes the position of the shadow
+                                        ),
+                                      ],
+                                    ),
                                     height: 50,
                                     width: 150,
                                     margin: EdgeInsets.only(

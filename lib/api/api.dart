@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:flutter/services.dart';
 import 'package:mhfatha/settings/imports.dart';
 
 import 'dart:convert';
@@ -137,7 +138,7 @@ Future<String> checkInternetConnection(BuildContext context) async {
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
-        print('Response Data: $jsonResponse');
+        // print('Response Data: $jsonResponse');
 
         // Convert the response data to a JSON string
         String jsonString = jsonEncode(jsonResponse);
@@ -153,9 +154,10 @@ Future<String> checkInternetConnection(BuildContext context) async {
     }
   }
 
-  Future<String> getStoreDetails(AuthProvider authProvider, int storeId,double latitude, double longitude) async {
+  Future<String> getStoreDetails(BuildContext context ,AuthProvider authProvider, int storeId,double latitude, double longitude) async {
     final url = Uri.parse('$baseUrl/store');
-
+  bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
+  String lang = Provider.of<AppState>(context, listen: false).display;
     try {
       final response = await http.post(
         url,
@@ -167,16 +169,17 @@ Future<String> checkInternetConnection(BuildContext context) async {
           'id': storeId,
           'user_latitude':latitude,
           'user_longitude': longitude,
+          'lang':lang
         }),
       );
-
+  print(lang);
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         // print('Store Details Response Data: $jsonResponse');
 
         // Convert the response data to a JSON string
         String jsonString = jsonEncode(jsonResponse);
-        // print(jsonString);
+      
         return jsonString;
       } else {
         throw Exception(
@@ -474,7 +477,170 @@ Future<String> getUserDiscounts(    BuildContext context,
 }
 
 
+
+  Future<Map<String, dynamic>> getRegionsAndCities(BuildContext context) async {
+    final url = Uri.parse('$baseUrl/regions');
+  bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
+  String lang = Provider.of<AppState>(context, listen: false).display;
+  AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+    try {
+         final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${authProvider.token}',
+      },
+      body: jsonEncode(<String, dynamic>{
+      }),
+    );
+
+   if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+// print(jsonResponse);
+        // Check if 'regions' key exists in the JSON response
+        if (jsonResponse.containsKey('regions')) {
+          return jsonResponse;
+        } else {
+          throw Exception('Invalid response format. Missing "regions" key.');
+        }
+      } else {
+        throw Exception(
+            'Failed to fetch regions and cities. Server responded with status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error getting regions and cities: $e');
+      throw Exception('Failed to fetch regions and cities. Check your internet connection.');
+    }
+  }
+  Future<Map<String, dynamic>> getUserDetails(BuildContext context) async {
+    final url = Uri.parse('$baseUrl/user');
+    AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+    try {
+      final response = await http.get(
+        url,
+        headers: <String, String>{
+          'Authorization': 'Bearer ${authProvider.token}',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        
+        if (jsonResponse['user'] is Map<String, dynamic>) {
+          // Check if 'user' is a Map<String, dynamic>
+          Map<String, dynamic> userData = jsonResponse['user'];
+          // print(userData);
+          return userData;
+        } else {
+          throw Exception('Invalid user data format received from the server.');
+        }
+      } else {
+        throw Exception(
+            'Failed to get user details. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
+      }
+    } catch (e) {
+      print('Error getting user details: $e');
+      throw Exception('Failed to get user details. Check your internet connection.');
+    }
+  }
+
+  Future<bool> updateUserProfile( {
+  required String firstName,
+  required String lastName,
+  required String birthday,
+  required String region,
+  required String mobile,
+  required String email,
+  String? otp, required BuildContext context,
+}) async {
+  final url = Uri.parse('$baseUrl/auth/update');
+  AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+  String lang = Provider.of<AppState>(context, listen: false).display;
+  bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
+
+  try {
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${authProvider.token}',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'lang': lang,
+        'first_name': firstName,
+        'last_name': lastName,
+        'birthday': birthday,
+        'region': region,
+        'mobile': mobile,
+        'email': email,
+        'otp': otp,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      final MessageC = jsonResponse['message'];
+      print('Update User Profile Response Data: $jsonResponse');
+
+      await authProvider.updateUserData(context);
+
+      if (jsonResponse['OTP'] == true) {
+        // Display dialog if 'OTP' is true
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('OTP Confirmation'),
+              content: Text(jsonResponse['error']),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+
+
+
+
+
+        
+      }
+
+
+
+QuickAlert.show(
+ context: context,
+ type: QuickAlertType.success,
+ text: '$MessageC',
+);
+
+
+      return jsonResponse['success'];
+
+
+    } else {
+  final jsonResponse = jsonDecode(response.body);
+      print(jsonResponse);
+      throw Exception(
+          'Failed to update user profile. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
+    }
+  } catch (e) {
+    // print('Error updating user profile: $e');
+    return false;
+  }
 }
+
+}
+
+
+
+
 
 void _showLoadingDialog(BuildContext context) {
   bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;

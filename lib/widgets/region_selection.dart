@@ -10,79 +10,88 @@ class RegionSelection extends StatefulWidget {
   final ValueChanged<String> onRegionSelected;
   final Color labelcolor;
   final Color color;
+  String selectedRegion; // Make it mutable
 
-  const RegionSelection(
-    {Key? key, 
-  required this.onRegionSelected,   
-   required this.color,
-    required this.labelcolor,})
-     
-      : super(key: key);
+  RegionSelection({
+    Key? key,
+    required this.onRegionSelected,
+    required this.color,
+    required this.labelcolor,
+    required this.selectedRegion,
+  }) : super(key: key);
 
+  // Add a method to update selectedRegion
+  void updateSelectedRegion(String newValue) {
+  selectedRegion = newValue;
+}
   @override
   State<RegionSelection> createState() => _RegionSelectionState();
 }
 
+
 class _RegionSelectionState extends State<RegionSelection> {
-  String selectedRegion = 'riyadh';
+  List<DropdownMenuItem<String>> citiesDropdownItems = [];
+
+  // late String selectedRegion; // Make it mutable
+
+
+  // Method to update selectedRegion externally
+void updateSelectedRegion(String newRegion) {
+  setState(() {
+    widget.onRegionSelected(newRegion);
+  });
+}
+  void fetchRegionsAndCities() async {
+    try {
+      bool isEnglish =
+          Provider.of<AppState>(context, listen: false).isEnglish;
+
+      Map<String, dynamic>? result =
+          await Api().getRegionsAndCities(context);
+
+      if (result != null) {
+        // Access the 'regions' data from the result
+        List<dynamic> regions = result['regions'];
+
+        // Clear existing items
+        citiesDropdownItems.clear();
+
+        // Process each region and add a DropdownMenuItem for each
+        regions.forEach((region) {
+          int regionId = region['id'];
+          String regionAr = region['region_ar'];
+          String regionEn = region['region_en'];
+
+          // Add a DropdownMenuItem for the current region
+          citiesDropdownItems.add(
+            DropdownMenuItem(
+              value: regionId.toString(),
+              child: Text(isEnglish ? regionEn : regionAr),
+            ),
+          );
+        });
+
+        // Trigger a rebuild of the widget with the updated data
+        setState(() {});
+      } else {
+        print('Error fetching regions and cities: Result is null');
+      }
+    } catch (e) {
+      // Handle errors
+      print('Error fetching regions and cities: $e');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchRegionsAndCities();
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool isEnglish = Provider.of<AppState>(context).isEnglish;
-
-    List<DropdownMenuItem<String>> citiesDropdownItems = [
-      DropdownMenuItem(
-        value: 'riyadh',
-        child: Text(isEnglish ? 'Riyadh' : 'الرياض'),
-      ),
-      DropdownMenuItem(
-        value: 'makkah',
-        child: Text(isEnglish ? 'Makkah Al-Mukarramah' : 'مكة المكرمة'),
-      ),
-      DropdownMenuItem(
-        value: 'madinah',
-        child: Text(isEnglish ? 'Al-Madinah Al-Munawwarah' : 'المدينة المنورة'),
-      ),
-      DropdownMenuItem(
-        value: 'eastern',
-        child: Text(isEnglish ? 'Eastern Province' : 'المنطقة الشرقية'),
-      ),
-      DropdownMenuItem(
-        value: 'qassim',
-        child: Text(isEnglish ? 'Qassim' : 'القصيم'),
-      ),
-      DropdownMenuItem(
-        value: 'tabuk',
-        child: Text(isEnglish ? 'Tabuk' : 'تبوك'),
-      ),
-      DropdownMenuItem(
-        value: 'northern',
-        child: Text(isEnglish ? 'Northern Borders' : 'الحدود الشمالية'),
-      ),
-      DropdownMenuItem(
-        value: 'jazan',
-        child: Text(isEnglish ? 'Jazan' : 'جازان'),
-      ),
-      DropdownMenuItem(
-        value: 'hail',
-        child: Text(isEnglish ? 'Hail' : 'حائل'),
-      ),
-      DropdownMenuItem(
-        value: 'asir',
-        child: Text(isEnglish ? 'Asir' : 'عسير'),
-      ),
-      DropdownMenuItem(
-        value: 'aljouf',
-        child: Text(isEnglish ? 'Al-Jouf' : 'الجوف'),
-      ),
-      DropdownMenuItem(
-        value: 'najran',
-        child: Text(isEnglish ? 'Najran' : 'نجران'),
-      ),
-      DropdownMenuItem(
-        value: 'bahah',
-        child: Text(isEnglish ? 'Al Bahah' : 'الباحة'),
-      ),
-    ];
+    bool isEnglish =
+        Provider.of<AppState>(context, listen: false).isEnglish;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,9 +99,8 @@ class _RegionSelectionState extends State<RegionSelection> {
         SizedBox(height: 20),
         Container(
           margin: EdgeInsets.only(left: 45, right: 45),
-
-          // width: 100,
-          alignment: isEnglish ? Alignment.centerLeft : Alignment.centerRight,
+          alignment:
+              isEnglish ? Alignment.centerLeft : Alignment.centerRight,
           child: Text(
             isEnglish ? 'Region' : 'المنطقة',
             style: TextStyle(
@@ -103,37 +111,28 @@ class _RegionSelectionState extends State<RegionSelection> {
           ),
         ),
         SizedBox(height: 14),
-        Container(
-          margin: EdgeInsets.only(left: 45, right: 45),
-          decoration: BoxDecoration(
-            color: widget.color, // Set the background color as needed
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: DropdownButton<String>(
-            value: selectedRegion,
-            onChanged: (String? value) {
-              setState(() {
-                selectedRegion = value!;
-                widget.onRegionSelected(selectedRegion);
-              });
-            },
-            items: citiesDropdownItems.map((DropdownMenuItem<String> item) {
-              return DropdownMenuItem<String>(
-                value: item.value,
-                child: Container(
-                  padding: EdgeInsets.only(right: 10, left: 10),
-                  // width: 100,
-                  alignment: Alignment.center,
-                  child: item.child,
-                ),
-              );
-            }).toList(),
+Container(
+  margin: EdgeInsets.only(left: 45, right: 45),
+  decoration: BoxDecoration(
+    color: widget.color,
+    borderRadius: BorderRadius.circular(10),
+  ),
+  child:  DropdownButton<String>(
+            value: widget.selectedRegion,
+          onChanged: (String? value) {
+  setState(() {
+    widget.updateSelectedRegion(value ?? ""); // Use an empty string as a default
+          widget.onRegionSelected(widget.selectedRegion);
+
+  });
+},
+
+            items: citiesDropdownItems,
             style: TextStyle(color: widget.labelcolor),
             underline: Container(),
-            dropdownColor:
-                widget.color, // Set the background color for the dropdown menu items
+            dropdownColor: widget.color,
           ),
-        ),
+),
       ],
     );
   }

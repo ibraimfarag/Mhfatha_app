@@ -46,11 +46,9 @@ class _NearByState extends State<NearBy> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 SizedBox(
-                                  height: 30,
+                                  height: 1,
                                 ),
-                                SizedBox(
-                                  height: 5,
-                                ),
+                             
                                 Text(
                                   isEnglish
                                       ? 'Near by Stores'
@@ -83,8 +81,7 @@ class _NearByState extends State<NearBy> {
                     // Build containers dynamically based on filteredStores
                     Container(
                         decoration: BoxDecoration(
-                          color: Color(0xFFF3F4F7),
-                          borderRadius: BorderRadius.only(
+color: Color(0xFFF3F4F7),                          borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(40),
                             topRight: Radius.circular(40),
                           ),
@@ -119,9 +116,19 @@ class _NearByState extends State<NearBy> {
           child: Container(
         // width: MediaQuery.of(context).size.width * 0.9, // 90% of screen width
         width: MediaQuery.of(context).size.width,
+        // height: 150,
         margin: const EdgeInsets.fromLTRB(8, 10, 8, 10),
         decoration: BoxDecoration(
-          color: Color.fromARGB(255, 238, 238, 238),
+           boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      spreadRadius: 5,
+                      blurRadius: 3,
+                      offset: Offset(0, 1),
+                    ),
+                  ],
+                    // color: Color(0xFFF3F4F7),
+                     color: Color(0xFFFFFFFF),
           border: Border.all(
             color: Color.fromARGB(5, 0, 0, 0),
             width: 2,
@@ -130,37 +137,22 @@ class _NearByState extends State<NearBy> {
         ),
         child: Column(
           children: [
+            
+Row(
+  
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+  children: [
+
+
+Column(
+   crossAxisAlignment:
+                CrossAxisAlignment.start ,
+  children: [
+
+
             Container(
-              height: 100,
-              width: double.infinity,
-              child: ClipRRect(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
-                ),
-                child: ShaderMask(
-                  shaderCallback: (Rect bounds) {
-                    return LinearGradient(
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                      colors: [
-                        Colors.transparent,
-                        const Color.fromARGB(255, 238, 238, 238)
-                            .withOpacity(0.8),
-                      ],
-                      stops: [0.0, 1.0],
-                    ).createShader(bounds);
-                  },
-                  blendMode: BlendMode.dstIn,
-                  child: Image.network(
-                    'https://mhfatha.net/FrontEnd/assets/images/store_images/${store['photo']}', // Replace with the actual image path
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+              padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
               child: Align(
                 alignment:
                     isEnglish ? Alignment.centerLeft : Alignment.centerRight,
@@ -168,14 +160,29 @@ class _NearByState extends State<NearBy> {
                   '${store['name']}',
                   style: TextStyle(
                     color: Colors.black87,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: AppVariables.serviceFontFamily,
-                    fontSize: 17,
+                    fontSize: 18, fontWeight: FontWeight.bold
                   ),
                   textAlign: isEnglish ? TextAlign.left : TextAlign.right,
                 ),
               ),
             ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+              child: Align(
+                alignment:
+                    isEnglish ? Alignment.centerLeft : Alignment.centerRight,
+                child: Text(
+                 isEnglish? '${store['category_name_en']}':'${store['category_name_ar']}',
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 14, fontWeight: FontWeight.bold
+                  ),
+                  textAlign: isEnglish ? TextAlign.left : TextAlign.right,
+                ),
+              ),
+            ),
+
+            
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
               child: Align(
@@ -193,6 +200,41 @@ class _NearByState extends State<NearBy> {
                 ),
               ),
             ),
+         
+],),
+
+
+
+Column(children: [
+
+            Container(
+              height: 100,
+    
+              // width: double.infinity,
+              width: 100,
+              child: ClipRRect(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
+                  bottomLeft: Radius.circular(30),
+                ),
+                child:  Image.network(
+                    'https://mhfatha.net/FrontEnd/assets/images/store_images/${store['photo']}', // Replace with the actual image path
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              
+            ),
+
+],),
+
+
+
+],),
+
+
+
           ],
         ),
       )),

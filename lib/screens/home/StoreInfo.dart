@@ -132,12 +132,14 @@ class StoreInfoScreen extends StatelessWidget {
                               ),
                             ),
                             Container(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 15),
                               child: Align(
   alignment: Provider.of<AppState>(context).isEnglish
       ? Alignment.centerLeft
       : Alignment.centerRight,
   child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:MainAxisAlignment.start,
     children: [
       Text(
         '${storeData?['name']}',
@@ -146,6 +148,18 @@ class StoreInfoScreen extends StatelessWidget {
           fontWeight: FontWeight.bold,
           fontFamily: AppVariables.serviceFontFamily,
           fontSize: 22,
+        ),
+        textAlign: Provider.of<AppState>(context).isEnglish
+            ? TextAlign.left
+            : TextAlign.right,
+      ),
+      Text(
+        '${Provider.of<AppState>(context).isEnglish ? '${storeData?['category_name_en']}' : '${storeData?['category_name_ar']}'}',
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.normal,
+          fontFamily: AppVariables.serviceFontFamily,
+          fontSize: 14,
         ),
         textAlign: Provider.of<AppState>(context).isEnglish
             ? TextAlign.left
@@ -261,22 +275,22 @@ if (phoneNumber != null && phoneNumber.isNotEmpty) {
     ),
     Text(
       // Parse and format the city
-      '${storeData?['city']}',
+      '${storeData?[isEnglish?'region_name_en':'region_name_ar']}',
       style: TextStyle(fontSize: 16),
     ),
-    SizedBox(width: 10), // Add some space between the two texts
-    Text(
-      Provider.of<AppState>(context).isEnglish ? 'Region: ' : 'المنطقة: ',
-      style: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-    Text(
-      // Parse and format the region
-      '${storeData?['region']}',
-      style: TextStyle(fontSize: 16),
-    ),
+    // SizedBox(width: 10), // Add some space between the two texts
+    // Text(
+    //   Provider.of<AppState>(context).isEnglish ? 'Region: ' : 'المنطقة: ',
+    //   style: TextStyle(
+    //     fontSize: 16,
+    //     fontWeight: FontWeight.bold,
+    //   ),
+    // ),
+    // Text(
+    //   // Parse and format the region
+    //   '${storeData?['region']}',
+    //   style: TextStyle(fontSize: 16),
+    // ),
   ],
 ),
 
