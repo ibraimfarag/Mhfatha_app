@@ -11,31 +11,29 @@ import 'package:http/http.dart' as http;
 class Api {
   static const String baseUrl = 'https://mhfatha.net/api';
 
-
-
 // /* -------------------------------------------------------------------------- */
 // /* ----------------------------- check internet ----------------------------- */
 // /* -------------------------------------------------------------------------- */
-Future<String> checkInternetConnection(BuildContext context) async {
-  try {
-    final response = await http.get(Uri.parse('$baseUrl/check-network'));
+  Future<String> checkInternetConnection(BuildContext context) async {
+    try {
+      final response = await http.get(Uri.parse('$baseUrl/check-network'));
 
-    if (response.statusCode == 200) {
-      Map<String, dynamic> data = json.decode(response.body);
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = json.decode(response.body);
 
-      // You can add your logic here when the internet is connected
-      print('Internet connected');
-      return 'Online';
-    } else {
-      print('Failed to check internet connection. Status code: ${response.statusCode}');
+        // You can add your logic here when the internet is connected
+        print('Internet connected');
+        return 'Online';
+      } else {
+        print(
+            'Failed to check internet connection. Status code: ${response.statusCode}');
+        return 'Offline';
+      }
+    } catch (e) {
+      print('Error checking internet connection: $e');
       return 'Offline';
     }
-  } catch (e) {
-    print('Error checking internet connection: $e');
-    return 'Offline';
   }
-}
-
 
   // /* -------------------------------------------------------------------------- */
   // /* -------------------------------- Login api ------------------------------- */
@@ -154,10 +152,15 @@ Future<String> checkInternetConnection(BuildContext context) async {
     }
   }
 
-  Future<String> getStoreDetails(BuildContext context ,AuthProvider authProvider, int storeId,double latitude, double longitude) async {
+  Future<String> getStoreDetails(
+      BuildContext context,
+      AuthProvider authProvider,
+      int storeId,
+      double latitude,
+      double longitude) async {
     final url = Uri.parse('$baseUrl/store');
-  bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
-  String lang = Provider.of<AppState>(context, listen: false).display;
+    bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
+    String lang = Provider.of<AppState>(context, listen: false).display;
     try {
       final response = await http.post(
         url,
@@ -167,19 +170,19 @@ Future<String> checkInternetConnection(BuildContext context) async {
         },
         body: jsonEncode(<String, dynamic>{
           'id': storeId,
-          'user_latitude':latitude,
+          'user_latitude': latitude,
           'user_longitude': longitude,
-          'lang':lang
+          'lang': lang
         }),
       );
-  print(lang);
+      print(lang);
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         // print('Store Details Response Data: $jsonResponse');
 
         // Convert the response data to a JSON string
         String jsonString = jsonEncode(jsonResponse);
-      
+
         return jsonString;
       } else {
         throw Exception(
@@ -309,48 +312,43 @@ Future<String> checkInternetConnection(BuildContext context) async {
       }
       final response = await request.send();
 
-if (response.statusCode == 200) {
-  final jsonResponse = jsonDecode(await response.stream.bytesToString());
-  print('Registration Response Data: $jsonResponse');
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(await response.stream.bytesToString());
+        print('Registration Response Data: $jsonResponse');
 
- 
-    // Display a success dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            isEnglish ? 'Registration Successful' : 'تم التسجيل بنجاح',
-            textAlign: isEnglish ? TextAlign.left : TextAlign.right,
-          ),
-          content: Text(
-            jsonResponse['message'] ?? '', // Display the message from jsonResponse
-            textAlign: isEnglish ? TextAlign.left : TextAlign.right,
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                 Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    LoginScreen()));
-              },
-              child: Text(
-                'OK',
+        // Display a success dialog
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                isEnglish ? 'Registration Successful' : 'تم التسجيل بنجاح',
                 textAlign: isEnglish ? TextAlign.left : TextAlign.right,
               ),
-            ),
-          ],
+              content: Text(
+                jsonResponse['message'] ??
+                    '', // Display the message from jsonResponse
+                textAlign: isEnglish ? TextAlign.left : TextAlign.right,
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => LoginScreen()));
+                  },
+                  child: Text(
+                    'OK',
+                    textAlign: isEnglish ? TextAlign.left : TextAlign.right,
+                  ),
+                ),
+              ],
+            );
+          },
         );
-      },
-    );
-  
 
-  return jsonResponse['success'];
-}
- else {
+        return jsonResponse['success'];
+      } else {
         final jsonResponse = jsonDecode(await response.stream.bytesToString());
 
         List<String> errorMessages = [];
@@ -408,11 +406,13 @@ if (response.statusCode == 200) {
       return false;
     }
   }
-  Future<String> searchStores(AuthProvider authProvider,String query, String lang) async {
-  final url = Uri.parse('$baseUrl/stores/search-by-name');
 
-  try {
-    final response = await http.post(
+  Future<String> searchStores(
+      AuthProvider authProvider, String query, String lang) async {
+    final url = Uri.parse('$baseUrl/stores/search-by-name');
+
+    try {
+      final response = await http.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -424,78 +424,78 @@ if (response.statusCode == 200) {
         }),
       );
 
-    if (response.statusCode == 200) {
-      final jsonResponse = jsonDecode(response.body);
-      // print('Search Response Data: $jsonResponse');
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        // print('Search Response Data: $jsonResponse');
 
-      // Convert the response data to a JSON string
-      String jsonString = jsonEncode(jsonResponse);
+        // Convert the response data to a JSON string
+        String jsonString = jsonEncode(jsonResponse);
 
-      return jsonString;
-    } else {
-      throw Exception(
-          'Failed to search stores. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
+        return jsonString;
+      } else {
+        throw Exception(
+            'Failed to search stores. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
+      }
+    } catch (e) {
+      print('Error during store search: $e');
+      return ''; // Return an empty string or handle the error as needed
     }
-  } catch (e) {
-    print('Error during store search: $e');
-    return ''; // Return an empty string or handle the error as needed
   }
-}
 
-Future<String> getUserDiscounts(    BuildContext context,
-) async {
-  final url = Uri.parse('$baseUrl/user-discounts');
-  bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
-  String lang = Provider.of<AppState>(context, listen: false).display;
-  AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
-  try {
-    final response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${authProvider.token}',
-      },
-      body: jsonEncode(<String, dynamic>{
-        'lang': lang,
-      }),
-    );
+  Future<String> getUserDiscounts(
+    BuildContext context,
+  ) async {
+    final url = Uri.parse('$baseUrl/user-discounts');
+    bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
+    String lang = Provider.of<AppState>(context, listen: false).display;
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+    try {
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${authProvider.token}',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'lang': lang,
+        }),
+      );
 
-    if (response.statusCode == 200) {
-      final jsonResponse = jsonDecode(response.body);
-      // Convert the response data to a JSON string
-      String jsonString = jsonEncode(jsonResponse);
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        // Convert the response data to a JSON string
+        String jsonString = jsonEncode(jsonResponse);
 
-      return jsonString;
-    } else {
-      throw Exception(
-          'Failed to get user discounts. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
+        return jsonString;
+      } else {
+        throw Exception(
+            'Failed to get user discounts. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
+      }
+    } catch (e) {
+      print('Error getting user discounts: $e');
+      return ''; // Return an empty string or handle the error as needed
     }
-  } catch (e) {
-    print('Error getting user discounts: $e');
-    return ''; // Return an empty string or handle the error as needed
   }
-}
-
-
 
   Future<Map<String, dynamic>> getRegionsAndCities(BuildContext context) async {
     final url = Uri.parse('$baseUrl/regions');
-  bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
-  String lang = Provider.of<AppState>(context, listen: false).display;
-  AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+    bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
+    String lang = Provider.of<AppState>(context, listen: false).display;
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
 
     try {
-         final response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${authProvider.token}',
-      },
-      body: jsonEncode(<String, dynamic>{
-      }),
-    );
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${authProvider.token}',
+        },
+        body: jsonEncode(<String, dynamic>{}),
+      );
 
-   if (response.statusCode == 200) {
+      if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 // print(jsonResponse);
         // Check if 'regions' key exists in the JSON response
@@ -510,12 +510,15 @@ Future<String> getUserDiscounts(    BuildContext context,
       }
     } catch (e) {
       print('Error getting regions and cities: $e');
-      throw Exception('Failed to fetch regions and cities. Check your internet connection.');
+      throw Exception(
+          'Failed to fetch regions and cities. Check your internet connection.');
     }
   }
+
   Future<Map<String, dynamic>> getUserDetails(BuildContext context) async {
     final url = Uri.parse('$baseUrl/user');
-    AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
     try {
       final response = await http.get(
         url,
@@ -526,7 +529,7 @@ Future<String> getUserDiscounts(    BuildContext context,
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
-        
+
         if (jsonResponse['user'] is Map<String, dynamic>) {
           // Check if 'user' is a Map<String, dynamic>
           Map<String, dynamic> userData = jsonResponse['user'];
@@ -541,106 +544,167 @@ Future<String> getUserDiscounts(    BuildContext context,
       }
     } catch (e) {
       print('Error getting user details: $e');
-      throw Exception('Failed to get user details. Check your internet connection.');
+      throw Exception(
+          'Failed to get user details. Check your internet connection.');
     }
   }
 
-  Future<bool> updateUserProfile( {
-  required String firstName,
-  required String lastName,
-  required String birthday,
-  required String region,
-  required String mobile,
-  required String email,
-  String? otp, required BuildContext context,
-}) async {
-  final url = Uri.parse('$baseUrl/auth/update');
-  AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
-  String lang = Provider.of<AppState>(context, listen: false).display;
-  bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
+  Future<bool> updateUserProfile({
+    required String firstName,
+    required String lastName,
+    required String birthday,
+    required String region,
+    required String mobile,
+    required String email,
+    String? otp,
+    required BuildContext context,
+  }) async {
+    final url = Uri.parse('$baseUrl/auth/update');
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+    String lang = Provider.of<AppState>(context, listen: false).display;
+    bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
+    OtpFieldController otpController = OtpFieldController();
+    String enteredOtp = '';
 
-  try {
-    final response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${authProvider.token}',
-      },
-      body: jsonEncode(<String, dynamic>{
-        'lang': lang,
-        'first_name': firstName,
-        'last_name': lastName,
-        'birthday': birthday,
-        'region': region,
-        'mobile': mobile,
-        'email': email,
-        'otp': otp,
-      }),
-    );
+    try {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.loading,
+        title: isEnglish ? 'Loading' : 'انتظر قليلاً',
+        text: isEnglish ? 'Fetching your data' : 'جاري تحميل البيانات',
+      );
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${authProvider.token}',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'lang': lang,
+          'first_name': firstName,
+          'last_name': lastName,
+          'birthday': birthday,
+          'region': region,
+          'mobile': mobile,
+          'email': email,
+        }),
+      );
 
-    if (response.statusCode == 200) {
-      final jsonResponse = jsonDecode(response.body);
-      final MessageC = jsonResponse['message'];
-      print('Update User Profile Response Data: $jsonResponse');
+      if (response.statusCode == 200) {
+        Navigator.pop(context);
+        final jsonResponse = jsonDecode(response.body);
+        final MessageC = jsonResponse['message'];
+        print('Update User Profile Response Data: $jsonResponse');
 
-      await authProvider.updateUserData(context);
+        await authProvider.updateUserData(context);
 
-      if (jsonResponse['OTP'] == true) {
-        // Display dialog if 'OTP' is true
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('OTP Confirmation'),
-              content: Text(jsonResponse['error']),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
+        if (jsonResponse['OTP'] == true) {
+          // Display dialog if 'OTP' is true
+          QuickAlert.show(
+            context: context,
+            type: QuickAlertType.custom,
+            showCancelBtn: true,
+            barrierDismissible: true,
+            confirmBtnText: isEnglish ? 'verify' : 'تفعيل',
+            cancelBtnText: isEnglish ? 'cancel' : 'الغاء',
+            customAsset: 'images/MeG.gif',
+            widget: Column(
+              children: [
+                Text(jsonResponse['error']),
+                OTPTextField(
+                  controller: otpController,
+                  length: 5,
+                  width: MediaQuery.of(context).size.width,
+                  fieldWidth: 20,
+                  style: TextStyle(fontSize: 17),
+                  textFieldAlignment: MainAxisAlignment.spaceAround,
+                  fieldStyle: FieldStyle.underline,
+                  onCompleted: (pin) {
+                    enteredOtp = pin;
+                    print("Completed: " + pin);
                   },
-                  child: Text('OK'),
                 ),
               ],
-            );
-          },
-        );
+            ),
+            onConfirmBtnTap: () async {
+              try {
+                QuickAlert.show(
+                  context: context,
+                  type: QuickAlertType.loading,
+                  title: isEnglish ? 'Loading' : 'انتظر قليلاً',
+                  text:
+                      isEnglish ? 'Fetching your data' : 'جاري تحميل البيانات',
+                );
+                final response = await http.post(
+                  url,
+                  headers: <String, String>{
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ${authProvider.token}',
+                  },
+                  body: jsonEncode(<String, dynamic>{
+                    'lang': lang,
+                    'first_name': firstName,
+                    'last_name': lastName,
+                    'birthday': birthday,
+                    'region': region,
+                    'mobile': mobile,
+                    'email': email,
+                    'otp': enteredOtp,
+                  }),
+                );
+                if (response.statusCode == 200) {
+                  final jsonResponse = jsonDecode(response.body);
+                  final MeC = jsonResponse['message'];
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  QuickAlert.show(
+                    context: context,
+                    type: QuickAlertType.success,
+                    text: '$MeC',
+                  );
+                  await authProvider.updateUserData(context);
+                }else{
+                  final jsonResponse = jsonDecode(response.body);
+                  final MeC = jsonResponse['error'];
+                  Navigator.pop(context);
+                
+                  QuickAlert.show(
+                    context: context,
+                    type: QuickAlertType.error,
+                     title: 'Oops...',
+                    text: '$MeC',
+                  );
+
+                }
 
 
+              } catch (e) {
+                print(e);
+              }
+            },
+          );
+        } else {
+          QuickAlert.show(
+            context: context,
+            type: QuickAlertType.success,
+            text: '$MessageC',
+          );
+        }
 
-
-
-        
+        return jsonResponse['success'];
+      } else {
+        final jsonResponse = jsonDecode(response.body);
+        print(jsonResponse);
+        throw Exception(
+            'Failed to update user profile. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
       }
-
-
-
-QuickAlert.show(
- context: context,
- type: QuickAlertType.success,
- text: '$MessageC',
-);
-
-
-      return jsonResponse['success'];
-
-
-    } else {
-  final jsonResponse = jsonDecode(response.body);
-      print(jsonResponse);
-      throw Exception(
-          'Failed to update user profile. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
+    } catch (e) {
+      // print('Error updating user profile: $e');
+      return false;
     }
-  } catch (e) {
-    // print('Error updating user profile: $e');
-    return false;
   }
 }
-
-}
-
-
-
-
 
 void _showLoadingDialog(BuildContext context) {
   bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;

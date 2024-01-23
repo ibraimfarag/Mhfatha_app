@@ -234,11 +234,7 @@ Navigator.pop(context);
                               // otp: /* Pass the OTP if needed */,
                             );
 
-                            if (success) {
-                              // Handle success, maybe show a success message
-                            } else {
-                              // Handle failure, maybe show an error message
-                            }
+                          
 
 
                           });

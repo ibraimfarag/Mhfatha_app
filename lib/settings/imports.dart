@@ -67,7 +67,6 @@ export 'package:mhfatha/settings/routes.dart';
 export 'package:mhfatha/settings/imports.dart';
 
 
-
 // /* -------------------------------------------------------------------------- */
 // /* -------------------------------------------------------------------------- */
 // /* -------------------------------------------------------------------------- */
@@ -137,6 +136,10 @@ export 'package:internet_connection_checker/internet_connection_checker.dart';
 
 // /* -------------------------------- flipcard -------------------------------- */
 export 'package:flip_card/flip_card.dart';
+
+export 'package:otp_text_field/otp_text_field.dart';
+export 'package:otp_text_field/style.dart';
+
 
 // /* -------------------------------------------------------------------------- */
 // /* --------------------------------- Widgets -------------------------------- */
