@@ -1091,10 +1091,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 width: 100,
                                 height: 150,
                                 Icons.local_offer,
-                                'Top Discount',
-                                'أعلى خصم',
+                                'stores',
+                                'المتاجر',
                                 'images/best-deal.jpg', () {
-                              // Navigator.pushNamed(context, '/nonet');
+                              Navigator.pushNamed(context, '/filteredStores');
                             }),
                           ],
                         ),

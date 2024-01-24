@@ -37,7 +37,8 @@ class StoreInfoScreen extends StatelessWidget {
     // Join the formatted information with line breaks
     return formattedWorkDays.join('\n');
   }
-    int calculateDaysRemaining(String endDate) {
+
+  int calculateDaysRemaining(String endDate) {
     DateTime endDateTime = DateTime.parse(endDate);
     DateTime now = DateTime.now();
     Duration difference = endDateTime.difference(now);
@@ -48,6 +49,7 @@ class StoreInfoScreen extends StatelessWidget {
   String getArabicDaysWord(int days) {
     return days > 10 ? 'يوم' : 'أيام';
   }
+
   String getEnglishDaysWord(int days) {
     return days > 1 ? 'Days' : 'Day';
   }
@@ -105,7 +107,7 @@ class StoreInfoScreen extends StatelessWidget {
                           children: [
                             Container(
                               height: 200,
-                              width:500,
+                              width: 500,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.only(
                                   topLeft: Radius.circular(0),
@@ -132,55 +134,62 @@ class StoreInfoScreen extends StatelessWidget {
                               ),
                             ),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 15),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 15),
                               child: Align(
-  alignment: Provider.of<AppState>(context).isEnglish
-      ? Alignment.centerLeft
-      : Alignment.centerRight,
-  child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:MainAxisAlignment.start,
-    children: [
-      Text(
-        '${storeData?['name']}',
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontFamily: AppVariables.serviceFontFamily,
-          fontSize: 22,
-        ),
-        textAlign: Provider.of<AppState>(context).isEnglish
-            ? TextAlign.left
-            : TextAlign.right,
-      ),
-      Text(
-        '${Provider.of<AppState>(context).isEnglish ? '${storeData?['category_name_en']}' : '${storeData?['category_name_ar']}'}',
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.normal,
-          fontFamily: AppVariables.serviceFontFamily,
-          fontSize: 14,
-        ),
-        textAlign: Provider.of<AppState>(context).isEnglish
-            ? TextAlign.left
-            : TextAlign.right,
-      ),
-      Text(
-        '${Provider.of<AppState>(context).isEnglish ? 'Distance: ' : ' على بعد '}${storeData?['distance']}',
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.normal,
-          fontFamily: AppVariables.serviceFontFamily,
-          fontSize: 14,
-        ),
-        textAlign: Provider.of<AppState>(context).isEnglish
-            ? TextAlign.left
-            : TextAlign.right,
-      ),
-    ],
-  ),
-),
-
+                                alignment:
+                                    Provider.of<AppState>(context).isEnglish
+                                        ? Alignment.centerLeft
+                                        : Alignment.centerRight,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '${storeData?['name']}',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily:
+                                            AppVariables.serviceFontFamily,
+                                        fontSize: 22,
+                                      ),
+                                      textAlign: Provider.of<AppState>(context)
+                                              .isEnglish
+                                          ? TextAlign.left
+                                          : TextAlign.right,
+                                    ),
+                                    Text(
+                                      '${Provider.of<AppState>(context).isEnglish ? '${storeData?['category_name_en']}' : '${storeData?['category_name_ar']}'}',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.normal,
+                                        fontFamily:
+                                            AppVariables.serviceFontFamily,
+                                        fontSize: 14,
+                                      ),
+                                      textAlign: Provider.of<AppState>(context)
+                                              .isEnglish
+                                          ? TextAlign.left
+                                          : TextAlign.right,
+                                    ),
+                                    Text(
+                                      '${Provider.of<AppState>(context).isEnglish ? 'Distance: ' : ' على بعد '}${storeData?['distance']}',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.normal,
+                                        fontFamily:
+                                            AppVariables.serviceFontFamily,
+                                        fontSize: 14,
+                                      ),
+                                      textAlign: Provider.of<AppState>(context)
+                                              .isEnglish
+                                          ? TextAlign.left
+                                          : TextAlign.right,
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -195,12 +204,15 @@ class StoreInfoScreen extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                   decoration: BoxDecoration(
                     color: Color.fromARGB(255, 223, 223, 223),
- borderRadius: BorderRadius.only(
-      topLeft: Radius.circular(0),
-      topRight: Radius.circular(0), // Change to 0 for bottom right
-      bottomLeft: Radius.circular(30), // Change to 0 for bottom left
-      bottomRight: Radius.circular(30),
-    ),                  ),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(0),
+                      topRight:
+                          Radius.circular(0), // Change to 0 for bottom right
+                      bottomLeft:
+                          Radius.circular(30), // Change to 0 for bottom left
+                      bottomRight: Radius.circular(30),
+                    ),
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -210,15 +222,15 @@ class StoreInfoScreen extends StatelessWidget {
                           buildIconButton(
                               Icons.call, isEnglish ? 'Call' : 'اتصال', () {
                             // Handle the call action
-final phoneNumber = storeData?['phone'];
-if (phoneNumber != null && phoneNumber.isNotEmpty) {
-  launch('tel:$phoneNumber');
-} else {
-  // Handle the case where the phone number is not available
-}
+                            final phoneNumber = storeData?['phone'];
+                            if (phoneNumber != null && phoneNumber.isNotEmpty) {
+                              launch('tel:$phoneNumber');
+                            } else {
+                              // Handle the case where the phone number is not available
+                            }
                           }),
-                  VerticalDivider(color: Colors.black),        
-              buildIconButton(Icons.directions,
+                          VerticalDivider(color: Colors.black),
+                          buildIconButton(Icons.directions,
                               isEnglish ? 'Directions' : 'الاتجاهات', () {
                             // Handle the directions action
                             // Example coordinates (adjust with your store location)
@@ -264,36 +276,37 @@ if (phoneNumber != null && phoneNumber.isNotEmpty) {
                         ),
                       ),
                       SizedBox(height: 10),
-                 Row(
-  children: [
-    Text(
-      Provider.of<AppState>(context).isEnglish ? 'City: ' : 'المدينة: ',
-      style: TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-    Text(
-      // Parse and format the city
-      '${storeData?[isEnglish?'region_name_en':'region_name_ar']}',
-      style: TextStyle(fontSize: 16),
-    ),
-    // SizedBox(width: 10), // Add some space between the two texts
-    // Text(
-    //   Provider.of<AppState>(context).isEnglish ? 'Region: ' : 'المنطقة: ',
-    //   style: TextStyle(
-    //     fontSize: 16,
-    //     fontWeight: FontWeight.bold,
-    //   ),
-    // ),
-    // Text(
-    //   // Parse and format the region
-    //   '${storeData?['region']}',
-    //   style: TextStyle(fontSize: 16),
-    // ),
-  ],
-),
-
+                      Row(
+                        children: [
+                          Text(
+                            Provider.of<AppState>(context).isEnglish
+                                ? 'City: '
+                                : 'المدينة: ',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            // Parse and format the city
+                            '${storeData?[isEnglish ? 'region_name_en' : 'region_name_ar']}',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          // SizedBox(width: 10), // Add some space between the two texts
+                          // Text(
+                          //   Provider.of<AppState>(context).isEnglish ? 'Region: ' : 'المنطقة: ',
+                          //   style: TextStyle(
+                          //     fontSize: 16,
+                          //     fontWeight: FontWeight.bold,
+                          //   ),
+                          // ),
+                          // Text(
+                          //   // Parse and format the region
+                          //   '${storeData?['region']}',
+                          //   style: TextStyle(fontSize: 16),
+                          // ),
+                        ],
+                      ),
                       Text(
                         // Parse and format the working days and hours
                         '${storeData?['location']}',
@@ -407,42 +420,64 @@ if (phoneNumber != null && phoneNumber.isNotEmpty) {
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Column(
-children: (storeData?['discounts'] is List<dynamic>
-  ? (storeData?['discounts'] as List<dynamic>)
-  : [])
-  .map<Widget>((discount) {
+                            children: (storeData?['discounts'] is List<dynamic>
+                                    ? (storeData?['discounts'] as List<dynamic>)
+                                    : [])
+                                .map<Widget>((discount) {
                               return Container(
-                                width: 300,
-                                margin: const EdgeInsets.all(10),
-                                padding: const EdgeInsets.all(20),
-                                decoration: BoxDecoration(
-                                  color: const Color.fromARGB(255, 228, 224, 224),
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                child: Column(children: [
-                                Row(children: [Text(
-                                isEnglish
-                                    ? 'Discount on: ${discount['category']} '
-                                    : 'خصم على : ${discount['category']} ',
-                                style: TextStyle(fontSize: 14),
-                                textAlign: isEnglish ? TextAlign.left : TextAlign.right,
-                              )],),
-                                Row(children: [Text(
-                                isEnglish
-                                    ? 'Percent: ${discount['percent']}%'
-                                    : 'نسبة الخصم : ${discount['percent']}% ',
-                                style: TextStyle(fontSize: 14),
-                                textAlign: isEnglish ? TextAlign.left : TextAlign.right,
-                              ),],),
-                              Row(children: [Text(
-                                    isEnglish
-                                      ? 'Days Remaining: ${calculateDaysRemaining(discount['end_date'])} ${getEnglishDaysWord(calculateDaysRemaining(discount['end_date']))}'
-                                        : 'الأيام المتبقية: ${calculateDaysRemaining(discount['end_date'])} ${getArabicDaysWord(calculateDaysRemaining(discount['end_date']))}',
-                                    style: TextStyle(fontSize: 12, color: Colors.blue),
-                                    textAlign: isEnglish ? TextAlign.left : TextAlign.right,
-                                  ),],)
-                              ],) 
-                              );
+                                  width: 300,
+                                  margin: const EdgeInsets.all(10),
+                                  padding: const EdgeInsets.all(20),
+                                  decoration: BoxDecoration(
+                                    color: const Color.fromARGB(
+                                        255, 228, 224, 224),
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            isEnglish
+                                                ? 'Discount on: ${discount['category']} '
+                                                : 'خصم على : ${discount['category']} ',
+                                            style: TextStyle(fontSize: 14),
+                                            textAlign: isEnglish
+                                                ? TextAlign.left
+                                                : TextAlign.right,
+                                          )
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            isEnglish
+                                                ? 'Percent: ${discount['percent']}%'
+                                                : 'نسبة الخصم : ${discount['percent']}% ',
+                                            style: TextStyle(fontSize: 14),
+                                            textAlign: isEnglish
+                                                ? TextAlign.left
+                                                : TextAlign.right,
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            isEnglish
+                                                ? 'Days Remaining: ${calculateDaysRemaining(discount['end_date'])} ${getEnglishDaysWord(calculateDaysRemaining(discount['end_date']))}'
+                                                : 'الأيام المتبقية: ${calculateDaysRemaining(discount['end_date'])} ${getArabicDaysWord(calculateDaysRemaining(discount['end_date']))}',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.blue),
+                                            textAlign: isEnglish
+                                                ? TextAlign.left
+                                                : TextAlign.right,
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ));
                             }).toList(),
                           ),
                         ),
@@ -473,5 +508,3 @@ children: (storeData?['discounts'] is List<dynamic>
     );
   }
 }
-
-

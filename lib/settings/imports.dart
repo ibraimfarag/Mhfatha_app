@@ -8,6 +8,7 @@ export 'package:mhfatha/api/api.dart';
 // /* ------------------------------- HomeScreen ------------------------------- */
 export 'package:mhfatha/screens/home/home_screen.dart';
 export 'package:mhfatha/screens/home/nearby.dart';
+export 'package:mhfatha/screens/home/FiteredStroes.dart';
 
 
 // /* ------------------------------- store info ------------------------------- */

@@ -704,6 +704,51 @@ class Api {
       return false;
     }
   }
+
+    // /* -------------------------------------------------------------------------- */
+  // /* ---------------------------- Filter Stores API ------------------------- */
+  // /* -------------------------------------------------------------------------- */
+Future<Map<String, dynamic>> filterStores(
+  BuildContext context, 
+  String region,
+  String category,
+  String userLatitude,
+  String userLongitude,
+) async {
+  final url = Uri.parse('$baseUrl/filter-stores');
+    String lang = Provider.of<AppState>(context, listen: false).display;
+  AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+    bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
+  try {
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${authProvider.token}',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'lang': lang,
+        'region': region,
+        'category': category,
+        'user_latitude': userLatitude,
+        'user_longitude': userLongitude,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      // print(jsonResponse);
+      return jsonResponse;
+    } else {
+      throw Exception('Failed to filter stores. Server responded with status code: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Error during filtering stores: $e');
+    throw Exception('Failed to filter stores. Check your internet connection.');
+  }
+}
+
 }
 
 void _showLoadingDialog(BuildContext context) {
