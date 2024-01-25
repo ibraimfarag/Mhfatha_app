@@ -82,27 +82,12 @@ class Api {
         print('Error during login: ${response.body}');
         String errorMessage = jsonResponse['error'] ?? 'Unknown error';
 
-        showDialog(
+        QuickAlert.show(
           context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text(isEnglish ? 'Error' : 'خطأ',
-                  textAlign: isEnglish ? TextAlign.left : TextAlign.right),
-              content: Text(errorMessage,
-                  textAlign: isEnglish ? TextAlign.left : TextAlign.right),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('OK',
-                      textAlign: isEnglish ? TextAlign.left : TextAlign.right),
-                ),
-              ],
-            );
-          },
+          type: QuickAlertType.error,
+          title: isEnglish ? 'Error' : 'خطأ',
+          text: errorMessage,
         );
-
         print('Error during login: ${response.body}');
         throw Exception(
             'Failed to login. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
@@ -316,35 +301,10 @@ class Api {
         final jsonResponse = jsonDecode(await response.stream.bytesToString());
         print('Registration Response Data: $jsonResponse');
 
-        // Display a success dialog
-        showDialog(
+        QuickAlert.show(
           context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text(
-                isEnglish ? 'Registration Successful' : 'تم التسجيل بنجاح',
-                textAlign: isEnglish ? TextAlign.left : TextAlign.right,
-              ),
-              content: Text(
-                jsonResponse['message'] ??
-                    '', // Display the message from jsonResponse
-                textAlign: isEnglish ? TextAlign.left : TextAlign.right,
-              ),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => LoginScreen()));
-                  },
-                  child: Text(
-                    'OK',
-                    textAlign: isEnglish ? TextAlign.left : TextAlign.right,
-                  ),
-                ),
-              ],
-            );
-          },
+          type: QuickAlertType.success,
+          text: jsonResponse['message'] ?? '',
         );
 
         return jsonResponse['success'];
@@ -369,33 +329,16 @@ class Api {
         }
         Navigator.of(context, rootNavigator: true).pop();
 
-        // Show dialog for unsuccessful registration
-        showDialog(
+        QuickAlert.show(
           context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text(
-                  isEnglish ? 'Registration Failed' : 'خطأ اثناء التسجيل',
-                  textAlign: isEnglish ? TextAlign.left : TextAlign.right),
-              content: Column(
-                crossAxisAlignment: isEnglish
-                    ? CrossAxisAlignment.start
-                    : CrossAxisAlignment.end,
-                mainAxisSize: MainAxisSize.min,
-                children:
-                    errorMessages.map((message) => Text(message)).toList(),
-              ),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('OK',
-                      textAlign: isEnglish ? TextAlign.left : TextAlign.right),
-                ),
-              ],
-            );
-          },
+          type: QuickAlertType.error,
+          title: isEnglish ? 'Registration Failed' : 'خطأ اثناء التسجيل',
+          widget: Column(
+            crossAxisAlignment:
+                isEnglish ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
+            children: errorMessages.map((message) => Text(message)).toList(),
+          ),
         );
 
         throw Exception(
@@ -480,8 +423,7 @@ class Api {
 
   Future<Map<String, dynamic>> getRegionsAndCities(BuildContext context) async {
     final url = Uri.parse('$baseUrl/regions');
-    bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
-    String lang = Provider.of<AppState>(context, listen: false).display;
+
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
 
@@ -490,14 +432,44 @@ class Api {
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ${authProvider.token}',
         },
-        body: jsonEncode(<String, dynamic>{}),
+      );
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        // print(jsonResponse);
+        // Check if 'regions' key exists in the JSON response
+        if (jsonResponse.containsKey('regions')) {
+          return jsonResponse;
+        } else {
+          throw Exception('Invalid response format. Missing "regions" key.');
+        }
+      } else {
+        throw Exception(
+            'Failed to fetch regions and cities. Server responded with status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error getting regions and cities: $e');
+      throw Exception(
+          'Failed to fetch regions and cities. Check your internet connection.');
+    }
+  }
+
+  Future<Map<String, dynamic>> getRegionsWithCities(
+      BuildContext context) async {
+    final url = Uri.parse('$baseUrl/registerregions');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
       );
 
       if (response.statusCode == 200) {
+        print('statusCode 200');
         final jsonResponse = jsonDecode(response.body);
-// print(jsonResponse);
+        // print(jsonResponse);
         // Check if 'regions' key exists in the JSON response
         if (jsonResponse.containsKey('regions')) {
           return jsonResponse;
@@ -664,21 +636,18 @@ class Api {
                     text: '$MeC',
                   );
                   await authProvider.updateUserData(context);
-                }else{
+                } else {
                   final jsonResponse = jsonDecode(response.body);
                   final MeC = jsonResponse['error'];
                   Navigator.pop(context);
-                
+
                   QuickAlert.show(
                     context: context,
                     type: QuickAlertType.error,
-                     title: 'Oops...',
+                    title: 'Oops...',
                     text: '$MeC',
                   );
-
                 }
-
-
               } catch (e) {
                 print(e);
               }
@@ -705,72 +674,60 @@ class Api {
     }
   }
 
-    // /* -------------------------------------------------------------------------- */
+  // /* -------------------------------------------------------------------------- */
   // /* ---------------------------- Filter Stores API ------------------------- */
   // /* -------------------------------------------------------------------------- */
-Future<Map<String, dynamic>> filterStores(
-  BuildContext context, 
-  String region,
-  String category,
-  String userLatitude,
-  String userLongitude,
-) async {
-  final url = Uri.parse('$baseUrl/filter-stores');
+  Future<Map<String, dynamic>> filterStores(
+    BuildContext context,
+    String region,
+    String category,
+    String userLatitude,
+    String userLongitude,
+  ) async {
+    final url = Uri.parse('$baseUrl/filter-stores');
     String lang = Provider.of<AppState>(context, listen: false).display;
-  AuthProvider authProvider =
+    AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
     bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
-  try {
-    final response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${authProvider.token}',
-      },
-      body: jsonEncode(<String, dynamic>{
-        'lang': lang,
-        'region': region,
-        'category': category,
-        'user_latitude': userLatitude,
-        'user_longitude': userLongitude,
-      }),
-    );
+    try {
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${authProvider.token}',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'lang': lang,
+          'region': region,
+          'category': category,
+          'user_latitude': userLatitude,
+          'user_longitude': userLongitude,
+        }),
+      );
 
-    if (response.statusCode == 200) {
-      final jsonResponse = jsonDecode(response.body);
-      // print(jsonResponse);
-      return jsonResponse;
-    } else {
-      throw Exception('Failed to filter stores. Server responded with status code: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        // print(jsonResponse);
+        return jsonResponse;
+      } else {
+        throw Exception(
+            'Failed to filter stores. Server responded with status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error during filtering stores: $e');
+      throw Exception(
+          'Failed to filter stores. Check your internet connection.');
     }
-  } catch (e) {
-    print('Error during filtering stores: $e');
-    throw Exception('Failed to filter stores. Check your internet connection.');
   }
-}
-
 }
 
 void _showLoadingDialog(BuildContext context) {
   bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
 
-  showDialog(
+  QuickAlert.show(
     context: context,
-    barrierDismissible:
-        false, // Prevent dismissing the dialog by tapping outside
-    builder: (BuildContext context) {
-      return AlertDialog(
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CircularProgressIndicator(), // Show the loading indicator
-            SizedBox(height: 16),
-            Text(isEnglish
-                ? "please wait"
-                : "يرجى الانتظار..."), // Add a message to inform the user
-          ],
-        ),
-      );
-    },
+    type: QuickAlertType.loading,
+    title: isEnglish ? 'please wait' : 'يرجى الانتظار...',
+    text: isEnglish ? 'loading your data' : 'جاري تحميل البيانات',
   );
 }

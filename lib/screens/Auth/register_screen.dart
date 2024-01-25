@@ -22,9 +22,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String selectedVendor = ''; // Default gender selection
 
   DateTime? selectedDate;
-// Declare variables to store selected region and city
 
-  String selectedRegion = '';
   String? _selectedProfileImagePath;
 
   TextEditingController nameController = TextEditingController();
@@ -33,6 +31,57 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController mobileController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
+  String selectedRegion = '1'; // Default region selection
+  List<DropdownMenuItem<String>> regionDropdownItems = [];
+
+  Api api = Api();
+  @override
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Fetch data here
+    fetchFilteredStores();
+  }
+
+  void fetchFilteredStores() async {
+    bool isEnglish = Provider.of<AppState>(context).isEnglish;
+
+    try {
+      Map<String, dynamic>? result = await api.getRegionsAndCities(context);
+
+      if (result != null) {
+        setState(() {
+          // Access the 'regions' data from the result
+          List<dynamic> regions = result['regions'];
+
+          // Clear existing items
+          regionDropdownItems.clear();
+
+          // Process each region and add a DropdownMenuItem for each
+          regions.forEach((region) {
+            int regionId = region['id'];
+            String regionAr = region['region_ar'];
+            String regionEn = region['region_en'];
+
+            // Add a DropdownMenuItem for the current region
+            regionDropdownItems.add(
+              DropdownMenuItem(
+                value: regionId.toString(),
+                child: Text(isEnglish ? regionEn : regionAr),
+              ),
+            );
+          });
+        });
+      } else {
+        print('Error fetching filtered stores: Result is null');
+      }
+    } catch (e) {
+      // Handle errors
+      print('Error fetching filtered stores: $e');
+    }
+  }
+
+// Variable to hold the selected region
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +119,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                // The "العودة" button
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pushNamed(context, '/login');
@@ -214,29 +262,62 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
 
                               // /* -------------------------------------------------------------------------- */
-                              // /* ----------------------------- city and region ---------------------------- */
+                              // /* --------------------------------- Region --------------------------------- */
                               // /* -------------------------------------------------------------------------- */
-
                               Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Column(
-                                    children: [
-                                      RegionSelection(
-                                        onRegionSelected: (value) {
-                                          // Handle region selection
-                                        },
-                                        color: Colors.blue,
-                                        labelcolor: Colors.black,
-                                        selectedRegion: '2',
-                                      )
-                                    ],
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 40, vertical: 20),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          isEnglish ? 'Region' : 'المدينة',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: colors,
+                                          ),
+                                        ),
+                                        Container(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 1, horizontal: 20),
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey[200],
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
+                                          child: DropdownButton<String>(
+                                            value: selectedRegion,
+                                            hint: Text(isEnglish
+                                                ? 'Select Region'
+                                                : 'اختر المنطقة'),
+                                            onChanged: (String? newValue) {
+                                              setState(() {
+                                                selectedRegion = newValue!;
+                                              });
+
+                                              print(selectedRegion);
+                                            },
+                                            items: regionDropdownItems.map(
+                                                (DropdownMenuItem<String>
+                                                    item) {
+                                              return item;
+                                            }).toList(),
+                                            underline: Container(),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
-                              SizedBox(
-                                height: 24,
-                              ),
+
                               // /* -------------------------------------------------------------------------- */
                               // /* ---------------------------------- email --------------------------------- */
                               // /* -------------------------------------------------------------------------- */
@@ -301,18 +382,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ),
                               // /* -------------------------------------------------------------------------- */
                               // /* ------------------------------ submit button ----------------------------- */
-//                             // /* -------------------------------------------------------------------------- */
-//     TextButton(
-//       onPressed: () {
-// Navigator.pushNamed(context, '/login');      },
-//       child: Text(
-//         isEnglish?'Back':'',
-//         style: TextStyle(
-//           color: Colors.white,
-//           fontSize: 16,
-//         ),
-//       ),
-//     ),
 
                               Row(
                                 mainAxisAlignment: MainAxisAlignment

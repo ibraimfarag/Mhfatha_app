@@ -9,9 +9,7 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-
-
-     late AuthProvider authProvider; // Declare authProvider variable
+  late AuthProvider authProvider; // Declare authProvider variable
 
   Color backgroundColor = Color.fromARGB(220, 255, 255, 255);
   Color ui = Color.fromARGB(220, 233, 233, 233);
@@ -23,13 +21,11 @@ class _AccountScreenState extends State<AccountScreen> {
   TextEditingController birthdayController = TextEditingController();
   late String selectedRegion; // Declare selectedRegion variable
 
-
   @override
   void initState() {
     super.initState();
- authProvider = Provider.of<AuthProvider>(context, listen: false);
+    authProvider = Provider.of<AuthProvider>(context, listen: false);
     selectedRegion = '${authProvider.user!['region']}';
-    
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -55,7 +51,7 @@ class _AccountScreenState extends State<AccountScreen> {
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
 
- String lang = Provider.of<AppState>(context, listen: false).display;
+    String lang = Provider.of<AppState>(context, listen: false).display;
     return DirectionalityWrapper(
         child: Scaffold(
       body: SingleChildScrollView(
@@ -134,9 +130,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       children: [
                         SizedBox(height: 20),
 
-                        // Language Section
-
-                        // Other Settings...
+               
 
                         buildSettingItem(context, 'name', 'الاسم', () {
                           // Navigate to account settings screen
@@ -168,76 +162,67 @@ class _AccountScreenState extends State<AccountScreen> {
                           // Implement report logic
                         }, email, ' ${authProvider.user!['email']}'),
 
-                        // buildSettingItem(
-                        //     context, Icons.message, 'Messages', 'الرسائل', () {
-                        //   // Implement messages logic
-                        // }),
 
-                        // Logout Button
 
-Row(
-  mainAxisAlignment: MainAxisAlignment.start,
-  children: [
-    Column(
-      children: [
-                    RegionSelection(
-  color: ui,
-  labelcolor: colors,
-  onRegionSelected: (value) {
-    print('onRegionSelected: $value');
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Column(
+                              children: [
+                                RegionSelection(
+                                  color: ui,
+                                  labelcolor: colors,
+                                  onRegionSelected: (value) {
+                                    print('onRegionSelected: $value');
 
-    setState(() {
-      
-    print('selectedRegion in AccountScreen: $selectedRegion');
-      selectedRegion = value;
-     // Update City with the value of selectedRegion
-    });
+                                    setState(() {
+                                      print(
+                                          'selectedRegion in AccountScreen: $selectedRegion');
+                                      selectedRegion = value;
+                                      // Update City with the value of selectedRegion
+                                    });
 
-    print('selectedRegion in AccountScreen: $selectedRegion');
-   
-  },
-  selectedRegion: selectedRegion,
-),
-
-      ],
-    ),
-  ],
-),
-
+                                    print(
+                                        'selectedRegion in AccountScreen: $selectedRegion');
+                                  },
+                                  selectedRegion: selectedRegion,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
 
                         SizedBox(
                           height: 24,
                         ),
                         ElevatedButton(
                           onPressed: () async {
+                            QuickAlert.show(
+                                context: context,
+                                type: QuickAlertType.confirm,
+                                text: isEnglish
+                                    ? 'Do you want to update profile'
+                                    : 'هل انت متاكد من تحديث البيانات الشخصية',
+                                confirmBtnText: isEnglish ? 'Yes' : 'نعم',
+                                cancelBtnText: isEnglish ? 'No' : 'لا',
+                                confirmBtnColor: Colors.green,
+                                onConfirmBtnTap: () async {
+                                  Navigator.pop(context);
 
-      QuickAlert.show(
- context: context,
- type: QuickAlertType.confirm,
- text: isEnglish?'Do you want to update profile':'هل انت متاكد من تحديث البيانات الشخصية',
- confirmBtnText: isEnglish?'Yes':'نعم',
- cancelBtnText: isEnglish?'No':'لا',
- confirmBtnColor: Colors.green,
- onConfirmBtnTap:() async {
-Navigator.pop(context);
+                                  print(
+                                      'selectedRegion in AccountScreen: $selectedRegion');
 
-    print('selectedRegion in AccountScreen: $selectedRegion');
-
-                            bool success = await Api().updateUserProfile(
-                              context: context,
-                              firstName: first_name.text,
-                              lastName: last_name.text,
-                              birthday: birthdayController.text,
-                              region: selectedRegion, 
-                              mobile: mobile.text,
-                              email: email.text,
-                              // otp: /* Pass the OTP if needed */,
-                            );
-
-                          
-
-
-                          });
+                                  bool success = await Api().updateUserProfile(
+                                    context: context,
+                                    firstName: first_name.text,
+                                    lastName: last_name.text,
+                                    birthday: birthdayController.text,
+                                    region: selectedRegion,
+                                    mobile: mobile.text,
+                                    email: email.text,
+                                    // otp: /* Pass the OTP if needed */,
+                                  );
+                                });
                           },
                           child: Text(isEnglish ? 'update' : 'تحديث'),
                         ),
