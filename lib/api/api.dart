@@ -256,24 +256,27 @@ class Api {
   // /* -------------------------------------------------------------------------- */
   // /* ------------------------------ User Registration ------------------------ */
   // /* -------------------------------------------------------------------------- */
-  Future<bool> registerUser({
-    required BuildContext context,
-    required String lang,
-    required String firstName,
-    required String lastName,
-    required String gender,
-    required String birthday,
-    required String region,
-    required String mobile,
-    required String email,
-    required String password,
-    required String confirmPasswordController,
-    required int isVendor,
-    File? imageFile,
-  }) async {
+Future<bool> registerUser({
+  required BuildContext context,
+  required String lang,
+  required String firstName,
+  required String lastName,
+  required String gender,
+  required String birthday,
+  required String region,
+  required String mobile,
+  required String email,
+  required String password,
+  required String confirmPasswordController,
+  required int isVendor,
+  File? imageFile,
+  String? otp,
+}) async {
     final url = Uri.parse('$baseUrl/register-post');
     bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
     _showLoadingDialog(context);
+OtpFieldController otpController = OtpFieldController();
+    String enteredOtp = '';
 
     try {
       final request = http.MultipartRequest('POST', url)
@@ -284,6 +287,7 @@ class Api {
         ..fields['birthday'] = birthday
         ..fields['region'] = region
         ..fields['mobile'] = mobile
+        ..fields['otp'] = enteredOtp
         ..fields['email'] = email
         ..fields['password'] = password
         ..fields['password_confirmation'] = confirmPasswordController
@@ -300,14 +304,104 @@ class Api {
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(await response.stream.bytesToString());
         print('Registration Response Data: $jsonResponse');
-
-        QuickAlert.show(
+if (jsonResponse['OTP'] == true) {
+          // Display dialog if 'OTP' is true
+            QuickAlert.show(
           context: context,
-          type: QuickAlertType.success,
-          text: jsonResponse['message'] ?? '',
+          type: QuickAlertType.custom,
+          showCancelBtn: true,
+          barrierDismissible: true,
+          confirmBtnText: isEnglish ? 'verify' : 'تفعيل',
+          cancelBtnText: isEnglish ? 'cancel' : 'الغاء',
+          customAsset: 'images/MeG.gif',
+          widget: Column(
+            children: [
+              Text(jsonResponse['message']),
+              OTPTextField(
+                controller: otpController,
+                length: 5,
+                width: MediaQuery.of(context).size.width,
+                fieldWidth: 20,
+                style: TextStyle(fontSize: 17),
+                textFieldAlignment: MainAxisAlignment.spaceAround,
+                fieldStyle: FieldStyle.underline,
+                onCompleted: (pin) {
+                  enteredOtp = pin;
+                  print("Completed: " + pin);
+                },
+              ),
+            ],
+          ),
+          onConfirmBtnTap: () async {
+            try {
+              QuickAlert.show(
+                context: context,
+                type: QuickAlertType.loading,
+                title: isEnglish ? 'Loading' : 'انتظر قليلاً',
+                text:
+                    isEnglish ? 'Fetching your data' : 'جاري تحميل البيانات',
+              );
+
+              final request = http.MultipartRequest('POST', url)
+                ..fields['lang'] = lang
+                ..fields['first_name'] = firstName
+                ..fields['last_name'] = lastName
+                ..fields['gender'] = gender
+                ..fields['birthday'] = birthday
+                ..fields['region'] = region
+                ..fields['mobile'] = mobile
+                ..fields['email'] = email
+                ..fields['password'] = password
+                ..fields['password_confirmation'] = confirmPasswordController
+                ..fields['otp'] = enteredOtp
+                ..fields['is_vendor'] = isVendor.toString();
+              // Use the correct field name for the file, in this case, 'photo'
+              // ..files.add(await http.MultipartFile.fromPath('photo', imageFile.path));
+              if (imageFile != null) {
+                // Use the correct field name for the file, in this case, 'photo'
+                request.files.add(await http.MultipartFile.fromPath(
+                    'photo', imageFile.path));
+              }
+              final response = await request.send();
+
+              if (response.statusCode == 200) {
+                final jsonResponse =
+                    jsonDecode(await response.stream.bytesToString());
+                print('Registration Response Data: $jsonResponse');
+                Navigator.of(context, rootNavigator: true).pop();
+
+                QuickAlert.show(
+                  context: context,
+                  type: QuickAlertType.success,
+                  text: jsonResponse['message'] ?? '',
+                  onConfirmBtnTap: () {
+                    Navigator.pushNamed(context, '/login');
+                  },
+                );
+
+                return jsonResponse['success'];
+              } else {
+                final jsonResponse =
+                    jsonDecode(await response.stream.bytesToString());
+                final MeC = jsonResponse['error'];
+                Navigator.pop(context);
+
+                QuickAlert.show(
+                  context: context,
+                  type: QuickAlertType.error,
+                  title: 'Oops...',
+                  text: '$MeC',
+                );
+              }
+            } catch (e) {
+              print(e);
+            }
+          },
         );
 
-        return jsonResponse['success'];
+      } 
+                    return true;
+      
       } else {
         final jsonResponse = jsonDecode(await response.stream.bytesToString());
 
