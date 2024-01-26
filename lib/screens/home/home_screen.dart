@@ -1228,7 +1228,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          // bottomNavigationBar: BottomNav(initialIndex: 0),
+          // bottomNavigationBar: BottomNavBar(initialIndex: 0),
           bottomNavigationBar: BottomNavBar(initialIndex: 0),
         ),
       ),

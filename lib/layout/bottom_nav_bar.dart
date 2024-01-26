@@ -19,6 +19,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
         bool isEnglish = Provider.of<AppState>(context).isEnglish;
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
 
     return CustomNavigationBar(
       iconSize: 30.0,
@@ -62,6 +64,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           icon: Icon(Icons.settings),
           title: Text(isEnglish?'settings':'الاعدادات'),
         ),
+        if (authProvider.isVendor)
         CustomNavigationBarItem(
           icon: Icon(Icons.store),
           title: Text(isEnglish?'stores':'المتاجر'),

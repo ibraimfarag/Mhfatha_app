@@ -85,7 +85,7 @@ class _RestPasswordState extends State<RestPassword> {
             ),
           ),
         ),
-        // bottomNavigationBar: BottomNav(initialIndex: 2),
+        // bottomNavigationBar: BottomNavBar(initialIndex: 2),
       ),
     );
   }

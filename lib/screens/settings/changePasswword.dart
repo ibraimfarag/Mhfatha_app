@@ -186,7 +186,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   )
                 ])),
       ),
-      bottomNavigationBar: BottomNav(initialIndex: 2),
+      bottomNavigationBar: BottomNavBar(initialIndex: 2),
     ));
   }
 

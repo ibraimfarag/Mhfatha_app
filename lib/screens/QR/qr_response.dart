@@ -217,7 +217,7 @@ class _QrResponseState extends State<QrResponse> {
             ),
           ),
         ),
-        bottomNavigationBar: BottomNav(initialIndex: 1),
+        bottomNavigationBar: BottomNavBar(initialIndex: 1),
       ),
     );
   }

@@ -385,7 +385,7 @@ class _GetDiscountState extends State<GetDiscount> {
             ),
           ],
         )),
-        bottomNavigationBar: BottomNav(initialIndex: 1),
+        bottomNavigationBar: BottomNavBar(initialIndex: 1),
       ),
     );
   }

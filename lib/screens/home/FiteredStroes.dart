@@ -361,7 +361,7 @@ class _FiteredStroesState extends State<FiteredStroes> {
             ),
           ),
         ),
-        bottomNavigationBar: BottomNav(initialIndex: 0),
+        bottomNavigationBar: BottomNavBar(initialIndex: 0),
       ),
     );
   }

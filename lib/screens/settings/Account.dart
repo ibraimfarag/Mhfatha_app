@@ -263,7 +263,7 @@ imageFile: _selectedProfileImagePath != null ? File(_selectedProfileImagePath ??
                   )
                 ])),
       ),
-      bottomNavigationBar: BottomNav(initialIndex: 2),
+      bottomNavigationBar: BottomNavBar(initialIndex: 2),
     ));
   }
 
