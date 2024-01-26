@@ -32,8 +32,10 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>We need access to your camera for taking photos.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+<string>We need your location to provide better service.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-<string>Your message explaining why you need background location</string>
+<string>We need your location to provide better service.</string>
 	<key>NSLocationUsageDescription</key>
 	<string>We need your location to provide better service.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

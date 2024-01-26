@@ -7,6 +7,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 // provider.dart
 class AuthProvider extends ChangeNotifier {
   String? _token;
+  bool get isVendor {
+    if (_user != null && _user!['is_vendor'] == 1) {
+      return true;
+    }
+    return false;
+  }
+  bool get isAdmin {
+    if (_user != null && _user!['is_admin'] == 1) {
+      return true;
+    }
+    return false;
+  }
+
   bool _isAuthenticated = false;
   Map<String, dynamic>? _user;
 final api = Api();

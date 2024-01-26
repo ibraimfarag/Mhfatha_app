@@ -38,7 +38,7 @@ void _startInternetCheckTimer(BuildContext context) {
 Future<void> _checkInternetConnection(BuildContext context) async {
   bool result = await InternetConnectionChecker().hasConnection;
   if (result) {
-    print('You are online');
+    // print('You are online');
     _setInternetConnectionState(true);
     _closeNointernetScreen(context); // Close the Nointernet screen if it was open
   } else {

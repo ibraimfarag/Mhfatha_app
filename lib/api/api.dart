@@ -24,11 +24,9 @@ class Api {
         // You can add your logic here when the internet is connected
         return 'Online';
       } else {
-      
         return 'Offline';
       }
     } catch (e) {
-   
       return 'Offline';
     }
   }
@@ -62,7 +60,7 @@ class Api {
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
-     // Print the entire response for debugging
+        // Print the entire response for debugging
         String token = jsonResponse['token'];
         Map<String, dynamic> user = jsonResponse['user'];
 
@@ -84,7 +82,7 @@ class Api {
           title: isEnglish ? 'Error' : 'خطأ',
           text: errorMessage,
         );
-    
+
         throw Exception(
             'Failed to login. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
       }
@@ -158,6 +156,7 @@ class Api {
 
         // Convert the response data to a JSON string
         String jsonString = jsonEncode(jsonResponse);
+        print(jsonString);
 
         return jsonString;
       } else {
@@ -168,7 +167,6 @@ class Api {
       return ''; // Return an empty string or handle the error as needed
     }
   }
-
 
   Future<String> getStoreDetailsByQR(
       AuthProvider authProvider, String encryptedStoreID, String lang) async {
@@ -192,7 +190,6 @@ class Api {
 
         // Convert the response data to a JSON string
         String jsonString = jsonEncode(jsonResponse);
-
         return jsonString;
       } else {
         throw Exception(
@@ -368,8 +365,7 @@ class Api {
                     text: '$MeC',
                   );
                 }
-              } catch (e) {
-              }
+              } catch (e) {}
             },
           );
         }
@@ -710,8 +706,7 @@ class Api {
                     text: '$MeC',
                   );
                 }
-              } catch (e) {
-              }
+              } catch (e) {}
             },
           );
         } else {
