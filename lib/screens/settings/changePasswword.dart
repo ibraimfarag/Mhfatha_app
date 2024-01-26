@@ -5,47 +5,27 @@ import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:mhfatha/settings/imports.dart';
 
-class AccountScreen extends StatefulWidget {
+class ChangePassword extends StatefulWidget {
   @override
-  State<AccountScreen> createState() => _AccountScreenState();
+  State<ChangePassword> createState() => _ChangePasswordState();
 }
 
-class _AccountScreenState extends State<AccountScreen> {
+class _ChangePasswordState extends State<ChangePassword> {
   late AuthProvider authProvider; // Declare authProvider variable
 
   Color backgroundColor = Color.fromARGB(220, 255, 255, 255);
   Color ui = Color.fromARGB(220, 233, 233, 233);
   Color ui2 = Color.fromARGB(255, 113, 194, 110);
   Color colors = Color(0xFF05204a);
-  TextEditingController first_name = TextEditingController();
-  TextEditingController last_name = TextEditingController();
-  TextEditingController email = TextEditingController();
-  TextEditingController mobile = TextEditingController();
-  TextEditingController birthdayController = TextEditingController();
-  late String selectedRegion; // Declare selectedRegion variable
-  String? _selectedProfileImagePath;
+  TextEditingController currentPassword = TextEditingController();
+  TextEditingController newpassword = TextEditingController();
+  TextEditingController confirmPassword = TextEditingController();
 
+  Api api = Api();
   @override
   void initState() {
     super.initState();
     authProvider = Provider.of<AuthProvider>(context, listen: false);
-    selectedRegion = '${authProvider.user!['region']}';
-  }
-
-  Future<void> _selectDate(BuildContext context) async {
-    DateTime currentDate = DateTime.now();
-    DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: currentDate,
-      firstDate: DateTime(1900),
-      lastDate: currentDate,
-    );
-
-    if (picked != null && picked != currentDate) {
-      setState(() {
-        birthdayController.text = picked.toString();
-      });
-    }
   }
 
   @override
@@ -133,80 +113,19 @@ class _AccountScreenState extends State<AccountScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 20),
-                        ProfilePhotoWidget(
-                          isEnglish: isEnglish,
-                          labelcolor: colors,
-                          color: ui,
-                          label: isEnglish
-                              ? 'Profile photo: '
-                              : 'الصورة الشخصية: ',
-                          selectPhotoText:
-                              isEnglish ? 'Select Photo' : 'اختر صورة',
-                          changePhotoText:
-                              isEnglish ? 'Change Photo' : 'تغير  الصورة',
-                          removeText: isEnglish ? 'Remove' : 'إزالة',
-                          onPhotoSelected: (path) {
-                            setState(() {
-                              _selectedProfileImagePath = path;
-                            });
-                            print('path : $path');
-                          },
-                        ),
-                        SizedBox(height: 20),
-                        buildSettingItem(context, 'name', 'الاسم', () {
-                          // Navigate to account settings screen
-                          // Navigator.pushNamed(context, Routes.accountSettings);
-                        }, first_name, ' ${authProvider.user!['first_name']}'),
-                        buildSettingItem(context, 'family name', 'اسم العائلة',
-                            () {
-                          // Implement privacy logic
-                        }, last_name, ' ${authProvider.user!['last_name']}'),
                         buildSettingItem(
-                          context,
-                          'birthday',
-                          'تاريخ الميلاد',
-                          () {
-                            // Show date picker and update the selected date
-                            _selectDate(context);
-                          },
-                          birthdayController, // Assume you have a TextEditingController for the birthday
-                          ' ${authProvider.user!['birthday']}',
-                        ),
-                        buildSettingItem(context, 'mobile number', 'رقم الجوال',
+                            context, 'current password', 'كلمة السر الحالية',
                             () {
                           // Implement report logic
-                        }, mobile, ' ${authProvider.user!['mobile']}'),
-                        buildSettingItem(context, 'email', 'البريد الالكتروني',
-                            () {
+                        }, currentPassword, ' '),
+                        buildSettingItem(
+                            context, 'new password', 'كلمة السر الجديدة', () {
                           // Implement report logic
-                        }, email, ' ${authProvider.user!['email']}'),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Column(
-                              children: [
-                                RegionSelection(
-                                  color: ui,
-                                  labelcolor: colors,
-                                  onRegionSelected: (value) {
-                                    print('onRegionSelected: $value');
-
-                                    setState(() {
-                                      print(
-                                          'selectedRegion in AccountScreen: $selectedRegion');
-                                      selectedRegion = value;
-                                      // Update City with the value of selectedRegion
-                                    });
-
-                                    print(
-                                        'selectedRegion in AccountScreen: $selectedRegion');
-                                  },
-                                  selectedRegion: selectedRegion,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                        }, newpassword, ' '),
+                        buildSettingItem(context, 'confirm new password',
+                            'تأكيد كلمة السر الجديدة', () {
+                          // Implement report logic
+                        }, confirmPassword, ' '),
                         SizedBox(
                           height: 24,
                         ),
@@ -217,33 +136,37 @@ class _AccountScreenState extends State<AccountScreen> {
                             ElevatedButton(
                               onPressed: () async {
                                 QuickAlert.show(
-                                    context: context,
-                                    type: QuickAlertType.confirm,
-                                    text: isEnglish
-                                        ? 'Do you want to update profile'
-                                        : 'هل انت متاكد من تحديث البيانات الشخصية',
-                                    confirmBtnText: isEnglish ? 'Yes' : 'نعم',
-                                    cancelBtnText: isEnglish ? 'No' : 'لا',
-                                    confirmBtnColor: Colors.green,
-                                    onConfirmBtnTap: () async {
-                                      Navigator.pop(context);
-
-                                      print(
-                                          'selectedRegion in AccountScreen: $selectedRegion');
-
-                                      bool success =
-                                          await Api().updateUserProfile(
-                                        context: context,
-                                        firstName: first_name.text,
-                                        lastName: last_name.text,
-                                        birthday: birthdayController.text,
-                                        region: selectedRegion,
-                                        mobile: mobile.text,
-                                        email: email.text,
-imageFile: _selectedProfileImagePath != null ? File(_selectedProfileImagePath ?? '') : null
-                                        // otp: /* Pass the OTP if needed */,
+                                  context: context,
+                                  type: QuickAlertType.confirm,
+                                  text: isEnglish
+                                      ? 'Do you want to update profile'
+                                      : 'هل انت متاكد من تحديث البيانات الشخصية',
+                                  confirmBtnText: isEnglish ? 'Yes' : 'نعم',
+                                  cancelBtnText: isEnglish ? 'No' : 'لا',
+                                  confirmBtnColor: Colors.green,
+                                  onConfirmBtnTap: () async {
+                                    Navigator.pop(context);
+                                    String oldPassword = currentPassword
+                                        .text; // Assuming you have a TextEditingController for the email field
+                                    String newPassword = newpassword
+                                        .text; // Assuming you have a TextEditingController for the email field
+                                    String confirmationNewPassword =
+                                        confirmPassword.text;
+                                    try {
+                                      String message = await api.changePassword(
+                                        context,
+                                        oldPassword,
+                                        newPassword,
+                                        confirmationNewPassword,
                                       );
-                                    });
+                                      // Show success message or handle accordingly
+                                     
+                                    } catch (e) {
+                                      // Handle error, show error message, etc.
+                                     
+                                    }
+                                  },
+                                );
                               },
                               style: ElevatedButton.styleFrom(
                                 primary: ui, // Set the background color

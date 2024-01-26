@@ -253,14 +253,22 @@ class _LoginScreenState extends State<LoginScreen> {
                       alignment: isEnglish
                           ? Alignment.centerRight
                           : Alignment.centerLeft,
-                      child: Text(
+                      child:GestureDetector(
+                            onTap: () {
+                              // Navigate to the register screen when the text is tapped
+                              Navigator.pushNamed(context, '/restpassword');
+                            },
+                            child:  Text(
                         isEnglish ? "Forgot Password?" : "هل نسيت كلمة المرور ؟",
                         style: TextStyle(
                             color: colors,
                             fontSize: 12,
                             fontWeight: FontWeight.bold),
                       ),
+                      ),
                     ),
+
+                    
                     SizedBox(
                       height: 20,
                     ),

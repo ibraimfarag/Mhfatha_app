@@ -644,7 +644,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                       // Handle onPressed for "يبعد 5 كم" button
                                     },
                                     child: Text(
-                                      
                                       '${Provider.of<AppState>(context).isEnglish ? 'Distance: ' : 'يبعد '}${store['distance']}',
                                       style: TextStyle(
                                         color: Colors.white,
@@ -699,35 +698,49 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ? Alignment.center
                                 : Alignment.center,
                             child: TextButton(
-                                onPressed: () async {
-                                  Navigator.pushNamed(context, '/store-info',
-                                      arguments: store);
-                                },
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons
-                                          .store, // Replace with the desired icon
+                              onPressed: () async {
+                                Navigator.pushNamed(context, '/store-info',
+                                    arguments: store);
+                              },
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty. all<Color>(Color.fromARGB(255, 9, 5, 39)), // Set the background color
+                                padding: MaterialStateProperty.all<
+                                        EdgeInsetsGeometry>(
+                                    EdgeInsets.all(12)), // Adjust the padding
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                       15), // Adjust the border radius as needed
+                                  ),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons
+                                        .store, // Replace with the desired icon
+                                    color: Colors.white,
+                                    size:
+                                        20, // Adjust the size according to your preference
+                                  ),
+                                  SizedBox(
+                                    width:
+                                        8, // Adjust the spacing between icon and text
+                                  ),
+                                  Text(
+                                    isEnglish ? 'Visit store' : 'زيارة المتجر',
+                                    style: TextStyle(
                                       color: Colors.white,
-                                      size:
-                                          20, // Adjust the size according to your preference
+                                      fontSize: 14,
+                                      fontFamily:
+                                          AppVariables.serviceFontFamily,
                                     ),
-                                    SizedBox(
-                                        width:
-                                            8), // Adjust the spacing between icon and text
-                                    Text(
-                                      isEnglish
-                                          ? 'Visit store'
-                                          : 'زيارة المتجر',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontFamily:
-                                            AppVariables.serviceFontFamily,
-                                      ),
-                                    ),
-                                  ],
-                                )),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
 
@@ -744,75 +757,90 @@ class _HomeScreenState extends State<HomeScreen> {
                                   //     color: Colors.white, size: 18),
                                   // const SizedBox(width: 1),
                                   TextButton(
-                                      onPressed: () async {
-                                        // Handle "Show discounts" option
-                                        // Navigator.pop(context); // Close the bottom sheet
+                                    onPressed: () async {
+                                      // Handle "Show discounts" option
+                                      // Navigator.pop(context); // Close the bottom sheet
 
-                                        // Display sub-context bottom menu
-                                        _showSubContextBottomMenu(
-                                            context, store);
-                                        // Add the logic to get store details by calling the API
+                                      // Display sub-context bottom menu
+                                      _showSubContextBottomMenu(context, store);
+                                      // Add the logic to get store details by calling the API
 
-                                        // Get store ID
-                                        int storeId = store['id'];
+                                      // Get store ID
+                                      int storeId = store['id'];
 
-                                        // Call the API to get store details
-                                        String storeDetails = await Api()
-                                            .getStoreDetails(
-                                                context,
-                                                authProvider,
-                                                store['id'],
-                                                latitude!,
-                                                longitude!);
+                                      // Call the API to get store details
+                                      String storeDetails =
+                                          await Api().getStoreDetails(
+                                        context,
+                                        authProvider,
+                                        store['id'],
+                                        latitude!,
+                                        longitude!,
+                                      );
 
-                                        // Parse the store details JSON
-                                        Map<String, dynamic> storeDetailsMap =
-                                            jsonDecode(storeDetails);
+                                      // Parse the store details JSON
+                                      Map<String, dynamic> storeDetailsMap =
+                                          jsonDecode(storeDetails);
 
-                                        // Access the "discounts" list
-                                        List<dynamic> discounts =
-                                            storeDetailsMap['store']
-                                                ['discounts'];
+                                      // Access the "discounts" list
+                                      List<dynamic> discounts =
+                                          storeDetailsMap['store']['discounts'];
 
-                                        // Iterate over each discount
-                                        for (var discount in discounts) {
-                                          // Access discount properties
-                                          int id = discount['id'];
-                                          double percent =
-                                              double.parse(discount['percent']);
-                                          String category =
-                                              discount['category'];
-                                          // ... access other properties as needed
+                                      // Iterate over each discount
+                                      for (var discount in discounts) {
+                                        // Access discount properties
+                                        int id = discount['id'];
+                                        double percent =
+                                            double.parse(discount['percent']);
+                                        String category = discount['category'];
+                                        // ... access other properties as needed
 
-                                          // Now, you can use these properties as needed.
-                                          // print('Discount ID: $id, Percent: $percent, Category: $category');
-                                        }
-                                      },
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons
-                                                .local_offer, // Replace with the desired icon
+                                        // Now, you can use these properties as needed.
+                                        // print('Discount ID: $id, Percent: $percent, Category: $category');
+                                      }
+                                    },
+                                    style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty
+                                          .all<Color>(Color.fromARGB(255, 9, 5, 39)), // Set the background color
+                                      padding: MaterialStateProperty.all<
+                                              EdgeInsetsGeometry>(
+                                          EdgeInsets.all(
+                                              12)), // Adjust the padding
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                             15), // Adjust the border radius as needed
+                                        ),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons
+                                              .local_offer, // Replace with the desired icon
+                                          color: Colors.white,
+                                          size:
+                                              20, // Adjust the size according to your preference
+                                        ),
+                                        SizedBox(
+                                          width:
+                                              8, // Adjust the spacing between icon and text
+                                        ),
+                                        Text(
+                                          isEnglish
+                                              ? 'Show discounts'
+                                              : 'عرض الخصومات',
+                                          style: TextStyle(
                                             color: Colors.white,
-                                            size:
-                                                20, // Adjust the size according to your preference
+                                            fontSize: 14,
+                                            fontFamily:
+                                                AppVariables.serviceFontFamily,
                                           ),
-                                          SizedBox(
-                                              width:
-                                                  8), // Adjust the spacing between icon and text
-                                          Text(
-                                            isEnglish
-                                                ? 'Show discounts'
-                                                : 'عرض الخصومات',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 14,
-                                              fontFamily: AppVariables
-                                                  .serviceFontFamily,
-                                            ),
-                                          ),
-                                        ],
-                                      )),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
                             ],
@@ -1069,7 +1097,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Icons.qr_code,
                               'Scan QR',
                               'فحص كود',
-                              'images/scan-qr.jpg', // Replace with the actual image path
+                              'images/qr.png', // Replace with the actual image path
                               () {
                                 Navigator.pushNamed(context, '/qr-scanner');
                               },
@@ -1081,7 +1109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Icons.store,
                                 'Nearby stores',
                                 'متاجر قريبة',
-                                'images/near-by.jpg', () {
+                                'images/nearby.jpg', () {
                               Navigator.pushNamed(context, '/nearby',
                                   arguments: filteredStores);
                             }),
@@ -1093,7 +1121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Icons.local_offer,
                                 'stores',
                                 'المتاجر',
-                                'images/best-deal.jpg', () {
+                                'images/stores.png', () {
                               Navigator.pushNamed(context, '/filteredStores');
                             }),
                           ],

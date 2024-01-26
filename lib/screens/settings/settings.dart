@@ -9,7 +9,9 @@ class SettingsScreen extends StatelessWidget {
     bool isDarkMode = Provider.of<AppState>(context).isDarkMode;
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
-Api api = Api(); 
+    Api api = Api();
+    Color ui = Color.fromARGB(255, 255, 100, 100);
+
     return DirectionalityWrapper(
         child: Scaffold(
       body: SingleChildScrollView(
@@ -90,48 +92,52 @@ Api api = Api();
 
                         // Language Section
 // Language Section
-Container(
-  padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-  margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
-  decoration: BoxDecoration(
-    color: Color(0xFFFFFFFF),
-    borderRadius: BorderRadius.circular(30),
-  ),
-  child: Row(
-    children: [
-      Icon(Icons.language),
-      SizedBox(width: 10),
-      Text(isEnglish ? 'Language' : 'اللغة'),
-      SizedBox(width: 10),
-      Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          color: Colors.white,
-        ),
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        child: DropdownButton<String>(
-          value: isEnglish ? 'English' : 'Arabic',
-          onChanged: (String? newValue) {
-            if (newValue == 'English') {
-              Provider.of<AppState>(context, listen: false)
-                  .toggleLanguage();
-            } else {
-              Provider.of<AppState>(context, listen: false)
-                  .toggleLanguage();
-            }
-          },
-          items: <String>['English', 'Arabic']
-              .map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-        ),
-      ),
-    ],
-  ),
-),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                          margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                          decoration: BoxDecoration(
+                            color: Color(0xFFFFFFFF),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(Icons.language),
+                              SizedBox(width: 10),
+                              Text(isEnglish ? 'Language' : 'اللغة'),
+                              SizedBox(width: 10),
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30),
+                                  color: Colors.white,
+                                ),
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: DropdownButton<String>(
+                                  value: isEnglish ? 'English' : 'العربية',
+                                  onChanged: (String? newValue) {
+                                    if (newValue == 'English') {
+                                      Provider.of<AppState>(context,
+                                              listen: false)
+                                          .toggleLanguage();
+                                    } else {
+                                      Provider.of<AppState>(context,
+                                              listen: false)
+                                          .toggleLanguage();
+                                    }
+                                  },
+                                  items: <String>['English', 
+                                  
+                                  'العربية']
+                                      .map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
 
                         // Other Settings...
                         buildSettingItem(context, Icons.settings,
@@ -141,6 +147,11 @@ Container(
                           await authProvider.updateUserData(context);
                         }),
 
+                        buildSettingItem(
+                            context, Icons.password, 'change password', 'تغير كلة السر ',
+                            () {
+                            Navigator.pushNamed(context, '/changePasswword');
+                        }),
                         buildSettingItem(
                             context, Icons.privacy_tip, 'Privacy', 'الخصوصية',
                             () {
@@ -157,27 +168,46 @@ Container(
                         //   // Implement messages logic
                         // }),
 
-                        ListTile(
-                          title: Text('Dark Mode'),
-                          trailing: Switch(
-                            value: isDarkMode,
-                            onChanged: (value) {
-                              Provider.of<AppState>(context, listen: false)
-                                  .toggleDarkMode();
-                            },
-                          ),
-                        ),
+                        // ListTile(
+                        //   title: Text('Dark Mode'),
+                        //   trailing: Switch(
+                        //     value: isDarkMode,
+                        //     onChanged: (value) {
+                        //       Provider.of<AppState>(context, listen: false)
+                        //           .toggleDarkMode();
+                        //     },
+                        //   ),
+                        // ),
+
                         // Logout Button
                         ElevatedButton(
                           onPressed: () {
-                            // Call the logout method from AuthProvider
-                            Provider.of<AuthProvider>(context, listen: false)
-                                .logout();
+                            QuickAlert.show(
+                                context: context,
+                                type: QuickAlertType.confirm,
+                                text: isEnglish
+                                    ? 'are you sure you want logout?'
+                                    : 'هل انت متأكد من عملية تسجيل الخروج من الحساب؟',
+                                confirmBtnText: isEnglish ? 'Yes' : 'نعم',
+                                cancelBtnText: isEnglish ? 'No' : 'لا',
+                                confirmBtnColor: Colors.green,
+                                onConfirmBtnTap: () {
+                                  // Call the logout method from AuthProvider
+                                  Provider.of<AuthProvider>(context,
+                                          listen: false)
+                                      .logout();
 
-                            // Navigate to the login screen or perform any other necessary actions
-                            Navigator.pushNamedAndRemoveUntil(
-                                context, Routes.login, (route) => false);
+                                  // Navigate to the login screen or perform any other necessary actions
+                                  Navigator.pushNamedAndRemoveUntil(
+                                      context, Routes.login, (route) => false);
+                                });
                           },
+                          style: ElevatedButton.styleFrom(
+                            primary: ui, // Set the background color
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
                           child: Text(isEnglish ? 'Logout' : 'تسجيل الخروج'),
                         ),
                       ],

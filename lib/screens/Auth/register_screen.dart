@@ -36,7 +36,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Api api = Api();
   @override
-  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // Fetch data here

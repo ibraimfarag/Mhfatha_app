@@ -28,10 +28,12 @@ export 'package:mhfatha/main.dart';
 // /* ------------------------------ AUTH & LOGIN ------------------------------ */
 export 'package:mhfatha/screens/Auth/login_screen.dart';
 export 'package:mhfatha/screens/Auth/register_screen.dart';
+export 'package:mhfatha/screens/Auth/restpassword.dart';
 
 // /* -------------------------------- settings -------------------------------- */
 export 'package:mhfatha/screens/settings/settings.dart';
 export 'package:mhfatha/screens/settings/Account.dart';
+export 'package:mhfatha/screens/settings/changePasswword.dart';
 
 /* -------------------------------- QrScreen ------------------------ */
 export 'package:mhfatha/screens/QR/qr_screen.dart';

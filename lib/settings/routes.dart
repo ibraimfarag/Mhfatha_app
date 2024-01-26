@@ -16,6 +16,8 @@ class Routes {
   static String nonetwork= '/nonet';
   static String account= '/account';
   static String filteredStores ='/filteredStores';
+  static String changePasswword ='/changePasswword';
+  static String restPassword ='/restpassword';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -33,6 +35,8 @@ class Routes {
       nonetwork: (context) => Nointernet(),
       account: (context) => AccountScreen(),
       filteredStores : (context) => FiteredStroes(),
+      changePasswword : (context) => ChangePassword(),
+      restPassword : (context) => RestPassword(),
 
       
     };

@@ -253,29 +253,26 @@ class Api {
     }
   }
 
-  // /* -------------------------------------------------------------------------- */
-  // /* ------------------------------ User Registration ------------------------ */
-  // /* -------------------------------------------------------------------------- */
-Future<bool> registerUser({
-  required BuildContext context,
-  required String lang,
-  required String firstName,
-  required String lastName,
-  required String gender,
-  required String birthday,
-  required String region,
-  required String mobile,
-  required String email,
-  required String password,
-  required String confirmPasswordController,
-  required int isVendor,
-  File? imageFile,
-  String? otp,
-}) async {
+  Future<bool> registerUser({
+    required BuildContext context,
+    required String lang,
+    required String firstName,
+    required String lastName,
+    required String gender,
+    required String birthday,
+    required String region,
+    required String mobile,
+    required String email,
+    required String password,
+    required String confirmPasswordController,
+    required int isVendor,
+    File? imageFile,
+    String? otp,
+  }) async {
     final url = Uri.parse('$baseUrl/register-post');
     bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
     _showLoadingDialog(context);
-OtpFieldController otpController = OtpFieldController();
+    OtpFieldController otpController = OtpFieldController();
     String enteredOtp = '';
 
     try {
@@ -304,104 +301,102 @@ OtpFieldController otpController = OtpFieldController();
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(await response.stream.bytesToString());
         print('Registration Response Data: $jsonResponse');
-if (jsonResponse['OTP'] == true) {
+        if (jsonResponse['OTP'] == true) {
           // Display dialog if 'OTP' is true
-            QuickAlert.show(
-          context: context,
-          type: QuickAlertType.custom,
-          showCancelBtn: true,
-          barrierDismissible: true,
-          confirmBtnText: isEnglish ? 'verify' : 'تفعيل',
-          cancelBtnText: isEnglish ? 'cancel' : 'الغاء',
-          customAsset: 'images/MeG.gif',
-          widget: Column(
-            children: [
-              Text(jsonResponse['message']),
-              OTPTextField(
-                controller: otpController,
-                length: 5,
-                width: MediaQuery.of(context).size.width,
-                fieldWidth: 20,
-                style: TextStyle(fontSize: 17),
-                textFieldAlignment: MainAxisAlignment.spaceAround,
-                fieldStyle: FieldStyle.underline,
-                onCompleted: (pin) {
-                  enteredOtp = pin;
-                  print("Completed: " + pin);
-                },
-              ),
-            ],
-          ),
-          onConfirmBtnTap: () async {
-            try {
-              QuickAlert.show(
-                context: context,
-                type: QuickAlertType.loading,
-                title: isEnglish ? 'Loading' : 'انتظر قليلاً',
-                text:
-                    isEnglish ? 'Fetching your data' : 'جاري تحميل البيانات',
-              );
-
-              final request = http.MultipartRequest('POST', url)
-                ..fields['lang'] = lang
-                ..fields['first_name'] = firstName
-                ..fields['last_name'] = lastName
-                ..fields['gender'] = gender
-                ..fields['birthday'] = birthday
-                ..fields['region'] = region
-                ..fields['mobile'] = mobile
-                ..fields['email'] = email
-                ..fields['password'] = password
-                ..fields['password_confirmation'] = confirmPasswordController
-                ..fields['otp'] = enteredOtp
-                ..fields['is_vendor'] = isVendor.toString();
-              // Use the correct field name for the file, in this case, 'photo'
-              // ..files.add(await http.MultipartFile.fromPath('photo', imageFile.path));
-              if (imageFile != null) {
-                // Use the correct field name for the file, in this case, 'photo'
-                request.files.add(await http.MultipartFile.fromPath(
-                    'photo', imageFile.path));
-              }
-              final response = await request.send();
-
-              if (response.statusCode == 200) {
-                final jsonResponse =
-                    jsonDecode(await response.stream.bytesToString());
-                print('Registration Response Data: $jsonResponse');
-                Navigator.of(context, rootNavigator: true).pop();
-
-                QuickAlert.show(
-                  context: context,
-                  type: QuickAlertType.success,
-                  text: jsonResponse['message'] ?? '',
-                  onConfirmBtnTap: () {
-                    Navigator.pushNamed(context, '/login');
+          QuickAlert.show(
+            context: context,
+            type: QuickAlertType.custom,
+            showCancelBtn: true,
+            barrierDismissible: true,
+            confirmBtnText: isEnglish ? 'verify' : 'تفعيل',
+            cancelBtnText: isEnglish ? 'cancel' : 'الغاء',
+            customAsset: 'images/MeG.gif',
+            widget: Column(
+              children: [
+                Text(jsonResponse['message']),
+                OTPTextField(
+                  controller: otpController,
+                  length: 5,
+                  width: MediaQuery.of(context).size.width,
+                  fieldWidth: 20,
+                  style: TextStyle(fontSize: 17),
+                  textFieldAlignment: MainAxisAlignment.spaceAround,
+                  fieldStyle: FieldStyle.underline,
+                  onCompleted: (pin) {
+                    enteredOtp = pin;
+                    print("Completed: " + pin);
                   },
-                );
-
-                return jsonResponse['success'];
-              } else {
-                final jsonResponse =
-                    jsonDecode(await response.stream.bytesToString());
-                final MeC = jsonResponse['error'];
-                Navigator.pop(context);
-
+                ),
+              ],
+            ),
+            onConfirmBtnTap: () async {
+              try {
                 QuickAlert.show(
                   context: context,
-                  type: QuickAlertType.error,
-                  title: 'Oops...',
-                  text: '$MeC',
+                  type: QuickAlertType.loading,
+                  title: isEnglish ? 'Loading' : 'انتظر قليلاً',
+                  text:
+                      isEnglish ? 'Fetching your data' : 'جاري تحميل البيانات',
                 );
-              }
-            } catch (e) {
-              print(e);
-            }
-          },
-        );
 
-      } 
-                    return true;
-      
+                final request = http.MultipartRequest('POST', url)
+                  ..fields['lang'] = lang
+                  ..fields['first_name'] = firstName
+                  ..fields['last_name'] = lastName
+                  ..fields['gender'] = gender
+                  ..fields['birthday'] = birthday
+                  ..fields['region'] = region
+                  ..fields['mobile'] = mobile
+                  ..fields['email'] = email
+                  ..fields['password'] = password
+                  ..fields['password_confirmation'] = confirmPasswordController
+                  ..fields['otp'] = enteredOtp
+                  ..fields['is_vendor'] = isVendor.toString();
+                // Use the correct field name for the file, in this case, 'photo'
+                // ..files.add(await http.MultipartFile.fromPath('photo', imageFile.path));
+                if (imageFile != null) {
+                  // Use the correct field name for the file, in this case, 'photo'
+                  request.files.add(await http.MultipartFile.fromPath(
+                      'photo', imageFile.path));
+                }
+                final response = await request.send();
+
+                if (response.statusCode == 200) {
+                  final jsonResponse =
+                      jsonDecode(await response.stream.bytesToString());
+                  print('Registration Response Data: $jsonResponse');
+                  Navigator.of(context, rootNavigator: true).pop();
+
+                  QuickAlert.show(
+                    context: context,
+                    type: QuickAlertType.success,
+                    text: jsonResponse['message'] ?? '',
+                    onConfirmBtnTap: () {
+                      Navigator.pushNamed(context, '/login');
+                    },
+                  );
+
+                  return jsonResponse['success'];
+                } else {
+                  final jsonResponse =
+                      jsonDecode(await response.stream.bytesToString());
+                  final MeC = jsonResponse['error'];
+                  Navigator.pop(context);
+
+                  QuickAlert.show(
+                    context: context,
+                    type: QuickAlertType.error,
+                    title: 'Oops...',
+                    text: '$MeC',
+                  );
+                }
+              } catch (e) {
+                print(e);
+              }
+            },
+          );
+        }
+        return true;
       } else {
         final jsonResponse = jsonDecode(await response.stream.bytesToString());
 
@@ -585,6 +580,7 @@ if (jsonResponse['OTP'] == true) {
     final url = Uri.parse('$baseUrl/user');
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
+
     try {
       final response = await http.get(
         url,
@@ -623,6 +619,7 @@ if (jsonResponse['OTP'] == true) {
     required String mobile,
     required String email,
     String? otp,
+    File? imageFile,
     required BuildContext context,
   }) async {
     final url = Uri.parse('$baseUrl/auth/update');
@@ -632,7 +629,6 @@ if (jsonResponse['OTP'] == true) {
     bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
     OtpFieldController otpController = OtpFieldController();
     String enteredOtp = '';
-
     try {
       QuickAlert.show(
         context: context,
@@ -640,26 +636,30 @@ if (jsonResponse['OTP'] == true) {
         title: isEnglish ? 'Loading' : 'انتظر قليلاً',
         text: isEnglish ? 'Fetching your data' : 'جاري تحميل البيانات',
       );
-      final response = await http.post(
-        url,
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ${authProvider.token}',
-        },
-        body: jsonEncode(<String, dynamic>{
-          'lang': lang,
-          'first_name': firstName,
-          'last_name': lastName,
-          'birthday': birthday,
-          'region': region,
-          'mobile': mobile,
-          'email': email,
-        }),
-      );
+
+      final request = http.MultipartRequest('POST', url)
+        ..headers['Content-Type'] = 'application/json'
+        ..headers['Authorization'] = 'Bearer ${authProvider.token}'
+        ..fields['lang'] = lang
+        ..fields['first_name'] = firstName
+        ..fields['last_name'] = lastName
+        ..fields['birthday'] = birthday
+        ..fields['region'] = region
+        ..fields['mobile'] = mobile
+        ..fields['otp'] = enteredOtp
+        ..fields['email'] = email;
+
+      if (imageFile != null) {
+        // Use the correct field name for the file, in this case, 'photo'
+        request.files
+            .add(await http.MultipartFile.fromPath('photo', imageFile.path));
+      }
+
+      final response = await request.send();
 
       if (response.statusCode == 200) {
         Navigator.pop(context);
-        final jsonResponse = jsonDecode(response.body);
+        final jsonResponse = jsonDecode(await response.stream.bytesToString());
         final MessageC = jsonResponse['message'];
         print('Update User Profile Response Data: $jsonResponse');
 
@@ -702,25 +702,29 @@ if (jsonResponse['OTP'] == true) {
                   text:
                       isEnglish ? 'Fetching your data' : 'جاري تحميل البيانات',
                 );
-                final response = await http.post(
-                  url,
-                  headers: <String, String>{
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ${authProvider.token}',
-                  },
-                  body: jsonEncode(<String, dynamic>{
-                    'lang': lang,
-                    'first_name': firstName,
-                    'last_name': lastName,
-                    'birthday': birthday,
-                    'region': region,
-                    'mobile': mobile,
-                    'email': email,
-                    'otp': enteredOtp,
-                  }),
-                );
+                final request = http.MultipartRequest('POST', url)
+                  ..headers['Content-Type'] = 'application/json'
+                  ..headers['Authorization'] = 'Bearer ${authProvider.token}'
+                  ..fields['lang'] = lang
+                  ..fields['first_name'] = firstName
+                  ..fields['last_name'] = lastName
+                  ..fields['birthday'] = birthday
+                  ..fields['region'] = region
+                  ..fields['mobile'] = mobile
+                  ..fields['otp'] = enteredOtp
+                  ..fields['email'] = email;
+
+                if (imageFile != null) {
+                  // Use the correct field name for the file, in this case, 'photo'
+                  request.files.add(await http.MultipartFile.fromPath(
+                      'photo', imageFile.path));
+                }
+
+                final response = await request.send();
+
                 if (response.statusCode == 200) {
-                  final jsonResponse = jsonDecode(response.body);
+                  final jsonResponse =
+                      jsonDecode(await response.stream.bytesToString());
                   final MeC = jsonResponse['message'];
                   Navigator.pop(context);
                   Navigator.pop(context);
@@ -731,7 +735,8 @@ if (jsonResponse['OTP'] == true) {
                   );
                   await authProvider.updateUserData(context);
                 } else {
-                  final jsonResponse = jsonDecode(response.body);
+                  final jsonResponse =
+                      jsonDecode(await response.stream.bytesToString());
                   final MeC = jsonResponse['error'];
                   Navigator.pop(context);
 
@@ -757,10 +762,10 @@ if (jsonResponse['OTP'] == true) {
 
         return jsonResponse['success'];
       } else {
-        final jsonResponse = jsonDecode(response.body);
+        final jsonResponse = jsonDecode(await response.stream.bytesToString());
         print(jsonResponse);
         throw Exception(
-            'Failed to update user profile. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
+            'Failed to update user profile. Server responded with status code: ${response.statusCode} and error message: $jsonResponse');
       }
     } catch (e) {
       // print('Error updating user profile: $e');
@@ -768,9 +773,6 @@ if (jsonResponse['OTP'] == true) {
     }
   }
 
-  // /* -------------------------------------------------------------------------- */
-  // /* ---------------------------- Filter Stores API ------------------------- */
-  // /* -------------------------------------------------------------------------- */
   Future<Map<String, dynamic>> filterStores(
     BuildContext context,
     String region,
@@ -811,6 +813,104 @@ if (jsonResponse['OTP'] == true) {
       print('Error during filtering stores: $e');
       throw Exception(
           'Failed to filter stores. Check your internet connection.');
+    }
+  }
+
+  Future<String> changePassword(BuildContext context, String oldPassword,
+      String newPassword, String confirmationNewPassword) async {
+    final url = Uri.parse('$baseUrl/auth/changepassword');
+    String lang = Provider.of<AppState>(context, listen: false).display;
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+
+    try {
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${authProvider.token}',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'lang': lang,
+          'old_password': oldPassword,
+          'new_password': newPassword,
+          'new_password_confirmation': confirmationNewPassword,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+
+        String message = jsonResponse['message'];
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.success,
+          text: message,
+        );
+        return message;
+      } else {
+        final jsonResponse = jsonDecode(response.body);
+
+        String message = jsonResponse['error'];
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          text: message,
+        );
+        return message;
+      }
+    } catch (e) {
+      print('Error changing password: $e');
+      throw Exception(
+          'Failed to change password. Check your internet connection.');
+    }
+  }
+
+  Future<Map<String, dynamic>> restPassword(
+      BuildContext context, String emailOrMobile,
+      [String? otp,
+      String? new_password,
+      String? new_password_confirmation]) async {
+    final url = Uri.parse('$baseUrl/auth/resetPassword');
+    String lang = Provider.of<AppState>(context, listen: false).display;
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+
+    try {
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${authProvider.token}',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'lang': lang,
+          'email_or_mobile': emailOrMobile,
+          'otp': otp,
+          'new_password': new_password,
+          'new_password_confirmation': new_password_confirmation
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        return jsonResponse;
+      } else {
+        final jsonResponse = jsonDecode(response.body);
+        String message = jsonResponse['error'];
+        QuickAlert.show(
+          context: context,
+          title: '',
+          type: QuickAlertType.error,
+          text: message,
+        );
+        // Returning the message in case of error
+        return {'error': message};
+      }
+    } catch (e) {
+      print('Error changing password: $e');
+      throw Exception(
+          'Failed to change password. Check your internet connection.');
     }
   }
 }
