@@ -21,6 +21,7 @@ export 'package:mhfatha/layout/bottom_nav.dart';
 export 'package:mhfatha/layout/sidebar.dart';
 export 'package:mhfatha/layout/theme_provider.dart';
 export 'package:mhfatha/layout/background.dart';
+export 'package:mhfatha/layout/bottom_nav_bar.dart';
 
 // /* ---------------------------------- MAIN ---------------------------------- */
 export 'package:mhfatha/main.dart';
@@ -171,4 +172,4 @@ export 'package:mhfatha/widgets/VendorJoin.dart';
 // ─── appBar ────────────────────────────────────────────────────────────────
 export 'package:mhfatha/widgets/appbar.dart';
 
-
+export 'package:custom_navigation_bar/custom_navigation_bar.dart';
