@@ -22,15 +22,13 @@ class Api {
         Map<String, dynamic> data = json.decode(response.body);
 
         // You can add your logic here when the internet is connected
-        print('Internet connected');
         return 'Online';
       } else {
-        print(
-            'Failed to check internet connection. Status code: ${response.statusCode}');
+      
         return 'Offline';
       }
     } catch (e) {
-      print('Error checking internet connection: $e');
+   
       return 'Offline';
     }
   }
@@ -64,8 +62,7 @@ class Api {
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
-        print(
-            'Response Data: $jsonResponse'); // Print the entire response for debugging
+     // Print the entire response for debugging
         String token = jsonResponse['token'];
         Map<String, dynamic> user = jsonResponse['user'];
 
@@ -79,7 +76,6 @@ class Api {
 
         final jsonResponse = jsonDecode(response.body);
 
-        print('Error during login: ${response.body}');
         String errorMessage = jsonResponse['error'] ?? 'Unknown error';
 
         QuickAlert.show(
@@ -88,12 +84,11 @@ class Api {
           title: isEnglish ? 'Error' : 'خطأ',
           text: errorMessage,
         );
-        print('Error during login: ${response.body}');
+    
         throw Exception(
             'Failed to login. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
       }
     } catch (e) {
-      print('Error during login: $e');
       return false;
     }
   }
@@ -121,7 +116,6 @@ class Api {
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
-        // print('Response Data: $jsonResponse');
 
         // Convert the response data to a JSON string
         String jsonString = jsonEncode(jsonResponse);
@@ -132,7 +126,6 @@ class Api {
             'Failed to send location. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
       }
     } catch (e) {
-      print('Error during sending location: $e');
       return ''; // Return an empty string or handle the error as needed
     }
   }
@@ -160,10 +153,8 @@ class Api {
           'lang': lang
         }),
       );
-      print(lang);
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
-        // print('Store Details Response Data: $jsonResponse');
 
         // Convert the response data to a JSON string
         String jsonString = jsonEncode(jsonResponse);
@@ -174,14 +165,10 @@ class Api {
             'Failed to get store details. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
       }
     } catch (e) {
-      print('Error getting store details: $e');
       return ''; // Return an empty string or handle the error as needed
     }
   }
 
-  // /* -------------------------------------------------------------------------- */
-  // /* ---------------------------- Store QR Code API -------------------------- */
-  // /* -------------------------------------------------------------------------- */
 
   Future<String> getStoreDetailsByQR(
       AuthProvider authProvider, String encryptedStoreID, String lang) async {
@@ -202,7 +189,6 @@ class Api {
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
-        // print('Store QR Response Data: $jsonResponse');
 
         // Convert the response data to a JSON string
         String jsonString = jsonEncode(jsonResponse);
@@ -213,7 +199,6 @@ class Api {
             'Failed to get store details by QR. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
       }
     } catch (e) {
-      print('Error getting store details by QR: $e');
       return ''; // Return an empty string or handle the error as needed
     }
   }
@@ -240,15 +225,11 @@ class Api {
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
-        print('Discount Details Response Data: $jsonResponse');
         return response; // Include jsonResponse with success flag
       } else {
-        print(
-            'Failed to post discount details. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
         return response; // Include error message with failure flag
       }
     } catch (e) {
-      print('Error during posting discount details: $e');
       return false; // Include error message with failure flag
     }
   }
@@ -300,7 +281,6 @@ class Api {
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(await response.stream.bytesToString());
-        print('Registration Response Data: $jsonResponse');
         if (jsonResponse['OTP'] == true) {
           // Display dialog if 'OTP' is true
           QuickAlert.show(
@@ -324,7 +304,6 @@ class Api {
                   fieldStyle: FieldStyle.underline,
                   onCompleted: (pin) {
                     enteredOtp = pin;
-                    print("Completed: " + pin);
                   },
                 ),
               ],
@@ -364,7 +343,6 @@ class Api {
                 if (response.statusCode == 200) {
                   final jsonResponse =
                       jsonDecode(await response.stream.bytesToString());
-                  print('Registration Response Data: $jsonResponse');
                   Navigator.of(context, rootNavigator: true).pop();
 
                   QuickAlert.show(
@@ -391,7 +369,6 @@ class Api {
                   );
                 }
               } catch (e) {
-                print(e);
               }
             },
           );
@@ -434,7 +411,6 @@ class Api {
             'Failed to register. Server responded with status code: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error during registration: $e');
       return false;
     }
   }
@@ -458,7 +434,6 @@ class Api {
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
-        // print('Search Response Data: $jsonResponse');
 
         // Convert the response data to a JSON string
         String jsonString = jsonEncode(jsonResponse);
@@ -469,7 +444,6 @@ class Api {
             'Failed to search stores. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
       }
     } catch (e) {
-      print('Error during store search: $e');
       return ''; // Return an empty string or handle the error as needed
     }
   }
@@ -505,7 +479,6 @@ class Api {
             'Failed to get user discounts. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
       }
     } catch (e) {
-      print('Error getting user discounts: $e');
       return ''; // Return an empty string or handle the error as needed
     }
   }
@@ -525,7 +498,6 @@ class Api {
       );
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
-        // print(jsonResponse);
         // Check if 'regions' key exists in the JSON response
         if (jsonResponse.containsKey('regions')) {
           return jsonResponse;
@@ -537,7 +509,6 @@ class Api {
             'Failed to fetch regions and cities. Server responded with status code: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error getting regions and cities: $e');
       throw Exception(
           'Failed to fetch regions and cities. Check your internet connection.');
     }
@@ -556,9 +527,7 @@ class Api {
       );
 
       if (response.statusCode == 200) {
-        print('statusCode 200');
         final jsonResponse = jsonDecode(response.body);
-        // print(jsonResponse);
         // Check if 'regions' key exists in the JSON response
         if (jsonResponse.containsKey('regions')) {
           return jsonResponse;
@@ -570,7 +539,6 @@ class Api {
             'Failed to fetch regions and cities. Server responded with status code: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error getting regions and cities: $e');
       throw Exception(
           'Failed to fetch regions and cities. Check your internet connection.');
     }
@@ -595,7 +563,6 @@ class Api {
         if (jsonResponse['user'] is Map<String, dynamic>) {
           // Check if 'user' is a Map<String, dynamic>
           Map<String, dynamic> userData = jsonResponse['user'];
-          // print(userData);
           return userData;
         } else {
           throw Exception('Invalid user data format received from the server.');
@@ -605,7 +572,6 @@ class Api {
             'Failed to get user details. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
       }
     } catch (e) {
-      print('Error getting user details: $e');
       throw Exception(
           'Failed to get user details. Check your internet connection.');
     }
@@ -661,8 +627,6 @@ class Api {
         Navigator.pop(context);
         final jsonResponse = jsonDecode(await response.stream.bytesToString());
         final MessageC = jsonResponse['message'];
-        print('Update User Profile Response Data: $jsonResponse');
-
         await authProvider.updateUserData(context);
 
         if (jsonResponse['OTP'] == true) {
@@ -688,7 +652,6 @@ class Api {
                   fieldStyle: FieldStyle.underline,
                   onCompleted: (pin) {
                     enteredOtp = pin;
-                    print("Completed: " + pin);
                   },
                 ),
               ],
@@ -748,7 +711,6 @@ class Api {
                   );
                 }
               } catch (e) {
-                print(e);
               }
             },
           );
@@ -763,12 +725,10 @@ class Api {
         return jsonResponse['success'];
       } else {
         final jsonResponse = jsonDecode(await response.stream.bytesToString());
-        print(jsonResponse);
         throw Exception(
             'Failed to update user profile. Server responded with status code: ${response.statusCode} and error message: $jsonResponse');
       }
     } catch (e) {
-      // print('Error updating user profile: $e');
       return false;
     }
   }
@@ -803,14 +763,12 @@ class Api {
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
-        // print(jsonResponse);
         return jsonResponse;
       } else {
         throw Exception(
             'Failed to filter stores. Server responded with status code: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error during filtering stores: $e');
       throw Exception(
           'Failed to filter stores. Check your internet connection.');
     }
@@ -860,7 +818,6 @@ class Api {
         return message;
       }
     } catch (e) {
-      print('Error changing password: $e');
       throw Exception(
           'Failed to change password. Check your internet connection.');
     }
@@ -908,7 +865,6 @@ class Api {
         return {'error': message};
       }
     } catch (e) {
-      print('Error changing password: $e');
       throw Exception(
           'Failed to change password. Check your internet connection.');
     }
