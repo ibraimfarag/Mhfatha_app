@@ -57,7 +57,8 @@ class _QrScannerState extends State<QrScanner> {
             ],
           ),
         ),
-        bottomNavigationBar: BottomNavBar(initialIndex: 1),
+        // bottomNavigationBar: BottomNavBar(initialIndex: 1),
+        bottomNavigationBar: NewNav(),
       ),
     );
   }

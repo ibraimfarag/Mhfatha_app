@@ -28,7 +28,10 @@ class _AccountScreenState extends State<AccountScreen> {
   @override
   void initState() {
     super.initState();
-    authProvider = Provider.of<AuthProvider>(context, listen: false);
+    
+   AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+    authProvider.updateUserData(context);
     selectedRegion = '${authProvider.user!['region']}';
   }
 
@@ -263,7 +266,8 @@ imageFile: _selectedProfileImagePath != null ? File(_selectedProfileImagePath ??
                   )
                 ])),
       ),
-      bottomNavigationBar: BottomNavBar(initialIndex: 2),
+      // bottomNavigationBar: BottomNavBar(initialIndex: 2),
+      bottomNavigationBar: NewNav(),
     ));
   }
 

@@ -9,7 +9,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class Api {
-  static const String baseUrl = 'https://mhfatha.net/api';
+  
+  static const String baseUrl = AppVariables.ApiUrl;
 
 // /* -------------------------------------------------------------------------- */
 // /* ----------------------------- check internet ----------------------------- */
@@ -156,7 +157,6 @@ class Api {
 
         // Convert the response data to a JSON string
         String jsonString = jsonEncode(jsonResponse);
-        print(jsonString);
 
         return jsonString;
       } else {

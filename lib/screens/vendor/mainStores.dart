@@ -5,12 +5,12 @@ import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:mhfatha/settings/imports.dart';
 
-class ChangePassword extends StatefulWidget {
+class MainStores extends StatefulWidget {
   @override
-  State<ChangePassword> createState() => _ChangePasswordState();
+  State<MainStores> createState() => _MainStoresState();
 }
 
-class _ChangePasswordState extends State<ChangePassword> {
+class _MainStoresState extends State<MainStores> {
   late AuthProvider authProvider; // Declare authProvider variable
 
   Color backgroundColor = Color.fromARGB(220, 255, 255, 255);
@@ -113,19 +113,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 20),
-                        buildSettingItem(
-                            context, 'current password', 'كلمة السر الحالية',
-                            () {
-                          // Implement report logic
-                        }, currentPassword, ' '),
-                        buildSettingItem(
-                            context, 'new password', 'كلمة السر الجديدة', () {
-                          // Implement report logic
-                        }, newpassword, ' '),
-                        buildSettingItem(context, 'confirm new password',
-                            'تأكيد كلمة السر الجديدة', () {
-                          // Implement report logic
-                        }, confirmPassword, ' '),
+                  
                         SizedBox(
                           height: 24,
                         ),
@@ -135,38 +123,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                           children: [
                             ElevatedButton(
                               onPressed: () async {
-                                QuickAlert.show(
-                                  context: context,
-                                  type: QuickAlertType.confirm,
-                                  text: isEnglish
-                                      ? 'Do you want to update profile'
-                                      : 'هل انت متاكد من تحديث البيانات الشخصية',
-                                  confirmBtnText: isEnglish ? 'Yes' : 'نعم',
-                                  cancelBtnText: isEnglish ? 'No' : 'لا',
-                                  confirmBtnColor: Colors.green,
-                                  onConfirmBtnTap: () async {
-                                    Navigator.pop(context);
-                                    String oldPassword = currentPassword
-                                        .text; // Assuming you have a TextEditingController for the email field
-                                    String newPassword = newpassword
-                                        .text; // Assuming you have a TextEditingController for the email field
-                                    String confirmationNewPassword =
-                                        confirmPassword.text;
-                                    try {
-                                      String message = await api.changePassword(
-                                        context,
-                                        oldPassword,
-                                        newPassword,
-                                        confirmationNewPassword,
-                                      );
-                                      // Show success message or handle accordingly
-                                     
-                                    } catch (e) {
-                                      // Handle error, show error message, etc.
-                                     
-                                    }
-                                  },
-                                );
+                          
                               },
                               style: ElevatedButton.styleFrom(
                                 primary: ui, // Set the background color
@@ -186,7 +143,6 @@ class _ChangePasswordState extends State<ChangePassword> {
                   )
                 ])),
       ),
-      // bottomNavigationBar: BottomNavBar(initialIndex: 2),
       bottomNavigationBar: NewNav(),
     ));
   }

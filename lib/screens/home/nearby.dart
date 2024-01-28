@@ -97,7 +97,8 @@ class _NearByState extends State<NearBy> {
             ),
           ),
         ),
-        bottomNavigationBar: BottomNavBar(initialIndex: 0),
+        // bottomNavigationBar: BottomNavBar(initialIndex: 0),
+        bottomNavigationBar: NewNav(),
       ),
     );
   }

@@ -2,7 +2,26 @@
 
 import 'package:mhfatha/settings/imports.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
+
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+@override
+
+
+  void initState() {
+    super.initState();
+
+   AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+    authProvider.updateUserData(context);
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
@@ -215,7 +234,8 @@ class SettingsScreen extends StatelessWidget {
                   )
                 ])),
       ),
-      bottomNavigationBar: BottomNavBar(initialIndex: 2),
+      // bottomNavigationBar: BottomNav(initialIndex: 2),
+      bottomNavigationBar: NewNav(),
     ));
   }
 

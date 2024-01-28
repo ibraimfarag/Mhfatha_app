@@ -12,7 +12,8 @@ class AppVariables {
   AppVariables._internal();
 
   // Define your App variables here
-  String appName = 'My App';
+  static const String appName = 'My App';
+  static const String ApiUrl = 'https://mhfatha.net/api';
 
   // static Color primaryColor = Color(0xFF001844);
   MaterialColor primaryColor = Colors.primaries[0];

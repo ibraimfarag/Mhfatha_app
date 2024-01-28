@@ -20,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Api api = Api();
   // Declare a controller for the QR code scanner
-  late QRViewController controller;
+  // late QRViewController controller;
 
   List<Map<String, dynamic>> storeList = [];
   bool isLoading = true;
@@ -50,6 +50,10 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       }
     });
+
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+    authProvider.updateUserData(context);
   }
 //  @override
 // void dispose() {
@@ -275,7 +279,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context); // Close the bottom sheet
-                    Navigator.pushNamed(context, '/store-info',
+                    Navigator.pushReplacementNamed(context, '/store-info',
                         arguments: store);
                   },
                   style: ElevatedButton.styleFrom(
@@ -699,12 +703,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 : Alignment.center,
                             child: TextButton(
                               onPressed: () async {
-                                Navigator.pushNamed(context, '/store-info',
+                                Navigator.pushReplacementNamed(context, '/store-info',
                                     arguments: store);
                               },
                               style: ButtonStyle(
                                 backgroundColor:
-                                    MaterialStateProperty. all<Color>(Color.fromARGB(255, 9, 5, 39)), // Set the background color
+                                    MaterialStateProperty.all<Color>(
+                                        Color.fromARGB(255, 9, 5,
+                                            39)), // Set the background color
                                 padding: MaterialStateProperty.all<
                                         EdgeInsetsGeometry>(
                                     EdgeInsets.all(12)), // Adjust the padding
@@ -712,7 +718,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(
-                                       15), // Adjust the border radius as needed
+                                        15), // Adjust the border radius as needed
                                   ),
                                 ),
                               ),
@@ -801,7 +807,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     },
                                     style: ButtonStyle(
                                       backgroundColor: MaterialStateProperty
-                                          .all<Color>(Color.fromARGB(255, 9, 5, 39)), // Set the background color
+                                          .all<Color>(Color.fromARGB(255, 9, 5,
+                                              39)), // Set the background color
                                       padding: MaterialStateProperty.all<
                                               EdgeInsetsGeometry>(
                                           EdgeInsets.all(
@@ -810,7 +817,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           RoundedRectangleBorder>(
                                         RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(
-                                             15), // Adjust the border radius as needed
+                                              15), // Adjust the border radius as needed
                                         ),
                                       ),
                                     ),
@@ -971,8 +978,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       TextStyle(color: Color(0xFFA9A7B2)),
                                   filled: true,
                                   hintText: isEnglish
-                                      ? 'Search stores'
-                                      : 'ابحث عن متجر',
+                                      ? 'Search '
+                                      : 'البحث',
                                   prefixIcon: Icon(Icons.search),
                                   fillColor: isDark
                                       ? Color.fromARGB(251, 34, 34, 34)
@@ -1038,7 +1045,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 size: 24),
                             SizedBox(width: 10),
                             Text(
-                              isEnglish ? 'Nearby Stores' : 'متاجر قريبة',
+                              isEnglish ? 'Nearby discounts' : 'خصومات قريبة منك ',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -1096,21 +1103,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
                               Icons.qr_code,
                               'Scan QR',
-                              'فحص كود',
+                              'مسح كود',
                               'images/qr.png', // Replace with the actual image path
                               () {
-                                Navigator.pushNamed(context, '/qr-scanner');
+                                Navigator.pushReplacementNamed(context, '/qr-scanner');
                               },
                             ),
 
                             buildIconWithText(
-                                width: 100,
+                                width: 120,
                                 height: 150,
                                 Icons.store,
-                                'Nearby stores',
-                                'متاجر قريبة',
+                                'Nearby discounts',
+                                'خصومات قريبة',
                                 'images/nearby.jpg', () {
-                              Navigator.pushNamed(context, '/nearby',
+                              Navigator.pushReplacementNamed(context, '/nearby',
                                   arguments: filteredStores);
                             }),
                             // buildIconWithText(Icons.search, 'Search', 'البحث', () {}),
@@ -1119,10 +1126,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 width: 100,
                                 height: 150,
                                 Icons.local_offer,
-                                'stores',
-                                'المتاجر',
+                                'discounts',
+                                'الخصومات',
                                 'images/stores.png', () {
-                              Navigator.pushNamed(context, '/filteredStores');
+                              Navigator.pushReplacementNamed(context, '/filteredStores');
                             }),
                           ],
                         ),
@@ -1205,7 +1212,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       jsonDecode(storeDetails);
                                   Map<String, dynamic> store =
                                       storeDetailsMap['store'];
-                                  Navigator.pushNamed(context, '/store-info',
+                                  Navigator.pushReplacementNamed(context, '/store-info',
                                       arguments: store);
 
                                   print(store);
@@ -1228,8 +1235,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          // bottomNavigationBar: BottomNavBar(initialIndex: 0),
-          bottomNavigationBar: BottomNavBar(initialIndex: 0),
+          // bottomNavigationBar: BottomNav(initialIndex: 0),
+          bottomNavigationBar: NewNav(),
         ),
       ),
     );
