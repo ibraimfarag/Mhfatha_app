@@ -37,7 +37,7 @@ class _NewNavState extends State<NewNav> {
               '/settings', currentRoute == '/settings'),
           if (authProvider.isVendor)
             _buildNavItem(Icons.store, isEnglish ? 'stores' : 'المتاجر',
-                '/settings', currentRoute == '/MainStores'),
+                '/mainstores', currentRoute == '/mainstores'),
         ],
       ),
     );

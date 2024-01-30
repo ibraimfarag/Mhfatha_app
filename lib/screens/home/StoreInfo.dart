@@ -255,6 +255,121 @@ class StoreInfoScreen extends StatelessWidget {
                     ],
                   ),
                 ),
+
+                if (storeData?['discounts'] == null ||
+                    storeData?['discounts'].isEmpty)
+                  Container(
+                      width: MediaQuery.of(context).size.width - 100,
+                      margin: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Text(
+                        isEnglish
+                            ? 'No discounts available now'
+                            : 'لا توجد خصومات متاحة الآن',
+                        style: TextStyle(fontSize: 16),
+                      ))
+                else
+                  // /* ------------------------------ Discounts ------------------------------ */
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          Provider.of<AppState>(context).isEnglish
+                              ? 'Discounts:'
+                              : 'الخصومات:',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        Container(
+                          constraints: BoxConstraints(
+                            minHeight: 100,
+                            maxHeight: 250,
+                          ),
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            child: Column(
+                              children:
+                                  (storeData?['discounts'] is List<dynamic>
+                                          ? (storeData?['discounts']
+                                              as List<dynamic>)
+                                          : [])
+                                      .map<Widget>((discount) {
+                                return Container(
+                                    width: 300,
+                                    margin: const EdgeInsets.all(10),
+                                    padding: const EdgeInsets.all(20),
+                                    decoration: BoxDecoration(
+                                      color: const Color.fromARGB(
+                                          255, 228, 224, 224),
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              isEnglish
+                                                  ? 'Discount on: ${discount['category']} '
+                                                  : 'خصم على : ${discount['category']} ',
+                                              style: TextStyle(fontSize: 14),
+                                              textAlign: isEnglish
+                                                  ? TextAlign.left
+                                                  : TextAlign.right,
+                                            )
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              isEnglish
+                                                  ? 'Percent: ${discount['percent']}%'
+                                                  : 'نسبة الخصم : ${discount['percent']}% ',
+                                              style: TextStyle(fontSize: 14),
+                                              textAlign: isEnglish
+                                                  ? TextAlign.left
+                                                  : TextAlign.right,
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              isEnglish
+                                                  ? 'Days Remaining: ${calculateDaysRemaining(discount['end_date'])} ${getEnglishDaysWord(calculateDaysRemaining(discount['end_date']))}'
+                                                  : 'الأيام المتبقية: ${calculateDaysRemaining(discount['end_date'])} ${getArabicDaysWord(calculateDaysRemaining(discount['end_date']))}',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.blue),
+                                              textAlign: isEnglish
+                                                  ? TextAlign.left
+                                                  : TextAlign.right,
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ));
+                              }).toList(),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+
                 //  /* ------------------------------ store address ------------------------------ */
                 Container(
                   margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -374,112 +489,6 @@ class StoreInfoScreen extends StatelessWidget {
                             Provider.of<AppState>(context).isEnglish,
                           ),
                           style: TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                if (storeData?['discounts'] == null ||
-                    storeData?['discounts'].isEmpty)
-                  Container(
-                      width: MediaQuery.of(context).size.width - 100,
-                      margin: const EdgeInsets.all(10),
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Text(
-                        isEnglish
-                            ? 'No discounts available now'
-                            : 'لا توجد خصومات متاحة الآن',
-                        style: TextStyle(fontSize: 16),
-                      ))
-                else
-                  // /* ------------------------------ Discounts ------------------------------ */
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          Provider.of<AppState>(context).isEnglish
-                              ? 'Discounts:'
-                              : 'الخصومات:',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Column(
-                            children: (storeData?['discounts'] is List<dynamic>
-                                    ? (storeData?['discounts'] as List<dynamic>)
-                                    : [])
-                                .map<Widget>((discount) {
-                              return Container(
-                                  width: 300,
-                                  margin: const EdgeInsets.all(10),
-                                  padding: const EdgeInsets.all(20),
-                                  decoration: BoxDecoration(
-                                    color: const Color.fromARGB(
-                                        255, 228, 224, 224),
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            isEnglish
-                                                ? 'Discount on: ${discount['category']} '
-                                                : 'خصم على : ${discount['category']} ',
-                                            style: TextStyle(fontSize: 14),
-                                            textAlign: isEnglish
-                                                ? TextAlign.left
-                                                : TextAlign.right,
-                                          )
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            isEnglish
-                                                ? 'Percent: ${discount['percent']}%'
-                                                : 'نسبة الخصم : ${discount['percent']}% ',
-                                            style: TextStyle(fontSize: 14),
-                                            textAlign: isEnglish
-                                                ? TextAlign.left
-                                                : TextAlign.right,
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            isEnglish
-                                                ? 'Days Remaining: ${calculateDaysRemaining(discount['end_date'])} ${getEnglishDaysWord(calculateDaysRemaining(discount['end_date']))}'
-                                                : 'الأيام المتبقية: ${calculateDaysRemaining(discount['end_date'])} ${getArabicDaysWord(calculateDaysRemaining(discount['end_date']))}',
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: Colors.blue),
-                                            textAlign: isEnglish
-                                                ? TextAlign.left
-                                                : TextAlign.right,
-                                          ),
-                                        ],
-                                      )
-                                    ],
-                                  ));
-                            }).toList(),
-                          ),
                         ),
                       ],
                     ),

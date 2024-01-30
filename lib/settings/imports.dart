@@ -5,6 +5,7 @@
 // /* ----------------------------------- API ---------------------------------- */
 
 export 'package:mhfatha/api/api.dart';
+export 'package:mhfatha/api/apiVendor.dart';
 // /* ------------------------------- HomeScreen ------------------------------- */
 export 'package:mhfatha/screens/home/home_screen.dart';
 export 'package:mhfatha/screens/home/nearby.dart';
@@ -50,6 +51,9 @@ export 'package:mhfatha/screens/QR/report.dart';
 // /* -------------------------------- Requests -------------------------------- */
 
 export 'package:mhfatha/screens/requests/main.dart';
+
+// /* --------------------------------- Vendor --------------------------------- */
+export 'package:mhfatha/screens/vendor/mainStores.dart';
 
 
 // /* -------------------------------- settings -------------------------------- */
@@ -171,5 +175,8 @@ export 'package:mhfatha/widgets/ProfilePhoto.dart';
 export 'package:mhfatha/widgets/VendorJoin.dart';
 // ─── appBar ────────────────────────────────────────────────────────────────
 export 'package:mhfatha/widgets/appbar.dart';
+
+export 'package:contextmenu/contextmenu.dart';
+
 
 

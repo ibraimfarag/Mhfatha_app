@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:mhfatha/settings/imports.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:async';
@@ -234,152 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _showStoreOptions(BuildContext context, Map<String, dynamic> store) {
-    showModalBottomSheet(
-      backgroundColor:
-          Colors.transparent, // Set background color to transparent
-
-      context: context,
-      builder: (BuildContext context) {
-        bool isEnglish = Provider.of<AppState>(context).isEnglish;
-        AuthProvider authProvider =
-            Provider.of<AuthProvider>(context, listen: false);
-
-        return Container(
-          padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
-          decoration: BoxDecoration(
-            color: Color(0xFFF0F0F0),
-            border: Border.all(
-              color: Color.fromARGB(
-                  5, 0, 0, 0), // You can customize the border color
-              width: 2, // You can customize the border width
-            ),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(40),
-              topRight: Radius.circular(40),
-            ),
-          ),
-          child: Column(
-            // crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Color(0xFFF0F0F0),
-                  borderRadius: BorderRadius.circular(30),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context); // Close the bottom sheet
-                    Navigator.pushReplacementNamed(context, '/store-info',
-                        arguments: store);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.white, // Change the button color
-                    minimumSize:
-                        Size(180, 50), // Set the minimum width and height
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 10), // Adjust horizontal padding as needed
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                          30), // Adjust the border radius as needed
-                    ),
-                  ),
-                  child: Text(
-                    isEnglish ? 'Visit store' : 'زيارة المتجر',
-                    style: TextStyle(
-                      color: Color.fromARGB(
-                          241, 114, 113, 113), // Change the text color
-                      fontSize: 16, // Adjust the font size as needed
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  color: Color(0xFFF0F0F0),
-                  borderRadius: BorderRadius.circular(30),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    // Handle "Show discounts" option
-                    Navigator.pop(context); // Close the bottom sheet
-
-                    // Display sub-context bottom menu
-                    _showSubContextBottomMenu(context, store);
-                    // Add the logic to get store details by calling the API
-
-                    // Get store ID
-                    int storeId = store['id'];
-
-                    // Call the API to get store details
-                    String storeDetails = await Api().getStoreDetails(context,
-                        authProvider, store['id'], latitude!, longitude!);
-
-                    // Parse the store details JSON
-                    Map<String, dynamic> storeDetailsMap =
-                        jsonDecode(storeDetails);
-
-                    // Access the "discounts" list
-                    List<dynamic> discounts =
-                        storeDetailsMap['store']['discounts'];
-
-                    // Iterate over each discount
-                    for (var discount in discounts) {
-                      // Access discount properties
-                      int id = discount['id'];
-                      double percent = double.parse(discount['percent']);
-                      String category = discount['category'];
-                      // ... access other properties as needed
-
-                      // Now, you can use these properties as needed.
-                      // print('Discount ID: $id, Percent: $percent, Category: $category');
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.white, // Change the button color
-                    minimumSize:
-                        Size(180, 50), // Set the minimum width and height
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 10), // Adjust horizontal padding as needed
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                          30), // Adjust the border radius as needed
-                    ),
-                  ),
-                  child: Text(
-                    isEnglish ? 'Show discounts' : 'عرض الخصومات',
-                    style: TextStyle(
-                      color: Color.fromARGB(
-                          241, 114, 113, 113), // Change the text color
-                      fontSize: 16, // Adjust the font size as needed
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+  
 
   void _showSubContextBottomMenu(
       BuildContext context, Map<String, dynamic> store) {
@@ -509,7 +365,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pop(context);
-                        _showStoreOptions(context, store);
+                        // _showStoreOptions(context, store);
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Colors.white, // Change the button color
@@ -551,7 +407,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return filteredStores.map((store) {
       return GestureDetector(
           onTap: () {
-            _showStoreOptions(context, store);
+            // _showStoreOptions(context, store);
           },
           child: FlipCard(
             fill: Fill
@@ -703,7 +559,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 : Alignment.center,
                             child: TextButton(
                               onPressed: () async {
-                                Navigator.pushReplacementNamed(context, '/store-info',
+
+
+                                Navigator.pushNamed(context, '/store-info',
                                     arguments: store);
                               },
                               style: ButtonStyle(
@@ -874,6 +732,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Provider.of<AuthProvider>(context, listen: false);
     String authName = authProvider.user![
         'first_name']; // Replace with the actual property holding the user's name
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
     return DirectionalityWrapper(
       child: GestureDetector(
@@ -1106,7 +965,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               'مسح كود',
                               'images/qr.png', // Replace with the actual image path
                               () {
-                                Navigator.pushReplacementNamed(context, '/qr-scanner');
+                                Navigator.pushNamed(context, '/qr-scanner');
                               },
                             ),
 
@@ -1117,7 +976,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 'Nearby discounts',
                                 'خصومات قريبة',
                                 'images/nearby.jpg', () {
-                              Navigator.pushReplacementNamed(context, '/nearby',
+                              Navigator.pushNamed(context, '/nearby',
                                   arguments: filteredStores);
                             }),
                             // buildIconWithText(Icons.search, 'Search', 'البحث', () {}),
@@ -1129,7 +988,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 'discounts',
                                 'الخصومات',
                                 'images/stores.png', () {
-                              Navigator.pushReplacementNamed(context, '/filteredStores');
+                              Navigator.pushNamed(context, '/filteredStores');
                             }),
                           ],
                         ),
@@ -1212,7 +1071,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       jsonDecode(storeDetails);
                                   Map<String, dynamic> store =
                                       storeDetailsMap['store'];
-                                  Navigator.pushReplacementNamed(context, '/store-info',
+                                  Navigator.pushNamed(context, '/store-info',
                                       arguments: store);
 
                                   print(store);

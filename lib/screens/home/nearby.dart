@@ -30,7 +30,7 @@ class _NearByState extends State<NearBy> {
                 children: [
                   CustomAppBar(
                     onBackTap: () {
-                      Navigator.pop(context);
+        Navigator.pushReplacementNamed(context, '/home');
                     },
                   ),
                   // SizedBox(height: 3),
@@ -109,7 +109,7 @@ class _NearByState extends State<NearBy> {
 
     return GestureDetector(
       onTap: () async {
-        Navigator.pushNamed(context, '/store-info', arguments: store);
+        Navigator.pushReplacementNamed(context, '/store-info', arguments: store);
       },
       child: FadeInRight(
           child: Container(
