@@ -54,6 +54,7 @@ export 'package:mhfatha/screens/requests/main.dart';
 
 // /* --------------------------------- Vendor --------------------------------- */
 export 'package:mhfatha/screens/vendor/mainStores.dart';
+export 'package:mhfatha/screens/vendor/createstore.dart';
 
 
 // /* -------------------------------- settings -------------------------------- */
@@ -175,8 +176,7 @@ export 'package:mhfatha/widgets/ProfilePhoto.dart';
 export 'package:mhfatha/widgets/VendorJoin.dart';
 // ─── appBar ────────────────────────────────────────────────────────────────
 export 'package:mhfatha/widgets/appbar.dart';
-
-export 'package:contextmenu/contextmenu.dart';
+// export
 
 
 

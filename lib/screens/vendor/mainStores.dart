@@ -204,7 +204,9 @@ class _MainStoresState extends State<MainStores> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          // Add your logic for when the plus icon is clicked
+                              Navigator.pushNamed(context, '/createstore');
+
+
                         },
                         child: Container(
                           // width: 100,
