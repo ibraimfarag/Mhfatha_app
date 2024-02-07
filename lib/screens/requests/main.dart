@@ -35,7 +35,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
         userDiscounts = parseAndSortUserDiscounts(response);
         userDiscounts.sort((a, b) => b['date'].compareTo(a['date']));
       });
-      print('User Discounts Response: $response');
+      // print('User Discounts Response: $response');
     } catch (e) {
       print('Error getting user discounts: $e');
     }

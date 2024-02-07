@@ -12,6 +12,7 @@ class ProfilePhotoWidget extends StatefulWidget {
   final String selectPhotoText;
   final String changePhotoText;
   final String removeText;
+  final String? endurl;
   final Function(String?) onPhotoSelected;
   final Color labelcolor;
   final Color color;
@@ -26,8 +27,11 @@ class ProfilePhotoWidget extends StatefulWidget {
     required this.onPhotoSelected,
     required this.labelcolor,
     required this.color,
+    this.endurl,
 
-  }) : super(key: key);
+  }
+  
+  ) : super(key: key);
 
   @override
   _ProfilePhotoWidgetState createState() => _ProfilePhotoWidgetState();
@@ -65,7 +69,7 @@ class _ProfilePhotoWidgetState extends State<ProfilePhotoWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                widget.isEnglish ? widget.label : 'الصورة الشخصية: ',
+                 widget.label ,
                 style: TextStyle(
                   color:widget.labelcolor,
                   fontSize: 16,
@@ -74,19 +78,31 @@ class _ProfilePhotoWidgetState extends State<ProfilePhotoWidget> {
               ),
               SizedBox(height: 2),
               // Display the selected image preview
-              _imageFile != null
-                  ? Container(
-                      height: 200,
-                      width: 200,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                          image: FileImage(File(_imageFile!.path)),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    )
-                  : Container(), // Placeholder if no image is selected
+            _imageFile != null
+  ? Container(
+      height: 200,
+      width: 200,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        image: DecorationImage(
+          image: FileImage(File(_imageFile!.path)),
+          fit: BoxFit.cover,
+        ),
+      ),
+    )
+  : widget.endurl != null  // Check if endurl is not null
+    ? Container(
+        height: 200,
+        width: 200,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          image: DecorationImage(
+            image: NetworkImage('https://mhfatha.net/FrontEnd/assets/images/${widget.endurl}'),
+            fit: BoxFit.cover,
+          ),
+        ),
+      )
+    : Container(), // Placeholder if no image is selected
               SizedBox(height: 16),
               // Option to remove the selected image
               Row(

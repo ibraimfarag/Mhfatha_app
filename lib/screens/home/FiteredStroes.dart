@@ -7,7 +7,6 @@ import 'package:mhfatha/settings/imports.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:async';
 
-
 class FiteredStroes extends StatefulWidget {
   @override
   _FiteredStroesState createState() => _FiteredStroesState();
@@ -35,7 +34,7 @@ class _FiteredStroesState extends State<FiteredStroes> {
 
 // Inside _FilteredStoresState class
   void fetchFilteredStores() async {
-    String  userLatitude = "$latitude";
+    String userLatitude = "$latitude";
     String userLongitude = "$longitude";
 
     try {
@@ -180,6 +179,7 @@ class _FiteredStroesState extends State<FiteredStroes> {
       print('Error during sending location: $e');
     }
   }
+
   @override
   Widget build(BuildContext context) {
     final isEnglish = Provider.of<AppState>(context).isEnglish;
@@ -198,10 +198,10 @@ class _FiteredStroesState extends State<FiteredStroes> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   CustomAppBar(
-                    onBackTap: () {
-                      Navigator.pop(context);
-                    },
-                  ),
+                      onBackTap: () {
+                        Navigator.pop(context);
+                      },
+                      marginTop: 30),
                   // SizedBox(height: 3),
                   Container(
                     // width: 320,
@@ -221,105 +221,107 @@ class _FiteredStroesState extends State<FiteredStroes> {
                                     color: Colors.white),
                               ),
                               // Add some space between the text and the dropdowns
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+                          
                                   // First Dropdown
                                   Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        isEnglish ? 'Region' : 'المدينة',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                              SizedBox(height: 20),
+                                    
+                                            Text(
+                                              isEnglish ? 'Region' : 'المدينة',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                              ),
+                                              
+                                            ),
+                                                   SizedBox(height: 10),
+                                            Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 1, horizontal: 20),
+                                              decoration: BoxDecoration(
+                                                color: Colors.grey[200],
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                              ),
+                                              child: DropdownButton(
+                                                value: selectedRegion,
+                                                items: regionList.map((region) {
+                                                  return DropdownMenuItem(
+                                                    value: region['region_id']
+                                                        .toString(), // Use region_id as the value
+                                                    child: Text(
+                                                        region['region_name']),
+                                                  );
+                                                }).toList(),
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    selectedRegion =
+                                                        value.toString();
+                                                    // Perform actions when a region is selected, if needed
+                                                  });
+                                                  fetchFilteredStores();
+                                                },
+                                                underline: Container(),
+                                              ),
+                                            ),
+                                
+                                      ]),
+                                 
+                                 SizedBox(height: 10),
+                                 
+                                  Row(children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          isEnglish ? 'Categorie' : 'الفئة',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
                                         ),
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 1, horizontal: 20),
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey[200],
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                        child: DropdownButton(
-                                          value: selectedRegion,
-                                          items: regionList.map((region) {
-                                            return DropdownMenuItem(
-                                              value: region['region_id']
-                                                  .toString(), // Use region_id as the value
-                                              child:
-                                                  Text(region['region_name']),
-                                            );
-                                          }).toList(),
-                                          onChanged: (value) {
-                                            setState(() {
-                                              selectedRegion = value.toString();
-                                              // Perform actions when a region is selected, if needed
-                                            });
-                                            fetchFilteredStores();
-                                          },
-                                          underline: Container(),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                        
+                                 SizedBox(height: 10),
+                                        Container(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 3, horizontal: 20),
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey[200],
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
+                                          child: DropdownButton(
+                                            value: selectedCategory,
+                                            items: categoryList.map((category) {
+                                              return DropdownMenuItem(
+                                                value: category['category_id']
+                                                    .toString(), // Use category_id as the value
+                                                child: Text(
+                                                    category['category_name']),
+                                              );
+                                            }).toList(),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                selectedCategory =
+                                                    value.toString();
 
-                                  SizedBox(
-                                      width:
-                                          26), // Add space between the dropdowns
-
-                                  // Second Dropdown
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        isEnglish ? 'Categorie' : 'الفئة',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
+                                                // Perform actions when a category is selected, if needed
+                                              });
+                                              fetchFilteredStores();
+                                            },
+                                            underline: Container(),
+                                          ),
                                         ),
-                                      ),
-                                      Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 1, horizontal: 20),
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey[200],
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                        child: DropdownButton(
-                                          value: selectedCategory,
-                                          items: categoryList.map((category) {
-                                            return DropdownMenuItem(
-                                              value: category['category_id']
-                                                  .toString(), // Use category_id as the value
-                                              child: Text(
-                                                  category['category_name']),
-                                            );
-                                          }).toList(),
-                                          onChanged: (value) {
-                                            setState(() {
-                                              selectedCategory =
-                                                  value.toString();
-
-                                              // Perform actions when a category is selected, if needed
-                                            });
-                                            fetchFilteredStores();
-                                          },
-                                          underline: Container(),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                                      ],
+                                    ),
+                                  ]),
+                          
                             ],
                           ),
                           SizedBox(
@@ -368,7 +370,7 @@ class _FiteredStroesState extends State<FiteredStroes> {
   }
 
   Widget buildStoreContainer(dynamic store) {
-        final isEnglish = Provider.of<AppState>(context).isEnglish;
+    final isEnglish = Provider.of<AppState>(context).isEnglish;
 
     return GestureDetector(
       onTap: () async {
@@ -491,6 +493,5 @@ class _FiteredStroesState extends State<FiteredStroes> {
         ),
       )),
     );
-
   }
 }

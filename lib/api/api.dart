@@ -9,7 +9,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class Api {
-  
   static const String baseUrl = AppVariables.ApiUrl;
 
 // /* -------------------------------------------------------------------------- */
@@ -478,6 +477,42 @@ class Api {
       return ''; // Return an empty string or handle the error as needed
     }
   }
+  Future<String> fetchVendorStores(
+    BuildContext context,
+  ) async {
+    final url = Uri.parse('$baseUrl/vendor/stores');
+    bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
+    String lang = Provider.of<AppState>(context, listen: false).display;
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+
+    try {
+
+
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${authProvider.token}',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        // Convert the response data to a JSON string
+        String jsonString = jsonEncode(jsonResponse);
+// print(jsonString);
+
+
+        return jsonString;
+      } else {
+        throw Exception(
+            'Failed to get user discounts. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
+      }
+    } catch (e) {
+      return ''; // Return an empty string or handle the error as needed
+    }
+  }
 
   Future<Map<String, dynamic>> getRegionsAndCities(BuildContext context) async {
     final url = Uri.parse('$baseUrl/regions');
@@ -499,6 +534,37 @@ class Api {
           return jsonResponse;
         } else {
           throw Exception('Invalid response format. Missing "regions" key.');
+        }
+      } else {
+        throw Exception(
+            'Failed to fetch regions and cities. Server responded with status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception(
+          'Failed to fetch regions and cities. Check your internet connection.');
+    }
+  }
+
+  Future<Map<String, dynamic>> getcategories(BuildContext context) async {
+    final url = Uri.parse('$baseUrl/categories');
+
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+
+    try {
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+      );
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        // Check if 'regions' key exists in the JSON response
+        if (jsonResponse.containsKey('Category')) {
+          return jsonResponse;
+        } else {
+          throw Exception('Invalid response format. Missing "categories" key.');
         }
       } else {
         throw Exception(
@@ -864,6 +930,9 @@ class Api {
           'Failed to change password. Check your internet connection.');
     }
   }
+
+
+
 }
 
 void _showLoadingDialog(BuildContext context) {

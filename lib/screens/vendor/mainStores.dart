@@ -1,5 +1,6 @@
 // lib\screens\settings\settings.dart
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
@@ -13,15 +14,15 @@ class MainStores extends StatefulWidget {
 
 class _MainStoresState extends State<MainStores> {
   late AuthProvider authProvider; // Declare authProvider variable
-  late VendorApi vendorApi; // Declare vendorApi variable
-
+  Api api = Api();
   Color backgroundColor = Color.fromARGB(220, 255, 255, 255);
   Color ui = Color.fromARGB(220, 233, 233, 233);
   Color ui2 = Color.fromARGB(255, 113, 194, 110);
   Color colors = Color(0xFF05204a);
 
-  List<Map<String, dynamic>> vendorStoresDataa =
-      []; // Declare vendorStoresData here
+  // List<Map<String, dynamic>> vendorStoresDataa =
+  //     []; // Declare vendorStoresData here
+  String vendorStoresDataa = '';
   String verifiedStoresCountt = '';
   String pendingStoresCountt = '';
   String sumCountTimess = '';
@@ -30,42 +31,38 @@ class _MainStoresState extends State<MainStores> {
   void initState() {
     super.initState();
     authProvider = Provider.of<AuthProvider>(context, listen: false);
-    vendorApi = VendorApi(context); // Initialize vendorApi in initState
-    fetchVendorStores(); // Call fetchVendorStores after initializing vendorApi
+    Api api = Api(); // Initialize vendorApi in initState
+    getVendorStores(); // Call fetchVendorStores after initializing vendorApi
   }
 
   // Method to fetch vendor stores data
-  Future<void> fetchVendorStores() async {
+
+  List<dynamic> VendorStores = [];
+
+  List<dynamic> parseAndSortUserDiscounts(String response) {
+    Map<String, dynamic> responseData = jsonDecode(response);
+
+    verifiedStoresCountt = responseData['verifiedStoresCount'].toString();
+    pendingStoresCountt = responseData['pendingStoresCount'].toString();
+    sumCountTimess = responseData['sumCountTimes'].toString();
+    sumTotalPaymentss = responseData['sumTotalPayments'].toString();
+
+    List<dynamic> discounts = jsonDecode(response)['userStores'];
+
+    return discounts;
+  }
+
+  Future<void> getVendorStores() async {
     try {
-      // Check if vendorApi is not null before calling createVendorStores
-
-      // Call createVendorStores method from vendorApi
-      final Map<String, dynamic> vendorData =
-          await vendorApi.createVendorStores();
-
-      // Extract vendor stores data directly with type casting
-      final List<Map<String, dynamic>> vendorStoresData =
-          (vendorData['userStores'] as List<dynamic>)
-              .cast<Map<String, dynamic>>();
-
-      // Extract additional keys
-      final verifiedStoresCount =
-          vendorData['verifiedStoresCount']?.toString() ?? '';
-      final pendingStoresCount =
-          vendorData['pendingStoresCount']?.toString() ?? '';
-      final sumCountTimes = vendorData['sumCountTimes']?.toString() ?? '';
-      final sumTotalPayments = vendorData['sumTotalPayments']?.toString() ?? '';
-
+      String response = await Api().fetchVendorStores(context);
       setState(() {
-        vendorStoresDataa = vendorStoresData;
-        verifiedStoresCountt = verifiedStoresCount;
-        pendingStoresCountt = pendingStoresCount;
-        sumCountTimess = sumCountTimes;
-        sumTotalPaymentss = sumTotalPayments;
+        vendorStoresDataa = response;
+        VendorStores = parseAndSortUserDiscounts(response);
+        // VendorStores.sort((a, b) => b['date'].compareTo(a['date']));
       });
+      // print('User Discounts Response: $response');
     } catch (e) {
-      // Handle error
-      print('Error fetching vendor stores: $e');
+      print('Error getting user discountssss: $e');
     }
   }
 
@@ -148,25 +145,49 @@ class _MainStoresState extends State<MainStores> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+
+                              Column(children: [
+                                    Text(
                                 isEnglish
-                                    ? 'Purchases times: $sumCountTimess'
-                                    : 'مرات الشراء: $sumCountTimess',
+                                    ? 'Purchases times'
+                                    : 'مرات الشراء',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                              ),    Text(
+                                isEnglish
+                                    ? ' $sumCountTimess'
+                                    : '$sumCountTimess',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,
                                 ),
                               ),
+
+                              ]),
+                          
                               SizedBox(width: 20),
-                              Text(
+                              Column(children: [
+                                Text(
                                 isEnglish
-                                    ? 'Total profits: $sumTotalPaymentss SAR'
-                                    : 'الأرباح الإجمالية: $sumTotalPaymentss ريال',
+                                    ? 'Total profits'
+                                    : 'الأرباح الإجمالية',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                              ),Text(
+                                isEnglish
+                                    ? '$sumTotalPaymentss SAR'
+                                    : '$sumTotalPaymentss ريال',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,
                                 ),
                               ),
+                              ],)
+                              
                             ],
                           ),
                           SizedBox(height: 16),
@@ -204,9 +225,7 @@ class _MainStoresState extends State<MainStores> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                              Navigator.pushNamed(context, '/createstore');
-
-
+                          Navigator.pushNamed(context, '/createstore');
                         },
                         child: Container(
                           // width: 100,
@@ -259,7 +278,7 @@ class _MainStoresState extends State<MainStores> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            for (var store in vendorStoresDataa)
+                            for (var store in VendorStores)
                               buildStoreContainer(store),
                           ],
                         ),
@@ -420,7 +439,12 @@ class _MainStoresState extends State<MainStores> {
                       PopupMenuItem(
                         child: GestureDetector(
                           onTap: () {
-                            // Handle option 1
+                            Navigator.pushNamed(
+                              context,
+                              '/editstore',
+                              arguments:
+                                  store, // Pass the store data to the route
+                            );
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(

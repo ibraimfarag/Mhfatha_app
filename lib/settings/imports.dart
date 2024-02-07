@@ -56,6 +56,8 @@ export 'package:mhfatha/screens/requests/main.dart';
 export 'package:mhfatha/screens/vendor/mainStores.dart';
 export 'package:mhfatha/screens/vendor/createstore.dart';
 
+export 'package:mhfatha/screens/vendor/editstore.dart';
+
 
 // /* -------------------------------- settings -------------------------------- */
 export 'package:mhfatha/layout/DirectionalityWrapper.dart';
@@ -155,6 +157,8 @@ export 'package:otp_text_field/style.dart';
 // /* -------------------------------------------------------------------------- */
 export 'package:mhfatha/widgets/region_selection.dart';
 
+export 'package:mhfatha/widgets/category_selection.dart';
+
 // /* ----------------------------- StoresCarousel ----------------------------- */
 
 export 'package:mhfatha/widgets/StoresCarousel.dart';
@@ -176,7 +180,11 @@ export 'package:mhfatha/widgets/ProfilePhoto.dart';
 export 'package:mhfatha/widgets/VendorJoin.dart';
 // ─── appBar ────────────────────────────────────────────────────────────────
 export 'package:mhfatha/widgets/appbar.dart';
-// export
 
+// /* ---------------------------- WorkingDaysWidget --------------------------- */
+export 'package:mhfatha/widgets/working_days_widget.dart';
+
+
+export 'package:flutter_map/flutter_map.dart';
 
 

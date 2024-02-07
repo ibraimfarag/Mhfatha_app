@@ -32,6 +32,7 @@ class _NearByState extends State<NearBy> {
                     onBackTap: () {
         Navigator.pushReplacementNamed(context, '/home');
                     },
+                    marginTop:30
                   ),
                   // SizedBox(height: 3),
                   Container(

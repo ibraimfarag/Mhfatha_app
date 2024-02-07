@@ -64,21 +64,7 @@ class StoreInfoScreen extends StatelessWidget {
 
     return DirectionalityWrapper(
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.arrow_forward),
-              onPressed: () {
-                // Navigate back to the previous screen
-                Navigator.pop(context);
-              },
-              // Change the color of the back button icon
-              color: Color.fromARGB(255, 7, 0, 34),
-            ),
-          ],
-        ),
+    
         body: SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 0),
@@ -86,6 +72,12 @@ class StoreInfoScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
+                 CustomAppBar(
+                    onBackTap: () {
+                      Navigator.pop(context);
+                    },
+                    iconColor:Colors.black
+                  ),
                 Container(
                   width: 600,
                   margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),

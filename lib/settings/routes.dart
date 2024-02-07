@@ -20,6 +20,7 @@ class Routes {
   static String restPassword ='/restpassword';
   static String vendorsMain ='/mainstores';
   static String createstore ='/createstore';
+  static String editstore ='/editstore';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -41,6 +42,7 @@ class Routes {
       restPassword : (context) => RestPassword(),
       vendorsMain : (context) => MainStores(),
       createstore : (context) => CreateStore(),
+      editstore : (context) => EditStore( ),
   
       
     };

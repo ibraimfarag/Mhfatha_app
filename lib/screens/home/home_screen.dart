@@ -958,7 +958,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             buildIconWithText(
                               width: 100,
-                              height: 150,
+                              height: 160,
 
                               Icons.qr_code,
                               'Scan QR',
@@ -971,7 +971,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                             buildIconWithText(
                                 width: 120,
-                                height: 150,
+                                height: 160,
                                 Icons.store,
                                 'Nearby discounts',
                                 'خصومات قريبة',
@@ -983,7 +983,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                             buildIconWithText(
                                 width: 100,
-                                height: 150,
+                                height: 160,
                                 Icons.local_offer,
                                 'discounts',
                                 'الخصومات',

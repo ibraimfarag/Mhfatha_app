@@ -29,7 +29,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
     Api api = Api();
-    Color ui = Color.fromARGB(255, 255, 100, 100);
+    Color ui = Color.fromARGB(255, 250, 82, 82);
 
     return DirectionalityWrapper(
         child: Scaffold(
@@ -227,7 +227,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               borderRadius: BorderRadius.circular(30),
                             ),
                           ),
-                          child: Text(isEnglish ? 'Logout' : 'تسجيل الخروج'),
+                          child: Text(isEnglish ? 'Logout' : 'تسجيل الخروج', style: TextStyle(color:Colors.white),),
                         ),
                       ],
                     ),

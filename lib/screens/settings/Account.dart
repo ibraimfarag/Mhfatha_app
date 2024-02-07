@@ -63,14 +63,19 @@ class _AccountScreenState extends State<AccountScreen> {
         child: Scaffold(
       body: SingleChildScrollView(
         child: Container(
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
             color: Color(0xFF080E27), // Set background color to #080e27
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                   CustomAppBar(
+                  onBackTap: () {
+                    Navigator.pop(context);
+                  },
+                  marginTop: 30,
+                ),
                   Container(
-                    padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
+                    padding: EdgeInsets.fromLTRB(20, 0, 20, 5),
                     // height: 200,
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -79,11 +84,9 @@ class _AccountScreenState extends State<AccountScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(
-                                height: 30,
-                              ),
-                              SizedBox(
                                 height: 5,
                               ),
+                        
                               Text(
                                 isEnglish ? ' welcome ' : ' مرحبا بك',
                                 style: TextStyle(

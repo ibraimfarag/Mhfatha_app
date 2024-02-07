@@ -7,12 +7,12 @@ import 'package:mhfatha/settings/imports.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:open_street_map_search_and_pick/open_street_map_search_and_pick.dart';
 
-class CreateStore extends StatefulWidget {
+class EditStore extends StatefulWidget {
   @override
-  State<CreateStore> createState() => _CreateStoreState();
+  State<EditStore> createState() => _EditStoreState();
 }
 
-class _CreateStoreState extends State<CreateStore> {
+class _EditStoreState extends State<EditStore> {
   late AuthProvider authProvider; // Declare authProvider variable
   late VendorApi vendorApi; // Declare vendorApi variable
 
@@ -26,27 +26,111 @@ class _CreateStoreState extends State<CreateStore> {
   TextEditingController longitude = TextEditingController();
   TextEditingController mobile = TextEditingController();
   TextEditingController taxNumber = TextEditingController();
-  late String selectedRegion; // Declare selectedRegion variable
-  late String selectedCategory; // Declare selectedRegion variable
+  String selectedRegion = '1';
+  String selectedCategory = '1';
   String? _selectedProfileImagePath;
-  List<String> selectedDays = []; // Holds selected days of the week
+  String storeimage = 'Market.png';
 
+  // List<String> selectedDays = []; // Holds selected days of the week
   Map<String, TimeOfDay?> openingTimes = {};
   Map<String, TimeOfDay?> closingTimes = {};
-  Map<String, Map<String, String>> workingDays = {};
+  Map<String, Map<String, String>> workingDayss = {};
 
   LatLng? selectedLocation;
+  // Map<String, dynamic>? storeData;
+
+  Map<String, dynamic>? storeData; // Move the declaration here
+  Map<String, bool> selectedDays = {
+    'Sunday': false,
+    'Monday': false,
+    'Tuesday': false,
+    'Wednesday': false,
+    'Thursday': false,
+    'Friday': false,
+    'Saturday': false,
+  };
+
+  // Initialize the opening and closing times for each day
+  void initializeTimes() {
+    // Initialize with default values or values from storeData if available
+    // For simplicity, let's initialize with null for now
+    // You can set default values based on your requirements
+    // For example: openingTimes['Monday'] = TimeOfDay(hour: 9, minute: 0);
+    //              closingTimes['Monday'] = TimeOfDay(hour: 18, minute: 0);
+    // Repeat this for all days of the week
+  }
 
   @override
   void initState() {
     super.initState();
     authProvider = Provider.of<AuthProvider>(context, listen: false);
-    vendorApi = VendorApi(context); // Initialize vendorApi in initState
+    vendorApi = VendorApi(context);
 
+    // Fetch store data from ModalRoute settings
+
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      setState(() {
+        storeData =
+            ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+        workingDayss = Map<String, Map<String, String>>.from(
+          (jsonDecode(storeData?['work_days'] ?? '{}') as Map<String, dynamic>)
+              .map((key, value) => MapEntry(
+                    key,
+                    Map<String, String>.from(value),
+                  )),
+        );
+        workingDayss.forEach((day, times) {
+
+          selectedDays[day] = true;
+
+                     openingTimes[day] = _getTimeOfDayFromString(times['from']);
+        closingTimes[day] = _getTimeOfDayFromString(times['to']);
+
+        });
+   
+
+        store_name.text = '${storeData?['name']}' ?? '';
+        address.text = '${storeData?['location']}' ?? '';
+        latitude.text = '${storeData?['latitude']}' ?? '';
+        longitude.text = '${storeData?['longitude']}' ?? '';
+        mobile.text = '${storeData?['phone']}' ?? '';
+        taxNumber.text = '${storeData?['tax_number']}' ?? '';
+        selectedRegion =
+            '${storeData?['region']}' ?? '${authProvider.user!['region']}';
+        selectedCategory = '${storeData?['category_id']}';
+        storeimage = '${storeData?['photo']}' ?? 'Market.png';
+
+        print('example :  $workingDayss');
+        // print('Days:  $selectedDays');
+      });
+    });
+print(openingTimes);
+print(closingTimes);
+    // Get authProvider and selectedRegion after fetching storeData
     authProvider.updateUserData(context);
-    selectedRegion = '${authProvider.user!['region']}';
-    selectedCategory = '${authProvider.user!['region']}';
   }
+TimeOfDay _getTimeOfDayFromString(String? timeString) {
+  if (timeString != null && timeString.isNotEmpty) {
+    // Replace any non-breaking space characters with regular spaces
+    timeString = timeString.replaceAll('\u202F', ' ');
+
+    // Try parsing with multiple formats to handle different time representations
+    final List<String> formats = ['hh:mm a', 'h:mm a', 'H:mm'];
+    for (final format in formats) {
+      try {
+        final dateTime = DateFormat(format).parse(timeString);
+        return TimeOfDay.fromDateTime(dateTime);
+      } catch (_) {
+        continue; // Try the next format if parsing fails
+      }
+    }
+    // If none of the formats match, return a default time
+    print('Failed to parse time: $timeString');
+  }
+  // Return a default time if the input is invalid
+  return TimeOfDay(hour: 0, minute: 0);
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +139,8 @@ class _CreateStoreState extends State<CreateStore> {
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
     // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+
+    // Initialize UI properties after getting storeData
 
     String lang = Provider.of<AppState>(context, listen: false).display;
     return DirectionalityWrapper(
@@ -73,15 +159,14 @@ class _CreateStoreState extends State<CreateStore> {
                   marginTop: 30,
                 ),
                 Container(
-                  margin: EdgeInsets.fromLTRB(20, 0, 20, 5),
-                  height: 200,
+                  margin: EdgeInsets.fromLTRB(20, 20, 20, 5),
                   child: Column(
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            isEnglish ? 'Create new store' : 'انشاء متجر جديد',
+                            '${storeData?['name']}',
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
@@ -90,7 +175,7 @@ class _CreateStoreState extends State<CreateStore> {
                           ),
                           Image.asset(
                             'images/output-store.gif',
-                            height: 120,
+                            height: 140,
                           ),
                         ],
                       ),
@@ -126,6 +211,7 @@ class _CreateStoreState extends State<CreateStore> {
                             changePhotoText:
                                 isEnglish ? 'Change Photo' : 'تغير  الصورة',
                             removeText: isEnglish ? 'Remove' : 'إزالة',
+                            endurl: 'store_images/$storeimage',
                             onPhotoSelected: (path) {
                               setState(() {
                                 _selectedProfileImagePath = path;
@@ -139,7 +225,7 @@ class _CreateStoreState extends State<CreateStore> {
                             'اسم المتجر',
                             () {},
                             store_name,
-                            ' ',
+                            '',
                           ),
                           Container(
                             margin: EdgeInsets.symmetric(
@@ -202,7 +288,7 @@ class _CreateStoreState extends State<CreateStore> {
                                           selectedRegion = value;
                                         });
                                       },
-                                      selectedRegion: selectedRegion,
+                                      selectedRegion: selectedRegion!,
                                     ),
                                   ],
                                 ),
@@ -249,15 +335,56 @@ class _CreateStoreState extends State<CreateStore> {
                             mobile,
                             '',
                           ),
-                          buildSettingItem(
-                            context,
-                            'Tax number',
-                            'الرقم الضريبي',
-                            () {},
-                            taxNumber,
-                            '',
-                          ),
-                          buildWeekdaysSelector(),
+                          // buildSettingItem(
+                          //   context,
+                          //   'Tax number',
+                          //   'الرقم الضريبي',
+                          //   () {},
+                          //   taxNumber,
+                          //   '',
+                          // ),
+//                  WeekdaysSelector(
+//   onChanged: (workingDays) {
+//     setState(() {
+//       workingDayss = workingDays;
+//       selectedDays = workingDays.keys.toList(); // Update selectedDays with the keys of workingDays
+//     });
+//   },
+//   workingDays: workingDayss,
+// ),
+
+                          Container(
+                              margin: EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 0),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 0),
+                              decoration: BoxDecoration(
+                                color: Color(0xFFFFFFFF),
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Column(
+                                children: [
+                                  SizedBox(height: 20),
+                                  Text(
+                                    isEnglish
+                                        ? 'Select working Days'
+                                        : 'حدد أيام العمل',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  buildDayTimeSelector('Sunday'),
+                                  buildDayTimeSelector('Monday'),
+                                  buildDayTimeSelector('Tuesday'),
+                                  buildDayTimeSelector('Wednesday'),
+                                  buildDayTimeSelector('Thursday'),
+                                  buildDayTimeSelector('Friday'),
+                                  buildDayTimeSelector('Saturday'),
+                                ],
+                              )),
+
                           ElevatedButton(
                             onPressed: () {
                               QuickAlert.show(
@@ -270,22 +397,24 @@ class _CreateStoreState extends State<CreateStore> {
                                   cancelBtnText: isEnglish ? 'No' : 'لا',
                                   confirmBtnColor: Colors.green,
                                   onConfirmBtnTap: () async {
-                                    bool success = await vendorApi.createstore(
-                                        context: context,
-                                        store_name: store_name.text,
-                                        address: address.text,
-                                        latitude: latitude.text,
-                                        longitude: longitude.text,
-                                        workingdays: workingDays,
-                                        region: selectedRegion,
-                                        categoryId: selectedCategory,
-                                        mobile: mobile.text,
-                                        tax_number: taxNumber.text,
-                                        imageFile: _selectedProfileImagePath !=
-                                                null
-                                            ? File(
-                                                _selectedProfileImagePath ?? '')
-                                            : null);
+                                    // bool success =
+                                    //     await vendorApi.CreateStore(
+                                    //         context: context,
+                                    //         store_name: store_name.text,
+                                    //         address: address.text,
+                                    //         latitude: latitude.text,
+                                    //         longitude: longitude.text,
+                                    //         workingdays: workingDays,
+                                    //         region: selectedRegion,
+                                    //         categoryId: selectedCategory,
+                                    //         mobile: mobile.text,
+                                    //         tax_number: taxNumber.text,
+                                    //         imageFile: _selectedProfileImagePath !=
+                                    //                 null
+                                    //             ? File(
+                                    //                 _selectedProfileImagePath ??
+                                    //                     '')
+                                    //             : null);
                                   });
                             },
                             style: ElevatedButton.styleFrom(
@@ -295,7 +424,7 @@ class _CreateStoreState extends State<CreateStore> {
                               ),
                             ),
                             child: Text(
-                              isEnglish ? 'create store' : 'انشاء المتجر',
+                              isEnglish ? 'edit store' : 'تحديث المتجر',
                               style: TextStyle(color: Colors.black),
                             ),
                           ),
@@ -313,6 +442,159 @@ class _CreateStoreState extends State<CreateStore> {
     );
   }
 
+ Widget buildDayTimeSelector(String day) {
+  bool isEnglish = Provider.of<AppState>(context).isEnglish;
+
+  return Container(
+    margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+    decoration: BoxDecoration(
+      color: Color.fromARGB(20, 71, 71, 71),
+      borderRadius: BorderRadius.circular(30),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        // Checkbox for selecting the day
+        Row(
+          children: [
+            Checkbox(
+              value: selectedDays[day] ?? false,
+              onChanged: (value) {
+                setState(() {
+                  selectedDays[day] = value!;
+                });
+              },
+              activeColor: Color(0xFF1D365C),
+            ),
+            Text(
+              isEnglish ? getEnglishDayName(day) : getArabicDayName(day),
+              style: TextStyle(
+                color: Color(0xFF1D365C),
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        // Display open and close times if the day is selected
+        if (selectedDays[day] ?? false)
+          Row(
+            children: [
+              SizedBox(width: 20),
+              Text(
+                isEnglish ? 'Open Time: ' : 'وقت الفتح: ',
+              ),
+              TextButton(
+                onPressed: () async {
+                  final selectedTime = await showTimePicker(
+                    context: context,
+                    initialTime: openingTimes[day] ?? TimeOfDay.now(),
+                  );
+                  if (selectedTime != null) {
+                    setState(() {
+                      openingTimes[day] = selectedTime;
+                    });
+                  }
+                },
+                child: Text(
+                  openingTimes[day]?.format(context) ?? '- - : - -',
+                  style: TextStyle(
+                    color: Color(0xFF1D365C),
+                  ),
+                ),
+              ),
+              SizedBox(width: 5),
+              Text(
+                isEnglish ? 'Close Time: ' : 'وقت الإغلاق: ',
+              ),
+              TextButton(
+                onPressed: () async {
+                  final selectedTime = await showTimePicker(
+                    context: context,
+                    initialTime: closingTimes[day] ?? TimeOfDay.now(),
+                  );
+                  if (selectedTime != null) {
+                    setState(() {
+                      closingTimes[day] = selectedTime;
+                    });
+                  }
+                },
+                child: Text(
+                  closingTimes[day]?.format(context) ?? '- - : - -',
+                  style: TextStyle(
+                    color: Color(0xFF1D365C),
+                  ),
+                ),
+              ),
+            ],
+          ),
+      ],
+    ),
+  );
+}
+
+// Helper method to get English day name
+  String getEnglishDayName(String day) {
+    switch (day) {
+      case 'Sunday':
+        return 'Sunday';
+      case 'Monday':
+        return 'Monday';
+      case 'Tuesday':
+        return 'Tuesday';
+      case 'Wednesday':
+        return 'Wednesday';
+      case 'Thursday':
+        return 'Thursday';
+      case 'Friday':
+        return 'Friday';
+      case 'Saturday':
+        return 'Saturday';
+      default:
+        return day;
+    }
+  }
+
+// Helper method to get Arabic day name
+  String getArabicDayName(String day) {
+    switch (day) {
+      case 'Sunday':
+        return 'الأحد';
+      case 'Monday':
+        return 'الاثنين';
+      case 'Tuesday':
+        return 'الثلاثاء';
+      case 'Wednesday':
+        return 'الأربعاء';
+      case 'Thursday':
+        return 'الخميس';
+      case 'Friday':
+        return 'الجمعة';
+      case 'Saturday':
+        return 'السبت';
+      default:
+        return day;
+    }
+  }
+
+  // Method to show time picker and update selected time
+  Future<void> _selectTime(String day, {required bool isOpeningTime}) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: isOpeningTime
+          ? openingTimes[day] ?? TimeOfDay.now()
+          : closingTimes[day] ?? TimeOfDay.now(),
+    );
+    setState(() {
+      if (isOpeningTime) {
+        openingTimes[day] = picked;
+      } else {
+        closingTimes[day] = picked;
+      }
+    });
+  }
+
   Widget buildSettingItem(
     BuildContext context,
     String englishTitle,
@@ -322,7 +604,6 @@ class _CreateStoreState extends State<CreateStore> {
     String preFilledText,
   ) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
-    controller.text = controller.text;
 
     return InkWell(
       onTap: onTap,
@@ -342,251 +623,35 @@ class _CreateStoreState extends State<CreateStore> {
               ],
             ),
             SizedBox(height: 10),
-            if (englishTitle.toLowerCase() == 'birthday')
-              InkWell(
-                onTap: () async {
-                  DateTime? pickedDate = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(1900),
-                    lastDate: DateTime.now(),
-                  );
-
-                  if (pickedDate != null && pickedDate != DateTime.now()) {
-                    controller.text =
-                        DateFormat('yyyy-MM-dd').format(pickedDate);
-                  }
-                },
-                child: AbsorbPointer(
-                  child: TextField(
-                    controller: controller,
-                    style: TextStyle(fontSize: 16, color: colors),
-                    decoration: InputDecoration(
-                      hintStyle: TextStyle(color: Colors.grey.shade700),
-                      filled: true,
-                      fillColor: ui,
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide(color: backgroundColor),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide(color: backgroundColor),
-                      ),
-                    ),
-                  ),
+            TextField(
+              obscureText: false,
+              controller: controller,
+              style: TextStyle(fontSize: 16, color: colors),
+              decoration: InputDecoration(
+                hintStyle: TextStyle(color: Colors.grey.shade700),
+                filled: true,
+                fillColor: ui,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide(color: backgroundColor),
                 ),
-              )
-            else
-              TextField(
-                obscureText: false,
-                controller: controller,
-                style: TextStyle(fontSize: 16, color: colors),
-                decoration: InputDecoration(
-                  hintStyle: TextStyle(color: Colors.grey.shade700),
-                  filled: true,
-                  fillColor: ui,
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide(color: backgroundColor),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide(color: backgroundColor),
-                  ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide(color: backgroundColor),
                 ),
               ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget buildWeekdaysSelector() {
-    bool isEnglish = Provider.of<AppState>(context).isEnglish;
-
-    List<String> englishDays = [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday'
-    ];
-    List<String> arabicDays = [
-      'الأحد',
-      'الاثنين',
-      'الثلاثاء',
-      'الأربعاء',
-      'الخميس',
-      'الجمعة',
-      'السبت'
-    ];
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(height: 20),
-        Text(
-          isEnglish ? 'Select working Days:' : 'حدد أيام العمل:',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        SizedBox(height: 10),
-        Wrap(
-          children: List.generate(
-            7,
-            (index) {
-              final day = isEnglish ? englishDays[index] : arabicDays[index];
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-                    padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
-                    decoration: BoxDecoration(
-                      color: Color(0xFFFFFFFF),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Checkbox(
-                              value: selectedDays.contains(day),
-                              onChanged: (value) {
-                                setState(() {
-                                  if (value != null && value) {
-                                    selectedDays.add(day);
-                                    openingTimes[day] = TimeOfDay.now();
-                                    closingTimes[day] = TimeOfDay.now();
-                                  } else {
-                                    selectedDays.remove(day);
-                                    openingTimes.remove(day);
-                                    closingTimes.remove(day);
-                                  }
-                                });
-                                updateWorkingDaysArray();
-                              },
-                              activeColor: Color(0xFF1D365C),
-                            ),
-                            Text(
-                              day,
-                              style: TextStyle(
-                                color: Color(0xFF1D365C),
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                        if (selectedDays.contains(day)) ...[
-                          Row(
-                            children: [
-                              SizedBox(width: 20),
-                              Text(
-                                isEnglish ? 'Open Time: ' : 'وقت الفتح: ',
-                              ),
-                              TextButton(
-                                onPressed: () async {
-                                  final selectedTime = await showTimePicker(
-                                    context: context,
-                                    initialTime: TimeOfDay.now(),
-                                  );
-                                  if (selectedTime != null) {
-                                    setState(() {
-                                      openingTimes[day] = selectedTime;
-                                    });
-                                  }
-                                },
-                                child: Text(
-                                  openingTimes[day]?.format(context) ??
-                                      'Select Time',
-                                  style: TextStyle(
-                                    color: Color(0xFF1D365C),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 5),
-                              Text(
-                                isEnglish ? 'Close Time: ' : 'وقت الإغلاق: ',
-                              ),
-                              TextButton(
-                                onPressed: () async {
-                                  final selectedTime = await showTimePicker(
-                                    context: context,
-                                    initialTime: TimeOfDay.now(),
-                                  );
-                                  if (selectedTime != null) {
-                                    setState(() {
-                                      closingTimes[day] = selectedTime;
-                                    });
-                                  }
-                                },
-                                child: Text(
-                                  closingTimes[day]?.format(context) ??
-                                      'Select Time',
-                                  style: TextStyle(
-                                    color: Color(0xFF1D365C),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-  void updateWorkingDaysArray() {
-    workingDays.clear();
-    List<String> arabicDays = [
-      'الأحد',
-      'الاثنين',
-      'الثلاثاء',
-      'الأربعاء',
-      'الخميس',
-      'الجمعة',
-      'السبت'
-    ];
-    List<String> englishDays = [
-      'sunday',
-      'monday',
-      'tuesday',
-      'wednesday',
-      'thursday',
-      'friday',
-      'saturday'
-    ];
-
-    for (String day in selectedDays) {
-      int index = arabicDays.indexOf(day);
-      String englishDay = englishDays[index];
-      workingDays['$englishDay'] = {
-        'from': openingTimes[day]?.format(context) ?? 'Select Time',
-        'to': closingTimes[day]?.format(context) ?? 'Select Time',
-      };
-    }
-    print(jsonEncode(workingDays));
-    // print(workingDays);
-  }
-
   void _openMap() async {
     final selectedLocation = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => MapScreen(
+        builder: (context) => EditMapScreen(
           onLocationSelected: (addressName, location) {
             // Update the address text field with the selected location
             address.text = '$addressName';
@@ -600,17 +665,17 @@ class _CreateStoreState extends State<CreateStore> {
   }
 }
 
-class MapScreen extends StatefulWidget {
+class EditMapScreen extends StatefulWidget {
   final Function(String, LatLng) onLocationSelected;
 
-  const MapScreen({Key? key, required this.onLocationSelected})
+  const EditMapScreen({Key? key, required this.onLocationSelected})
       : super(key: key);
 
   @override
-  _MapScreenState createState() => _MapScreenState();
+  _EditMapScreenState createState() => _EditMapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _EditMapScreenState extends State<EditMapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

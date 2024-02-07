@@ -26,26 +26,19 @@ class _QrScannerState extends State<QrScanner> {
 
     return DirectionalityWrapper(
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.arrow_forward),
-              onPressed: () {
-                // Navigate back to the previous screen
-                Navigator.pop(context);
-              },
-              // Change the color of the back button icon
-              color: Color.fromARGB(255, 7, 0, 34),
-            ),
-          ],
-        ),
+      
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+               CustomAppBar(
+                    onBackTap: () {
+        Navigator.pushReplacementNamed(context, '/home');
+                    },
+                    iconColor: Colors.black,
+                    marginTop:30
+                  ),
               Expanded(
                 child: QRView(
                   key: qrKey,
