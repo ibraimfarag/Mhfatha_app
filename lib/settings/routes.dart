@@ -21,6 +21,7 @@ class Routes {
   static String vendorsMain ='/mainstores';
   static String createstore ='/createstore';
   static String editstore ='/editstore';
+  static String storeDiscounts ='/storediscounts';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -42,8 +43,9 @@ class Routes {
       restPassword : (context) => RestPassword(),
       vendorsMain : (context) => MainStores(),
       createstore : (context) => CreateStore(),
-      editstore : (context) => EditStore( ),
-  
+      editstore : (context) => EditStore(),
+      storeDiscounts : (context) => MainDiscounts(),
+      
       
     };
   }

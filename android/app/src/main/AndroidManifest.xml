@@ -9,8 +9,9 @@
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
-    <application android:label="Mhfatha" android:name="${applicationName}" android:icon="@mipmap/launcher_icon"  android:enableOnBackInvokedCallback="true">
+    <application android:label="Mhfatha" android:name="${applicationName}" android:icon="@mipmap/launcher_icon"  android:enableOnBackInvokedCallback="true"   android:requestLegacyExternalStorage="true" >
         <activity android:name=".MainActivity" android:exported="true" android:launchMode="singleTop" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize">
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user

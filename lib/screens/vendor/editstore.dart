@@ -30,6 +30,7 @@ class _EditStoreState extends State<EditStore> {
   String selectedCategory = '1';
   String? _selectedProfileImagePath;
   String storeimage = 'Market.png';
+  String store_idd='';
 
   // List<String> selectedDays = []; // Holds selected days of the week
   Map<String, TimeOfDay?> openingTimes = {};
@@ -80,14 +81,11 @@ class _EditStoreState extends State<EditStore> {
                   )),
         );
         workingDayss.forEach((day, times) {
-
           selectedDays[day] = true;
 
-                     openingTimes[day] = _getTimeOfDayFromString(times['from']);
-        closingTimes[day] = _getTimeOfDayFromString(times['to']);
-
+          openingTimes[day] = _getTimeOfDayFromString(times['from']);
+          closingTimes[day] = _getTimeOfDayFromString(times['to']);
         });
-   
 
         store_name.text = '${storeData?['name']}' ?? '';
         address.text = '${storeData?['location']}' ?? '';
@@ -99,38 +97,38 @@ class _EditStoreState extends State<EditStore> {
             '${storeData?['region']}' ?? '${authProvider.user!['region']}';
         selectedCategory = '${storeData?['category_id']}';
         storeimage = '${storeData?['photo']}' ?? 'Market.png';
-
+        store_idd = '${storeData?['id']}' ?? '';
         print('example :  $workingDayss');
         // print('Days:  $selectedDays');
       });
     });
-print(openingTimes);
-print(closingTimes);
+    print(openingTimes);
+    print(closingTimes);
     // Get authProvider and selectedRegion after fetching storeData
     authProvider.updateUserData(context);
   }
-TimeOfDay _getTimeOfDayFromString(String? timeString) {
-  if (timeString != null && timeString.isNotEmpty) {
-    // Replace any non-breaking space characters with regular spaces
-    timeString = timeString.replaceAll('\u202F', ' ');
 
-    // Try parsing with multiple formats to handle different time representations
-    final List<String> formats = ['hh:mm a', 'h:mm a', 'H:mm'];
-    for (final format in formats) {
-      try {
-        final dateTime = DateFormat(format).parse(timeString);
-        return TimeOfDay.fromDateTime(dateTime);
-      } catch (_) {
-        continue; // Try the next format if parsing fails
+  TimeOfDay _getTimeOfDayFromString(String? timeString) {
+    if (timeString != null && timeString.isNotEmpty) {
+      // Replace any non-breaking space characters with regular spaces
+      timeString = timeString.replaceAll('\u202F', ' ');
+
+      // Try parsing with multiple formats to handle different time representations
+      final List<String> formats = ['hh:mm a', 'h:mm a', 'H:mm'];
+      for (final format in formats) {
+        try {
+          final dateTime = DateFormat(format).parse(timeString);
+          return TimeOfDay.fromDateTime(dateTime);
+        } catch (_) {
+          continue; // Try the next format if parsing fails
+        }
       }
+      // If none of the formats match, return a default time
+      print('Failed to parse time: $timeString');
     }
-    // If none of the formats match, return a default time
-    print('Failed to parse time: $timeString');
+    // Return a default time if the input is invalid
+    return TimeOfDay(hour: 0, minute: 0);
   }
-  // Return a default time if the input is invalid
-  return TimeOfDay(hour: 0, minute: 0);
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -335,24 +333,14 @@ TimeOfDay _getTimeOfDayFromString(String? timeString) {
                             mobile,
                             '',
                           ),
-                          // buildSettingItem(
-                          //   context,
-                          //   'Tax number',
-                          //   'الرقم الضريبي',
-                          //   () {},
-                          //   taxNumber,
-                          //   '',
-                          // ),
-//                  WeekdaysSelector(
-//   onChanged: (workingDays) {
-//     setState(() {
-//       workingDayss = workingDays;
-//       selectedDays = workingDays.keys.toList(); // Update selectedDays with the keys of workingDays
-//     });
-//   },
-//   workingDays: workingDayss,
-// ),
-
+                          buildSettingItem(
+                            context,
+                            'Tax number',
+                            'الرقم الضريبي',
+                            () {},
+                            taxNumber,
+                            '',
+                          ),
                           Container(
                               margin: EdgeInsets.symmetric(
                                   vertical: 5, horizontal: 0),
@@ -384,7 +372,6 @@ TimeOfDay _getTimeOfDayFromString(String? timeString) {
                                   buildDayTimeSelector('Saturday'),
                                 ],
                               )),
-
                           ElevatedButton(
                             onPressed: () {
                               QuickAlert.show(
@@ -397,24 +384,23 @@ TimeOfDay _getTimeOfDayFromString(String? timeString) {
                                   cancelBtnText: isEnglish ? 'No' : 'لا',
                                   confirmBtnColor: Colors.green,
                                   onConfirmBtnTap: () async {
-                                    // bool success =
-                                    //     await vendorApi.CreateStore(
-                                    //         context: context,
-                                    //         store_name: store_name.text,
-                                    //         address: address.text,
-                                    //         latitude: latitude.text,
-                                    //         longitude: longitude.text,
-                                    //         workingdays: workingDays,
-                                    //         region: selectedRegion,
-                                    //         categoryId: selectedCategory,
-                                    //         mobile: mobile.text,
-                                    //         tax_number: taxNumber.text,
-                                    //         imageFile: _selectedProfileImagePath !=
-                                    //                 null
-                                    //             ? File(
-                                    //                 _selectedProfileImagePath ??
-                                    //                     '')
-                                    //             : null);
+                                    bool success = await vendorApi.updatestore(
+                                        context: context,
+                                        store_id: store_idd,
+                                        store_name: store_name.text,
+                                        address: address.text,
+                                        latitude: latitude.text,
+                                        longitude: longitude.text,
+                                        workingdays: workingDayss,
+                                        region: selectedRegion,
+                                        categoryId: selectedCategory,
+                                        mobile: mobile.text,
+                                        tax_number: taxNumber.text,
+                                        imageFile: _selectedProfileImagePath !=
+                                                null
+                                            ? File(
+                                                _selectedProfileImagePath ?? '')
+                                            : null);
                                   });
                             },
                             style: ElevatedButton.styleFrom(
@@ -442,7 +428,7 @@ TimeOfDay _getTimeOfDayFromString(String? timeString) {
     );
   }
 
- Widget buildDayTimeSelector(String day) {
+  Widget buildDayTimeSelector(String day) {
   bool isEnglish = Provider.of<AppState>(context).isEnglish;
 
   return Container(
@@ -463,6 +449,20 @@ TimeOfDay _getTimeOfDayFromString(String? timeString) {
               onChanged: (value) {
                 setState(() {
                   selectedDays[day] = value!;
+                  if (value!) {
+                    // If the day is selected, initialize the opening and closing times if not already initialized
+                    if (openingTimes[day] == null) {
+                      openingTimes[day] = TimeOfDay(hour: 9, minute: 0); // Set default opening time
+                    }
+                    if (closingTimes[day] == null) {
+                      closingTimes[day] = TimeOfDay(hour: 18, minute: 0); // Set default closing time
+                    }
+                  } else {
+                    // If the day is deselected, remove its entry from workingDayss
+                    workingDayss.remove(day);
+                  }
+                  // Print updated workingDayss
+                  print('Updated workingDayss: $workingDayss');
                 });
               },
               activeColor: Color(0xFF1D365C),
@@ -494,6 +494,11 @@ TimeOfDay _getTimeOfDayFromString(String? timeString) {
                   if (selectedTime != null) {
                     setState(() {
                       openingTimes[day] = selectedTime;
+                      // Update workingDayss with the selected opening time
+                      workingDayss[day] ??= {};
+                      workingDayss[day]!['from'] = selectedTime.format(context);
+                      // Print updated workingDayss
+                      print('Updated workingDayss: $workingDayss');
                     });
                   }
                 },
@@ -517,6 +522,11 @@ TimeOfDay _getTimeOfDayFromString(String? timeString) {
                   if (selectedTime != null) {
                     setState(() {
                       closingTimes[day] = selectedTime;
+                      // Update workingDayss with the selected closing time
+                      workingDayss[day] ??= {};
+                      workingDayss[day]!['to'] = selectedTime.format(context);
+                      // Print updated workingDayss
+                      print('Updated workingDayss: $workingDayss');
                     });
                   }
                 },
@@ -533,6 +543,7 @@ TimeOfDay _getTimeOfDayFromString(String? timeString) {
     ),
   );
 }
+
 
 // Helper method to get English day name
   String getEnglishDayName(String day) {

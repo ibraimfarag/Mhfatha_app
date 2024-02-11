@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:mhfatha/settings/imports.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class MainStores extends StatefulWidget {
   @override
@@ -32,6 +33,8 @@ class _MainStoresState extends State<MainStores> {
     super.initState();
     authProvider = Provider.of<AuthProvider>(context, listen: false);
     Api api = Api(); // Initialize vendorApi in initState
+    final vendorApi = VendorApi(context);
+
     getVendorStores(); // Call fetchVendorStores after initializing vendorApi
   }
 
@@ -72,7 +75,7 @@ class _MainStoresState extends State<MainStores> {
     bool isDarkMode = Provider.of<AppState>(context).isDarkMode;
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
-    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     String lang = Provider.of<AppState>(context, listen: false).display;
     return DirectionalityWrapper(
@@ -145,49 +148,47 @@ class _MainStoresState extends State<MainStores> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-
-                              Column(children: [
-                                    Text(
-                                isEnglish
-                                    ? 'Purchases times'
-                                    : 'مرات الشراء',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
-                              ),    Text(
-                                isEnglish
-                                    ? ' $sumCountTimess'
-                                    : '$sumCountTimess',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
-                              ),
-
-                              ]),
-                          
-                              SizedBox(width: 20),
                               Column(children: [
                                 Text(
-                                isEnglish
-                                    ? 'Total profits'
-                                    : 'الأرباح الإجمالية',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
+                                  isEnglish ? 'Purchases times' : 'مرات الشراء',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
                                 ),
-                              ),Text(
-                                isEnglish
-                                    ? '$sumTotalPaymentss SAR'
-                                    : '$sumTotalPaymentss ريال',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
+                                Text(
+                                  isEnglish
+                                      ? ' $sumCountTimess'
+                                      : '$sumCountTimess',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
                                 ),
-                              ),
-                              ],)
-                              
+                              ]),
+                              SizedBox(width: 20),
+                              Column(
+                                children: [
+                                  Text(
+                                    isEnglish
+                                        ? 'Total profits'
+                                        : 'الأرباح الإجمالية',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  Text(
+                                    isEnglish
+                                        ? '$sumTotalPaymentss SAR'
+                                        : '$sumTotalPaymentss ريال',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
+                              )
                             ],
                           ),
                           SizedBox(height: 16),
@@ -259,6 +260,7 @@ class _MainStoresState extends State<MainStores> {
                     ],
                   ),
                   Container(
+                    width: double.infinity,
                     padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                     decoration: BoxDecoration(
                       color: Color(0xFFF3F4F7),
@@ -466,8 +468,37 @@ class _MainStoresState extends State<MainStores> {
                       ),
                       PopupMenuItem(
                         child: GestureDetector(
+                          onTap: () async {
+                            // Permission granted or already granted, proceed with downloading QR code image
+                            await VendorApi(context)
+                                .getStoreQRImage('${store['id']}', context);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 16),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  isEnglish ? 'QR' : 'الباركود',
+                                ),
+                                SizedBox(width: 8),
+                                Icon(Icons.barcode_reader),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      PopupMenuItem(
+                        child: GestureDetector(
                           onTap: () {
-                            // Handle option 1
+                            Navigator.pushNamed(
+                              context,
+                              '/storediscounts',
+                              arguments:
+                                  store, // Pass the store data to the route
+                            );
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(
@@ -490,7 +521,20 @@ class _MainStoresState extends State<MainStores> {
                       PopupMenuItem(
                         child: GestureDetector(
                           onTap: () {
-                            // Handle option 2
+                            QuickAlert.show(
+                              context: context,
+                              type: QuickAlertType.confirm,
+                              text: isEnglish
+                                  ? 'are you sure you want to delete store ${store['name']} ?'
+                                  : '؟ ${store['name']} هل انت متأكد من حذف متجر ',
+                              cancelBtnText: isEnglish ? 'No' : 'لا',
+                              confirmBtnText: isEnglish ? 'yes' : 'نعم',
+                              confirmBtnColor: Colors.greenAccent,
+                              onConfirmBtnTap: () async {
+                                await VendorApi(context)
+                                    .deleteStore('${store['id']}', context);
+                              },
+                            );
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(
