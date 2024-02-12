@@ -174,7 +174,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         buildSettingItem(
                             context, Icons.privacy_tip, 'Privacy', 'الخصوصية',
                             () {
-                          // Implement privacy logic
+                          Navigator.pushNamed(context, '/NotificationReceiver');
                         }),
 
                         buildSettingItem(
