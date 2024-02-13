@@ -2,9 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Requesting permission to save the QR code image to your photo library.</string>
-
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -36,9 +33,9 @@
 	<key>NSCameraUsageDescription</key>
 	<string>We need access to your camera for taking photos.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-<string>We need your location to provide better service.</string>
+	<string>We need your location to provide better service.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-<string>We need your location to provide better service.</string>
+	<string>We need your location to provide better service.</string>
 	<key>NSLocationUsageDescription</key>
 	<string>We need your location to provide better service.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
