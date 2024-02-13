@@ -13,6 +13,7 @@ class _NearByState extends State<NearBy> {
     List<dynamic> filteredStores =
         ModalRoute.of(context)!.settings.arguments as List<dynamic>;
     final isEnglish = Provider.of<AppState>(context).isEnglish;
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     return DirectionalityWrapper(
       child: Scaffold(

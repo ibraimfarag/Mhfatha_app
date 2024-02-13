@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:mhfatha/settings/imports.dart';
@@ -105,7 +106,7 @@ class _MainStoresState extends State<MainStores> {
                                   height: 5,
                                 ),
                                 Text(
-                                  isEnglish ? ' welcome ' : ' مرحبا بك',
+                                  isEnglish ? ' Welcome ' : ' مرحبا بك',
                                   style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
@@ -150,7 +151,7 @@ class _MainStoresState extends State<MainStores> {
                             children: [
                               Column(children: [
                                 Text(
-                                  isEnglish ? 'Purchases times' : 'مرات الشراء',
+                                  isEnglish ? 'Purchases Times' : 'مرات الشراء',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 16,
@@ -171,7 +172,7 @@ class _MainStoresState extends State<MainStores> {
                                 children: [
                                   Text(
                                     isEnglish
-                                        ? 'Total profits'
+                                        ? 'Total Profits'
                                         : 'الأرباح الإجمالية',
                                     style: TextStyle(
                                       color: Colors.white,
@@ -246,7 +247,7 @@ class _MainStoresState extends State<MainStores> {
                               isEnglish ? Icon(Icons.add) : Container(),
                               Text(
                                 isEnglish
-                                    ? 'Add store'
+                                    ? 'Add Store'
                                     : 'اضافة متجر', // Text based on language
                               ),
                               SizedBox(width: 5), // Space between icon and text
@@ -434,94 +435,173 @@ class _MainStoresState extends State<MainStores> {
                     ],
                   ),
                   // Context Menu Button
-                  PopupMenuButton(
-                    icon: Icon(Icons.more_vert),
-                    // offset: Offset(0, 100), // Example offset
+                  // PopupMenuButton(
+                  //   icon: Icon(Icons.more_vert),
+                  //   // offset: Offset(0, 100), // Example offset
+                  //   itemBuilder: (context) => [
+                  //     PopupMenuItem(
+                  //       enabled: store['verification'] !=
+                  //           0, // Disable when verification is 0
+                  //       child: GestureDetector(
+                  //         onTap: () {
+                  //           if (store['verification'] != 0) {
+                  //             // Only navigate if verification is not 0
+                  //             Navigator.pushNamed(
+                  //               context,
+                  //               '/editstore',
+                  //               arguments:
+                  //                   store, // Pass the store data to the route
+                  //             );
+                  //           }
+                  //         },
+                  //         child: Container(
+                  //           padding: EdgeInsets.symmetric(
+                  //               vertical: 8, horizontal: 16),
+                  //           // width: 120, // Set width for the container
+                  //           child: Row(
+                  //             mainAxisAlignment: MainAxisAlignment.end,
+                  //             crossAxisAlignment: CrossAxisAlignment.end,
+                  //             children: [
+                  //               Text(
+                  //                 isEnglish ? 'Edit' : 'تعديل',
+                  //               ),
+                  //               SizedBox(width: 8),
+                  //               Icon(Icons.edit), // Edit icon
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     PopupMenuItem(
+                  //       child: GestureDetector(
+                  //         onTap: () async {
+                  //           // Permission granted or already granted, proceed with downloading QR code image
+                  //           await VendorApi(context)
+                  //               .getStoreQRImage('${store['id']}', context);
+                  //         },
+                  //         child: Container(
+                  //           padding: EdgeInsets.symmetric(
+                  //               vertical: 8, horizontal: 16),
+                  //           child: Row(
+                  //             mainAxisAlignment: MainAxisAlignment.end,
+                  //             crossAxisAlignment: CrossAxisAlignment.end,
+                  //             children: [
+                  //               Text(
+                  //                 isEnglish ? 'QR' : 'الباركود',
+                  //               ),
+                  //               SizedBox(width: 8),
+                  //               Icon(Icons.barcode_reader),
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     PopupMenuItem(
+                  //       child: GestureDetector(
+                  //         onTap: () {
+                  //           Navigator.pushNamed(
+                  //             context,
+                  //             '/storediscounts',
+                  //             arguments:
+                  //                 store, // Pass the store data to the route
+                  //           );
+                  //         },
+                  //         child: Container(
+                  //           padding: EdgeInsets.symmetric(
+                  //               vertical: 8, horizontal: 16),
+                  //           // width: 200, // Set width for the container
+                  //           child: Row(
+                  //             mainAxisAlignment: MainAxisAlignment.end,
+                  //             crossAxisAlignment: CrossAxisAlignment.end,
+                  //             children: [
+                  //               Text(
+                  //                 isEnglish ? 'Discounts' : 'الخصومات',
+                  //               ),
+                  //               SizedBox(width: 8),
+                  //               Icon(Icons.discount), // Edit icon
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     PopupMenuItem(
+                  //       child: GestureDetector(
+                  //         onTap: () {
+                  //           QuickAlert.show(
+                  //             context: context,
+                  //             type: QuickAlertType.confirm,
+                  //             text: isEnglish
+                  //                 ? 'are you sure you want to delete store ${store['name']} ?'
+                  //                 : '؟ ${store['name']} هل انت متأكد من حذف متجر ',
+                  //             cancelBtnText: isEnglish ? 'No' : 'لا',
+                  //             confirmBtnText: isEnglish ? 'yes' : 'نعم',
+                  //             confirmBtnColor: Colors.greenAccent,
+                  //             onConfirmBtnTap: () async {
+                  //               await VendorApi(context)
+                  //                   .deleteStore('${store['id']}', context);
+                  //             },
+                  //           );
+                  //         },
+                  //         child: Container(
+                  //           padding: EdgeInsets.symmetric(
+                  //               vertical: 8, horizontal: 16),
+                  //           // width: 120, // Set width for the container
+                  //           child: Row(
+                  //             mainAxisAlignment: MainAxisAlignment.end,
+                  //             crossAxisAlignment: CrossAxisAlignment.end,
+                  //             children: [
+                  //               Text(
+                  //                 isEnglish ? 'Delete' : 'حذف',
+                  //                 style: TextStyle(
+                  //                     color: Colors
+                  //                         .red), // Text style with red color
+                  //               ),
+                  //               SizedBox(width: 8),
+                  //               Icon(Icons.delete,
+                  //                   color: Colors
+                  //                       .red), // Delete icon with red color
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // )
+                  PullDownButton(
                     itemBuilder: (context) => [
-                      PopupMenuItem(
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              '/editstore',
-                              arguments:
-                                  store, // Pass the store data to the route
-                            );
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 16),
-                            // width: 120, // Set width for the container
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  isEnglish ? 'Edit' : 'تعديل',
-                                ),
-                                SizedBox(width: 8),
-                                Icon(Icons.edit), // Edit icon
-                              ],
-                            ),
-                          ),
-                        ),
+                      PullDownMenuItem(
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/editstore',
+                            arguments:
+                                store, // Pass the store data to the route
+                          );
+                        },
+                        title: isEnglish ? 'Edit' : 'تعديل',
+                        icon: Icons.edit,
                       ),
-                      PopupMenuItem(
-                        child: GestureDetector(
-                          onTap: () async {
-                            // Permission granted or already granted, proceed with downloading QR code image
-                            await VendorApi(context)
-                                .getStoreQRImage('${store['id']}', context);
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 16),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  isEnglish ? 'QR' : 'الباركود',
-                                ),
-                                SizedBox(width: 8),
-                                Icon(Icons.barcode_reader),
-                              ],
-                            ),
-                          ),
-                        ),
+                    //  Icon(Icons.barcode_reader)
+                      PullDownMenuItem(
+                        onTap: () async {  await VendorApi(context)
+                                .getStoreQRImage('${store['id']}', context);},
+                        title:isEnglish ? 'QR' : 'الباركود',
+                        
+                        icon: CupertinoIcons.qrcode_viewfinder,
                       ),
-                      PopupMenuItem(
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.pushNamed(
+                      PullDownMenuItem(
+                        onTap: () {Navigator.pushNamed(
                               context,
                               '/storediscounts',
                               arguments:
                                   store, // Pass the store data to the route
-                            );
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 16),
-                            // width: 200, // Set width for the container
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  isEnglish ? 'Discounts' : 'الخصومات',
-                                ),
-                                SizedBox(width: 8),
-                                Icon(Icons.discount), // Edit icon
-                              ],
-                            ),
-                          ),
-                        ),
+                            );},
+                        title: isEnglish ? 'Discounts' : 'الخصومات',
+                        
+                        icon: Icons.discount,
                       ),
-                      PopupMenuItem(
-                        child: GestureDetector(
-                          onTap: () {
-                            QuickAlert.show(
+                      PullDownMenuItem(
+                        onTap: () { QuickAlert.show(
                               context: context,
                               type: QuickAlertType.confirm,
                               text: isEnglish
@@ -534,32 +614,19 @@ class _MainStoresState extends State<MainStores> {
                                 await VendorApi(context)
                                     .deleteStore('${store['id']}', context);
                               },
-                            );
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 16),
-                            // width: 120, // Set width for the container
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  isEnglish ? 'Delete' : 'حذف',
-                                  style: TextStyle(
-                                      color: Colors
-                                          .red), // Text style with red color
-                                ),
-                                SizedBox(width: 8),
-                                Icon(Icons.delete,
-                                    color: Colors
-                                        .red), // Delete icon with red color
-                              ],
-                            ),
-                          ),
-                        ),
+                            );},
+                        title: isEnglish ? 'Delete' : 'حذف',
+                        
+                        isDestructive: true,
+                        icon: CupertinoIcons.delete,
                       ),
                     ],
+                    buttonBuilder: (context, showMenu) => CupertinoButton(
+                      onPressed: showMenu,
+                      padding: EdgeInsets.zero,
+                      // child: const Icon(CupertinoIcons.ellipsis_circle),
+                      child: const Icon(Icons.more_vert),
+                    ),
                   )
                 ],
               ),

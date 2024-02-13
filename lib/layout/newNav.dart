@@ -31,12 +31,12 @@ class _NewNavState extends State<NewNav> {
               '/home',
               currentRoute ==
                   '/home'), // Customize icon, label, and route for each item
-          _buildNavItem(Icons.wallet, isEnglish ? 'my wallet' : 'محفظتي',
+          _buildNavItem(Icons.wallet, isEnglish ? 'My Wallet' : 'محفظتي',
               '/requests', currentRoute == '/requests'),
           _buildNavItem(Icons.settings, isEnglish ? 'Settings' : 'الإعدادات',
               '/settings', currentRoute == '/settings'),
           if (authProvider.isVendor)
-            _buildNavItem(Icons.store, isEnglish ? 'stores' : 'المتاجر',
+            _buildNavItem(Icons.store, isEnglish ? 'Stores' : 'المتاجر',
                 '/mainstores', currentRoute == '/mainstores'),
         ],
       ),

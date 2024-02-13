@@ -54,6 +54,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
         Provider.of<AuthProvider>(context, listen: false);
     String authName = authProvider.user![
         'first_name']; // Replace with the actual property holding the user's name
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     return DirectionalityWrapper(
       child: Scaffold(
@@ -88,8 +89,8 @@ class _RequestsScreenState extends State<RequestsScreen> {
                             ),
                             Text(
                               isEnglish
-                                  ? ' Gained $totalDiscountsCount discount'
-                                  : ' نفذت $totalDiscountsCount خصم  ',
+                                  ? ' Gained $totalDiscountsCount Discount'
+                                  : ' حصلت على $totalDiscountsCount خصم  ',
                               style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
@@ -100,7 +101,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
                             ),
                             Text(
                               isEnglish
-                                  ? ' total payments'
+                                  ? ' Total Payments'
                                   : ' اجمالي المدفوعات  ',
                               style: TextStyle(
                                   fontSize: 14,
@@ -121,7 +122,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
                             ),
                             Text(
                               isEnglish
-                                  ? ' total savings '
+                                  ? ' Total Savings '
                                   : ' اجمالي التوفير ',
                               style: TextStyle(
                                   fontSize: 14,

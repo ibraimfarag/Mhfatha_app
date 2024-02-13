@@ -30,6 +30,7 @@ class _RestPasswordState extends State<RestPassword> {
   @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
     return DirectionalityWrapper(
       child: Scaffold(

@@ -30,6 +30,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         Provider.of<AuthProvider>(context, listen: false);
     Api api = Api();
     Color ui = Color.fromARGB(255, 250, 82, 82);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     return DirectionalityWrapper(
         child: Scaffold(
@@ -57,7 +58,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 height: 5,
                               ),
                               Text(
-                                isEnglish ? ' welcome ' : ' مرحبا بك',
+                                isEnglish ? ' Welcome ' : ' مرحبا بك',
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
@@ -167,7 +168,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         }),
 
                         buildSettingItem(
-                            context, Icons.password, 'change password', 'تغير كلة السر ',
+                            context, Icons.password, 'Change Password', 'تغيير كلمة السر ',
                             () {
                             Navigator.pushNamed(context, '/changePasswword');
                         }),

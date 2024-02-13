@@ -34,6 +34,7 @@ class _ChangePasswordState extends State<ChangePassword> {
     bool isDarkMode = Provider.of<AppState>(context).isDarkMode;
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     String lang = Provider.of<AppState>(context, listen: false).display;
     return DirectionalityWrapper(
@@ -66,7 +67,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                 height: 5,
                               ),
                               Text(
-                                isEnglish ? ' welcome ' : ' مرحبا بك',
+                                isEnglish ? ' Welcome ' : ' مرحبا بك',
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
@@ -118,15 +119,15 @@ class _ChangePasswordState extends State<ChangePassword> {
                       children: [
                         SizedBox(height: 20),
                         buildSettingItem(
-                            context, 'current password', 'كلمة السر الحالية',
+                            context, 'Current Password', 'كلمة السر الحالية',
                             () {
                           // Implement report logic
                         }, currentPassword, ' '),
                         buildSettingItem(
-                            context, 'new password', 'كلمة السر الجديدة', () {
+                            context, 'New Password', 'كلمة السر الجديدة', () {
                           // Implement report logic
                         }, newpassword, ' '),
-                        buildSettingItem(context, 'confirm new password',
+                        buildSettingItem(context, 'Confirm New Password',
                             'تأكيد كلمة السر الجديدة', () {
                           // Implement report logic
                         }, confirmPassword, ' '),
@@ -179,7 +180,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                 ),
                               ),
                               child: Text(
-                                isEnglish ? 'update' : 'تحديث',
+                                isEnglish ? 'Update' : 'تحديث',
                                 style: TextStyle(color: colors),
                               ),
                             ),

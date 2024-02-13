@@ -136,7 +136,7 @@ class _EditStoreState extends State<EditStore> {
     bool isDarkMode = Provider.of<AppState>(context).isDarkMode;
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
-    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     // Initialize UI properties after getting storeData
 
@@ -203,7 +203,7 @@ class _EditStoreState extends State<EditStore> {
                             labelcolor: colors,
                             color: ui,
                             label:
-                                isEnglish ? 'Store photo: ' : 'صورة المتجر: ',
+                                isEnglish ? 'Store Photo: ' : 'صورة المتجر: ',
                             selectPhotoText:
                                 isEnglish ? 'Select Photo' : 'اختر صورة',
                             changePhotoText:
@@ -219,7 +219,7 @@ class _EditStoreState extends State<EditStore> {
                           ),
                           buildSettingItem(
                             context,
-                            'store name',
+                            'Store Name',
                             'اسم المتجر',
                             () {},
                             store_name,
@@ -311,7 +311,7 @@ class _EditStoreState extends State<EditStore> {
                                 children: [
                                   SizedBox(width: 10),
                                   Text(isEnglish
-                                      ? 'select on map'
+                                      ? 'Select On Map'
                                       : 'حدد على الخريطة'),
                                 ],
                               ),
@@ -319,7 +319,7 @@ class _EditStoreState extends State<EditStore> {
                           ),
                           buildSettingItem(
                             context,
-                            'address',
+                            'Address',
                             'العنوان',
                             () {},
                             address,
@@ -327,7 +327,7 @@ class _EditStoreState extends State<EditStore> {
                           ),
                           buildSettingItem(
                             context,
-                            'mobile number',
+                            'Mobile Number',
                             'رقم الجوال',
                             () {},
                             mobile,
@@ -335,7 +335,7 @@ class _EditStoreState extends State<EditStore> {
                           ),
                           buildSettingItem(
                             context,
-                            'Tax number',
+                            'Tax Number',
                             'الرقم الضريبي',
                             () {},
                             taxNumber,
@@ -355,7 +355,7 @@ class _EditStoreState extends State<EditStore> {
                                   SizedBox(height: 20),
                                   Text(
                                     isEnglish
-                                        ? 'Select working Days'
+                                        ? 'Select Working Days'
                                         : 'حدد أيام العمل',
                                     style: TextStyle(
                                       fontSize: 16,
@@ -378,7 +378,7 @@ class _EditStoreState extends State<EditStore> {
                                   context: context,
                                   type: QuickAlertType.confirm,
                                   text: isEnglish
-                                      ? 'are you sure store info?'
+                                      ? 'Are you sure store info?'
                                       : 'هل انت متأكد من معلومات المتجر؟',
                                   confirmBtnText: isEnglish ? 'Yes' : 'نعم',
                                   cancelBtnText: isEnglish ? 'No' : 'لا',
@@ -410,7 +410,7 @@ class _EditStoreState extends State<EditStore> {
                               ),
                             ),
                             child: Text(
-                              isEnglish ? 'edit store' : 'تحديث المتجر',
+                              isEnglish ? 'Edit Store' : 'تحديث المتجر',
                               style: TextStyle(color: Colors.black),
                             ),
                           ),

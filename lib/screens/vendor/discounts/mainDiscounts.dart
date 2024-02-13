@@ -90,8 +90,8 @@ class _MainDiscountsState extends State<MainDiscounts> {
     bool isDarkMode = Provider.of<AppState>(context).isDarkMode;
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
-    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
     // final Map<String, dynamic> store = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     String lang = Provider.of<AppState>(context, listen: false).display;
     return DirectionalityWrapper(
@@ -344,7 +344,7 @@ class _MainDiscountsState extends State<MainDiscounts> {
                               isEnglish ? Icon(Icons.add) : Container(),
                               Text(
                                 isEnglish
-                                    ? 'Add disscount'
+                                    ? 'Add Disscount'
                                     : 'اضافة خصم', // Text based on language
                               ),
                               SizedBox(width: 5), // Space between icon and text

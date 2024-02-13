@@ -10,6 +10,7 @@ class _NointernetState extends State<Nointernet> {
   Widget build(BuildContext context) {
 
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
     return DirectionalityWrapper(
       child: Scaffold(

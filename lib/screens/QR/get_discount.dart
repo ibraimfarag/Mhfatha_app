@@ -120,6 +120,7 @@ class _GetDiscountState extends State<GetDiscount> {
         _postDiscountDetails();
       }
     }
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
     return DirectionalityWrapper(
       child: Scaffold(

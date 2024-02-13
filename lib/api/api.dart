@@ -190,6 +190,15 @@ class Api {
         // Convert the response data to a JSON string
         String jsonString = jsonEncode(jsonResponse);
         return jsonString;
+      } else if (response.statusCode == 404) {
+        final jsonResponse = jsonDecode(response.body);
+
+        // Convert the response data to a JSON string
+        String jsonString = jsonEncode(jsonResponse);
+
+        
+        print('responseeeeeee : $jsonString');
+        return jsonString;
       } else {
         throw Exception(
             'Failed to get store details by QR. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
@@ -477,42 +486,48 @@ class Api {
       return ''; // Return an empty string or handle the error as needed
     }
   }
-  Future<String> fetchVendorStores(
-    BuildContext context,
-  ) async {
-    final url = Uri.parse('$baseUrl/vendor/stores');
-    bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
-    String lang = Provider.of<AppState>(context, listen: false).display;
-    AuthProvider authProvider =
-        Provider.of<AuthProvider>(context, listen: false);
+Future<String> fetchVendorStores(BuildContext context) async {
+  final url = Uri.parse('$baseUrl/vendor/stores');
+  bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
+  String lang = Provider.of<AppState>(context, listen: false).display;
+  AuthProvider authProvider =
+      Provider.of<AuthProvider>(context, listen: false);
 
-    try {
+  // Show loading indicator asynchronously after the current build
+  await Future.delayed(Duration.zero);
+  _showLoadingDialog(context);
 
+  try {
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${authProvider.token}',
+      },
+    );
 
-      final response = await http.post(
-        url,
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ${authProvider.token}',
-        },
-      );
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      // Convert the response data to a JSON string
+      String jsonString = jsonEncode(jsonResponse);
 
-      if (response.statusCode == 200) {
-        final jsonResponse = jsonDecode(response.body);
-        // Convert the response data to a JSON string
-        String jsonString = jsonEncode(jsonResponse);
-// print(jsonString);
+      // Hide loading indicator
+      Navigator.of(context).pop();
 
-
-        return jsonString;
-      } else {
-        throw Exception(
-            'Failed to get user discounts. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
-      }
-    } catch (e) {
-      return ''; // Return an empty string or handle the error as needed
+      return jsonString;
+    } else {
+      // Hide loading indicator
+      Navigator.of(context).pop();
+      throw Exception(
+          'Failed to get user discounts. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
     }
+  } catch (e) {
+    // Hide loading indicator
+    Navigator.of(context).pop();
+    return ''; // Return an empty string or handle the error as needed
   }
+}
+
 
   Future<Map<String, dynamic>> getRegionsAndCities(BuildContext context) async {
     final url = Uri.parse('$baseUrl/regions');
@@ -930,9 +945,6 @@ class Api {
           'Failed to change password. Check your internet connection.');
     }
   }
-
-
-
 }
 
 void _showLoadingDialog(BuildContext context) {

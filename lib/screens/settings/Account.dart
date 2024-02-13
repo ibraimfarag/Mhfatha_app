@@ -57,6 +57,7 @@ class _AccountScreenState extends State<AccountScreen> {
     bool isDarkMode = Provider.of<AppState>(context).isDarkMode;
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     String lang = Provider.of<AppState>(context, listen: false).display;
     return DirectionalityWrapper(
@@ -88,7 +89,7 @@ class _AccountScreenState extends State<AccountScreen> {
                               ),
                         
                               Text(
-                                isEnglish ? ' welcome ' : ' مرحبا بك',
+                                isEnglish ? ' Welcome ' : ' مرحبا بك',
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
@@ -144,7 +145,7 @@ class _AccountScreenState extends State<AccountScreen> {
                           labelcolor: colors,
                           color: ui,
                           label: isEnglish
-                              ? 'Profile photo: '
+                              ? 'Profile Photo: '
                               : 'الصورة الشخصية: ',
                           selectPhotoText:
                               isEnglish ? 'Select Photo' : 'اختر صورة',
@@ -159,17 +160,17 @@ class _AccountScreenState extends State<AccountScreen> {
                           },
                         ),
                         SizedBox(height: 20),
-                        buildSettingItem(context, 'name', 'الاسم', () {
+                        buildSettingItem(context, 'First Name', 'الاسم', () {
                           // Navigate to account settings screen
                           // Navigator.pushNamed(context, Routes.accountSettings);
                         }, first_name, ' ${authProvider.user!['first_name']}'),
-                        buildSettingItem(context, 'family name', 'اسم العائلة',
+                        buildSettingItem(context, 'Last Name', 'اسم العائلة',
                             () {
                           // Implement privacy logic
                         }, last_name, ' ${authProvider.user!['last_name']}'),
                         buildSettingItem(
                           context,
-                          'birthday',
+                          'Birthday',
                           'تاريخ الميلاد',
                           () {
                             // Show date picker and update the selected date
@@ -178,11 +179,11 @@ class _AccountScreenState extends State<AccountScreen> {
                           birthdayController, // Assume you have a TextEditingController for the birthday
                           ' ${authProvider.user!['birthday']}',
                         ),
-                        buildSettingItem(context, 'mobile number', 'رقم الجوال',
+                        buildSettingItem(context, 'Mobile Number', 'رقم الجوال',
                             () {
                           // Implement report logic
                         }, mobile, ' ${authProvider.user!['mobile']}'),
-                        buildSettingItem(context, 'email', 'البريد الالكتروني',
+                        buildSettingItem(context, 'Email', 'البريد الالكتروني',
                             () {
                           // Implement report logic
                         }, email, ' ${authProvider.user!['email']}'),
@@ -258,7 +259,7 @@ imageFile: _selectedProfileImagePath != null ? File(_selectedProfileImagePath ??
                                 ),
                               ),
                               child: Text(
-                                isEnglish ? 'update' : 'تحديث',
+                                isEnglish ? 'Update' : 'تحديث',
                                 style: TextStyle(color: colors),
                               ),
                             ),

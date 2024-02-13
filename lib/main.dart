@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/services.dart';
 import 'package:mhfatha/settings/imports.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -15,7 +16,20 @@ void main() async {
     SharedPreferences.getInstance(),
   ]);
   
-
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
   runApp(
     MultiProvider(
       providers: [
@@ -36,6 +50,7 @@ class MhfathaApp extends StatefulWidget {
 }
 
 class _MhfathaAppState extends State<MhfathaApp> {
+  final PushNotificationService _notificationService = PushNotificationService();
 
 
   @override
@@ -49,6 +64,9 @@ class _MhfathaAppState extends State<MhfathaApp> {
 
   @override
   Widget build(BuildContext context) {
+
+      _notificationService.initialize();
+
     Provider.of<AppState>(context, listen: false).loadLanguage();
     bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
 

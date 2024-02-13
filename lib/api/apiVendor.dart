@@ -23,6 +23,21 @@ class VendorApi {
   String bearerToken = '';
   AuthProvider? authProvider;
 
+// Timer variable
+late Timer _timer;
+
+// Function to start the timer
+void _startTimer(BuildContext context) {
+  _timer = Timer(Duration(seconds: 3), () {
+    Navigator.of(context).pop();
+  });
+}
+
+// Function to cancel the timer
+void _cancelTimer() {
+  _timer.cancel();
+}
+
   Future<void> initializeData(BuildContext context) async {
     isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
     lang = Provider.of<AppState>(context, listen: false).display;
@@ -88,7 +103,8 @@ class VendorApi {
           type: QuickAlertType.success,
           text: '$MessageC',
           onConfirmBtnTap: () {
-            Navigator.of(context).pop();
+            Navigator.pop(context);
+            Navigator.pop(context);
           },
         );
 
@@ -97,22 +113,28 @@ class VendorApi {
         return jsonResponse['success'];
       } else {
         final jsonResponse = jsonDecode(await response.stream.bytesToString());
-        Navigator.pop(context);
-        Navigator.pop(context);
+        // Navigator.pop(context);
+        // Navigator.pop(context);
 
         // Extracting error messages from the jsonResponse
         final errors = jsonResponse['errors'];
         final errorMessages = errors.values.toList().join('\n');
 
         QuickAlert.show(
-            context: context,
-            type: QuickAlertType.error,
-            title: isEnglish ? 'Error' : 'خطأ',
-            text: errorMessages.isNotEmpty
-                ? errorMessages
-                : 'Sorry, something went wrong',
-            confirmBtnText: isEnglish ? 'ok' : 'حسنا',
-            confirmBtnColor: Colors.red);
+          context: context,
+          type: QuickAlertType.error,
+          title: isEnglish ? 'Error' : 'خطأ',
+          text: errorMessages.isNotEmpty
+              ? errorMessages
+              : 'Sorry, something went wrong',
+          confirmBtnText: isEnglish ? 'ok' : 'حسنا',
+          confirmBtnColor: Colors.red,
+          onConfirmBtnTap: () {
+            Navigator.of(context).pop();
+            // Navigator.of(context).pop();
+          },
+        );
+
         print(jsonResponse);
         throw Exception(
             'Failed to update user profile. Server responded with status code: ${response.statusCode} and error message: $jsonResponse');
@@ -244,40 +266,40 @@ class VendorApi {
     }
   }
 
-  Future<void> downloadAndSaveImage(
-      String imageUrl, String fileName, BuildContext context) async {
-    final response = await http.get(Uri.parse(imageUrl));
-    final bytes = response.bodyBytes;
+Future<void> downloadAndSaveImage(
+    String imageUrl, String fileName, BuildContext context) async {
+  final response = await http.get(Uri.parse(imageUrl));
+  final bytes = response.bodyBytes;
 
-    // Get the directory for storing images
-    final directory = await getApplicationDocumentsDirectory();
-    final imagePath = '${directory.path}/$fileName';
+  // Get the directory for storing images
+  final directory = await getApplicationDocumentsDirectory();
+  final imagePath = '${directory.path}/$fileName';
 
-    // Save the image file
-    await File(imagePath).writeAsBytes(bytes);
+  // Save the image file
+  await File(imagePath).writeAsBytes(bytes);
 
-    // Add image to the phone's image directory
-    final result = await ImageGallerySaver.saveFile(imagePath);
-    print('Image saved to gallery: $result');
+  // Add image to the phone's image directory
+  final result = await ImageGallerySaver.saveFile(imagePath);
+  print('Image saved to gallery: $result');
 
-    // Show success message
-    QuickAlert.show(
-      context: context,
-      type: QuickAlertType.success,
-      text: isEnglish ? 'Image saved to gallery' : 'تم حفظ الصورة بنجاح',
-      onConfirmBtnTap: () {
-        Navigator.of(context).pop();
-        Navigator.of(context).pop();
-      },
-      confirmBtnText: isEnglish ? 'ok' : 'حسنا',
-      confirmBtnColor: Colors.greenAccent,
-    );
+  // Show success message
+  QuickAlert.show(
+    context: context,
+    type: QuickAlertType.success,
+    text: isEnglish ? 'Image saved to gallery' : 'تم حفظ الصورة بنجاح',
+    onConfirmBtnTap: () {
+      // Cancel the timer when 'onConfirmBtnTap' is called
+      _cancelTimer();
+      // Optionally, you can perform other actions here
+            Navigator.pop(context);
+    },
+    confirmBtnText: isEnglish ? 'ok' : 'حسنا',
+    confirmBtnColor: Colors.greenAccent,
+  );
 
-    // Pop context after 3 seconds
-    Timer(Duration(seconds: 3), () {
-      Navigator.of(context).pop();
-    });
-  }
+  // Pop context after 3 seconds
+  _startTimer(context);
+}
 
   Future<void> deleteStore(String storeId, BuildContext context) async {
     final url = Uri.parse('$baseUrl/vendor/store/delete');
@@ -384,7 +406,7 @@ class VendorApi {
     String category,
     String startDate,
     String endDate,
-    Map<String, dynamic> store ,
+    Map<String, dynamic> store,
     BuildContext context,
   ) async {
     final url = Uri.parse('$baseUrl/vendor/store/discounts/create');

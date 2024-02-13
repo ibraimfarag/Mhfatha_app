@@ -113,6 +113,7 @@ void updateSelectedRegion(String newRegion) {
         SizedBox(height: 14),
 Container(
   margin: EdgeInsets.only(left: 45, right: 45),
+  padding: EdgeInsets.only(left: 10, right: 10),
   decoration: BoxDecoration(
     color: widget.color,
     borderRadius: BorderRadius.circular(10),

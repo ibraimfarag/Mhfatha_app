@@ -22,6 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
     Size size = MediaQuery.of(context).size;
     bool isDark = Provider.of<AppState>(context).isDarkMode;
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);

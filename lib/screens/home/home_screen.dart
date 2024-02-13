@@ -32,6 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+
+
     _getLocation();
     // Set up a timer to check location changes every 90 seconds
     locationTimer = Timer.periodic(Duration(seconds: 3), (Timer timer) async {
@@ -727,12 +729,13 @@ class _HomeScreenState extends State<HomeScreen> {
     bool isDark = Provider.of<AppState>(context).isDarkMode;
     Size size = MediaQuery.of(context).size;
     String lang = Provider.of<AppState>(context, listen: false).display;
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
     String authName = authProvider.user![
         'first_name']; // Replace with the actual property holding the user's name
-    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
     return DirectionalityWrapper(
       child: GestureDetector(
@@ -789,23 +792,23 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: 20,
                       ),
-                      // Container(
-                      //   margin: EdgeInsets.symmetric(horizontal: 25),
-                      //   child: Align(
-                      //     alignment: isEnglish
-                      //         ? Alignment.centerLeft
-                      //         : Alignment.centerRight,
-                      //     child: Text(
-                      //       isEnglish
-                      //           ? 'Welcome back $authName'
-                      //           : 'مرحبًا $authName',
-                      //       style: TextStyle(
-                      //         fontSize: 14,
-                      //         fontWeight: FontWeight.bold,
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 25),
+                        child: Align(
+                          alignment: isEnglish
+                              ? Alignment.centerLeft
+                              : Alignment.centerRight,
+                          child: Text(
+                            isEnglish
+                                ? 'Welcome back $authName'
+                                : 'مرحبًا $authName',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
                       Padding(
                         padding:
                             EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -904,7 +907,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 size: 24),
                             SizedBox(width: 10),
                             Text(
-                              isEnglish ? 'Nearby discounts' : 'خصومات قريبة منك ',
+                              isEnglish ? 'Nearby Discounts' : 'خصومات قريبة منك ',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -940,8 +943,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           padding: const EdgeInsets.all(16.0),
                           child: Text(
                             isEnglish
-                                ? "Unfortunately, there are no stores near you at the moment."
-                                : "للأسف لا توجد متاجر في الوقت الحالي بالقرب منك",
+                                ? "Unfortunately, there are no Discounts near by at the moment."
+                                : "للأسف لا توجد خصومات في الوقت الحالي بالقرب منك",
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -962,8 +965,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
                               Icons.qr_code,
                               'Scan QR',
-                              'مسح كود',
-                              'images/qr.png', // Replace with the actual image path
+                              'مسح الكود',
+                              'images/qr.jpg', // Replace with the actual image path
                               () {
                                 Navigator.pushNamed(context, '/qr-scanner');
                               },
@@ -973,8 +976,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 width: 120,
                                 height: 160,
                                 Icons.store,
-                                'Nearby discounts',
-                                'خصومات قريبة',
+                                'Nearby Discounts',
+                                'الخصومات القريبة',
                                 'images/nearby.jpg', () {
                               Navigator.pushNamed(context, '/nearby',
                                   arguments: filteredStores);
@@ -985,43 +988,43 @@ class _HomeScreenState extends State<HomeScreen> {
                                 width: 100,
                                 height: 160,
                                 Icons.local_offer,
-                                'discounts',
+                                'Discounts',
                                 'الخصومات',
-                                'images/stores.png', () {
+                                'images/discount-2.png', () {
                               Navigator.pushNamed(context, '/filteredStores');
                             }),
                           ],
                         ),
                       ),
 
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          width: double.infinity, // Adjust the width as needed
-                          height: 100, // Adjust the width as needed
-                          margin: EdgeInsets.fromLTRB(15, 0, 15, 10),
-                          decoration: BoxDecoration(
-                            // color: Color(0xFFF3F4F7),
-                            //  color: Color(0xFFFFFFFF),
+                      // GestureDetector(
+                      //   onTap: () {},
+                      //   child: Container(
+                      //     width: double.infinity, // Adjust the width as needed
+                      //     height: 100, // Adjust the width as needed
+                      //     margin: EdgeInsets.fromLTRB(15, 0, 15, 10),
+                      //     decoration: BoxDecoration(
+                      //       // color: Color(0xFFF3F4F7),
+                      //       //  color: Color(0xFFFFFFFF),
 
-                            borderRadius: BorderRadius.circular(30),
-                          ),
+                      //       borderRadius: BorderRadius.circular(30),
+                      //     ),
 
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(30),
-                            child: Image.asset(
-                              'images/elegance.jpg', // Use the provided image path
-                              fit: BoxFit.cover,
-                              // width: 10,
-                            ),
-                          ),
-                        ),
-                      ),
+                      //     child: ClipRRect(
+                      //       borderRadius: BorderRadius.circular(30),
+                      //       child: Image.asset(
+                      //         'images/elegance.jpg', // Use the provided image path
+                      //         fit: BoxFit.cover,
+                      //         // width: 10,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                   if (storeList.isNotEmpty)
                     Positioned(
-                      top: 190, // Adjust the top position as needed
+                      top: size.height - 615, // Adjust the top position as needed
                       left: 20, // Adjust the left position as needed
                       child: Container(
                         constraints: BoxConstraints(maxHeight: 200),

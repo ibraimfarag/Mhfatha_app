@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:mhfatha/settings/imports.dart';
-
 class QrResponse extends StatefulWidget {
   final String responseData;
 
@@ -13,6 +12,13 @@ class QrResponse extends StatefulWidget {
 }
 
 class _QrResponseState extends State<QrResponse> {
+  // Parse the JSON response data
+  late Map<String, dynamic> responseDataMap;
+  late Map<String, dynamic> store;
+  late List<dynamic> discounts;
+  late String storeName;
+  
+  // Calculate days remaining
   int calculateDaysRemaining(String endDate) {
     DateTime endDateTime = DateTime.parse(endDate);
     DateTime now = DateTime.now();
@@ -20,26 +26,30 @@ class _QrResponseState extends State<QrResponse> {
     return difference.inDays;
   }
 
-  // Function to get the correct Arabic word for days
+  // Get the correct Arabic word for days
   String getArabicDaysWord(int days) {
     return days > 10 ? 'يوم' : 'أيام';
   }
 
+  // Get the correct English word for days
   String getEnglishDaysWord(int days) {
     return days > 1 ? 'Days' : 'Day';
   }
+@override
+void initState() {
+  super.initState();
+  responseDataMap = jsonDecode(widget.responseData);
+  store = responseDataMap['store'];
+  discounts = responseDataMap['discounts'].values.toList();
+   storeName = store['name'];
+}
+
+
 
   @override
   Widget build(BuildContext context) {
-    // Parse the JSON response data
-    Map<String, dynamic> responseDataMap = jsonDecode(widget.responseData);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
-    // Access the "discounts" field
-    List<dynamic> discounts = responseDataMap['discounts'];
-    Map<String, dynamic> store = responseDataMap['store'];
-
-    // Determine store name based on language
-    String storeName = store['name'];
 
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
     return DirectionalityWrapper(
@@ -222,4 +232,6 @@ class _QrResponseState extends State<QrResponse> {
       ),
     );
   }
+
+
 }

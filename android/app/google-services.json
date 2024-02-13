@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "197190218958",
+    "project_id": "mhfaata",
+    "storage_bucket": "mhfaata.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:197190218958:android:8b176e092edaee6b988c9f",
+        "android_client_info": {
+          "package_name": "com.app.mhfatha"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQqffgrcf7AOsaY2JMyMul4-QCV5eicaM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

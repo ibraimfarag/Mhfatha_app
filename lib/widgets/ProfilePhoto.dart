@@ -44,7 +44,9 @@ class _ProfilePhotoWidgetState extends State<ProfilePhotoWidget> {
   Widget build(BuildContext context) {
             bool isDark = Provider.of<AppState>(context).isDarkMode;
 
-    return Row(
+    return  SingleChildScrollView(
+  scrollDirection: Axis.horizontal,
+  child:Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
@@ -182,6 +184,7 @@ class _ProfilePhotoWidgetState extends State<ProfilePhotoWidget> {
           ),
         )
       ],
+    )
     );
   }
 }

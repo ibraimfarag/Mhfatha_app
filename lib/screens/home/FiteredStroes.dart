@@ -183,6 +183,7 @@ class _FiteredStroesState extends State<FiteredStroes> {
   @override
   Widget build(BuildContext context) {
     final isEnglish = Provider.of<AppState>(context).isEnglish;
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     return DirectionalityWrapper(
       child: Scaffold(
