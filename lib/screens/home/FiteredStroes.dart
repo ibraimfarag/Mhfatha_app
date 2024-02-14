@@ -30,6 +30,8 @@ class _FiteredStroesState extends State<FiteredStroes> {
     // Call the fetchRegionList method from the Api class when the widget is initialized
     _getLocation();
     fetchFilteredStores();
+        SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+
   }
   void didChangeDependencies() {
     super.didChangeDependencies();

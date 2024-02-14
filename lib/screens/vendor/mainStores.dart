@@ -92,7 +92,7 @@ class _MainStoresState extends State<MainStores> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
+                    padding: EdgeInsets.fromLTRB(20,60, 20, 5),
                     // height: 200,
                     child: Column(children: [
                       Row(
