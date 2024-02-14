@@ -22,7 +22,10 @@ class _GetDiscountState extends State<GetDiscount> {
   Color backgroundColor = Color.fromARGB(255, 236, 236, 236);
   bool _isNextButtonEnabled = false;
   Color textColor = const Color(0xFF32567A);
-
+ void didChangeDependencies() {
+    super.didChangeDependencies();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+  }
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic> data =
@@ -120,31 +123,20 @@ class _GetDiscountState extends State<GetDiscount> {
         _postDiscountDetails();
       }
     }
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
     return DirectionalityWrapper(
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          // actions: [
-          // Show the back button only on screen 2 and 3
-          // if (_currentScreen > 1)
-          // IconButton(
-          //   icon: Icon(Icons.arrow_back),
-          //   onPressed: () {
-          //     // Navigate back to the previous screen
-          //     setState(() {
-          //       _currentScreen--;
-          //     });
-          //   },
-          //   color: Color.fromARGB(255, 7, 0, 34),
-          // ),
-          // ],
-        ),
+       
         body: SingleChildScrollView(
             child: Column(
           children: [
+              CustomAppBar(
+                  onBackTap: () {
+                    Navigator.pop(context);
+                  },iconColor:const Color.fromARGB(146, 0, 0, 0),
+                                    marginTop: 30,
+
+                ),
             SizedBox(height: 20),
             if (_currentScreen == 1)
               Image.asset(

@@ -84,7 +84,10 @@ class _MainDiscountsState extends State<MainDiscounts> {
       controller.text = DateFormat('yyyy-MM-dd').format(pickedDate);
     }
   }
-
+    void didChangeDependencies() {
+    super.didChangeDependencies();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+  }
   @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
@@ -92,7 +95,6 @@ class _MainDiscountsState extends State<MainDiscounts> {
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
     // final Map<String, dynamic> store = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     String lang = Provider.of<AppState>(context, listen: false).display;
     return DirectionalityWrapper(

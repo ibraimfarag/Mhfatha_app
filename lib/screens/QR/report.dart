@@ -9,7 +9,10 @@ class ReportScreen extends StatefulWidget {
 class _ReportScreenState extends State<ReportScreen> {
   String selectedReport = '';
   TextEditingController detailsController = TextEditingController();
-
+ void didChangeDependencies() {
+    super.didChangeDependencies();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+  }
   @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
@@ -22,20 +25,7 @@ class _ReportScreenState extends State<ReportScreen> {
 
     return DirectionalityWrapper(
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.arrow_forward),
-              onPressed: () {
-                // Navigate back to the previous screen
-                Navigator.pop(context);
-              },
-              color: Color.fromARGB(255, 7, 0, 34),
-            ),
-          ],
-        ),
+       
         // ${store?['name']}
         body: SingleChildScrollView(
           child: Container(
@@ -44,6 +34,13 @@ class _ReportScreenState extends State<ReportScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
+                 CustomAppBar(
+                  onBackTap: () {
+                    Navigator.pop(context);
+                  },iconColor:const Color.fromARGB(146, 0, 0, 0),
+                                    marginTop: 30,
+
+                ),
                 SizedBox(height: 16),
                 Text(
                   isEnglish ? 'Choose a Report Reason:' : 'اختر سبب البلاغ:',

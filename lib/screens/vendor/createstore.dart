@@ -72,14 +72,16 @@ class _CreateStoreState extends State<CreateStore> {
     //       TimeOfDay(hour: 18, minute: 0); // Set default closing time
     // }
   }
-
+    void didChangeDependencies() {
+    super.didChangeDependencies();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+  }
   @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
     bool isDarkMode = Provider.of<AppState>(context).isDarkMode;
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     String lang = Provider.of<AppState>(context, listen: false).display;
     return DirectionalityWrapper(

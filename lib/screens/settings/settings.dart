@@ -3,25 +3,25 @@
 import 'package:mhfatha/settings/imports.dart';
 
 class SettingsScreen extends StatefulWidget {
-
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-@override
-
-
+  @override
   void initState() {
     super.initState();
 
-   AuthProvider authProvider =
+    AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
     authProvider.updateUserData(context);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
   }
-
-
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+  }
   @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
@@ -30,7 +30,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
         Provider.of<AuthProvider>(context, listen: false);
     Api api = Api();
     Color ui = Color.fromARGB(255, 250, 82, 82);
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     return DirectionalityWrapper(
         child: Scaffold(
@@ -134,19 +133,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 child: DropdownButton<String>(
                                   value: isEnglish ? 'English' : 'العربية',
                                   onChanged: (String? newValue) {
-                                    if (newValue == 'English') {
+                                    if (newValue == 'English' && !isEnglish) {
                                       Provider.of<AppState>(context,
                                               listen: false)
                                           .toggleLanguage();
-                                    } else {
+                                    } else if (newValue == 'العربية' &&
+                                        isEnglish) {
                                       Provider.of<AppState>(context,
                                               listen: false)
                                           .toggleLanguage();
                                     }
                                   },
-                                  items: <String>['English', 
-                                  
-                                  'العربية']
+                                  items: <String>['English', 'العربية']
                                       .map((String value) {
                                     return DropdownMenuItem<String>(
                                       value: value,
@@ -167,10 +165,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           await authProvider.updateUserData(context);
                         }),
 
-                        buildSettingItem(
-                            context, Icons.password, 'Change Password', 'تغيير كلمة السر ',
-                            () {
-                            Navigator.pushNamed(context, '/changePasswword');
+                        buildSettingItem(context, Icons.password,
+                            'Change Password', 'تغيير كلمة السر ', () {
+                          Navigator.pushNamed(context, '/changePasswword');
                         }),
                         buildSettingItem(
                             context, Icons.privacy_tip, 'Privacy', 'الخصوصية',
@@ -228,7 +225,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               borderRadius: BorderRadius.circular(30),
                             ),
                           ),
-                          child: Text(isEnglish ? 'Logout' : 'تسجيل الخروج', style: TextStyle(color:Colors.white),),
+                          child: Text(
+                            isEnglish ? 'Logout' : 'تسجيل الخروج',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ],
                     ),

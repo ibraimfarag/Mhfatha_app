@@ -16,13 +16,15 @@ class _LoginScreenState extends State<LoginScreen> {
   Color colors = Color(0xFF05204a);
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+  }
   @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
     Size size = MediaQuery.of(context).size;
     bool isDark = Provider.of<AppState>(context).isDarkMode;
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
@@ -42,57 +44,56 @@ class _LoginScreenState extends State<LoginScreen> {
               children: <Widget>[
                 // Background Image
 
-                Positioned(
-                  top: 60,
-                  right: 20,
-                  child: Container(
-         decoration: BoxDecoration(
-                                color: isDark? Color.fromARGB(251, 34, 34, 34):Color(0xFFF0F0F0),
-                                borderRadius: BorderRadius.circular(15),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color:isDark? Color.fromARGB(250, 17, 17, 17): Colors.grey.withOpacity(0.5),
-                                    spreadRadius:
-                                        5, // Negative spreadRadius makes the shadow inside
-                                    blurRadius: 7,
-                                    offset: Offset(0,
-                                        3), // changes the position of the shadow
-                                  ),
-                                ],
-                              ),
-                    padding: EdgeInsets.all(1),
-                    child: Row(
-                      children: [
-                        PopupMenuButton<String>(
-                          icon: Icon(Icons.language,
-                              color: colors),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          onSelected: (String value) {
-                            if (value == 'en' || value == 'ar') {
-                              Provider.of<AppState>(context, listen: false)
-                                  .toggleLanguage();
-                            }
-                          },
-                          itemBuilder: (BuildContext context) {
-                            return <PopupMenuEntry<String>>[
-                              PopupMenuItem<String>(
-                                value: 'en',
-                                child: Text('English'),
-                              ),
-                              PopupMenuItem<String>(
-                                value: 'ar',
-                                child: Text('العربية'),
-                              ),
-                              // Add more languages as needed
-                            ];
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+             Positioned(
+  top: 60,
+  right: 20,
+  child: Container(
+    decoration: BoxDecoration(
+      color: isDark ? Color.fromARGB(251, 34, 34, 34) : Color(0xFFF0F0F0),
+      borderRadius: BorderRadius.circular(15),
+      boxShadow: [
+        BoxShadow(
+          color: isDark
+              ? Color.fromARGB(250, 17, 17, 17)
+              : Colors.grey.withOpacity(0.5),
+          spreadRadius: 5,
+          blurRadius: 7,
+          offset: Offset(0, 3),
+        ),
+      ],
+    ),
+    padding: EdgeInsets.all(1),
+    child: Row(
+      children: [
+        PopupMenuButton<String>(
+          icon: Icon(Icons.language, color: colors),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          onSelected: (String value) {
+            if ((value == 'en' && !isEnglish) || (value == 'ar' && isEnglish)) {
+              Provider.of<AppState>(context, listen: false).toggleLanguage();
+            }
+          },
+          itemBuilder: (BuildContext context) {
+            return <PopupMenuEntry<String>>[
+              PopupMenuItem<String>(
+                value: 'en',
+                child: Text('English'),
+              ),
+              PopupMenuItem<String>(
+                value: 'ar',
+                child: Text('العربية'),
+              ),
+              // Add more languages as needed
+            ];
+          },
+        ),
+      ],
+    ),
+  ),
+),
+
 
                 Column(
                   // mainAxisAlignment: MainAxisAlignment.start,
@@ -368,8 +369,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   : "انشاء حساب جديد",
                               style: TextStyle(
                                 color: colors,
-                                decoration: TextDecoration
-                                    .underline, // Add underline to indicate it's clickable
+                                // decoration: TextDecoration
+                                //     .underline,
                               ),
                             ),
                           ),

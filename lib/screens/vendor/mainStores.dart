@@ -69,14 +69,16 @@ class _MainStoresState extends State<MainStores> {
       print('Error getting user discountssss: $e');
     }
   }
-
+    void didChangeDependencies() {
+    super.didChangeDependencies();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+  }
   @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
     bool isDarkMode = Provider.of<AppState>(context).isDarkMode;
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     String lang = Provider.of<AppState>(context, listen: false).display;
     return DirectionalityWrapper(
@@ -434,139 +436,7 @@ class _MainStoresState extends State<MainStores> {
                       ),
                     ],
                   ),
-                  // Context Menu Button
-                  // PopupMenuButton(
-                  //   icon: Icon(Icons.more_vert),
-                  //   // offset: Offset(0, 100), // Example offset
-                  //   itemBuilder: (context) => [
-                  //     PopupMenuItem(
-                  //       enabled: store['verification'] !=
-                  //           0, // Disable when verification is 0
-                  //       child: GestureDetector(
-                  //         onTap: () {
-                  //           if (store['verification'] != 0) {
-                  //             // Only navigate if verification is not 0
-                  //             Navigator.pushNamed(
-                  //               context,
-                  //               '/editstore',
-                  //               arguments:
-                  //                   store, // Pass the store data to the route
-                  //             );
-                  //           }
-                  //         },
-                  //         child: Container(
-                  //           padding: EdgeInsets.symmetric(
-                  //               vertical: 8, horizontal: 16),
-                  //           // width: 120, // Set width for the container
-                  //           child: Row(
-                  //             mainAxisAlignment: MainAxisAlignment.end,
-                  //             crossAxisAlignment: CrossAxisAlignment.end,
-                  //             children: [
-                  //               Text(
-                  //                 isEnglish ? 'Edit' : 'تعديل',
-                  //               ),
-                  //               SizedBox(width: 8),
-                  //               Icon(Icons.edit), // Edit icon
-                  //             ],
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     PopupMenuItem(
-                  //       child: GestureDetector(
-                  //         onTap: () async {
-                  //           // Permission granted or already granted, proceed with downloading QR code image
-                  //           await VendorApi(context)
-                  //               .getStoreQRImage('${store['id']}', context);
-                  //         },
-                  //         child: Container(
-                  //           padding: EdgeInsets.symmetric(
-                  //               vertical: 8, horizontal: 16),
-                  //           child: Row(
-                  //             mainAxisAlignment: MainAxisAlignment.end,
-                  //             crossAxisAlignment: CrossAxisAlignment.end,
-                  //             children: [
-                  //               Text(
-                  //                 isEnglish ? 'QR' : 'الباركود',
-                  //               ),
-                  //               SizedBox(width: 8),
-                  //               Icon(Icons.barcode_reader),
-                  //             ],
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     PopupMenuItem(
-                  //       child: GestureDetector(
-                  //         onTap: () {
-                  //           Navigator.pushNamed(
-                  //             context,
-                  //             '/storediscounts',
-                  //             arguments:
-                  //                 store, // Pass the store data to the route
-                  //           );
-                  //         },
-                  //         child: Container(
-                  //           padding: EdgeInsets.symmetric(
-                  //               vertical: 8, horizontal: 16),
-                  //           // width: 200, // Set width for the container
-                  //           child: Row(
-                  //             mainAxisAlignment: MainAxisAlignment.end,
-                  //             crossAxisAlignment: CrossAxisAlignment.end,
-                  //             children: [
-                  //               Text(
-                  //                 isEnglish ? 'Discounts' : 'الخصومات',
-                  //               ),
-                  //               SizedBox(width: 8),
-                  //               Icon(Icons.discount), // Edit icon
-                  //             ],
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     PopupMenuItem(
-                  //       child: GestureDetector(
-                  //         onTap: () {
-                  //           QuickAlert.show(
-                  //             context: context,
-                  //             type: QuickAlertType.confirm,
-                  //             text: isEnglish
-                  //                 ? 'are you sure you want to delete store ${store['name']} ?'
-                  //                 : '؟ ${store['name']} هل انت متأكد من حذف متجر ',
-                  //             cancelBtnText: isEnglish ? 'No' : 'لا',
-                  //             confirmBtnText: isEnglish ? 'yes' : 'نعم',
-                  //             confirmBtnColor: Colors.greenAccent,
-                  //             onConfirmBtnTap: () async {
-                  //               await VendorApi(context)
-                  //                   .deleteStore('${store['id']}', context);
-                  //             },
-                  //           );
-                  //         },
-                  //         child: Container(
-                  //           padding: EdgeInsets.symmetric(
-                  //               vertical: 8, horizontal: 16),
-                  //           // width: 120, // Set width for the container
-                  //           child: Row(
-                  //             mainAxisAlignment: MainAxisAlignment.end,
-                  //             crossAxisAlignment: CrossAxisAlignment.end,
-                  //             children: [
-                  //               Text(
-                  //                 isEnglish ? 'Delete' : 'حذف',
-                  //                 style: TextStyle(
-                  //                     color: Colors
-                  //                         .red), // Text style with red color
-                  //               ),
-                  //               SizedBox(width: 8),
-                  //               Icon(Icons.delete,
-                  //                   color: Colors
-                  //                       .red), // Delete icon with red color
-                  //             ],
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ],
-                  // )
+                 
                   PullDownButton(
                     itemBuilder: (context) => [
                       PullDownMenuItem(
@@ -580,13 +450,14 @@ class _MainStoresState extends State<MainStores> {
                         },
                         title: isEnglish ? 'Edit' : 'تعديل',
                         icon: Icons.edit,
+                        // enabled: store['verifcation'] == 1,
                       ),
                     //  Icon(Icons.barcode_reader)
                       PullDownMenuItem(
                         onTap: () async {  await VendorApi(context)
                                 .getStoreQRImage('${store['id']}', context);},
                         title:isEnglish ? 'QR' : 'الباركود',
-                        
+                          enabled: store['verifcation'] == 1,
                         icon: CupertinoIcons.qrcode_viewfinder,
                       ),
                       PullDownMenuItem(
@@ -597,7 +468,8 @@ class _MainStoresState extends State<MainStores> {
                                   store, // Pass the store data to the route
                             );},
                         title: isEnglish ? 'Discounts' : 'الخصومات',
-                        
+                              enabled: store['verifcation'] == 1,
+
                         icon: Icons.discount,
                       ),
                       PullDownMenuItem(

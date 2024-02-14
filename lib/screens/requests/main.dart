@@ -47,6 +47,11 @@ class _RequestsScreenState extends State<RequestsScreen> {
     getUserDiscounts();
   }
 
+   void didChangeDependencies() {
+    super.didChangeDependencies();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
@@ -54,7 +59,6 @@ class _RequestsScreenState extends State<RequestsScreen> {
         Provider.of<AuthProvider>(context, listen: false);
     String authName = authProvider.user![
         'first_name']; // Replace with the actual property holding the user's name
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     return DirectionalityWrapper(
       child: Scaffold(

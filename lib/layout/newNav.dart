@@ -19,7 +19,7 @@ class _NewNavState extends State<NewNav> {
     String currentRoute = ModalRoute.of(context)?.settings.name ?? '';
 
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 10), // Adjust padding as needed
+      padding: EdgeInsets.symmetric(vertical: 20), // Adjust padding as needed
       color: Colors.white, // Customize background color
       child: Row(
         mainAxisAlignment:

@@ -40,15 +40,18 @@ void initState() {
   super.initState();
   responseDataMap = jsonDecode(widget.responseData);
   store = responseDataMap['store'];
-  discounts = responseDataMap['discounts'].values.toList();
+  // discounts = responseDataMap['discounts'].values.toList();
+discounts = responseDataMap['discounts'];
    storeName = store['name'];
 }
 
-
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+  }
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
 
     bool isEnglish = Provider.of<AppState>(context).isEnglish;

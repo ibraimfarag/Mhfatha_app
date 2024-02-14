@@ -26,11 +26,15 @@ class _RestPasswordState extends State<RestPassword> {
   String enteredOtp = '';
 
   Api api = Api();
-
+ @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+  }
   @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+      // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
     return DirectionalityWrapper(
       child: Scaffold(

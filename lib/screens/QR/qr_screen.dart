@@ -50,10 +50,12 @@ class _QrScannerState extends State<QrScanner> with SingleTickerProviderStateMix
       1,
     );
   }
-
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+  }
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
     return DirectionalityWrapper(
       child: Scaffold(

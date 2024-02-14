@@ -9,11 +9,14 @@ class NearBy extends StatefulWidget {
 
 class _NearByState extends State<NearBy> {
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+  }
   Widget build(BuildContext context) {
     List<dynamic> filteredStores =
         ModalRoute.of(context)!.settings.arguments as List<dynamic>;
     final isEnglish = Provider.of<AppState>(context).isEnglish;
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     return DirectionalityWrapper(
       child: Scaffold(
@@ -51,8 +54,8 @@ class _NearByState extends State<NearBy> {
                               ),
                               Text(
                                 isEnglish
-                                    ? 'Near by Stores'
-                                    : ' المتاجر القريبة',
+                                    ? 'Discounts Nearby '
+                                    : ' الخصومات القريبة',
                                 style: TextStyle(
                                     fontSize: 28,
                                     fontWeight: FontWeight.bold,

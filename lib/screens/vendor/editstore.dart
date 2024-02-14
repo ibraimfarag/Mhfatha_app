@@ -129,7 +129,10 @@ class _EditStoreState extends State<EditStore> {
     // Return a default time if the input is invalid
     return TimeOfDay(hour: 0, minute: 0);
   }
-
+    void didChangeDependencies() {
+    super.didChangeDependencies();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+  }
   @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;

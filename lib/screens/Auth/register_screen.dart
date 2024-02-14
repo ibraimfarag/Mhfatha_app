@@ -40,6 +40,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.didChangeDependencies();
     // Fetch data here
     fetchFilteredStores();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+
   }
 
   void fetchFilteredStores() async {
@@ -139,7 +141,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     borderRadius: BorderRadius.circular(15),
                                   ),
                                   onSelected: (String value) {
-                                    if (value == 'en' || value == 'ar') {
+                                    if ((value == 'en' &&
+                                            !Provider.of<AppState>(context,
+                                                    listen: false)
+                                                .isEnglish) ||
+                                        (value == 'ar' &&
+                                            Provider.of<AppState>(context,
+                                                    listen: false)
+                                                .isEnglish)) {
                                       Provider.of<AppState>(context,
                                               listen: false)
                                           .toggleLanguage();

@@ -7,10 +7,17 @@ class Nointernet extends StatefulWidget {
 
 class _NointernetState extends State<Nointernet> {
   @override
+
+      void didChangeDependencies() {
+    super.didChangeDependencies();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+  }
+  @override
+
+
   Widget build(BuildContext context) {
 
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
     return DirectionalityWrapper(
       child: Scaffold(

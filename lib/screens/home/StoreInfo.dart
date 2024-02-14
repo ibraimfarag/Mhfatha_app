@@ -3,8 +3,14 @@ import 'dart:convert';
 
 import 'package:mhfatha/settings/imports.dart';
 
-class StoreInfoScreen extends StatelessWidget {
+class StoreInfoScreen extends StatefulWidget {
   const StoreInfoScreen({Key? key}) : super(key: key);
+
+  @override
+  State<StoreInfoScreen> createState() => _StoreInfoScreenState();
+}
+
+class _StoreInfoScreenState extends State<StoreInfoScreen> {
   String parseWorkDays(Map<String, dynamic> workDays, bool isEnglish) {
     // Define day names in English and Arabic
     Map<String, String> dayNames = {
@@ -53,7 +59,10 @@ class StoreInfoScreen extends StatelessWidget {
   String getEnglishDaysWord(int days) {
     return days > 1 ? 'Days' : 'Day';
   }
-
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+  }
   @override
   Widget build(BuildContext context) {
     // Retrieve the 'store' argument

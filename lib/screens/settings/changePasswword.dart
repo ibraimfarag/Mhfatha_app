@@ -27,6 +27,10 @@ class _ChangePasswordState extends State<ChangePassword> {
     super.initState();
     authProvider = Provider.of<AuthProvider>(context, listen: false);
   }
+    void didChangeDependencies() {
+    super.didChangeDependencies();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +38,6 @@ class _ChangePasswordState extends State<ChangePassword> {
     bool isDarkMode = Provider.of<AppState>(context).isDarkMode;
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     String lang = Provider.of<AppState>(context, listen: false).display;
     return DirectionalityWrapper(

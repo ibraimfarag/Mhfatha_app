@@ -7,6 +7,7 @@ import 'package:mhfatha/settings/imports.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:async';
 
+// import 'package:searchfield/searchfield.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -29,10 +30,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Timer? locationTimer;
   Timer? reloadTimer;
   late Timer network;
+
   @override
   void initState() {
     super.initState();
-
 
     _getLocation();
     // Set up a timer to check location changes every 90 seconds
@@ -58,12 +59,17 @@ class _HomeScreenState extends State<HomeScreen> {
         Provider.of<AuthProvider>(context, listen: false);
     authProvider.updateUserData(context);
   }
+
 //  @override
 // void dispose() {
   // Cancel the timer when the widget is disposed
   // locationTimer?.cancel();
   // super.dispose();
 // }
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+  }
 
   Future<void> _checkAndSendLocation() async {
     try {
@@ -237,8 +243,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  
-
   void _showSubContextBottomMenu(
       BuildContext context, Map<String, dynamic> store) {
     showModalBottomSheet(
@@ -274,75 +278,83 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                if (store['discounts'] == null || store['discounts'].isEmpty)
-                  Text(
-                    isEnglish
-                        ? 'No discounts available now'
-                        : 'لا توجد خصومات متاحة الآن',
-                    style: TextStyle(fontSize: 16),
-                  )
+                if (store['discounts'] == null ||
+                    !(store['discounts'] is List) ||
+                    store['discounts'].isEmpty)
+                  Container(
+                       width: MediaQuery.of(context).size.width - 100,
+                          margin: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                      child:Center(
+                        child:Text(
+                        isEnglish
+                            ? 'No discounts available now'
+                            : 'لا توجد خصومات متاحة الآن',
+                        style: TextStyle(fontSize: 16, color: Colors.black),
+                      ) ,
+                      ) )
                 else
                   SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
+                    scrollDirection: Axis.vertical,
                     child: Column(
-                      // children: store['discounts'].entries.map<Widget>((entry) {
-                      //   Map<String, dynamic> discount = entry.value as Map<String, dynamic>;
                       children: (store?['discounts'] is List<dynamic>
                               ? (store?['discounts'] as List<dynamic>)
                               : [])
                           .map<Widget>((discount) {
                         return Container(
-                            width: MediaQuery.of(context).size.width - 100,
-                            margin: const EdgeInsets.all(10),
-                            padding: const EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      isEnglish
-                                          ? 'Discount on: ${discount['category']} '
-                                          : 'خصم على : ${discount['category']} ',
-                                      style: TextStyle(fontSize: 14),
-                                      textAlign: isEnglish
-                                          ? TextAlign.left
-                                          : TextAlign.right,
-                                    )
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      isEnglish
-                                          ? 'Percent: ${discount['percent']}%'
-                                          : 'نسبة الخصم : ${discount['percent']}% ',
-                                      style: TextStyle(fontSize: 14),
-                                      textAlign: isEnglish
-                                          ? TextAlign.left
-                                          : TextAlign.right,
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      isEnglish
-                                          ? 'Days Remaining: ${calculateDaysRemaining(discount['end_date'])} ${getEnglishDaysWord(calculateDaysRemaining(discount['end_date']))}'
-                                          : 'الأيام المتبقية: ${calculateDaysRemaining(discount['end_date'])} ${getArabicDaysWord(calculateDaysRemaining(discount['end_date']))}',
-                                      style: TextStyle(
-                                          fontSize: 12, color: Colors.blue),
-                                      textAlign: isEnglish
-                                          ? TextAlign.left
-                                          : TextAlign.right,
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ));
+                          width: MediaQuery.of(context).size.width - 100,
+                          margin: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Column(
+                            // crossAxisAlignment: isEnglish ? CrossAxisAlignment.start : CrossAxisAlignment.end, // Adjusted alignment
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    isEnglish
+                                        ? 'Discount on ${discount['category']} '
+                                        : '${discount['category']} خصم على',
+                                    style: TextStyle(fontSize: 14),
+                                    // textAlign: TextAlign.start, // Text alignment adjusted to start
+                                  )
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    isEnglish
+                                        ? 'Percent: ${discount['percent']}%'
+                                        : '%${discount['percent']}  : نسبة الخصم',
+                                    style: TextStyle(fontSize: 14),
+                                    //  / textAlign: TextAlign.start, // Text alignment adjusted to start
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    isEnglish
+                                        ? 'Days Remaining: ${calculateDaysRemaining(discount['end_date'])} ${getEnglishDaysWord(calculateDaysRemaining(discount['end_date']))}'
+                                        : 'الأيام المتبقية: ${calculateDaysRemaining(discount['end_date'])} ${getArabicDaysWord(calculateDaysRemaining(discount['end_date']))}',
+                                    style: TextStyle(fontSize: 12),
+                                    // textAlign: TextAlign.start, // Text alignment adjusted to start
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        );
                       }).toList(),
                     ),
                   ),
@@ -561,8 +573,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 : Alignment.center,
                             child: TextButton(
                               onPressed: () async {
-
-
                                 Navigator.pushNamed(context, '/store-info',
                                     arguments: store);
                               },
@@ -599,7 +609,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     isEnglish ? 'Visit store' : 'زيارة المتجر',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 14,
+                                      fontSize: 12,
                                       fontFamily:
                                           AppVariables.serviceFontFamily,
                                     ),
@@ -619,9 +629,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               Row(
                                 children: [
-                                  // Icon(Icons.location_on,
-                                  //     color: Colors.white, size: 18),
-                                  // const SizedBox(width: 1),
+                            
                                   TextButton(
                                     onPressed: () async {
                                       // Handle "Show discounts" option
@@ -700,7 +708,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               : 'عرض الخصومات',
                                           style: TextStyle(
                                             color: Colors.white,
-                                            fontSize: 14,
+                                            fontSize: 12,
                                             fontFamily:
                                                 AppVariables.serviceFontFamily,
                                           ),
@@ -723,19 +731,23 @@ class _HomeScreenState extends State<HomeScreen> {
     }).toList();
   }
 
+  final focus = FocusNode();
+
+  var suggestions = <String>[];
+
   @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
     bool isDark = Provider.of<AppState>(context).isDarkMode;
     Size size = MediaQuery.of(context).size;
     String lang = Provider.of<AppState>(context, listen: false).display;
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
     String authName = authProvider.user![
         'first_name']; // Replace with the actual property holding the user's name
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
     return DirectionalityWrapper(
       child: GestureDetector(
@@ -788,7 +800,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ]),
                       ),
-
                       SizedBox(
                         height: 20,
                       ),
@@ -834,14 +845,45 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ],
                               ),
-                              child: TextField(
-                                decoration: InputDecoration(
+                              child: SearchField(
+                                onSearchTextChanged: (query) {
+                                  api
+                                      .searchStores(authProvider, query, lang)
+                                      .then((result) {
+                                    // Parse the JSON response
+                                    Map<String, dynamic> jsonResponse =
+                                        jsonDecode(result);
+
+                                    // Check if 'stores' key exists and its type is correct
+                                    if (jsonResponse.containsKey('stores') &&
+                                        jsonResponse['stores']
+                                            is List<dynamic>) {
+                                      List<dynamic> stores =
+                                          jsonResponse['stores'];
+
+                                      // Extract names and ids of the stores from the search results
+                                      List<Map<String, dynamic>> storeList =
+                                          stores
+                                              .whereType<Map<String, dynamic>>()
+                                              .toList();
+
+                                      // Update the suggestions with the search results
+                                      setState(() {
+                                        suggestions = storeList
+                                            .map((store) =>
+                                                '${store['name']} - ${store['id']}')
+                                            .toList();
+                                      });
+                                    }
+                                  });
+                                },
+                                key: const Key('searchfield'),
+                                hint: isEnglish ? 'Search ' : 'البحث',
+                                itemHeight: 50,
+                                searchInputDecoration: InputDecoration(
                                   hintStyle:
                                       TextStyle(color: Color(0xFFA9A7B2)),
                                   filled: true,
-                                  hintText: isEnglish
-                                      ? 'Search '
-                                      : 'البحث',
                                   prefixIcon: Icon(Icons.search),
                                   fillColor: isDark
                                       ? Color.fromARGB(251, 34, 34, 34)
@@ -855,42 +897,96 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                   focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(30),
+                                    borderRadius: suggestions.isEmpty
+                                        ? BorderRadius.circular(30)
+                                        : BorderRadius.only(
+                                            topLeft: Radius.circular(30),
+                                            topRight: Radius.circular(30),
+                                          ),
                                     borderSide: BorderSide(
                                       color: Color.fromARGB(0, 225, 226, 228),
                                     ),
                                   ),
                                 ),
-                                onChanged: (query) {
-                                  // Call the API method to search stores with the entered query
-                                  api
-                                      .searchStores(authProvider, query, lang)
-                                      .then((result) {
-                                    // print('Search Result: $result');
+                                suggestionsDecoration: SuggestionDecoration(
+                                  padding: const EdgeInsets.all(4),
+                                  color: isDark
+                                      ? Color.fromARGB(251, 34, 34, 34)
+                                      : Color(0xFFF0F0F0),
+                                  // border: Border.all(color: Colors.red),
+                                  borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(30),
+                                    bottomRight: Radius.circular(30),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius:
+                                          -5, // Negative spreadRadius makes the shadow inside
+                                      blurRadius: 7,
+                                      offset: Offset(0,
+                                          3), // changes the position of the shadow
+                                    ),
+                                  ],
+                                ),
+                                suggestions: suggestions.map((e) {
+                                  var parts = e.split(' - ');
+                                  var name = parts[0];
+                                  var id = parts[1];
+                                  return SearchFieldListItem<String>(e,
+                                      child: GestureDetector(
+                                        onTap: () async {
+                                          // Handle the tap action here, e.g., navigate to a new screen
+                                          print('Tapped on item with id: $id');
+                                          String storeDetails =
+                                              await Api().getStoreDetails(
+                                            context,
+                                            authProvider,
+                                            int.parse(id),
+                                            latitude!,
+                                            longitude!,
+                                          );
 
-                                    // Parse the JSON response
-                                    Map<String, dynamic> jsonResponse =
-                                        jsonDecode(result);
+                                          // Parse the store details JSON
+                                          Map<String, dynamic> storeDetailsMap =
+                                              jsonDecode(storeDetails);
+                                          Map<String, dynamic> store =
+                                              storeDetailsMap['store'];
+                                          Navigator.pushNamed(
+                                              context, '/store-info',
+                                              arguments: store);
 
-                                    // Check if 'stores' key exists and its type is correct
-                                    if (jsonResponse.containsKey('stores') &&
-                                        jsonResponse['stores']
-                                            is List<dynamic>) {
-                                      List<dynamic> stores =
-                                          jsonResponse['stores'];
-
-                                      // Convert each item in the list to a Map
-                                      // List<Map<String, dynamic>> storeList = stores.whereType<Map<String, dynamic>>().toList();
-
-                                      storeList = stores
-                                          .whereType<Map<String, dynamic>>()
-                                          .toList();
-                                      setState(() {});
-                                    }
-                                  });
+                                          print(store);
+                                        },
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment: isEnglish
+                                              ? MainAxisAlignment.start
+                                              : MainAxisAlignment.end,
+                                          children: [
+                                            Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 20),
+                                              child: Text(
+                                                '$name',
+                                                textAlign: isEnglish
+                                                    ? TextAlign.start
+                                                    : TextAlign.end,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ));
+                                }).toList(),
+                                focusNode: focus,
+                                suggestionState: Suggestion.expand,
+                                onSuggestionTap:
+                                    (SearchFieldListItem<String> x) {
+                                  focus.unfocus();
                                 },
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),
@@ -907,7 +1003,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 size: 24),
                             SizedBox(width: 10),
                             Text(
-                              isEnglish ? 'Nearby Discounts' : 'خصومات قريبة منك ',
+                              isEnglish
+                                  ? 'Nearby Discounts'
+                                  : 'خصومات قريبة منك ',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -956,11 +1054,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 20),
-                        child: Row(
+
+                        child: 
+                          SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child:
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
+
                             buildIconWithText(
-                              width: 100,
+                              // width: 120,
                               height: 160,
 
                               Icons.qr_code,
@@ -973,7 +1077,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
 
                             buildIconWithText(
-                                width: 120,
+                                // width: 110,
                                 height: 160,
                                 Icons.store,
                                 'Nearby Discounts',
@@ -985,7 +1089,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             // buildIconWithText(Icons.search, 'Search', 'البحث', () {}),
 
                             buildIconWithText(
-                                width: 100,
+                                // width: 120,
                                 height: 160,
                                 Icons.local_offer,
                                 'Discounts',
@@ -995,104 +1099,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             }),
                           ],
                         ),
+                        ),
+
+
                       ),
-
-                      // GestureDetector(
-                      //   onTap: () {},
-                      //   child: Container(
-                      //     width: double.infinity, // Adjust the width as needed
-                      //     height: 100, // Adjust the width as needed
-                      //     margin: EdgeInsets.fromLTRB(15, 0, 15, 10),
-                      //     decoration: BoxDecoration(
-                      //       // color: Color(0xFFF3F4F7),
-                      //       //  color: Color(0xFFFFFFFF),
-
-                      //       borderRadius: BorderRadius.circular(30),
-                      //     ),
-
-                      //     child: ClipRRect(
-                      //       borderRadius: BorderRadius.circular(30),
-                      //       child: Image.asset(
-                      //         'images/elegance.jpg', // Use the provided image path
-                      //         fit: BoxFit.cover,
-                      //         // width: 10,
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
                     ],
                   ),
-                  if (storeList.isNotEmpty)
-                    Positioned(
-                      top: size.height - 615, // Adjust the top position as needed
-                      left: 20, // Adjust the left position as needed
-                      child: Container(
-                        constraints: BoxConstraints(maxHeight: 200),
-                        width: size.width - 40,
-                        decoration: BoxDecoration(
-                          color: isDark
-                              ? Color.fromARGB(251, 34, 34, 34)
-                              : Color(0xFFF0F0F0),
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(30),
-                            bottomRight: Radius.circular(30),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius:
-                                  -5, // Negative spreadRadius makes the shadow inside
-                              blurRadius: 7,
-                              offset: Offset(
-                                  0, 3), // changes the position of the shadow
-                            ),
-                          ],
-                        ),
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          physics: ClampingScrollPhysics(),
-                          itemCount: storeList.length,
-                          itemBuilder: (context, index) {
-                            // Check if the index is within the valid range
-                            if (index >= 0 && index < storeList.length) {
-                              // Access individual store information using storeList[index]
-                              Map<String, dynamic> stores = storeList[index];
-                              String name = stores['name'].toString();
-                              String id = stores['id'].toString();
-
-                              // Wrap the ListTile with GestureDetector to make it tappable
-                              return GestureDetector(
-                                onTap: () async {
-                                  // Handle the tap action here, e.g., navigate to a new screen
-                                  print('Tapped on item with id: $id');
-                                  String storeDetails = await Api()
-                                      .getStoreDetails(context, authProvider,
-                                          stores['id'], latitude!, longitude!);
-
-                                  // Parse the store details JSON
-                                  Map<String, dynamic> storeDetailsMap =
-                                      jsonDecode(storeDetails);
-                                  Map<String, dynamic> store =
-                                      storeDetailsMap['store'];
-                                  Navigator.pushNamed(context, '/store-info',
-                                      arguments: store);
-
-                                  print(store);
-                                },
-                                child: ListTile(
-                                  title: Text(name),
-                                  // subtitle: Text(store['description']),  // Replace 'description' with the actual key
-                                  // Add more widgets to display additional information as needed
-                                ),
-                              );
-                            } else {
-                              // Handle the case where the index is out of bounds
-                              return SizedBox.shrink();
-                            }
-                          },
-                        ),
-                      ),
-                    ),
                 ],
               ),
             ),
@@ -1106,14 +1118,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget buildIconWithText(IconData icon, String englishText, String arabicText,
       String imagePath, VoidCallback onTap,
-      {required double width, required double height}) {
+      {double? width, required double height}) {
     final isEnglish = Provider.of<AppState>(context).isEnglish;
     bool isDark = Provider.of<AppState>(context).isDarkMode;
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: width, // Adjust the width as needed
+        width: width != null ? width : null, // Adjust the width as needed
         height: height, // Adjust the width as needed
         margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
         decoration: BoxDecoration(
@@ -1139,7 +1151,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Container(
               height: 100,
-              width: 180,
+              width: width != null ? width : null,
               child: ClipRRect(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(15),
