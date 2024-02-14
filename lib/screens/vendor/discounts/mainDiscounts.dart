@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:mhfatha/settings/imports.dart';
@@ -91,7 +92,7 @@ class _MainDiscountsState extends State<MainDiscounts> {
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
     // final Map<String, dynamic> store = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     String lang = Provider.of<AppState>(context, listen: false).display;
     return DirectionalityWrapper(
@@ -310,7 +311,7 @@ class _MainDiscountsState extends State<MainDiscounts> {
                                           category,
                                           startDate,
                                           endDate,
-                                          store!,                                          
+                                          store!,
                                           _scaffoldKey.currentState!.context);
                                     },
                                     child: Text(
@@ -458,91 +459,78 @@ class _MainDiscountsState extends State<MainDiscounts> {
             ),
             borderRadius: BorderRadius.circular(30),
           ),
-          child: Column(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Container(
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  child: Row(
                     children: [
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                        child: Text(
-                          isEnglish?'Discount on : ${Discounts['category']}':'خصم : ${Discounts['category']}',
-                          style: TextStyle(
-                            color: Colors.black87,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign:
-                              isEnglish ? TextAlign.left : TextAlign.right,
+                      Text(
+                        isEnglish
+                            ? 'Discount on : ${Discounts['category']}'
+                            : 'خصم : ${Discounts['category']}',
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
                         ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(2, 0,2, 0),
-                        child: Text(
-                         isEnglish? ' percent : ${Discounts['percent']?.replaceAll(RegExp(r'\.0+$'), '')}%': ' قيمة الخصم : ${Discounts['percent']?.replaceAll(RegExp(r'\.0+$'), '')}%',
-                          style: TextStyle(
-                            color: Colors.black87,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign:
-                              isEnglish ? TextAlign.left : TextAlign.right,
-                        ),
+                        textAlign: isEnglish ? TextAlign.left : TextAlign.right,
                       ),
                     ],
                   ),
-                  // Context Menu Button
-                  PopupMenuButton(
-                    icon: Icon(Icons.more_vert),
-                    // offset: Offset(0, 100), // Example offset
-                    itemBuilder: (context) => [
-                      PopupMenuItem(
-                        child: GestureDetector(
-                          onTap: () {
-                            QuickAlert.show(
-                              context: context,
-                              type: QuickAlertType.confirm,
-                              text: isEnglish
-                                  ? 'are you sure you want to delete store ${Discounts['category']} ?'
-                                  : '؟ ${Discounts['category']} هل انت متأكد من حذف خصم ',
-                              cancelBtnText: isEnglish ? 'No' : 'لا',
-                              confirmBtnText: isEnglish ? 'yes' : 'نعم',
-                              confirmBtnColor: Colors.greenAccent,
-                              onConfirmBtnTap: () async {
-                                await VendorApi(context).deleteDiscount(
-                                    '${Discounts['id']}', context);
-                              },
-                            );
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 16),
-                            // width: 120, // Set width for the container
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  isEnglish ? 'Delete' : 'حذف',
-                                  style: TextStyle(
-                                      color: Colors
-                                          .red), // Text style with red color
-                                ),
-                                SizedBox(width: 8),
-                                Icon(Icons.delete,
-                                    color: Colors
-                                        .red), // Delete icon with red color
-                              ],
-                            ),
-                          ),
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+                  child: Row(
+                    children: [
+                      Text(
+                        isEnglish
+                            ? ' percent : ${Discounts['percent']?.replaceAll(RegExp(r'\.0+$'), '')}%'
+                            : ' قيمة الخصم : ${Discounts['percent']?.replaceAll(RegExp(r'\.0+$'), '')}%',
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
                         ),
+                        textAlign: isEnglish ? TextAlign.left : TextAlign.right,
                       ),
                     ],
-                  )
+                  ),
+                ),
+              ]),
+              // Context Menu Button
+              PullDownButton(
+                itemBuilder: (context) => [
+                  PullDownMenuItem(
+                    onTap: () {
+                      QuickAlert.show(
+                        context: context,
+                        type: QuickAlertType.confirm,
+                        text: isEnglish
+                            ? 'are you sure you want to delete store ${Discounts['category']} ?'
+                            : '؟ ${Discounts['category']} هل انت متأكد من حذف خصم ',
+                        cancelBtnText: isEnglish ? 'No' : 'لا',
+                        confirmBtnText: isEnglish ? 'yes' : 'نعم',
+                        confirmBtnColor: Colors.greenAccent,
+                        onConfirmBtnTap: () async {
+                          await VendorApi(context)
+                              .deleteDiscount('${Discounts['id']}', context);
+                        },
+                      );
+                    },
+                    title: isEnglish ? 'Delete' : 'حذف',
+                    isDestructive: true,
+                    icon: CupertinoIcons.delete,
+                  ),
                 ],
+                buttonBuilder: (context, showMenu) => CupertinoButton(
+                  onPressed: showMenu,
+                  padding: EdgeInsets.zero,
+                  // child: const Icon(CupertinoIcons.ellipsis_circle),
+                  child: const Icon(Icons.more_vert),
+                ),
               ),
             ],
           ),
