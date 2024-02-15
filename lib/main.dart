@@ -15,12 +15,14 @@ void main() async {
   await Future.wait([
     SharedPreferences.getInstance(),
   ]);
-  
-  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  // Request notification permissions
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
   NotificationSettings settings = await messaging.requestPermission(
     alert: true,
     announcement: false,
@@ -30,17 +32,72 @@ void main() async {
     provisional: false,
     sound: true,
   );
+
+  // Initialize flutter_local_notifications
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+  final InitializationSettings initializationSettings =
+      InitializationSettings(android: initializationSettingsAndroid);
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+  // Configure Firebase message handler
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    // Handle the received message
+    _handleFirebaseMessage(message, flutterLocalNotificationsPlugin);
+  });
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AppState(context)),
-        ChangeNotifierProvider(create: (context) => DarkModeProvider()), // Add DarkModeProvider
-        ChangeNotifierProvider(create: (context) => AuthProvider()), // Add DarkModeProvider
+        ChangeNotifierProvider(create: (context) => DarkModeProvider()),
+        ChangeNotifierProvider(create: (context) => AuthProvider()),
       ],
       child: MhfathaApp(),
     ),
   );
 }
+
+Future<void> _handleFirebaseMessage(
+    RemoteMessage message, FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) async {
+  // Extract notification details from the message
+  final String? title = message.notification?.title;
+  final String? body = message.notification?.body;
+
+  if (title != null && body != null) {
+    // Show the notification using flutter_local_notifications
+    await _showNotification(flutterLocalNotificationsPlugin, title, body);
+  }
+}
+
+Future<void> _showNotification(
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin, String title, String body) async {
+  const AndroidNotificationDetails androidPlatformChannelSpecifics =
+      AndroidNotificationDetails(
+    'firebase_notification_channel_id',
+    'Firebase Notifications',
+    importance: Importance.max,
+    priority: Priority.high,
+    // sound: RawResourceAndroidNotificationSound('your_custom_sound'), // Specify custom sound here
+    icon: '@mipmap/launcher_icon', // Specify custom icon here
+    ticker: 'ticker',
+  );
+
+  const NotificationDetails platformChannelSpecifics =
+      NotificationDetails(android: androidPlatformChannelSpecifics);
+
+  await flutterLocalNotificationsPlugin.show(
+    0,
+    title,
+    body,
+    platformChannelSpecifics,
+    payload: 'Firebase Notification',
+  );
+}
+
+
 
 class MhfathaApp extends StatefulWidget {
   const MhfathaApp({Key? key}) : super(key: key);

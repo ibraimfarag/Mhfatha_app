@@ -397,33 +397,36 @@ class _CreateStoreState extends State<CreateStore> {
             ),
             SizedBox(height: 10),
 if (englishTitle.toLowerCase() == 'mobile number' || englishTitle.toLowerCase() == 'tax number')
-              TextField(
-                obscureText: false,
-                controller: controller,
-                style: TextStyle(fontSize: 16, color: colors),
-                keyboardType:
-                    TextInputType.phone, // Set the keyboard type to phone
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(
-                      RegExp(r'[0-9]')), // Allow only numbers
-                  LengthLimitingTextInputFormatter(
-                      10), // Limit the length to 10 characters
-                ],
-
-                decoration: InputDecoration(
-                  hintStyle: TextStyle(color: Colors.grey.shade700),
-                  filled: true,
-                  fillColor: ui,
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide(color: backgroundColor),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide(color: backgroundColor),
-                  ),
-                ),
-              )
+  TextField(
+    obscureText: false,
+    controller: controller,
+    style: TextStyle(fontSize: 16, color: colors),
+    keyboardType: TextInputType.phone, // Set the keyboard type to phone
+    inputFormatters: [
+      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')), // Allow only numbers
+      LengthLimitingTextInputFormatter(10), // Limit the length to 10 characters
+    ],
+    decoration: InputDecoration(
+      hintStyle: TextStyle(color: Colors.grey.shade700),
+      filled: true,
+      fillColor: ui,
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(30),
+        borderSide: BorderSide(color: backgroundColor),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(30),
+        borderSide: BorderSide(color: backgroundColor),
+      ),
+    ),
+    onChanged: (value) {
+      if (value.length == 10) {
+        // If the input length is 10, remove focus from the TextField
+        // This will close the keyboard
+        FocusScope.of(context).unfocus();
+      }
+    },
+  )
             else
               TextField(
                 obscureText: false,

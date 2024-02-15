@@ -73,21 +73,41 @@ class _MainDiscountsState extends State<MainDiscounts> {
     }
   }
 
-  Future<void> selectDate(TextEditingController controller) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-    if (pickedDate != null) {
-      controller.text = DateFormat('yyyy-MM-dd').format(pickedDate);
-    }
+Future<void> selectDate(TextEditingController controller) async {
+  DateTime? selectedDate = await showDatePicker(
+    context: context,
+    initialDate: DateTime.now(),
+    firstDate: DateTime(2000),
+    lastDate: DateTime(2101),
+    builder: (BuildContext context, Widget? child) {
+      return Theme(
+        data: ThemeData.light().copyWith(
+          primaryColor: Color(0xFF080E27), // Change this to your desired color
+          // accentColor: Color(0xFF080E27), // Change this to your desired color
+          colorScheme: ColorScheme.light(
+            primary: Color(0xFF080E27), // Change this to your desired color
+          ),
+          buttonTheme: ButtonThemeData(
+            textTheme: ButtonTextTheme.primary,
+          ),
+        ),
+        child: child!,
+      );
+    },
+  );
+
+  if (selectedDate != null && selectedDate != controller.text) {
+    // Update the controller with the selected date
+    controller.text = DateFormat('yyyy-MM-dd').format(selectedDate);
   }
-    void didChangeDependencies() {
+}
+
+
+  void didChangeDependencies() {
     super.didChangeDependencies();
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
   }
+
   @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
@@ -213,7 +233,7 @@ class _MainDiscountsState extends State<MainDiscounts> {
                                             : TextAlign.right,
                                       ),
                                       SizedBox(height: 10),
-                                      TextFormField(
+                                      TextField(
                                         decoration: InputDecoration(
                                           labelText: isEnglish
                                               ? 'Percent'
@@ -222,6 +242,17 @@ class _MainDiscountsState extends State<MainDiscounts> {
                                               ? 'Enter Percent'
                                               : 'أدخل النسبة المئوية',
                                           prefixIcon: Icon(Icons.percent),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Color(
+                                                    0xFF080E27)), // Bottom border color when focused
+                                          ),
+                                          labelStyle: TextStyle(
+                                              color: Color(
+                                                  0xFF080E27)), // Label text color
+                                          hintStyle: TextStyle(
+                                              color: Color(
+                                                  0xFF080E27)), // Hint text color
                                         ),
                                         keyboardType: TextInputType.number,
                                         onChanged: (value) => percent = value,
@@ -238,6 +269,17 @@ class _MainDiscountsState extends State<MainDiscounts> {
                                               ? 'Enter Category'
                                               : 'أدخل الفئة',
                                           prefixIcon: Icon(Icons.category),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Color(
+                                                    0xFF080E27)), // Bottom border color when focused
+                                          ),
+                                          labelStyle: TextStyle(
+                                              color: Color(
+                                                  0xFF080E27)), // Label text color
+                                          hintStyle: TextStyle(
+                                              color: Color(
+                                                  0xFF080E27)), // Hint text color
                                         ),
                                         onChanged: (value) => category = value,
                                         textAlign: isEnglish
@@ -260,6 +302,18 @@ class _MainDiscountsState extends State<MainDiscounts> {
                                                   : 'اختر تاريخ البدء',
                                               prefixIcon:
                                                   Icon(Icons.calendar_today),
+                                              focusedBorder:
+                                                  UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Color(
+                                                        0xFF080E27)), // Bottom border color when focused
+                                              ),
+                                              labelStyle: TextStyle(
+                                                  color: Color(
+                                                      0xFF080E27)), // Label text color
+                                              hintStyle: TextStyle(
+                                                  color: Color(
+                                                      0xFF080E27)), // Hint text color
                                             ),
                                             textAlign: isEnglish
                                                 ? TextAlign.left
@@ -283,6 +337,18 @@ class _MainDiscountsState extends State<MainDiscounts> {
                                                   : 'اختر تاريخ الانتهاء',
                                               prefixIcon:
                                                   Icon(Icons.calendar_today),
+                                              focusedBorder:
+                                                  UnderlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Color(
+                                                        0xFF080E27)), // Bottom border color when focused
+                                              ),
+                                              labelStyle: TextStyle(
+                                                  color: Color(
+                                                      0xFF080E27)), // Label text color
+                                              hintStyle: TextStyle(
+                                                  color: Color(
+                                                      0xFF080E27)), // Hint text color
                                             ),
                                             textAlign: isEnglish
                                                 ? TextAlign.left
@@ -321,6 +387,9 @@ class _MainDiscountsState extends State<MainDiscounts> {
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
+                                        color: Color(0xFF080E27),
+
+
                                       ),
                                     ),
                                   ),

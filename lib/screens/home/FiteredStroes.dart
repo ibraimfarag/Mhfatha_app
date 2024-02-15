@@ -4,7 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:mhfatha/settings/imports.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:permission_handler/permission_handler.dart' hide PermissionStatus;
 import 'dart:async';
 
 class FiteredStroes extends StatefulWidget {
@@ -67,32 +67,31 @@ class _FiteredStroesState extends State<FiteredStroes> {
     }
   }
 
-  Future<void> _getLocation() async {
+    Future<void> _getLocation() async {
+ Location location = Location();
     bool serviceEnabled;
-    LocationPermission permission;
+    PermissionStatus permission;
 
     // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    serviceEnabled = await location.serviceEnabled();
     if (!serviceEnabled) {
-      // Location services are not enabled don't continue
+      // Location services are not enabled, don't continue
       // accessing the position and request users of the
       // App to enable the location services.
       return Future.error('Location services are disabled.');
     }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
+
+    permission = await location.hasPermission();
+    if (permission == PermissionStatus.denied) {
+      permission = await location.requestPermission();
+      if (permission == PermissionStatus.denied) {
         // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
+        // requesting permissions again. Show an explanatory UI.
         return Future.error('Location permissions are denied');
       }
     }
 
-    if (permission == LocationPermission.deniedForever) {
+    if (permission == PermissionStatus.deniedForever) {
       // Permissions are denied forever, handle appropriately.
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
@@ -122,9 +121,7 @@ class _FiteredStroesState extends State<FiteredStroes> {
     }
 
     try {
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
+      LocationData locationData = await location.getLocation();
 
       // Check if the widget is still mounted before updating the state
       if (!mounted) {
@@ -132,8 +129,8 @@ class _FiteredStroesState extends State<FiteredStroes> {
       }
 
       setState(() {
-        latitude = position.latitude;
-        longitude = position.longitude;
+        latitude = locationData.latitude;
+        longitude = locationData.longitude;
       });
 
       // Call the method to send location when the coordinates are available
@@ -144,6 +141,7 @@ class _FiteredStroesState extends State<FiteredStroes> {
       print("Error getting location: $e");
     }
   }
+
 
   Future<void> _sendLocation() async {
     AuthProvider authProvider =

@@ -27,7 +27,8 @@ class _ChangePasswordState extends State<ChangePassword> {
     super.initState();
     authProvider = Provider.of<AuthProvider>(context, listen: false);
   }
-    void didChangeDependencies() {
+
+  void didChangeDependencies() {
     super.didChangeDependencies();
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
   }
@@ -49,13 +50,12 @@ class _ChangePasswordState extends State<ChangePassword> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                   CustomAppBar(
-                  onBackTap: () {
-                    Navigator.pop(context);
-                  },
-                                    marginTop: 30,
-
-                ),
+                  CustomAppBar(
+                    onBackTap: () {
+                      Navigator.pop(context);
+                    },
+                    marginTop: 30,
+                  ),
                   Container(
                     padding: EdgeInsets.fromLTRB(20, 0, 20, 5),
                     // height: 200,
@@ -65,7 +65,6 @@ class _ChangePasswordState extends State<ChangePassword> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                        
                               SizedBox(
                                 height: 5,
                               ),
@@ -145,6 +144,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                               onPressed: () async {
                                 QuickAlert.show(
                                   context: context,
+                                  // customAsset: 'images/no-internet.jpg',
                                   type: QuickAlertType.confirm,
                                   text: isEnglish
                                       ? 'Do you want to update profile'
@@ -168,10 +168,8 @@ class _ChangePasswordState extends State<ChangePassword> {
                                         confirmationNewPassword,
                                       );
                                       // Show success message or handle accordingly
-                                     
                                     } catch (e) {
                                       // Handle error, show error message, etc.
-                                     
                                     }
                                   },
                                 );

@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:mhfatha/settings/imports.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:permission_handler/permission_handler.dart' hide PermissionStatus;
 import 'dart:async';
 
 // import 'package:searchfield/searchfield.dart';
@@ -71,11 +71,10 @@ class _HomeScreenState extends State<HomeScreen> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
   }
 
-  Future<void> _checkAndSendLocation() async {
+Future<void> _checkAndSendLocation() async {
+    Location location = Location();
     try {
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
+      LocationData locationData = await location.getLocation();
 
       // Check if the widget is still mounted before updating the state
       if (!mounted) {
@@ -83,10 +82,10 @@ class _HomeScreenState extends State<HomeScreen> {
       }
 
       // Check if the location has changed significantly
-      if (latitude != position.latitude || longitude != position.longitude) {
+      if (latitude != locationData.latitude || longitude != locationData.longitude) {
         setState(() {
-          latitude = position.latitude;
-          longitude = position.longitude;
+          latitude = locationData.latitude;
+          longitude = locationData.longitude;
         });
 
         // Call the method to send location when the coordinates are available
@@ -98,7 +97,6 @@ class _HomeScreenState extends State<HomeScreen> {
       print("Error getting location: $e");
     }
   }
-
   int calculateDaysRemaining(String endDate) {
     DateTime endDateTime = DateTime.parse(endDate);
     DateTime now = DateTime.now();
@@ -116,31 +114,30 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _getLocation() async {
+   Location location = Location();
     bool serviceEnabled;
-    LocationPermission permission;
+    PermissionStatus permission;
 
     // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    serviceEnabled = await location.serviceEnabled();
     if (!serviceEnabled) {
-      // Location services are not enabled don't continue
+      // Location services are not enabled, don't continue
       // accessing the position and request users of the
       // App to enable the location services.
       return Future.error('Location services are disabled.');
     }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
+
+    permission = await location.hasPermission();
+    if (permission == PermissionStatus.denied) {
+      permission = await location.requestPermission();
+      if (permission == PermissionStatus.denied) {
         // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
+        // requesting permissions again. Show an explanatory UI.
         return Future.error('Location permissions are denied');
       }
     }
 
-    if (permission == LocationPermission.deniedForever) {
+    if (permission == PermissionStatus.deniedForever) {
       // Permissions are denied forever, handle appropriately.
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
@@ -170,9 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     try {
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
+      LocationData locationData = await location.getLocation();
 
       // Check if the widget is still mounted before updating the state
       if (!mounted) {
@@ -180,8 +175,8 @@ class _HomeScreenState extends State<HomeScreen> {
       }
 
       setState(() {
-        latitude = position.latitude;
-        longitude = position.longitude;
+        latitude = locationData.latitude;
+        longitude = locationData.longitude;
       });
 
       // Call the method to send location when the coordinates are available
@@ -192,7 +187,6 @@ class _HomeScreenState extends State<HomeScreen> {
       print("Error getting location: $e");
     }
   }
-
   Future<void> _reloadFilteredStores() async {
     // Check if the widget is still mounted before proceeding
     if (!mounted) {
@@ -282,21 +276,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     !(store['discounts'] is List) ||
                     store['discounts'].isEmpty)
                   Container(
-                       width: MediaQuery.of(context).size.width - 100,
-                          margin: const EdgeInsets.all(10),
-                          padding: const EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                      child:Center(
-                        child:Text(
-                        isEnglish
-                            ? 'No discounts available now'
-                            : 'لا توجد خصومات متاحة الآن',
-                        style: TextStyle(fontSize: 16, color: Colors.black),
-                      ) ,
-                      ) )
+                      width: MediaQuery.of(context).size.width - 100,
+                      margin: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Center(
+                        child: Text(
+                          isEnglish
+                              ? 'No discounts available now'
+                              : 'لا توجد خصومات متاحة الآن',
+                          style: TextStyle(fontSize: 16, color: Colors.black),
+                        ),
+                      ))
                 else
                   SingleChildScrollView(
                     scrollDirection: Axis.vertical,
@@ -432,7 +426,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
               width: 500,
               // height: 900,
-              margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+              margin: const EdgeInsets.fromLTRB(2, 0, 2, 0),
               decoration: BoxDecoration(
                 color: Color.fromARGB(255, 3, 12, 19),
                 borderRadius: BorderRadius.circular(15),
@@ -440,7 +434,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 children: [
                   Container(
-                    width: 500,
+                    // width: 500,
                     // height: 900,
                     margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                     decoration: BoxDecoration(
@@ -451,8 +445,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         // Image with gradient
                         Container(
-                          height: 100,
-                          width: 180,
+                          height: 105,
+                          width: 140,
                           child: ClipRRect(
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(15),
@@ -492,7 +486,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: AppVariables.serviceFontFamily,
-                                fontSize: 14,
+                                fontSize: MediaQuery.of(context).size.width *
+                                    0.03, // Adjust the multiplier as needed
                               ),
                               textAlign:
                                   Provider.of<AppState>(context).isEnglish
@@ -512,19 +507,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   Icon(Icons.location_on,
                                       color: Colors.white, size: 18),
-                                  const SizedBox(width: 1),
-                                  TextButton(
-                                    onPressed: () {
-                                      // Handle onPressed for "يبعد 5 كم" button
-                                    },
-                                    child: Text(
-                                      '${Provider.of<AppState>(context).isEnglish ? 'Distance: ' : 'يبعد '}${store['distance']}',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                        fontFamily:
-                                            AppVariables.serviceFontFamily,
-                                      ),
+                                  // const SizedBox(width: 1),
+                                  Text(
+                                    '${Provider.of<AppState>(context).isEnglish ? 'Distance: ' : 'يبعد '}${store['distance']}',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: MediaQuery.of(context)
+                                              .size
+                                              .width *
+                                          0.025, // Adjust the multiplier as needed
+                                      fontFamily:
+                                          AppVariables.serviceFontFamily,
                                     ),
                                   ),
                                 ],
@@ -542,7 +535,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
               width: 500,
               // height: 900,
-              margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+              margin: const EdgeInsets.fromLTRB(2, 0, 2, 0),
               decoration: BoxDecoration(
                 color: Color.fromARGB(255, 3, 12, 19),
                 borderRadius: BorderRadius.circular(15),
@@ -562,7 +555,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SizedBox(
-                          height: 60,
+                          height: 20,
                         ),
                         Container(
                           padding: const EdgeInsets.symmetric(
@@ -583,7 +576,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             39)), // Set the background color
                                 padding: MaterialStateProperty.all<
                                         EdgeInsetsGeometry>(
-                                    EdgeInsets.all(12)), // Adjust the padding
+                                    EdgeInsets.all(10)), // Adjust the padding
                                 shape: MaterialStateProperty.all<
                                     RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
@@ -599,20 +592,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                         .store, // Replace with the desired icon
                                     color: Colors.white,
                                     size:
-                                        20, // Adjust the size according to your preference
+                                        15, // Adjust the size according to your preference
                                   ),
                                   SizedBox(
                                     width:
-                                        8, // Adjust the spacing between icon and text
+                                        4, // Adjust the spacing between icon and text
                                   ),
                                   Text(
                                     isEnglish ? 'Visit store' : 'زيارة المتجر',
                                     style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontFamily:
-                                          AppVariables.serviceFontFamily,
-                                    ),
+                                        color: Colors.white,
+                                        fontSize: MediaQuery.of(context)
+                                                .size
+                                                .width *
+                                            0.03, // Adjust the multiplier as needed
+                                        fontFamily:
+                                            AppVariables.serviceFontFamily,
+                                        fontWeight: FontWeight.w600),
                                   ),
                                 ],
                               ),
@@ -629,7 +625,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               Row(
                                 children: [
-                            
                                   TextButton(
                                     onPressed: () async {
                                       // Handle "Show discounts" option
@@ -680,7 +675,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       padding: MaterialStateProperty.all<
                                               EdgeInsetsGeometry>(
                                           EdgeInsets.all(
-                                              12)), // Adjust the padding
+                                              8)), // Adjust the padding
                                       shape: MaterialStateProperty.all<
                                           RoundedRectangleBorder>(
                                         RoundedRectangleBorder(
@@ -696,22 +691,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                               .local_offer, // Replace with the desired icon
                                           color: Colors.white,
                                           size:
-                                              20, // Adjust the size according to your preference
+                                              15, // Adjust the size according to your preference
                                         ),
                                         SizedBox(
                                           width:
-                                              8, // Adjust the spacing between icon and text
+                                              4, // Adjust the spacing between icon and text
                                         ),
                                         Text(
                                           isEnglish
                                               ? 'Show discounts'
                                               : 'عرض الخصومات',
                                           style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 12,
-                                            fontFamily:
-                                                AppVariables.serviceFontFamily,
-                                          ),
+                                              color: Colors.white,
+                                              fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.03, // Adjust the multiplier as needed
+                                              fontFamily: AppVariables
+                                                  .serviceFontFamily,
+                                              fontWeight: FontWeight.w600),
                                         ),
                                       ],
                                     ),
@@ -814,7 +812,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ? 'Welcome back $authName'
                                 : 'مرحبًا $authName',
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: MediaQuery.of(context).size.width *
+                                  0.04, // Adjust the multiplier as needed
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -959,22 +958,28 @@ class _HomeScreenState extends State<HomeScreen> {
                                           print(store);
                                         },
                                         child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          crossAxisAlignment: isEnglish
+                                              ? CrossAxisAlignment.start
+                                              : CrossAxisAlignment.end,
                                           mainAxisAlignment: isEnglish
                                               ? MainAxisAlignment.start
                                               : MainAxisAlignment.end,
                                           children: [
-                                            Container(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 20),
-                                              child: Text(
-                                                '$name',
-                                                textAlign: isEnglish
-                                                    ? TextAlign.start
-                                                    : TextAlign.end,
+                                        Container(
+                                                margin: EdgeInsets.symmetric(
+                                                    horizontal: 20),
+                                                child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 0),
+                                                  child: Text(
+                                                    '$name',
+                                                    textAlign: isEnglish
+                                                        ? TextAlign.start
+                                                        : TextAlign.end,
+                                                  ),
+                                                ),
                                               ),
-                                            )
+                                            
                                           ],
                                         ),
                                       ));
@@ -1026,13 +1031,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             items: buildStoreContainers(),
                             options: CarouselOptions(
                               autoPlay: true,
-                              aspectRatio: 9 / 5,
+                              aspectRatio: 2.2,
                               enlargeCenterPage: false,
                               enableInfiniteScroll: true,
-                              autoPlayCurve: Curves.fastOutSlowIn,
+                              // autoPlayCurve: Curves.fastOutSlowIn,
                               autoPlayAnimationDuration:
                                   Duration(milliseconds: 4000),
-                              viewportFraction: 0.5,
+                              viewportFraction:
+                                  MediaQuery.of(context).size.width >= 768
+                                      ? 0.5
+                                      : 0.41,
                             ),
                           ),
                         )
@@ -1054,54 +1062,48 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 20),
-
-                        child: 
-                          SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child:
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-
-                            buildIconWithText(
-                              // width: 120,
-                              height: 160,
-
-                              Icons.qr_code,
-                              'Scan QR',
-                              'مسح الكود',
-                              'images/qr.jpg', // Replace with the actual image path
-                              () {
-                                Navigator.pushNamed(context, '/qr-scanner');
-                              },
-                            ),
-
-                            buildIconWithText(
-                                // width: 110,
-                                height: 160,
-                                Icons.store,
-                                'Nearby Discounts',
-                                'الخصومات القريبة',
-                                'images/nearby.jpg', () {
-                              Navigator.pushNamed(context, '/nearby',
-                                  arguments: filteredStores);
-                            }),
-                            // buildIconWithText(Icons.search, 'Search', 'البحث', () {}),
-
-                            buildIconWithText(
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              buildIconWithText(
                                 // width: 120,
-                                height: 160,
-                                Icons.local_offer,
-                                'Discounts',
-                                'الخصومات',
-                                'images/discount-2.png', () {
-                              Navigator.pushNamed(context, '/filteredStores');
-                            }),
-                          ],
-                        ),
-                        ),
+                                // height: 130,
 
+                                Icons.qr_code,
+                                'Scan QR',
+                                'مسح الكود',
+                                'images/qr.jpg', // Replace with the actual image path
+                                () {
+                                  Navigator.pushNamed(context, '/qr-scanner');
+                                },
+                              ),
 
+                              buildIconWithText(
+                                  // width: 110,
+                                  // height: 130,
+                                  Icons.store,
+                                  'Nearby Discounts',
+                                  'الخصومات القريبة',
+                                  'images/nearby.jpg', () {
+                                Navigator.pushNamed(context, '/nearby',
+                                    arguments: filteredStores);
+                              }),
+                              // buildIconWithText(Icons.search, 'Search', 'البحث', () {}),
+
+                              buildIconWithText(
+                                  // width: 120,
+                                  // height: 130,
+                                  Icons.local_offer,
+                                  'Discounts',
+                                  'الخصومات',
+                                  'images/discount-2.png', () {
+                                Navigator.pushNamed(context, '/filteredStores');
+                              }),
+                            ],
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -1118,7 +1120,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget buildIconWithText(IconData icon, String englishText, String arabicText,
       String imagePath, VoidCallback onTap,
-      {double? width, required double height}) {
+      {double? width, double? height}) {
     final isEnglish = Provider.of<AppState>(context).isEnglish;
     bool isDark = Provider.of<AppState>(context).isDarkMode;
 
@@ -1126,8 +1128,11 @@ class _HomeScreenState extends State<HomeScreen> {
       onTap: onTap,
       child: Container(
         width: width != null ? width : null, // Adjust the width as needed
-        height: height, // Adjust the width as needed
-        margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+        height: height != null
+            ? height
+            : MediaQuery.of(context).size.height *
+                0.15, // Adjust the width as needed
+        margin: const EdgeInsets.fromLTRB(8, 12, 8, 12),
         decoration: BoxDecoration(
           color: isDark ? Color.fromARGB(255, 29, 29, 29) : Color(0xFFF0F0F0),
           border: Border.all(
@@ -1150,7 +1155,8 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             Container(
-              height: 100,
+              height: MediaQuery.of(context).size.height *
+                  0.1, // Adjust the multiplier as needed
               width: width != null ? width : null,
               child: ClipRRect(
                 borderRadius: BorderRadius.only(
@@ -1179,7 +1185,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               child: Align(
                 alignment: isEnglish ? Alignment.center : Alignment.center,
                 child: Text(
@@ -1188,7 +1194,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: isDark ? Color(0xFFFFFFFF) : Colors.black87,
                     fontWeight: FontWeight.bold,
                     fontFamily: AppVariables.serviceFontFamily,
-                    fontSize: 14,
+                    fontSize: MediaQuery.of(context).size.width *
+                        0.03, // Adjust the multiplier as needed
                   ),
                   textAlign: isEnglish ? TextAlign.center : TextAlign.center,
                 ),

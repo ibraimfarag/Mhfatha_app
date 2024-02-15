@@ -111,7 +111,7 @@ export 'package:provider/provider.dart';
 // export 'package:intl/intl.dart';
 
 // /* ----------------------------- multi_language ----------------------------- */
-export 'package:flutter_locales/flutter_locales.dart';
+// export 'package:flutter_locales/flutter_locales.dart';
 
 // /* --------------------------- shared preferences --------------------------- */
 export 'package:shared_preferences/shared_preferences.dart';
@@ -126,7 +126,7 @@ export 'package:carousel_slider/carousel_slider.dart';
 
 // /* -------------------------------- location -------------------------------- */
 
-export'package:geolocator/geolocator.dart';
+// export'package:geolocator/geolocator.dart';
 
 // /* --------------------------- permission handler --------------------------- */
 
@@ -151,7 +151,7 @@ export 'package:internet_connection_checker/internet_connection_checker.dart';
 
 // ─── Location ────────────────────────────────────────────────────────────────
 
-// export 'package:location/location.dart';
+export 'package:location/location.dart';
 
 // /* -------------------------------- flipcard -------------------------------- */
 export 'package:flip_card/flip_card.dart';
@@ -208,6 +208,5 @@ export 'package:mhfatha/firebase_options.dart';
 export 'package:firebase_messaging/firebase_messaging.dart';
 
 export'package:pull_down_button/pull_down_button.dart';
-export 'package:statusbarz/statusbarz.dart';
-export 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
+
 export 'package:searchfield/searchfield.dart';

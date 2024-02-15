@@ -19,7 +19,7 @@ class _NewNavState extends State<NewNav> {
     String currentRoute = ModalRoute.of(context)?.settings.name ?? '';
 
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 20), // Adjust padding as needed
+      padding: EdgeInsets.only(bottom: 15 , top: 5), // Adjust padding as needed
       color: Colors.white, // Customize background color
       child: Row(
         mainAxisAlignment:
@@ -33,11 +33,11 @@ class _NewNavState extends State<NewNav> {
                   '/home'), // Customize icon, label, and route for each item
           _buildNavItem(Icons.wallet, isEnglish ? 'My Wallet' : 'محفظتي',
               '/requests', currentRoute == '/requests'),
+          if (authProvider.isVendor)
+            _buildNavItem(Icons.store, isEnglish ? 'My Stores' : 'متاجري',
+                '/mainstores', currentRoute == '/mainstores'),
           _buildNavItem(Icons.settings, isEnglish ? 'Settings' : 'الإعدادات',
               '/settings', currentRoute == '/settings'),
-          if (authProvider.isVendor)
-            _buildNavItem(Icons.store, isEnglish ? 'Stores' : 'المتاجر',
-                '/mainstores', currentRoute == '/mainstores'),
         ],
       ),
     );
