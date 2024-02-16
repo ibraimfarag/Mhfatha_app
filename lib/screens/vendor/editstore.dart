@@ -732,15 +732,19 @@ class EditMapScreen extends StatefulWidget {
 class _EditMapScreenState extends State<EditMapScreen> {
   @override
   Widget build(BuildContext context) {
+        bool isEnglish = Provider.of<AppState>(context).isEnglish;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Select Location'),
+        title: Text(isEnglish ? 'Select Location' : 'حدد موقع المتجر'),
       ),
       body: OpenStreetMapSearchAndPick(
         buttonTextStyle:
             const TextStyle(fontSize: 18, fontStyle: FontStyle.normal),
-        buttonColor: Colors.blue,
-        buttonText: 'Set Current Location',
+               buttonColor: Color(0xFF080E27),
+        buttonText: isEnglish ? 'Set Current Location' : 'اختر الموقع الحالي',
+        locationPinIconColor: Colors.red,
+        locationPinText: '',
         onPicked: (pickedData) {
           final LatLng location =
               LatLng(pickedData.latLong.latitude, pickedData.latLong.longitude);

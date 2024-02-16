@@ -72,10 +72,12 @@ class _CreateStoreState extends State<CreateStore> {
     //       TimeOfDay(hour: 18, minute: 0); // Set default closing time
     // }
   }
-    void didChangeDependencies() {
+
+  void didChangeDependencies() {
     super.didChangeDependencies();
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
   }
+
   @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
@@ -396,37 +398,41 @@ class _CreateStoreState extends State<CreateStore> {
               ],
             ),
             SizedBox(height: 10),
-if (englishTitle.toLowerCase() == 'mobile number' || englishTitle.toLowerCase() == 'commercial register')
-  TextField(
-    obscureText: false,
-    controller: controller,
-    style: TextStyle(fontSize: 16, color: colors),
-    keyboardType: TextInputType.phone, // Set the keyboard type to phone
-    inputFormatters: [
-      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')), // Allow only numbers
-      LengthLimitingTextInputFormatter(10), // Limit the length to 10 characters
-    ],
-    decoration: InputDecoration(
-      hintStyle: TextStyle(color: Colors.grey.shade700),
-      filled: true,
-      fillColor: ui,
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(30),
-        borderSide: BorderSide(color: backgroundColor),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(30),
-        borderSide: BorderSide(color: backgroundColor),
-      ),
-    ),
-    onChanged: (value) {
-      if (value.length == 10) {
-        // If the input length is 10, remove focus from the TextField
-        // This will close the keyboard
-        FocusScope.of(context).unfocus();
-      }
-    },
-  )
+            if (englishTitle.toLowerCase() == 'mobile number' ||
+                englishTitle.toLowerCase() == 'commercial register')
+              TextField(
+                obscureText: false,
+                controller: controller,
+                style: TextStyle(fontSize: 16, color: colors),
+                keyboardType:
+                    TextInputType.phone, // Set the keyboard type to phone
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(
+                      RegExp(r'[0-9]')), // Allow only numbers
+                  LengthLimitingTextInputFormatter(
+                      10), // Limit the length to 10 characters
+                ],
+                decoration: InputDecoration(
+                  hintStyle: TextStyle(color: Colors.grey.shade700),
+                  filled: true,
+                  fillColor: ui,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide(color: backgroundColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide(color: backgroundColor),
+                  ),
+                ),
+                onChanged: (value) {
+                  if (value.length == 10) {
+                    // If the input length is 10, remove focus from the TextField
+                    // This will close the keyboard
+                    FocusScope.of(context).unfocus();
+                  }
+                },
+              )
             else
               TextField(
                 obscureText: false,
@@ -665,15 +671,19 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
+    bool isEnglish = Provider.of<AppState>(context).isEnglish;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Select Location'),
+        title: Text(isEnglish ? 'Select Location' : 'حدد موقع المتجر'),
       ),
       body: OpenStreetMapSearchAndPick(
         buttonTextStyle:
             const TextStyle(fontSize: 18, fontStyle: FontStyle.normal),
-        buttonColor: Colors.blue,
-        buttonText: 'Set Current Location',
+        buttonColor: Color(0xFF080E27),
+        buttonText: isEnglish ? 'Set Current Location' : 'اختر الموقع الحالي',
+        locationPinIconColor: Colors.red,
+        locationPinText: '',
         onPicked: (pickedData) {
           final LatLng location =
               LatLng(pickedData.latLong.latitude, pickedData.latLong.longitude);
