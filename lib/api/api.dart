@@ -948,12 +948,30 @@ Future<String> fetchVendorStores(BuildContext context) async {
 }
 
 void _showLoadingDialog(BuildContext context) {
-  bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
-
-  QuickAlert.show(
+  showDialog(
     context: context,
-    type: QuickAlertType.loading,
-    title: isEnglish ? 'please wait' : 'يرجى الانتظار...',
-    text: isEnglish ? 'loading your data' : 'جاري تحميل البيانات',
+    barrierDismissible: false, // Prevent dialog from closing on outside tap
+    builder: (BuildContext context) {
+      return Dialog(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        child: Center(
+          child: CircularProgressIndicator(), // Replace QuickAlert with CircularProgressIndicator
+        ),
+      );
+    },
   );
 }
+
+
+// void _showLoadingDialog(BuildContext context) {
+//   bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
+
+//   QuickAlert.show(
+//     context: context,
+//     type: QuickAlertType.loading,
+//     // customAsset:,
+//     title: isEnglish ? 'please wait' : 'يرجى الانتظار...',
+//     text: isEnglish ? 'loading your data' : 'جاري تحميل البيانات',
+//   );
+// }

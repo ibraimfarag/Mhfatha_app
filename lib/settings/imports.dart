@@ -113,6 +113,7 @@ export 'package:provider/provider.dart';
 // /* ----------------------------- multi_language ----------------------------- */
 // export 'package:flutter_locales/flutter_locales.dart';
 
+
 // /* --------------------------- shared preferences --------------------------- */
 export 'package:shared_preferences/shared_preferences.dart';
 
@@ -130,7 +131,9 @@ export 'package:carousel_slider/carousel_slider.dart';
 
 // /* --------------------------- permission handler --------------------------- */
 
-export 'package:url_launcher/url_launcher.dart';
+// export 'package:url_launcher/url_launcher.dart';
+// export 'package:maps_launcher/maps_launcher.dart';
+ export 'package:map_launcher/map_launcher.dart';
 
 // /* ----------------------------------- QR ----------------------------------- */
 

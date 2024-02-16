@@ -80,7 +80,7 @@ Future<void> _showNotification(
     'Firebase Notifications',
     importance: Importance.max,
     priority: Priority.high,
-    // sound: RawResourceAndroidNotificationSound('your_custom_sound'), // Specify custom sound here
+// sound: RawResourceAndroidNotificationSound('wrong.mp3'),
     icon: '@mipmap/launcher_icon', // Specify custom icon here
     ticker: 'ticker',
   );

@@ -30,7 +30,7 @@ class _EditStoreState extends State<EditStore> {
   String selectedCategory = '1';
   String? _selectedProfileImagePath;
   String storeimage = 'Market.png';
-  String store_idd='';
+  String store_idd = '';
 
   // List<String> selectedDays = []; // Holds selected days of the week
   Map<String, TimeOfDay?> openingTimes = {};
@@ -129,10 +129,12 @@ class _EditStoreState extends State<EditStore> {
     // Return a default time if the input is invalid
     return TimeOfDay(hour: 0, minute: 0);
   }
-    void didChangeDependencies() {
+
+  void didChangeDependencies() {
     super.didChangeDependencies();
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
   }
+
   @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
@@ -338,8 +340,8 @@ class _EditStoreState extends State<EditStore> {
                           ),
                           buildSettingItem(
                             context,
-                            'Tax Number',
-                            'الرقم الضريبي',
+                            'Commercial Register',
+                            'السجل التجاري',
                             () {},
                             taxNumber,
                             '',
@@ -358,8 +360,8 @@ class _EditStoreState extends State<EditStore> {
                                   SizedBox(height: 20),
                                   Text(
                                     isEnglish
-                                        ? 'Select Working Days'
-                                        : 'حدد أيام العمل',
+                                        ? 'Select Working Days and Time'
+                                        : 'حدد أيام و أوقات العمل',
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -432,121 +434,123 @@ class _EditStoreState extends State<EditStore> {
   }
 
   Widget buildDayTimeSelector(String day) {
-  bool isEnglish = Provider.of<AppState>(context).isEnglish;
+    bool isEnglish = Provider.of<AppState>(context).isEnglish;
 
-  return Container(
-    margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-    decoration: BoxDecoration(
-      color: Color.fromARGB(20, 71, 71, 71),
-      borderRadius: BorderRadius.circular(30),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        // Checkbox for selecting the day
-        Row(
-          children: [
-            Checkbox(
-              value: selectedDays[day] ?? false,
-              onChanged: (value) {
-                setState(() {
-                  selectedDays[day] = value!;
-                  if (value!) {
-                    // If the day is selected, initialize the opening and closing times if not already initialized
-                    if (openingTimes[day] == null) {
-                      openingTimes[day] = TimeOfDay(hour: 9, minute: 0); // Set default opening time
-                    }
-                    if (closingTimes[day] == null) {
-                      closingTimes[day] = TimeOfDay(hour: 18, minute: 0); // Set default closing time
-                    }
-                  } else {
-                    // If the day is deselected, remove its entry from workingDayss
-                    workingDayss.remove(day);
-                  }
-                  // Print updated workingDayss
-                  print('Updated workingDayss: $workingDayss');
-                });
-              },
-              activeColor: Color(0xFF1D365C),
-            ),
-            Text(
-              isEnglish ? getEnglishDayName(day) : getArabicDayName(day),
-              style: TextStyle(
-                color: Color(0xFF1D365C),
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-        // Display open and close times if the day is selected
-        if (selectedDays[day] ?? false)
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+      decoration: BoxDecoration(
+        color: Color.fromARGB(20, 71, 71, 71),
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          // Checkbox for selecting the day
           Row(
             children: [
-              SizedBox(width: 20),
-              Text(
-                isEnglish ? 'Open Time: ' : 'وقت الفتح: ',
-              ),
-              TextButton(
-                onPressed: () async {
-                  final selectedTime = await showTimePicker(
-                    context: context,
-                    initialTime: openingTimes[day] ?? TimeOfDay.now(),
-                  );
-                  if (selectedTime != null) {
-                    setState(() {
-                      openingTimes[day] = selectedTime;
-                      // Update workingDayss with the selected opening time
-                      workingDayss[day] ??= {};
-                      workingDayss[day]!['from'] = selectedTime.format(context);
-                      // Print updated workingDayss
-                      print('Updated workingDayss: $workingDayss');
-                    });
-                  }
+              Checkbox(
+                value: selectedDays[day] ?? false,
+                onChanged: (value) {
+                  setState(() {
+                    selectedDays[day] = value!;
+                    if (value!) {
+                      // If the day is selected, initialize the opening and closing times if not already initialized
+                      if (openingTimes[day] == null) {
+                        openingTimes[day] = TimeOfDay(
+                            hour: 9, minute: 0); // Set default opening time
+                      }
+                      if (closingTimes[day] == null) {
+                        closingTimes[day] = TimeOfDay(
+                            hour: 18, minute: 0); // Set default closing time
+                      }
+                    } else {
+                      // If the day is deselected, remove its entry from workingDayss
+                      workingDayss.remove(day);
+                    }
+                    // Print updated workingDayss
+                    print('Updated workingDayss: $workingDayss');
+                  });
                 },
-                child: Text(
-                  openingTimes[day]?.format(context) ?? '- - : - -',
-                  style: TextStyle(
-                    color: Color(0xFF1D365C),
-                  ),
-                ),
+                activeColor: Color(0xFF1D365C),
               ),
-              SizedBox(width: 5),
               Text(
-                isEnglish ? 'Close Time: ' : 'وقت الإغلاق: ',
-              ),
-              TextButton(
-                onPressed: () async {
-                  final selectedTime = await showTimePicker(
-                    context: context,
-                    initialTime: closingTimes[day] ?? TimeOfDay.now(),
-                  );
-                  if (selectedTime != null) {
-                    setState(() {
-                      closingTimes[day] = selectedTime;
-                      // Update workingDayss with the selected closing time
-                      workingDayss[day] ??= {};
-                      workingDayss[day]!['to'] = selectedTime.format(context);
-                      // Print updated workingDayss
-                      print('Updated workingDayss: $workingDayss');
-                    });
-                  }
-                },
-                child: Text(
-                  closingTimes[day]?.format(context) ?? '- - : - -',
-                  style: TextStyle(
-                    color: Color(0xFF1D365C),
-                  ),
+                isEnglish ? getEnglishDayName(day) : getArabicDayName(day),
+                style: TextStyle(
+                  color: Color(0xFF1D365C),
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],
           ),
-      ],
-    ),
-  );
-}
-
+          // Display open and close times if the day is selected
+          if (selectedDays[day] ?? false)
+            Row(
+              children: [
+                SizedBox(width: 20),
+                Text(
+                  isEnglish ? 'Open Time: ' : 'وقت الفتح: ',
+                ),
+                TextButton(
+                  onPressed: () async {
+                    final selectedTime = await showTimePicker(
+                      context: context,
+                      initialTime: openingTimes[day] ?? TimeOfDay.now(),
+                    );
+                    if (selectedTime != null) {
+                      setState(() {
+                        openingTimes[day] = selectedTime;
+                        // Update workingDayss with the selected opening time
+                        workingDayss[day] ??= {};
+                        workingDayss[day]!['from'] =
+                            selectedTime.format(context);
+                        // Print updated workingDayss
+                        print('Updated workingDayss: $workingDayss');
+                      });
+                    }
+                  },
+                  child: Text(
+                    openingTimes[day]?.format(context) ?? '- - : - -',
+                    style: TextStyle(
+                      color: Color(0xFF1D365C),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 5),
+                Text(
+                  isEnglish ? 'Close Time: ' : 'وقت الإغلاق: ',
+                ),
+                TextButton(
+                  onPressed: () async {
+                    final selectedTime = await showTimePicker(
+                      context: context,
+                      initialTime: closingTimes[day] ?? TimeOfDay.now(),
+                    );
+                    if (selectedTime != null) {
+                      setState(() {
+                        closingTimes[day] = selectedTime;
+                        // Update workingDayss with the selected closing time
+                        workingDayss[day] ??= {};
+                        workingDayss[day]!['to'] = selectedTime.format(context);
+                        // Print updated workingDayss
+                        print('Updated workingDayss: $workingDayss');
+                      });
+                    }
+                  },
+                  child: Text(
+                    closingTimes[day]?.format(context) ?? '- - : - -',
+                    style: TextStyle(
+                      color: Color(0xFF1D365C),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+        ],
+      ),
+    );
+  }
 
 // Helper method to get English day name
   String getEnglishDayName(String day) {
@@ -637,24 +641,60 @@ class _EditStoreState extends State<EditStore> {
               ],
             ),
             SizedBox(height: 10),
-            TextField(
-              obscureText: false,
-              controller: controller,
-              style: TextStyle(fontSize: 16, color: colors),
-              decoration: InputDecoration(
-                hintStyle: TextStyle(color: Colors.grey.shade700),
-                filled: true,
-                fillColor: ui,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide(color: backgroundColor),
+            if (englishTitle.toLowerCase() == 'mobile number' ||
+                englishTitle.toLowerCase() == 'commercial register')
+              TextField(
+                obscureText: false,
+                controller: controller,
+                style: TextStyle(fontSize: 16, color: colors),
+                keyboardType:
+                    TextInputType.phone, // Set the keyboard type to phone
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(
+                      RegExp(r'[0-9]')), // Allow only numbers
+                  LengthLimitingTextInputFormatter(
+                      10), // Limit the length to 10 characters
+                ],
+                decoration: InputDecoration(
+                  hintStyle: TextStyle(color: Colors.grey.shade700),
+                  filled: true,
+                  fillColor: ui,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide(color: backgroundColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide(color: backgroundColor),
+                  ),
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide(color: backgroundColor),
+                onChanged: (value) {
+                  if (value.length == 10) {
+                    // If the input length is 10, remove focus from the TextField
+                    // This will close the keyboard
+                    FocusScope.of(context).unfocus();
+                  }
+                },
+              )
+            else
+              TextField(
+                obscureText: false,
+                controller: controller,
+                style: TextStyle(fontSize: 16, color: colors),
+                decoration: InputDecoration(
+                  hintStyle: TextStyle(color: Colors.grey.shade700),
+                  filled: true,
+                  fillColor: ui,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide(color: backgroundColor),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    borderSide: BorderSide(color: backgroundColor),
+                  ),
                 ),
               ),
-            ),
           ],
         ),
       ),

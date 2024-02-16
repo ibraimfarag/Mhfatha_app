@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:mhfatha/settings/imports.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
 class StoreInfoScreen extends StatefulWidget {
   const StoreInfoScreen({Key? key}) : super(key: key);
@@ -59,10 +60,12 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
   String getEnglishDaysWord(int days) {
     return days > 1 ? 'Days' : 'Day';
   }
+
   void didChangeDependencies() {
     super.didChangeDependencies();
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
   }
+
   @override
   Widget build(BuildContext context) {
     // Retrieve the 'store' argument
@@ -73,7 +76,6 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
 
     return DirectionalityWrapper(
       child: Scaffold(
-    
         body: SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 20, horizontal: 0),
@@ -81,12 +83,11 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
-                 CustomAppBar(
+                CustomAppBar(
                     onBackTap: () {
                       Navigator.pop(context);
                     },
-                    iconColor:Colors.black
-                  ),
+                    iconColor: Colors.black),
                 Container(
                   width: 600,
                   margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -225,14 +226,14 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                             // Handle the call action
                             final phoneNumber = storeData?['phone'];
                             if (phoneNumber != null && phoneNumber.isNotEmpty) {
-                              launch('tel:$phoneNumber');
+                              FlutterPhoneDirectCaller.callNumber(phoneNumber);
                             } else {
                               // Handle the case where the phone number is not available
                             }
                           }),
                           VerticalDivider(color: Colors.black),
                           buildIconButton(Icons.directions,
-                              isEnglish ? 'Directions' : 'الاتجاهات', () {
+                              isEnglish ? 'Directions' : 'الاتجاهات', () async {
                             // Handle the directions action
                             // Example coordinates (adjust with your store location)
                             double latitude =
@@ -241,8 +242,19 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                                 double.parse('${storeData?['longitude']}');
                             String label = '${storeData?['name']}';
 
-                            launch(
-                                'https://www.google.com/maps/dir/?api=1&destination=$latitude,$longitude');
+                            // launch(
+                            //     'https://www.google.com/maps/dir/?api=1&destination=$latitude,$longitude');
+
+                            // MapsLauncher.launchCoordinates(latitude, longitude);
+                            final availableMaps =
+                                await MapLauncher.installedMaps;
+                            print(
+                                availableMaps); // [AvailableMap { mapName: Google Maps, mapType: google }, ...]
+
+                            await availableMaps.first.showMarker(
+                              coords: Coords(latitude, longitude),
+                              title: "$label",
+                            );
                           }),
                           // buildIconButton(
                           //     Icons.message, isEnglish ? 'Message' : 'رسالة',

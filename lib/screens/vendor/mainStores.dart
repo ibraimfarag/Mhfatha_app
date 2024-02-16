@@ -153,7 +153,7 @@ class _MainStoresState extends State<MainStores> {
                             children: [
                               Column(children: [
                                 Text(
-                                  isEnglish ? 'Purchases Times' : 'مرات الشراء',
+                                  isEnglish ? 'Purchases Times' : 'عدد مرات الشراء',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 16,

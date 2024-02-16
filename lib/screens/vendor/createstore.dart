@@ -275,8 +275,8 @@ class _CreateStoreState extends State<CreateStore> {
                           ),
                           buildSettingItem(
                             context,
-                            'Tax Number',
-                            'الرقم الضريبي',
+                            'Commercial Register',
+                            'السجل التجاري',
                             () {},
                             taxNumber,
                             '',
@@ -295,8 +295,8 @@ class _CreateStoreState extends State<CreateStore> {
                                   SizedBox(height: 20),
                                   Text(
                                     isEnglish
-                                        ? 'Select Working Days'
-                                        : 'حدد أيام العمل',
+                                        ? 'Select Working Days and times'
+                                        : 'حدد أيام و أوقات العمل',
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -396,7 +396,7 @@ class _CreateStoreState extends State<CreateStore> {
               ],
             ),
             SizedBox(height: 10),
-if (englishTitle.toLowerCase() == 'mobile number' || englishTitle.toLowerCase() == 'tax number')
+if (englishTitle.toLowerCase() == 'mobile number' || englishTitle.toLowerCase() == 'commercial register')
   TextField(
     obscureText: false,
     controller: controller,
@@ -509,7 +509,7 @@ if (englishTitle.toLowerCase() == 'mobile number' || englishTitle.toLowerCase() 
               children: [
                 SizedBox(width: 20),
                 Text(
-                  isEnglish ? 'Open Time: ' : 'وقت الفتح: ',
+                  isEnglish ? 'Open Time: ' : 'وقت الافتتاح: ',
                 ),
                 TextButton(
                   onPressed: () async {
