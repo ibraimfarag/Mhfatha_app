@@ -11,7 +11,7 @@ class _NearByState extends State<NearBy> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+    
   }
   Widget build(BuildContext context) {
     List<dynamic> filteredStores =

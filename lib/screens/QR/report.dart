@@ -11,7 +11,7 @@ class _ReportScreenState extends State<ReportScreen> {
   TextEditingController detailsController = TextEditingController();
  void didChangeDependencies() {
     super.didChangeDependencies();
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+    
   }
   @override
   Widget build(BuildContext context) {

@@ -15,12 +15,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
     authProvider.updateUserData(context);
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+    
 
   }
   void didChangeDependencies() {
     super.didChangeDependencies();
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+    
   }
   @override
   Widget build(BuildContext context) {

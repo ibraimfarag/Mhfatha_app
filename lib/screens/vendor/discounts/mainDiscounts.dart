@@ -105,7 +105,7 @@ Future<void> selectDate(TextEditingController controller) async {
 
   void didChangeDependencies() {
     super.didChangeDependencies();
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+    
   }
 
   @override

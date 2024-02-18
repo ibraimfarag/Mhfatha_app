@@ -10,7 +10,7 @@ class _NointernetState extends State<Nointernet> {
 
       void didChangeDependencies() {
     super.didChangeDependencies();
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+    
   }
   @override
 

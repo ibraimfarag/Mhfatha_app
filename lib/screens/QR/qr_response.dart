@@ -47,7 +47,7 @@ discounts = responseDataMap['discounts'];
 
   void didChangeDependencies() {
     super.didChangeDependencies();
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+    
   }
 
   @override

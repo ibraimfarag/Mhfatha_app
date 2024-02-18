@@ -74,7 +74,7 @@ export 'package:mhfatha/screens/Auth/noInternet.dart';
 
 // /* ------------------------------ Configuration ----------------------------- */
 export 'package:mhfatha/settings/languages.dart';
-export 'package:mhfatha/settings/language_provider.dart';
+export 'package:mhfatha/settings/AppState.dart';
 export 'package:mhfatha/settings/provider.dart';
 export 'package:mhfatha/settings/routes.dart';
 
@@ -112,6 +112,9 @@ export 'package:provider/provider.dart';
 
 // /* ----------------------------- multi_language ----------------------------- */
 // export 'package:flutter_locales/flutter_locales.dart';
+export 'package:device_information/device_information.dart';
+
+
 
 
 // /* --------------------------- shared preferences --------------------------- */

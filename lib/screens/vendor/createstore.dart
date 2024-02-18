@@ -75,7 +75,7 @@ class _CreateStoreState extends State<CreateStore> {
 
   void didChangeDependencies() {
     super.didChangeDependencies();
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+    
   }
 
   @override

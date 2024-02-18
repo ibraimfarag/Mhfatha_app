@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:permission_handler/permission_handler.dart' as permission_handler;
 
 import 'package:mhfatha/settings/imports.dart';
 
@@ -41,16 +43,96 @@ class _RequestsScreenState extends State<RequestsScreen> {
     }
   }
 
+ String _platformVersion = 'Unknown',
+      _imeiNo = "",
+      _modelName = "",
+      _manufacturerName = "",
+      _deviceName = "",
+      _productName = "",
+      _cpuType = "",
+      _hardware = "";
+  var _apiLevel;
+
+  
   @override
   void initState() {
     super.initState();
     getUserDiscounts();
+        requestPermissions();
+
+    // initPlatformState();
   }
 
-   void didChangeDependencies() {
-    super.didChangeDependencies();
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+  Future<void> requestPermissions() async {
+    // Check if permissions are already granted
+    permission_handler.PermissionStatus permissionStatus = await permission_handler.Permission.phone.status;
+    if (permissionStatus != permission_handler.PermissionStatus.granted) {
+      // Request permissions
+      permission_handler.PermissionStatus status = await permission_handler.Permission.phone.request();
+      if (status != permission_handler.PermissionStatus.granted) {
+        // Handle permission denied
+        // You can display a message to the user or take appropriate action
+        print('Permission denied');
+        return;
+      }
+    }
+
+    // Permissions granted, proceed with accessing device information
+    initPlatformState();
   }
+
+
+  Future<void> initPlatformState() async {
+    late String platformVersion,
+        imeiNo = '',
+        modelName = '',
+        manufacturer = '',
+        deviceName = '',
+        productName = '',
+        cpuType = '',
+        hardware = '';
+    var apiLevel;
+    // Platform messages may fail,
+    // so we use a try/catch PlatformException.
+    try {
+      platformVersion = await DeviceInformation.platformVersion;
+      imeiNo = await DeviceInformation.deviceIMEINumber;
+      modelName = await DeviceInformation.deviceModel;
+      manufacturer = await DeviceInformation.deviceManufacturer;
+      apiLevel = await DeviceInformation.apiLevel;
+      deviceName = await DeviceInformation.deviceName;
+      productName = await DeviceInformation.productName;
+      cpuType = await DeviceInformation.cpuName;
+      hardware = await DeviceInformation.hardware;
+    } on PlatformException catch (e) {
+      platformVersion = '${e.message}';
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      _platformVersion = platformVersion;
+      _imeiNo = imeiNo;
+      _modelName = modelName;
+      _manufacturerName = manufacturer;
+      _apiLevel = apiLevel;
+      _deviceName = deviceName;
+      _productName = productName;
+      _cpuType = cpuType;
+      _hardware = hardware;
+    });
+
+    print(_platformVersion);
+    print(_modelName);
+    print(_productName);
+    print(_apiLevel );
+    print(_manufacturerName );
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +152,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
+
                 Container(
                   padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
                   // height: 200,
@@ -159,6 +242,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
                             ),
                           ],
                         ),
+
                       ]),
                 ),
                 SizedBox(height: 16),
@@ -240,7 +324,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
                         ),
                       ),
                   ]),
-                )
+                ),
                 // Display the user discounts information
               ],
             ),

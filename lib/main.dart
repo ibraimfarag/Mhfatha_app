@@ -4,9 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:mhfatha/settings/imports.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-
-
-
 // Function to request location permissions
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -58,10 +55,57 @@ void main() async {
       child: MhfathaApp(),
     ),
   );
+  late Timer timer;
+
+  // Call validateToken method from the api class every 10 seconds
+  timer = Timer.periodic(Duration(seconds: 30), (timer) async {
+    // Get the context
+    BuildContext context = navigatorKey.currentContext!;
+    // Call the validateToken method
+    dynamic result = await Api().validateToken(context);
+    bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
+    bool isAuthenticated = Provider.of<AuthProvider>(context, listen: false).isAuthenticated;
+        if (isAuthenticated) {
+              if (result is Map<String, dynamic>) {
+                bool success = result['success'];
+                String? message = result['message']; // Make message nullable
+
+                if (success) {
+                  // print('Token is valid!');
+                } else {
+                  // print('Token is invalid!');
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text(isEnglish ? 'Invalid' : 'خطأ'),
+                        content: Text(message ??
+                            'Unknown error'), // Provide a default message if message is null
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Provider.of<AuthProvider>(context, listen: false).logout();
+                              Navigator.pop(context);
+                            },
+                            child: Text(isEnglish ? 'OK' : 'حسنا'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
+              } else {
+                print('Failed to validate token.');
+              }
+              }
+
+    // print('helloooooooooooooooo');
+  });
 }
 
-Future<void> _handleFirebaseMessage(
-    RemoteMessage message, FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) async {
+Future<void> _handleFirebaseMessage(RemoteMessage message,
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) async {
   // Extract notification details from the message
   final String? title = message.notification?.title;
   final String? body = message.notification?.body;
@@ -73,7 +117,9 @@ Future<void> _handleFirebaseMessage(
 }
 
 Future<void> _showNotification(
-    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin, String title, String body) async {
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin,
+    String title,
+    String body) async {
   const AndroidNotificationDetails androidPlatformChannelSpecifics =
       AndroidNotificationDetails(
     'firebase_notification_channel_id',
@@ -97,8 +143,6 @@ Future<void> _showNotification(
   );
 }
 
-
-
 class MhfathaApp extends StatefulWidget {
   const MhfathaApp({Key? key}) : super(key: key);
 
@@ -107,72 +151,71 @@ class MhfathaApp extends StatefulWidget {
 }
 
 class _MhfathaAppState extends State<MhfathaApp> {
-  final PushNotificationService _notificationService = PushNotificationService();
-
+  final PushNotificationService _notificationService =
+      PushNotificationService();
 
   @override
   void initState() {
     super.initState();
     Provider.of<AuthProvider>(context, listen: false).loadAuthData();
-
   }
-
-
 
   @override
   Widget build(BuildContext context) {
-
-      _notificationService.initialize();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Color(
+          0xFF080E27), // Set your desired status bar background color here
+      statusBarBrightness:
+          Brightness.light, // Set the status bar text color to dark
+      statusBarIconBrightness:
+          Brightness.light, // Set the status bar icon color to light
+    ));
+    _notificationService.initialize();
 
     Provider.of<AppState>(context, listen: false).loadLanguage();
     bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
 
-    return Consumer<AppState>(
-      builder: (context, appState, child) {
-        return MaterialApp(
-                    navigatorKey: navigatorKey,
+    return Consumer<AppState>(builder: (context, appState, child) {
+      return MaterialApp(
+        navigatorKey: navigatorKey,
 
-      title: 'Mhfatha',
+        title: 'Mhfatha',
         theme: ThemeData.light().copyWith(
-          
-        primaryColor: Colors.red, // Change the primary color
-        hintColor: const Color.fromARGB(255, 58, 52, 2), // Change the accent color
-        scaffoldBackgroundColor: Colors.white, // Change the background color
-        // Add more color customizations as needed
+          primaryColor: Colors.red, // Change the primary color
+          hintColor:
+              const Color.fromARGB(255, 58, 52, 2), // Change the accent color
+          scaffoldBackgroundColor: Colors.white, // Change the background color
+          // Add more color customizations as needed
+        ),
 
-        
-      ),
+        darkTheme: ThemeData.dark(),
+        themeMode: appState.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+        debugShowCheckedModeBanner: false,
+        home: Builder(
+          builder: (BuildContext context) {
+            // Check if the user is authenticated
+            AuthProvider authProvider = Provider.of<AuthProvider>(context);
+            bool isAuthenticated = authProvider.isAuthenticated;
 
-          darkTheme: ThemeData.dark(),
-          themeMode: appState.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      debugShowCheckedModeBanner: false,
-  home: Builder(
-            builder: (BuildContext context) {
-              // Check if the user is authenticated
-              AuthProvider authProvider = Provider.of<AuthProvider>(context);
-              bool isAuthenticated = authProvider.isAuthenticated;
-
-              // Return the appropriate screen based on authentication status
-              return isAuthenticated ? HomeScreen() : LoginScreen();
-            },
-          ),
-      routes: Routes.getRoutes(),
-      onGenerateRoute: (settings) {
-        return Routes.unknownRoute(settings);
-      },
-      builder: (context, child) {
-        // Wrap your app with Provider here
-        // Example: return MyProvider(child: child);
-        return child!;
-      },
-      // navigatorKey: GlobalKey(),
-    ); //matrial
+            // Return the appropriate screen based on authentication status
+            return isAuthenticated ? HomeScreen() : LoginScreen();
+          },
+        ),
+        routes: Routes.getRoutes(),
+        onGenerateRoute: (settings) {
+          return Routes.unknownRoute(settings);
+        },
+        builder: (context, child) {
+          // Wrap your app with Provider here
+          // Example: return MyProvider(child: child);
+          return child!;
+        },
+        // navigatorKey: GlobalKey(),
+      ); //matrial
+    });
   }
-  );
-}
 
-
-void _navigateTo(BuildContext context, String route) {
-  Navigator.of(context).pushNamed(route);
-}
+  void _navigateTo(BuildContext context, String route) {
+    Navigator.of(context).pushNamed(route);
+  }
 }

@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:mhfatha/settings/imports.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async'; // Import async library
 
 // provider.dart
 class AuthProvider extends ChangeNotifier {
@@ -31,9 +32,11 @@ final api = Api();
 
   // Getter for the user data
   Map<String, dynamic>? get user => _user;
+  late Timer _tokenValidationTimer; // Timer for token validation
 
 
   int? get userId => _user?['id'];
+
 
   // Load authentication data from SharedPreferences
   Future<void> loadAuthData() async {
@@ -98,4 +101,8 @@ final api = Api();
       // Handle errors or throw an exception if needed
     }
   }
+
+
+
+
 }

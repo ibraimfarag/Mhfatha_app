@@ -30,7 +30,7 @@ class _ChangePasswordState extends State<ChangePassword> {
 
   void didChangeDependencies() {
     super.didChangeDependencies();
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+    
   }
 
   @override

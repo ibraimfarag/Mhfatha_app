@@ -63,7 +63,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
 
   void didChangeDependencies() {
     super.didChangeDependencies();
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+    
   }
 
   @override

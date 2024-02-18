@@ -52,7 +52,7 @@ class _AccountScreenState extends State<AccountScreen> {
   }
     void didChangeDependencies() {
     super.didChangeDependencies();
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+    
   }
   @override
   Widget build(BuildContext context) {

@@ -4,7 +4,12 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:mhfatha/settings/imports.dart';
-import 'package:permission_handler/permission_handler.dart' hide PermissionStatus;
+import 'package:permission_handler/permission_handler.dart'
+    hide PermissionStatus;
+import 'package:permission_handler/permission_handler.dart'
+    as permission_handler;
+import 'dart:io' show Platform;
+
 import 'dart:async';
 
 // import 'package:searchfield/searchfield.dart';
@@ -30,7 +35,17 @@ class _HomeScreenState extends State<HomeScreen> {
   Timer? locationTimer;
   Timer? reloadTimer;
   late Timer network;
-
+  String _platformVersion = 'Unknown',
+      _imeiNo = "",
+      _modelName = "",
+      _manufacturerName = "",
+      _deviceName = "",
+      _token = "",
+      _platform = "",
+      _productName = "",
+      _cpuType = "",
+      _hardware = "";
+  var _apiLevel;
   @override
   void initState() {
     super.initState();
@@ -58,7 +73,83 @@ class _HomeScreenState extends State<HomeScreen> {
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
     authProvider.updateUserData(context);
+
+    requestPermissions();
   }
+
+  Future<void> requestPermissions() async {
+    // Check if permissions are already granted
+    permission_handler.PermissionStatus permissionStatus =
+        await permission_handler.Permission.phone.status;
+    if (permissionStatus != permission_handler.PermissionStatus.granted) {
+      // Request permissions
+      permission_handler.PermissionStatus status =
+          await permission_handler.Permission.phone.request();
+      if (status != permission_handler.PermissionStatus.granted) {
+        // Handle permission denied
+        // You can display a message to the user or take appropriate action
+        print('Permission denied');
+        return;
+      }
+    }
+
+    // Permissions granted, proceed with accessing device information
+    initPlatformState();
+  }
+
+Future<void> initPlatformState() async {
+  late String platformVersion,
+      modelName = '',
+      deviceName = '';
+
+  String tokenFirebase = '';
+  // Determine the platform
+  String platform = Platform.isAndroid ? 'Android' : 'iOS';
+  PushNotificationService pushNotificationService = PushNotificationService();
+
+  // Platform messages may fail,
+  // so we use a try/catch PlatformException.
+  try {
+    platformVersion = await DeviceInformation.platformVersion;
+    List<String> versionParts = platformVersion.split(' ');
+    if (versionParts.length > 1) {
+      platformVersion = versionParts[1]; // Extracting only the version number
+    }
+    modelName = await DeviceInformation.deviceModel;
+    deviceName = await DeviceInformation.deviceName;
+    tokenFirebase = (await pushNotificationService.getToken())!;
+  } on PlatformException catch (e) {
+    platformVersion = '${e.message}';
+  }
+
+  // If the widget was removed from the tree while the asynchronous platform
+  // message was in flight, we want to discard the reply rather than calling
+  // setState to update our non-existent appearance.
+  if (!mounted) return;
+
+  setState(() {
+    _platformVersion = platformVersion;
+    _modelName = modelName;
+    _deviceName = deviceName;
+    _platform = platform; // Adding platform information to state
+    _token = tokenFirebase;
+  });
+
+  print('Platform: $_platform');
+  print('Platform Version: $_platformVersion');
+  print('Model Name: $_modelName');
+  print('Token: $_token');
+
+
+  api.updateDeviceInfo(
+  context,
+  _token,
+  _platform,
+  _platformVersion,
+  _modelName,
+);
+
+}
 
 //  @override
 // void dispose() {
@@ -68,10 +159,9 @@ class _HomeScreenState extends State<HomeScreen> {
 // }
   void didChangeDependencies() {
     super.didChangeDependencies();
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
   }
 
-Future<void> _checkAndSendLocation() async {
+  Future<void> _checkAndSendLocation() async {
     Location location = Location();
     try {
       LocationData locationData = await location.getLocation();
@@ -82,7 +172,8 @@ Future<void> _checkAndSendLocation() async {
       }
 
       // Check if the location has changed significantly
-      if (latitude != locationData.latitude || longitude != locationData.longitude) {
+      if (latitude != locationData.latitude ||
+          longitude != locationData.longitude) {
         setState(() {
           latitude = locationData.latitude;
           longitude = locationData.longitude;
@@ -97,6 +188,7 @@ Future<void> _checkAndSendLocation() async {
       print("Error getting location: $e");
     }
   }
+
   int calculateDaysRemaining(String endDate) {
     DateTime endDateTime = DateTime.parse(endDate);
     DateTime now = DateTime.now();
@@ -114,7 +206,7 @@ Future<void> _checkAndSendLocation() async {
   }
 
   Future<void> _getLocation() async {
-   Location location = Location();
+    Location location = Location();
     bool serviceEnabled;
     PermissionStatus permission;
 
@@ -187,6 +279,7 @@ Future<void> _checkAndSendLocation() async {
       print("Error getting location: $e");
     }
   }
+
   Future<void> _reloadFilteredStores() async {
     // Check if the widget is still mounted before proceeding
     if (!mounted) {
@@ -739,13 +832,12 @@ Future<void> _checkAndSendLocation() async {
     bool isDark = Provider.of<AppState>(context).isDarkMode;
     Size size = MediaQuery.of(context).size;
     String lang = Provider.of<AppState>(context, listen: false).display;
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
     String authName = authProvider.user![
         'first_name']; // Replace with the actual property holding the user's name
-    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+    //
 
     return DirectionalityWrapper(
       child: GestureDetector(
@@ -965,21 +1057,20 @@ Future<void> _checkAndSendLocation() async {
                                               ? MainAxisAlignment.start
                                               : MainAxisAlignment.end,
                                           children: [
-                                        Container(
-                                                margin: EdgeInsets.symmetric(
-                                                    horizontal: 20),
-                                                child: Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 0),
-                                                  child: Text(
-                                                    '$name',
-                                                    textAlign: isEnglish
-                                                        ? TextAlign.start
-                                                        : TextAlign.end,
-                                                  ),
+                                            Container(
+                                              margin: EdgeInsets.symmetric(
+                                                  horizontal: 20),
+                                              child: Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 0),
+                                                child: Text(
+                                                  '$name',
+                                                  textAlign: isEnglish
+                                                      ? TextAlign.start
+                                                      : TextAlign.end,
                                                 ),
                                               ),
-                                            
+                                            ),
                                           ],
                                         ),
                                       ));

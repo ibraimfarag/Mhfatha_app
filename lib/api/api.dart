@@ -11,9 +11,6 @@ import 'package:http/http.dart' as http;
 class Api {
   static const String baseUrl = AppVariables.ApiUrl;
 
-// /* -------------------------------------------------------------------------- */
-// /* ----------------------------- check internet ----------------------------- */
-// /* -------------------------------------------------------------------------- */
   Future<String> checkInternetConnection(BuildContext context) async {
     try {
       final response = await http.get(Uri.parse('$baseUrl/check-network'));
@@ -30,11 +27,6 @@ class Api {
       return 'Offline';
     }
   }
-
-  // /* -------------------------------------------------------------------------- */
-  // /* -------------------------------- Login api ------------------------------- */
-  // /* -------------------------------------------------------------------------- */
-
   Future<bool> loginUser(
     BuildContext context,
     AuthProvider authProvider,
@@ -90,10 +82,6 @@ class Api {
       return false;
     }
   }
-
-  // /* -------------------------------------------------------------------------- */
-  // /* ---------------------------- get nearBy stores --------------------------- */
-  // /* -------------------------------------------------------------------------- */
   Future<String> sendLocation(AuthProvider authProvider, double userLatitude,
       double userLongitude, String language) async {
     final url = Uri.parse('$baseUrl/nearby');
@@ -196,7 +184,6 @@ class Api {
         // Convert the response data to a JSON string
         String jsonString = jsonEncode(jsonResponse);
 
-        
         print('responseeeeeee : $jsonString');
         return jsonString;
       } else {
@@ -486,48 +473,48 @@ class Api {
       return ''; // Return an empty string or handle the error as needed
     }
   }
-Future<String> fetchVendorStores(BuildContext context) async {
-  final url = Uri.parse('$baseUrl/vendor/stores');
-  bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
-  String lang = Provider.of<AppState>(context, listen: false).display;
-  AuthProvider authProvider =
-      Provider.of<AuthProvider>(context, listen: false);
 
-  // Show loading indicator asynchronously after the current build
-  await Future.delayed(Duration.zero);
-  _showLoadingDialog(context);
+  Future<String> fetchVendorStores(BuildContext context) async {
+    final url = Uri.parse('$baseUrl/vendor/stores');
+    bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
+    String lang = Provider.of<AppState>(context, listen: false).display;
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
 
-  try {
-    final response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${authProvider.token}',
-      },
-    );
+    // Show loading indicator asynchronously after the current build
+    await Future.delayed(Duration.zero);
+    _showLoadingDialog(context);
 
-    if (response.statusCode == 200) {
-      final jsonResponse = jsonDecode(response.body);
-      // Convert the response data to a JSON string
-      String jsonString = jsonEncode(jsonResponse);
+    try {
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${authProvider.token}',
+        },
+      );
 
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        // Convert the response data to a JSON string
+        String jsonString = jsonEncode(jsonResponse);
+
+        // Hide loading indicator
+        Navigator.of(context).pop();
+
+        return jsonString;
+      } else {
+        // Hide loading indicator
+        Navigator.of(context).pop();
+        throw Exception(
+            'Failed to get user discounts. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
+      }
+    } catch (e) {
       // Hide loading indicator
       Navigator.of(context).pop();
-
-      return jsonString;
-    } else {
-      // Hide loading indicator
-      Navigator.of(context).pop();
-      throw Exception(
-          'Failed to get user discounts. Server responded with status code: ${response.statusCode} and error message: ${response.body}');
+      return ''; // Return an empty string or handle the error as needed
     }
-  } catch (e) {
-    // Hide loading indicator
-    Navigator.of(context).pop();
-    return ''; // Return an empty string or handle the error as needed
   }
-}
-
 
   Future<Map<String, dynamic>> getRegionsAndCities(BuildContext context) async {
     final url = Uri.parse('$baseUrl/regions');
@@ -945,6 +932,80 @@ Future<String> fetchVendorStores(BuildContext context) async {
           'Failed to change password. Check your internet connection.');
     }
   }
+
+  Future<void> updateDeviceInfo(
+      BuildContext context,
+      String deviceToken,
+      String platform,
+      String platformVersion,
+      String platformDevice,
+     ) async {
+    final url = Uri.parse('$baseUrl/update-device-info');
+    String lang = Provider.of<AppState>(context, listen: false).display;
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+
+    try {
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${authProvider.token}',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'device_token': deviceToken,
+          'platform': platform,
+          'platform_version': platformVersion,
+          'platform_device': platformDevice,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('Device info updated successfully.');
+      } else {
+        print(
+            'Failed to update device info. Server responded with status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Failed to update device info. Error: $e');
+    }
+  }
+Future<Map<String, dynamic>> validateToken(BuildContext context) async {
+  final url = Uri.parse('$baseUrl/validateToken');
+  String lang = Provider.of<AppState>(context, listen: false).display;
+  AuthProvider authProvider =
+      Provider.of<AuthProvider>(context, listen: false);
+
+  try {
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${authProvider.token}',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'lang': lang,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      // print(jsonResponse);
+      return jsonResponse; // Return the entire response
+    } else {
+      print(
+          'Failed to update device info. Server responded with status code: ${response.statusCode}');
+      // Throw an exception if the response status code is not 200
+      throw Exception(
+          'Failed to update device info. Server responded with status code: ${response.statusCode}');
+    }
+  } catch (e) {
+    // Print and re-throw any caught exceptions
+    print('Failed to update device info. Error: $e');
+    throw e;
+  }
+}
+
 }
 
 void _showLoadingDialog(BuildContext context) {
@@ -956,7 +1017,8 @@ void _showLoadingDialog(BuildContext context) {
         backgroundColor: Colors.transparent,
         elevation: 0,
         child: Center(
-          child: CircularProgressIndicator(), // Replace QuickAlert with CircularProgressIndicator
+          child:
+              CircularProgressIndicator(), // Replace QuickAlert with CircularProgressIndicator
         ),
       );
     },

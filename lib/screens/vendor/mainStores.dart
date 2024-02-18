@@ -71,7 +71,7 @@ class _MainStoresState extends State<MainStores> {
   }
     void didChangeDependencies() {
     super.didChangeDependencies();
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+    
   }
   @override
   Widget build(BuildContext context) {

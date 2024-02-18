@@ -132,7 +132,7 @@ class _EditStoreState extends State<EditStore> {
 
   void didChangeDependencies() {
     super.didChangeDependencies();
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+    
   }
 
   @override
@@ -141,7 +141,7 @@ class _EditStoreState extends State<EditStore> {
     bool isDarkMode = Provider.of<AppState>(context).isDarkMode;
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+    
 
     // Initialize UI properties after getting storeData
 

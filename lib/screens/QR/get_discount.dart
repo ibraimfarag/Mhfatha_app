@@ -24,7 +24,7 @@ class _GetDiscountState extends State<GetDiscount> {
   Color textColor = const Color(0xFF32567A);
  void didChangeDependencies() {
     super.didChangeDependencies();
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+    
   }
   @override
   Widget build(BuildContext context) {
