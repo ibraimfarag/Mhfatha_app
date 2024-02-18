@@ -96,7 +96,7 @@ void main() async {
                   );
                 }
               } else {
-                print('Failed to validate token.');
+                // print('Failed to validate token.');
               }
               }
 
