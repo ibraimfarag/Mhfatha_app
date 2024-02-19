@@ -15,13 +15,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
     authProvider.updateUserData(context);
-    
-
   }
+
   void didChangeDependencies() {
     super.didChangeDependencies();
-    
   }
+
   @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
@@ -202,12 +201,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             QuickAlert.show(
                                 context: context,
                                 type: QuickAlertType.confirm,
+                                customAsset: 'images/confirm.gif',
                                 text: isEnglish
                                     ? 'are you sure you want logout?'
                                     : 'هل انت متأكد من عملية تسجيل الخروج من الحساب؟',
                                 confirmBtnText: isEnglish ? 'Yes' : 'نعم',
                                 cancelBtnText: isEnglish ? 'No' : 'لا',
-                                confirmBtnColor: Colors.green,
+                                confirmBtnColor: Color(0xFF0D2750),
                                 onConfirmBtnTap: () {
                                   // Call the logout method from AuthProvider
                                   Provider.of<AuthProvider>(context,

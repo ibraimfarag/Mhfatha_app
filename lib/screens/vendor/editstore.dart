@@ -132,7 +132,6 @@ class _EditStoreState extends State<EditStore> {
 
   void didChangeDependencies() {
     super.didChangeDependencies();
-    
   }
 
   @override
@@ -141,7 +140,6 @@ class _EditStoreState extends State<EditStore> {
     bool isDarkMode = Provider.of<AppState>(context).isDarkMode;
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
-    
 
     // Initialize UI properties after getting storeData
 
@@ -382,12 +380,13 @@ class _EditStoreState extends State<EditStore> {
                               QuickAlert.show(
                                   context: context,
                                   type: QuickAlertType.confirm,
+                                  customAsset: 'images/confirm.gif',
                                   text: isEnglish
                                       ? 'Are you sure store info?'
                                       : 'هل انت متأكد من معلومات المتجر؟',
                                   confirmBtnText: isEnglish ? 'Yes' : 'نعم',
                                   cancelBtnText: isEnglish ? 'No' : 'لا',
-                                  confirmBtnColor: Colors.green,
+                                  confirmBtnColor: Color(0xFF0D2750),
                                   onConfirmBtnTap: () async {
                                     bool success = await vendorApi.updatestore(
                                         context: context,
@@ -732,7 +731,7 @@ class EditMapScreen extends StatefulWidget {
 class _EditMapScreenState extends State<EditMapScreen> {
   @override
   Widget build(BuildContext context) {
-        bool isEnglish = Provider.of<AppState>(context).isEnglish;
+    bool isEnglish = Provider.of<AppState>(context).isEnglish;
 
     return Scaffold(
       appBar: AppBar(
@@ -741,7 +740,7 @@ class _EditMapScreenState extends State<EditMapScreen> {
       body: OpenStreetMapSearchAndPick(
         buttonTextStyle:
             const TextStyle(fontSize: 18, fontStyle: FontStyle.normal),
-               buttonColor: Color(0xFF080E27),
+        buttonColor: Color(0xFF080E27),
         buttonText: isEnglish ? 'Set Current Location' : 'اختر الموقع الحالي',
         locationPinIconColor: Colors.red,
         locationPinText: '',

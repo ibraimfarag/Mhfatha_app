@@ -24,19 +24,19 @@ class VendorApi {
   AuthProvider? authProvider;
 
 // Timer variable
-late Timer _timer;
+  late Timer _timer;
 
 // Function to start the timer
-void _startTimer(BuildContext context) {
-  _timer = Timer(Duration(seconds: 3), () {
-    Navigator.of(context).pop();
-  });
-}
+  void _startTimer(BuildContext context) {
+    _timer = Timer(Duration(seconds: 3), () {
+      Navigator.of(context).pop();
+    });
+  }
 
 // Function to cancel the timer
-void _cancelTimer() {
-  _timer.cancel();
-}
+  void _cancelTimer() {
+    _timer.cancel();
+  }
 
   Future<void> initializeData(BuildContext context) async {
     isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
@@ -64,6 +64,7 @@ void _cancelTimer() {
       QuickAlert.show(
         context: context,
         type: QuickAlertType.loading,
+        customAsset: 'images/loading.gif',
         title: isEnglish ? 'Loading' : 'انتظر قليلاً',
         text: isEnglish ? 'Fetching your data' : 'جاري تحميل البيانات',
       );
@@ -101,6 +102,7 @@ void _cancelTimer() {
         QuickAlert.show(
           context: context,
           type: QuickAlertType.success,
+          customAsset: 'images/success.gif',
           text: '$MessageC',
           onConfirmBtnTap: () {
             Navigator.pop(context);
@@ -166,6 +168,7 @@ void _cancelTimer() {
       QuickAlert.show(
         context: context,
         type: QuickAlertType.loading,
+        customAsset: 'images/loading.gif',
         title: isEnglish ? 'Loading' : 'انتظر قليلاً',
         text: isEnglish ? 'Fetching your data' : 'جاري تحميل البيانات',
       );
@@ -202,6 +205,7 @@ void _cancelTimer() {
         QuickAlert.show(
           context: context,
           type: QuickAlertType.success,
+          customAsset: 'images/success.gif',
           text: '$MessageC',
           onConfirmBtnTap: () {
             Navigator.of(context).pop();
@@ -266,40 +270,41 @@ void _cancelTimer() {
     }
   }
 
-Future<void> downloadAndSaveImage(
-    String imageUrl, String fileName, BuildContext context) async {
-  final response = await http.get(Uri.parse(imageUrl));
-  final bytes = response.bodyBytes;
+  Future<void> downloadAndSaveImage(
+      String imageUrl, String fileName, BuildContext context) async {
+    final response = await http.get(Uri.parse(imageUrl));
+    final bytes = response.bodyBytes;
 
-  // Get the directory for storing images
-  final directory = await getApplicationDocumentsDirectory();
-  final imagePath = '${directory.path}/$fileName';
+    // Get the directory for storing images
+    final directory = await getApplicationDocumentsDirectory();
+    final imagePath = '${directory.path}/$fileName';
 
-  // Save the image file
-  await File(imagePath).writeAsBytes(bytes);
+    // Save the image file
+    await File(imagePath).writeAsBytes(bytes);
 
-  // Add image to the phone's image directory
-  final result = await ImageGallerySaver.saveFile(imagePath);
-  print('Image saved to gallery: $result');
+    // Add image to the phone's image directory
+    final result = await ImageGallerySaver.saveFile(imagePath);
+    print('Image saved to gallery: $result');
 
-  // Show success message
-  QuickAlert.show(
-    context: context,
-    type: QuickAlertType.success,
-    text: isEnglish ? 'Image saved to gallery' : 'تم حفظ الصورة بنجاح',
-    onConfirmBtnTap: () {
-      // Cancel the timer when 'onConfirmBtnTap' is called
-      _cancelTimer();
-      // Optionally, you can perform other actions here
-            Navigator.pop(context);
-    },
-    confirmBtnText: isEnglish ? 'ok' : 'حسنا',
-    confirmBtnColor: Colors.greenAccent,
-  );
+    // Show success message
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.success,
+      customAsset: 'images/success.gif',
+      text: isEnglish ? 'Image saved to gallery' : 'تم حفظ الصورة بنجاح',
+      onConfirmBtnTap: () {
+        // Cancel the timer when 'onConfirmBtnTap' is called
+        _cancelTimer();
+        // Optionally, you can perform other actions here
+        Navigator.pop(context);
+      },
+      confirmBtnText: isEnglish ? 'ok' : 'حسنا',
+      confirmBtnColor: Color(0xFF0D2750),
+    );
 
-  // Pop context after 3 seconds
-  _startTimer(context);
-}
+    // Pop context after 3 seconds
+    _startTimer(context);
+  }
 
   Future<void> deleteStore(String storeId, BuildContext context) async {
     final url = Uri.parse('$baseUrl/vendor/store/delete');
@@ -320,6 +325,7 @@ Future<void> downloadAndSaveImage(
         QuickAlert.show(
           context: context,
           type: QuickAlertType.success,
+          customAsset: 'images/success.gif',
           text: message,
           onConfirmBtnTap: () {
             Navigator.of(context).pop();
@@ -327,7 +333,7 @@ Future<void> downloadAndSaveImage(
             Navigator.of(context).pushReplacementNamed('/mainstores');
           },
           confirmBtnText: isEnglish ? 'ok' : 'حسنا',
-          confirmBtnColor: Colors.greenAccent,
+          confirmBtnColor: Color(0xFF0D2750),
         );
       } else {
         final jsonResponse = jsonDecode(response.body);
@@ -415,6 +421,7 @@ Future<void> downloadAndSaveImage(
       QuickAlert.show(
         context: context,
         type: QuickAlertType.loading,
+        customAsset: 'images/loading.gif',
         title: isEnglish ? 'Loading' : 'انتظر قليلاً',
         text: isEnglish ? 'Creating discount' : 'جاري إنشاء الخصم',
       );
@@ -444,6 +451,7 @@ Future<void> downloadAndSaveImage(
         QuickAlert.show(
           context: context,
           type: QuickAlertType.success,
+          customAsset: 'images/success.gif',
           text: message,
           onConfirmBtnTap: () {
             // Navigator.of(context).pop();
@@ -455,7 +463,7 @@ Future<void> downloadAndSaveImage(
             );
           },
           confirmBtnText: isEnglish ? 'ok' : 'حسنا',
-          confirmBtnColor: Colors.greenAccent,
+          confirmBtnColor: Color(0xFF0D2750),
         );
 
         return true;
@@ -519,13 +527,14 @@ Future<void> downloadAndSaveImage(
         QuickAlert.show(
           context: context,
           type: QuickAlertType.success,
+          customAsset: 'images/success.gif',
           text: message,
           onConfirmBtnTap: () {
             Navigator.of(context).pop();
             // You may add additional navigation logic here if needed
           },
           confirmBtnText: isEnglish ? 'ok' : 'حسنا',
-          confirmBtnColor: Colors.greenAccent,
+          confirmBtnColor: Color(0xFF0D2750),
         );
         return true;
       } else {
@@ -570,6 +579,7 @@ void _showLoadingDialog(BuildContext context) {
   QuickAlert.show(
     context: context,
     type: QuickAlertType.loading,
+    customAsset: 'images/loading.gif',
     title: isEnglish ? 'please wait' : 'يرجى الانتظار...',
     text: isEnglish ? 'loading your data' : 'جاري تحميل البيانات',
   );

@@ -30,7 +30,6 @@ class _ChangePasswordState extends State<ChangePassword> {
 
   void didChangeDependencies() {
     super.didChangeDependencies();
-    
   }
 
   @override
@@ -146,12 +145,14 @@ class _ChangePasswordState extends State<ChangePassword> {
                                   context: context,
                                   // customAsset: 'images/no-internet.jpg',
                                   type: QuickAlertType.confirm,
+
+                                  customAsset: 'images/confirm.gif',
                                   text: isEnglish
                                       ? 'Do you want to update profile'
                                       : 'هل انت متاكد من تحديث البيانات الشخصية',
                                   confirmBtnText: isEnglish ? 'Yes' : 'نعم',
                                   cancelBtnText: isEnglish ? 'No' : 'لا',
-                                  confirmBtnColor: Colors.green,
+                                  confirmBtnColor: Color(0xFF0D2750),
                                   onConfirmBtnTap: () async {
                                     Navigator.pop(context);
                                     String oldPassword = currentPassword

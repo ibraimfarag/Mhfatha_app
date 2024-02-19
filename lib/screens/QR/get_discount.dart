@@ -22,10 +22,10 @@ class _GetDiscountState extends State<GetDiscount> {
   Color backgroundColor = Color.fromARGB(255, 236, 236, 236);
   bool _isNextButtonEnabled = false;
   Color textColor = const Color(0xFF32567A);
- void didChangeDependencies() {
+  void didChangeDependencies() {
     super.didChangeDependencies();
-    
   }
+
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic> data =
@@ -108,12 +108,13 @@ class _GetDiscountState extends State<GetDiscount> {
       bool confirm = await QuickAlert.show(
           context: context,
           type: QuickAlertType.confirm,
+          customAsset: 'images/confirm.gif',
           text: isEnglish
               ? 'Are you sure you want to proceed?'
               : 'هل أنت متأكد أنك تريد المتابعة؟',
           confirmBtnText: isEnglish ? 'Yes' : 'نعم',
           cancelBtnText: isEnglish ? 'No' : 'لا',
-          confirmBtnColor: Colors.green,
+          confirmBtnColor: Color(0xFF0D2750),
           onConfirmBtnTap: () async {
             Navigator.of(context).pop(true);
           });
@@ -126,17 +127,16 @@ class _GetDiscountState extends State<GetDiscount> {
 
     return DirectionalityWrapper(
       child: Scaffold(
-       
         body: SingleChildScrollView(
             child: Column(
           children: [
-              CustomAppBar(
-                  onBackTap: () {
-                    Navigator.pop(context);
-                  },iconColor:const Color.fromARGB(146, 0, 0, 0),
-                                    marginTop: 30,
-
-                ),
+            CustomAppBar(
+              onBackTap: () {
+                Navigator.pop(context);
+              },
+              iconColor: const Color.fromARGB(146, 0, 0, 0),
+              marginTop: 30,
+            ),
             SizedBox(height: 20),
             if (_currentScreen == 1)
               Image.asset(
@@ -305,21 +305,23 @@ class _GetDiscountState extends State<GetDiscount> {
                             ElevatedButton(
                               onPressed: () {
                                 QuickAlert.show(
-                                    context: context,
-                                    type: QuickAlertType.success,
-                                    text: isEnglish
-                                        ? 'Thank you, the discount has been successfully registered with the merchant'
-                                        : 'شكرا لك , لقد تم تسجيل الخصم بنجاح عند التاجر ',
-                                    confirmBtnText: isEnglish
-                                        ? 'Back to home '
-                                        : 'العودة للرئيسية',
-                                    onConfirmBtnTap: () async {
-                                      Navigator.pushNamed(
-                                        context,
-                                        '/home',
-                                      );
-                                    },
-                                    confirmBtnColor: themeColor);
+                                  context: context,
+                                  type: QuickAlertType.success,
+                                  customAsset: 'images/success.gif',
+                                  text: isEnglish
+                                      ? 'Thank you, the discount has been successfully registered with the merchant'
+                                      : 'شكرا لك , لقد تم تسجيل الخصم بنجاح عند التاجر ',
+                                  confirmBtnText: isEnglish
+                                      ? 'Back to home '
+                                      : 'العودة للرئيسية',
+                                  onConfirmBtnTap: () async {
+                                    Navigator.pushNamed(
+                                      context,
+                                      '/home',
+                                    );
+                                  },
+                                  confirmBtnColor: Color(0xFF0D2750),
+                                );
                               },
                               child: Text(
                                 isEnglish ? 'Accepted' : 'مقبولة',

@@ -27,6 +27,7 @@ class Api {
       return 'Offline';
     }
   }
+
   Future<bool> loginUser(
     BuildContext context,
     AuthProvider authProvider,
@@ -82,6 +83,7 @@ class Api {
       return false;
     }
   }
+
   Future<String> sendLocation(AuthProvider authProvider, double userLatitude,
       double userLongitude, String language) async {
     final url = Uri.parse('$baseUrl/nearby');
@@ -305,6 +307,7 @@ class Api {
                 QuickAlert.show(
                   context: context,
                   type: QuickAlertType.loading,
+                  customAsset: 'images/loading.gif',
                   title: isEnglish ? 'Loading' : 'انتظر قليلاً',
                   text:
                       isEnglish ? 'Fetching your data' : 'جاري تحميل البيانات',
@@ -340,10 +343,12 @@ class Api {
                   QuickAlert.show(
                     context: context,
                     type: QuickAlertType.success,
+                    customAsset: 'images/success.gif',
                     text: jsonResponse['message'] ?? '',
                     onConfirmBtnTap: () {
                       Navigator.pushNamed(context, '/login');
                     },
+                    confirmBtnColor: Color(0xFF0D2750),
                   );
 
                   return jsonResponse['success'];
@@ -663,6 +668,7 @@ class Api {
       QuickAlert.show(
         context: context,
         type: QuickAlertType.loading,
+        customAsset: 'images/loading.gif',
         title: isEnglish ? 'Loading' : 'انتظر قليلاً',
         text: isEnglish ? 'Fetching your data' : 'جاري تحميل البيانات',
       );
@@ -725,6 +731,7 @@ class Api {
                 QuickAlert.show(
                   context: context,
                   type: QuickAlertType.loading,
+                  customAsset: 'images/loading.gif',
                   title: isEnglish ? 'Loading' : 'انتظر قليلاً',
                   text:
                       isEnglish ? 'Fetching your data' : 'جاري تحميل البيانات',
@@ -758,6 +765,8 @@ class Api {
                   QuickAlert.show(
                     context: context,
                     type: QuickAlertType.success,
+                    customAsset: 'images/success.gif',
+                    confirmBtnColor: Color(0xFF0D2750),
                     text: '$MeC',
                   );
                   await authProvider.updateUserData(context);
@@ -781,7 +790,9 @@ class Api {
           QuickAlert.show(
             context: context,
             type: QuickAlertType.success,
+            customAsset: 'images/success.gif',
             text: '$MessageC',
+            confirmBtnColor: Color(0xFF0D2750),
           );
         }
 
@@ -866,7 +877,9 @@ class Api {
         QuickAlert.show(
           context: context,
           type: QuickAlertType.success,
+          customAsset: 'images/success.gif',
           text: message,
+          confirmBtnColor: Color(0xFF0D2750),
         );
         return message;
       } else {
@@ -934,12 +947,12 @@ class Api {
   }
 
   Future<void> updateDeviceInfo(
-      BuildContext context,
-      String deviceToken,
-      String platform,
-      String platformVersion,
-      String platformDevice,
-     ) async {
+    BuildContext context,
+    String deviceToken,
+    String platform,
+    String platformVersion,
+    String platformDevice,
+  ) async {
     final url = Uri.parse('$baseUrl/update-device-info');
     String lang = Provider.of<AppState>(context, listen: false).display;
     AuthProvider authProvider =
@@ -970,42 +983,42 @@ class Api {
       print('Failed to update device info. Error: $e');
     }
   }
-Future<Map<String, dynamic>> validateToken(BuildContext context) async {
-  final url = Uri.parse('$baseUrl/validateToken');
-  String lang = Provider.of<AppState>(context, listen: false).display;
-  AuthProvider authProvider =
-      Provider.of<AuthProvider>(context, listen: false);
 
-  try {
-    final response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${authProvider.token}',
-      },
-      body: jsonEncode(<String, dynamic>{
-        'lang': lang,
-      }),
-    );
+  Future<Map<String, dynamic>> validateToken(BuildContext context) async {
+    final url = Uri.parse('$baseUrl/validateToken');
+    String lang = Provider.of<AppState>(context, listen: false).display;
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
 
-    if (response.statusCode == 200) {
-      final jsonResponse = jsonDecode(response.body);
-      // print(jsonResponse);
-      return jsonResponse; // Return the entire response
-    } else {
-      print(
-          'Failed to update device info. Server responded with status code: ${response.statusCode}');
-      // Throw an exception if the response status code is not 200
-      throw Exception(
-          'Failed to update device info. Server responded with status code: ${response.statusCode}');
+    try {
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${authProvider.token}',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'lang': lang,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        // print(jsonResponse);
+        return jsonResponse; // Return the entire response
+      } else {
+        print(
+            'Failed to update device info. Server responded with status code: ${response.statusCode}');
+        // Throw an exception if the response status code is not 200
+        throw Exception(
+            'Failed to update device info. Server responded with status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Print and re-throw any caught exceptions
+      print('Failed to update device info. Error: $e');
+      throw e;
     }
-  } catch (e) {
-    // Print and re-throw any caught exceptions
-    print('Failed to update device info. Error: $e');
-    throw e;
   }
-}
-
 }
 
 void _showLoadingDialog(BuildContext context) {
@@ -1032,6 +1045,7 @@ void _showLoadingDialog(BuildContext context) {
 //   QuickAlert.show(
 //     context: context,
 //     type: QuickAlertType.loading,
+                                  //  customAsset: 'images/loading.gif',
 //     // customAsset:,
 //     title: isEnglish ? 'please wait' : 'يرجى الانتظار...',
 //     text: isEnglish ? 'loading your data' : 'جاري تحميل البيانات',

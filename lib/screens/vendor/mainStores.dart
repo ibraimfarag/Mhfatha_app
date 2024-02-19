@@ -69,10 +69,11 @@ class _MainStoresState extends State<MainStores> {
       print('Error getting user discountssss: $e');
     }
   }
-    void didChangeDependencies() {
+
+  void didChangeDependencies() {
     super.didChangeDependencies();
-    
   }
+
   @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
@@ -92,7 +93,7 @@ class _MainStoresState extends State<MainStores> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    padding: EdgeInsets.fromLTRB(20,60, 20, 5),
+                    padding: EdgeInsets.fromLTRB(20, 60, 20, 5),
                     // height: 200,
                     child: Column(children: [
                       Row(
@@ -153,7 +154,9 @@ class _MainStoresState extends State<MainStores> {
                             children: [
                               Column(children: [
                                 Text(
-                                  isEnglish ? 'Purchases Times' : 'عدد مرات الشراء',
+                                  isEnglish
+                                      ? 'Purchases Times'
+                                      : 'عدد مرات الشراء',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 16,
@@ -436,7 +439,6 @@ class _MainStoresState extends State<MainStores> {
                       ),
                     ],
                   ),
-                 
                   PullDownButton(
                     itemBuilder: (context) => [
                       PullDownMenuItem(
@@ -452,43 +454,48 @@ class _MainStoresState extends State<MainStores> {
                         icon: Icons.edit,
                         // enabled: store['verifcation'] == 1,
                       ),
-                    //  Icon(Icons.barcode_reader)
+                      //  Icon(Icons.barcode_reader)
                       PullDownMenuItem(
-                        onTap: () async {  await VendorApi(context)
-                                .getStoreQRImage('${store['id']}', context);},
-                        title:isEnglish ? 'QR' : 'الباركود',
-                          enabled: store['verifcation'] == 1,
+                        onTap: () async {
+                          await VendorApi(context)
+                              .getStoreQRImage('${store['id']}', context);
+                        },
+                        title: isEnglish ? 'QR' : 'الباركود',
+                        enabled: store['verifcation'] == 1,
                         icon: CupertinoIcons.qrcode_viewfinder,
                       ),
                       PullDownMenuItem(
-                        onTap: () {Navigator.pushNamed(
-                              context,
-                              '/storediscounts',
-                              arguments:
-                                  store, // Pass the store data to the route
-                            );},
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/storediscounts',
+                            arguments:
+                                store, // Pass the store data to the route
+                          );
+                        },
                         title: isEnglish ? 'Discounts' : 'الخصومات',
-                              enabled: store['verifcation'] == 1,
-
+                        enabled: store['verifcation'] == 1,
                         icon: Icons.discount,
                       ),
                       PullDownMenuItem(
-                        onTap: () { QuickAlert.show(
-                              context: context,
-                              type: QuickAlertType.confirm,
-                              text: isEnglish
-                                  ? 'are you sure you want to delete store ${store['name']} ?'
-                                  : '؟ ${store['name']} هل انت متأكد من حذف متجر ',
-                              cancelBtnText: isEnglish ? 'No' : 'لا',
-                              confirmBtnText: isEnglish ? 'yes' : 'نعم',
-                              confirmBtnColor: Colors.greenAccent,
-                              onConfirmBtnTap: () async {
-                                await VendorApi(context)
-                                    .deleteStore('${store['id']}', context);
-                              },
-                            );},
+                        onTap: () {
+                          QuickAlert.show(
+                            context: context,
+                            type: QuickAlertType.confirm,
+                            customAsset: 'images/confirm.gif',
+                            text: isEnglish
+                                ? 'are you sure you want to delete store ${store['name']} ?'
+                                : '؟ ${store['name']} هل انت متأكد من حذف متجر ',
+                            cancelBtnText: isEnglish ? 'No' : 'لا',
+                            confirmBtnText: isEnglish ? 'yes' : 'نعم',
+                            confirmBtnColor: Color(0xFF0D2750),
+                            onConfirmBtnTap: () async {
+                              await VendorApi(context)
+                                  .deleteStore('${store['id']}', context);
+                            },
+                          );
+                        },
                         title: isEnglish ? 'Delete' : 'حذف',
-                        
                         isDestructive: true,
                         icon: CupertinoIcons.delete,
                       ),
@@ -497,7 +504,10 @@ class _MainStoresState extends State<MainStores> {
                       onPressed: showMenu,
                       padding: EdgeInsets.zero,
                       // child: const Icon(CupertinoIcons.ellipsis_circle),
-                      child: const Icon(Icons.more_vert),
+                      child: const Icon(
+                        Icons.more_vert,
+                        color: Color(0xFF0D2750),
+                      ),
                     ),
                   )
                 ],

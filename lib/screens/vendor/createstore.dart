@@ -75,7 +75,6 @@ class _CreateStoreState extends State<CreateStore> {
 
   void didChangeDependencies() {
     super.didChangeDependencies();
-    
   }
 
   @override
@@ -319,12 +318,13 @@ class _CreateStoreState extends State<CreateStore> {
                               QuickAlert.show(
                                   context: context,
                                   type: QuickAlertType.confirm,
+                                  customAsset: 'images/confirm.gif',
                                   text: isEnglish
                                       ? 'are you sure store info?'
                                       : 'هل انت متأكد من معلومات المتجر؟',
                                   confirmBtnText: isEnglish ? 'Yes' : 'نعم',
                                   cancelBtnText: isEnglish ? 'No' : 'لا',
-                                  confirmBtnColor: Colors.green,
+                                  confirmBtnColor: Color(0xFF0D2750),
                                   onConfirmBtnTap: () async {
                                     bool success = await vendorApi.createstore(
                                         context: context,

@@ -28,8 +28,8 @@ class _AccountScreenState extends State<AccountScreen> {
   @override
   void initState() {
     super.initState();
-    
-   AuthProvider authProvider =
+
+    AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
     authProvider.updateUserData(context);
     selectedRegion = '${authProvider.user!['region']}';
@@ -50,10 +50,11 @@ class _AccountScreenState extends State<AccountScreen> {
       });
     }
   }
-    void didChangeDependencies() {
+
+  void didChangeDependencies() {
     super.didChangeDependencies();
-    
   }
+
   @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
@@ -71,12 +72,12 @@ class _AccountScreenState extends State<AccountScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                   CustomAppBar(
-                  onBackTap: () {
-                    Navigator.pop(context);
-                  },
-                  marginTop: 30,
-                ),
+                  CustomAppBar(
+                    onBackTap: () {
+                      Navigator.pop(context);
+                    },
+                    marginTop: 30,
+                  ),
                   Container(
                     padding: EdgeInsets.fromLTRB(20, 0, 20, 5),
                     // height: 200,
@@ -89,7 +90,6 @@ class _AccountScreenState extends State<AccountScreen> {
                               SizedBox(
                                 height: 5,
                               ),
-                        
                               Text(
                                 isEnglish ? ' Welcome ' : ' مرحبا بك',
                                 style: TextStyle(
@@ -228,30 +228,35 @@ class _AccountScreenState extends State<AccountScreen> {
                                 QuickAlert.show(
                                     context: context,
                                     type: QuickAlertType.confirm,
+                                    customAsset: 'images/confirm.gif',
                                     text: isEnglish
                                         ? 'Do you want to update profile'
                                         : 'هل انت متاكد من تحديث البيانات الشخصية',
                                     confirmBtnText: isEnglish ? 'Yes' : 'نعم',
                                     cancelBtnText: isEnglish ? 'No' : 'لا',
-                                    confirmBtnColor: Colors.green,
+                                    confirmBtnColor: Color(0xFF0D2750),
                                     onConfirmBtnTap: () async {
                                       Navigator.pop(context);
 
                                       print(
                                           'selectedRegion in AccountScreen: $selectedRegion');
 
-                                      bool success =
-                                          await Api().updateUserProfile(
-                                        context: context,
-                                        firstName: first_name.text,
-                                        lastName: last_name.text,
-                                        birthday: birthdayController.text,
-                                        region: selectedRegion,
-                                        mobile: mobile.text,
-                                        email: email.text,
-imageFile: _selectedProfileImagePath != null ? File(_selectedProfileImagePath ?? '') : null
-                                        // otp: /* Pass the OTP if needed */,
-                                      );
+                                      bool success = await Api().updateUserProfile(
+                                          context: context,
+                                          firstName: first_name.text,
+                                          lastName: last_name.text,
+                                          birthday: birthdayController.text,
+                                          region: selectedRegion,
+                                          mobile: mobile.text,
+                                          email: email.text,
+                                          imageFile: _selectedProfileImagePath !=
+                                                  null
+                                              ? File(
+                                                  _selectedProfileImagePath ??
+                                                      '')
+                                              : null
+                                          // otp: /* Pass the OTP if needed */,
+                                          );
                                     });
                               },
                               style: ElevatedButton.styleFrom(

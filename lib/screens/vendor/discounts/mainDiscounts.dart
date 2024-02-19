@@ -73,39 +73,38 @@ class _MainDiscountsState extends State<MainDiscounts> {
     }
   }
 
-Future<void> selectDate(TextEditingController controller) async {
-  DateTime? selectedDate = await showDatePicker(
-    context: context,
-    initialDate: DateTime.now(),
-    firstDate: DateTime(2000),
-    lastDate: DateTime(2101),
-    builder: (BuildContext context, Widget? child) {
-      return Theme(
-        data: ThemeData.light().copyWith(
-          primaryColor: Color(0xFF080E27), // Change this to your desired color
-          // accentColor: Color(0xFF080E27), // Change this to your desired color
-          colorScheme: ColorScheme.light(
-            primary: Color(0xFF080E27), // Change this to your desired color
+  Future<void> selectDate(TextEditingController controller) async {
+    DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor:
+                Color(0xFF080E27), // Change this to your desired color
+            // accentColor: Color(0xFF080E27), // Change this to your desired color
+            colorScheme: ColorScheme.light(
+              primary: Color(0xFF080E27), // Change this to your desired color
+            ),
+            buttonTheme: ButtonThemeData(
+              textTheme: ButtonTextTheme.primary,
+            ),
           ),
-          buttonTheme: ButtonThemeData(
-            textTheme: ButtonTextTheme.primary,
-          ),
-        ),
-        child: child!,
-      );
-    },
-  );
+          child: child!,
+        );
+      },
+    );
 
-  if (selectedDate != null && selectedDate != controller.text) {
-    // Update the controller with the selected date
-    controller.text = DateFormat('yyyy-MM-dd').format(selectedDate);
+    if (selectedDate != null && selectedDate != controller.text) {
+      // Update the controller with the selected date
+      controller.text = DateFormat('yyyy-MM-dd').format(selectedDate);
+    }
   }
-}
-
 
   void didChangeDependencies() {
     super.didChangeDependencies();
-    
   }
 
   @override
@@ -388,8 +387,6 @@ Future<void> selectDate(TextEditingController controller) async {
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                         color: Color(0xFF080E27),
-
-
                                       ),
                                     ),
                                   ),
@@ -579,12 +576,13 @@ Future<void> selectDate(TextEditingController controller) async {
                       QuickAlert.show(
                         context: context,
                         type: QuickAlertType.confirm,
+                        customAsset: 'images/confirm.gif',
                         text: isEnglish
                             ? 'are you sure you want to delete store ${Discounts['category']} ?'
                             : '؟ ${Discounts['category']} هل انت متأكد من حذف خصم ',
                         cancelBtnText: isEnglish ? 'No' : 'لا',
                         confirmBtnText: isEnglish ? 'yes' : 'نعم',
-                        confirmBtnColor: Colors.greenAccent,
+                        confirmBtnColor: Color(0xFF0D2750),
                         onConfirmBtnTap: () async {
                           await VendorApi(context)
                               .deleteDiscount('${Discounts['id']}', context);

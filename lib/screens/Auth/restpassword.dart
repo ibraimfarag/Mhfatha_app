@@ -26,15 +26,15 @@ class _RestPasswordState extends State<RestPassword> {
   String enteredOtp = '';
 
   Api api = Api();
- @override
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    
   }
+
   @override
   Widget build(BuildContext context) {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
-      // 
+    //
 
     return DirectionalityWrapper(
       child: Scaffold(
@@ -299,17 +299,19 @@ class _RestPasswordState extends State<RestPassword> {
               );
             }
 
-  // Navigator.pushNamed(context, '/restpassword');
-
+            // Navigator.pushNamed(context, '/restpassword');
 
             if (message['Success'] == true && message['reseted'] == true) {
               String war = message['message'];
               QuickAlert.show(
                 context: context,
                 type: QuickAlertType.success,
+                customAsset: 'images/success.gif',
                 text: war,
-                onConfirmBtnTap:(){  Navigator.pushNamed(context, '/login');
-}
+                onConfirmBtnTap: () {
+                  Navigator.pushNamed(context, '/login');
+                },
+                confirmBtnColor: Color(0xFF0D2750),
               );
             }
           },
