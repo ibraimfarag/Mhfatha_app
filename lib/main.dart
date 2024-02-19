@@ -33,11 +33,21 @@ void main() async {
   // Initialize flutter_local_notifications
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
-  final InitializationSettings initializationSettings =
-      InitializationSettings(android: initializationSettingsAndroid);
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+const AndroidInitializationSettings initializationSettingsAndroid =
+    AndroidInitializationSettings('@mipmap/ic_launcher');
+
+// For iOS
+const DarwinInitializationSettings initializationSettingsIOS =
+    DarwinInitializationSettings();
+
+// Initialize FlutterLocalNotificationsPlugin with both Android and iOS settings
+const InitializationSettings initializationSettings = InitializationSettings(
+  android: initializationSettingsAndroid,
+  iOS: initializationSettingsIOS,
+);
+
+// Initialize the plugin
+await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
   // Configure Firebase message handler
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
