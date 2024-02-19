@@ -100,31 +100,36 @@ class _CreateStoreState extends State<CreateStore> {
                   },
                   marginTop: 30,
                 ),
-                Container(
-                  margin: EdgeInsets.fromLTRB(20, 0, 20, 5),
-                  height: 200,
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            isEnglish ? 'Create New Store' : 'انشاء متجر جديد',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                          Image.asset(
-                            'images/output-store.gif',
-                            height: 120,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+Container(
+  margin: EdgeInsets.fromLTRB(20, 0, 20, 5),
+  height: 200,
+  child: Column(
+    children: [
+      Expanded( // Wrap Row with Expanded
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Flexible( // Wrap Text with Flexible
+              child: Text(
+                isEnglish ? 'Create New Store' : 'انشاء متجر جديد',
+                style: TextStyle(
+                  fontSize: MediaQuery.of(context).size.width * 0.05, // Adjust the multiplier as needed
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
+              ),
+            ),
+            Image.asset(
+              'images/output-store.gif',
+              height: MediaQuery.of(context).size.width * 0.3, // Adjust the multiplier as needed
+            ),
+          ],
+        ),
+      ),
+    ],
+  ),
+),
+
                 Container(
                   padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                   decoration: BoxDecoration(
@@ -458,126 +463,132 @@ class _CreateStoreState extends State<CreateStore> {
     );
   }
 
-  Widget buildDayTimeSelector(String day) {
-    bool isEnglish = Provider.of<AppState>(context).isEnglish;
+Widget buildDayTimeSelector(String day) {
+  bool isEnglish = Provider.of<AppState>(context).isEnglish;
+  double screenWidth = MediaQuery.of(context).size.width;
 
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-      decoration: BoxDecoration(
-        color: Color.fromARGB(20, 71, 71, 71),
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          // Checkbox for selecting the day
+  return Container(
+    margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+    decoration: BoxDecoration(
+      color: Color.fromARGB(20, 71, 71, 71),
+      borderRadius: BorderRadius.circular(30),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        // Checkbox for selecting the day
+        Row(
+          children: [
+            Checkbox(
+              value: selectedDays[day] ?? false,
+              onChanged: (value) {
+                setState(() {
+                  selectedDays[day] = value!;
+                  if (value!) {
+                    // If the day is selected, set default opening and closing times
+                    openingTimes[day] = TimeOfDay(hour: 8, minute: 0);
+                    closingTimes[day] = TimeOfDay(hour: 12, minute: 0);
+                    
+                    // Update workingDays with the selected opening and closing times
+                    workingDays[day] ??= {}; // Ensure the inner map is initialized
+                    workingDays[day]!['from'] = openingTimes[day]!.format(context);
+                    workingDays[day]!['to'] = closingTimes[day]!.format(context);
+                  } else {
+                    // If the day is deselected, remove its entry from workingDays
+                    workingDays.remove(day);
+                  }
+                  // Print updated workingDays
+                  print('Updated workingDays: $workingDays');
+                });
+              },
+              activeColor: Color(0xFF1D365C),
+            ),
+            Text(
+              isEnglish ? getEnglishDayName(day) : getArabicDayName(day),
+              style: TextStyle(
+                color: Color(0xFF1D365C),
+                fontSize: screenWidth * 0.04, // Adjust the font size dynamically
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        // Display open and close times if the day is selected
+        if (selectedDays[day] ?? false)
           Row(
             children: [
-              Checkbox(
-                value: selectedDays[day] ?? false,
-                onChanged: (value) {
-                  setState(() {
-                    selectedDays[day] = value!;
-                    if (value!) {
-                      // If the day is selected, initialize the opening and closing times if not already initialized
-                      // if (openingTimes[day] == null) {
-                      //   openingTimes[day] = TimeOfDay(
-                      //       hour: 9, minute: 0); // Set default opening time
-                      // }
-                      // if (closingTimes[day] == null) {
-                      //   closingTimes[day] = TimeOfDay(
-                      //       hour: 18, minute: 0); // Set default closing time
-                      // }
-                    } else {
-                      // If the day is deselected, remove its entry from workingDayss
-                      workingDays.remove(day);
-                    }
-                    // Print updated workingDayss
-                    print('Updated workingDayss: $workingDays');
-                  });
-                },
-                activeColor: Color(0xFF1D365C),
-              ),
+              SizedBox(width: screenWidth * 0.03), // Adjust spacing dynamically
               Text(
-                isEnglish ? getEnglishDayName(day) : getArabicDayName(day),
+                isEnglish ? 'Open Time: ' : 'وقت الافتتاح: ',
                 style: TextStyle(
-                  color: Color(0xFF1D365C),
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                  fontSize: screenWidth * 0.035, // Adjust the font size dynamically
+                ),
+              ),
+              TextButton(
+                onPressed: () async {
+                  final selectedTime = await showTimePicker(
+                    context: context,
+                    initialTime: openingTimes[day] ?? TimeOfDay(hour: 9, minute: 0),
+                  );
+                  if (selectedTime != null) {
+                    setState(() {
+                      openingTimes[day] = selectedTime;
+                      // Update workingDays with the selected opening time
+                      workingDays[day] ??= {}; // Ensure the inner map is initialized
+                      workingDays[day]!['from'] = selectedTime.format(context);
+                      // Print updated workingDays
+                      print('Updated workingDays: $workingDays');
+                    });
+                  }
+                },
+                child: Text(
+                  openingTimes[day]?.format(context) ?? '- - : - -',
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.035, // Adjust the font size dynamically
+                    color: Color(0xFF1D365C),
+                  ),
+                ),
+              ),
+              SizedBox(width: screenWidth * 0.02), // Adjust spacing dynamically
+              Text(
+                isEnglish ? 'Close Time: ' : 'وقت الإغلاق: ',
+                style: TextStyle(
+                  fontSize: screenWidth * 0.035, // Adjust the font size dynamically
+                ),
+              ),
+              TextButton(
+                onPressed: () async {
+                  final selectedTime = await showTimePicker(
+                    context: context,
+                    initialTime: closingTimes[day] ?? TimeOfDay(hour: 12, minute: 0),
+                  );
+                  if (selectedTime != null) {
+                    setState(() {
+                      closingTimes[day] = selectedTime;
+                      // Update workingDays with the selected closing time
+                      workingDays[day] ??= {}; // Ensure the inner map is initialized
+                      workingDays[day]!['to'] = selectedTime.format(context);
+                      // Print updated workingDays
+                      print('Updated workingDays: $workingDays');
+                    });
+                  }
+                },
+                child: Text(
+                  closingTimes[day]?.format(context) ?? '- - : - -',
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.035, // Adjust the font size dynamically
+                    color: Color(0xFF1D365C),
+                  ),
                 ),
               ),
             ],
           ),
-          // Display open and close times if the day is selected
-          if (selectedDays[day] ?? false)
-            Row(
-              children: [
-                SizedBox(width: 20),
-                Text(
-                  isEnglish ? 'Open Time: ' : 'وقت الافتتاح: ',
-                ),
-                TextButton(
-                  onPressed: () async {
-                    final selectedTime = await showTimePicker(
-                      context: context,
-                      initialTime: openingTimes[day] ?? TimeOfDay.now(),
-                    );
-                    if (selectedTime != null) {
-                      setState(() {
-                        openingTimes[day] = selectedTime;
-                        // Update workingDays with the selected opening time
-                        workingDays[day] ??=
-                            {}; // Ensure the inner map is initialized
-                        workingDays[day]!['from'] =
-                            selectedTime.format(context);
-                        // Print updated workingDays
-                        print('Updated workingDays: $workingDays');
-                      });
-                    }
-                  },
-                  child: Text(
-                    openingTimes[day]?.format(context) ?? '- - : - -',
-                    style: TextStyle(
-                      color: Color(0xFF1D365C),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 5),
-                Text(
-                  isEnglish ? 'Close Time: ' : 'وقت الإغلاق: ',
-                ),
-                TextButton(
-                  onPressed: () async {
-                    final selectedTime = await showTimePicker(
-                      context: context,
-                      initialTime: closingTimes[day] ?? TimeOfDay.now(),
-                    );
-                    if (selectedTime != null) {
-                      setState(() {
-                        closingTimes[day] = selectedTime;
-                        // Update workingDays with the selected closing time
-                        workingDays[day] ??=
-                            {}; // Ensure the inner map is initialized
-                        workingDays[day]!['to'] = selectedTime.format(context);
-                        // Print updated workingDays
-                        print('Updated workingDays: $workingDays');
-                      });
-                    }
-                  },
-                  child: Text(
-                    closingTimes[day]?.format(context) ?? '- - : - -',
-                    style: TextStyle(
-                      color: Color(0xFF1D365C),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-        ],
-      ),
-    );
-  }
+      ],
+    ),
+  );
+}
+
 
 // Helper method to get English day name
   String getEnglishDayName(String day) {
