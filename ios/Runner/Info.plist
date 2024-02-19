@@ -3,6 +3,15 @@
 <plist version="1.0">
 	<dict>
 		<key>
+			NSAppTransportSecurity
+		</key>
+		<dict>
+			<key>
+				NSAllowsLocalNetworking
+			</key>
+			<true />
+		</dict>
+		<key>
 			FirebaseAppDelegateProxyEnabled
 		</key>
 		<false />
