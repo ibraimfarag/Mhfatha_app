@@ -5,21 +5,13 @@ import 'package:permission_handler/permission_handler.dart'
 
 import 'package:mhfatha/settings/imports.dart';
 
-class RequestsScreen extends StatefulWidget {
+class AdminLayout extends StatefulWidget {
   @override
-  _RequestsScreenState createState() => _RequestsScreenState();
+  _AdminLayoutState createState() => _AdminLayoutState();
 }
 
-class _RequestsScreenState extends State<RequestsScreen> {
-  Future<void> getUserDiscounts() async {
-    try {
-      String response = await Api().getUserDiscounts(context);
-      setState(() {});
-      // print('User Discounts Response: $response');
-    } catch (e) {
-      print('Error getting user discounts: $e');
-    }
-  }
+class _AdminLayoutState extends State<AdminLayout> {
+  
 
   @override
   void initState() {

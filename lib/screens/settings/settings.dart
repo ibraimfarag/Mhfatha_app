@@ -72,6 +72,45 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white),
                               ),
+                              SizedBox(height: 5),
+                              if (!authProvider.isAdmin & authProvider.isVendor)
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 6),
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.yellow,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Text(
+                                    isEnglish ? 'Vendor' : 'تاجر',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              if (authProvider.isAdmin || authProvider.isVendor)
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 6),
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.yellow,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Text(
+                                    isEnglish ? 'Admin' : 'مدير',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
                             ],
                           ),
                           SizedBox(

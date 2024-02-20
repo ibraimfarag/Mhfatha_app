@@ -40,8 +40,8 @@ void initState() {
   super.initState();
   responseDataMap = jsonDecode(widget.responseData);
   store = responseDataMap['store'];
-  // discounts = responseDataMap['discounts'].values.toList();
-discounts = responseDataMap['discounts'];
+  discounts = responseDataMap['discounts'].values.toList();
+// discounts = responseDataMap['discounts'];
    storeName = store['name'];
 }
 

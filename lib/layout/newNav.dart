@@ -36,6 +36,9 @@ class _NewNavState extends State<NewNav> {
           if (authProvider.isVendor)
             _buildNavItem(Icons.store, isEnglish ? 'My Stores' : 'متاجري',
                 '/mainstores', currentRoute == '/mainstores'),
+          if (authProvider.isAdmin)
+            _buildNavItem(Icons.vaccines_outlined, isEnglish ? 'Manage' : 'ادارة',
+                '/mainstores', currentRoute == '/mainstores'),
           _buildNavItem(Icons.settings, isEnglish ? 'Settings' : 'الإعدادات',
               '/settings', currentRoute == '/settings'),
         ],
