@@ -75,8 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
     authProvider.updateUserData(context);
 
     requestPermissions();
-        initPlatformState();
-
+    initPlatformState();
   }
 
   Future<void> requestPermissions() async {
@@ -99,59 +98,55 @@ class _HomeScreenState extends State<HomeScreen> {
     initPlatformState();
   }
 
-Future<void> initPlatformState() async {
-  late String platformVersion,
-      modelName = '',
-      deviceName = '';
+  Future<void> initPlatformState() async {
+    late String platformVersion, modelName = '', deviceName = '';
 
-  String tokenFirebase = '';
-  // Determine the platform
-  String platform = Platform.isAndroid ? 'Android' : 'iOS';
-  PushNotificationService pushNotificationService = PushNotificationService();
+    String tokenFirebase = '';
+    // Determine the platform
+    String platform = Platform.isAndroid ? 'Android' : 'iOS';
+    PushNotificationService pushNotificationService = PushNotificationService();
 
-  // Platform messages may fail,
-  // so we use a try/catch PlatformException.
-  try {
-    platformVersion = await DeviceInformation.platformVersion;
-    List<String> versionParts = platformVersion.split(' ');
-    if (versionParts.length > 1) {
-      platformVersion = versionParts[1]; // Extracting only the version number
+    // Platform messages may fail,
+    // so we use a try/catch PlatformException.
+    try {
+      platformVersion = await DeviceInformation.platformVersion;
+      List<String> versionParts = platformVersion.split(' ');
+      if (versionParts.length > 1) {
+        platformVersion = versionParts[1]; // Extracting only the version number
+      }
+      modelName = await DeviceInformation.deviceModel;
+      deviceName = await DeviceInformation.deviceName;
+      tokenFirebase = (await pushNotificationService.getToken())!;
+    } on PlatformException catch (e) {
+      platformVersion = '${e.message}';
     }
-    modelName = await DeviceInformation.deviceModel;
-    deviceName = await DeviceInformation.deviceName;
-    tokenFirebase = (await pushNotificationService.getToken())!;
-  } on PlatformException catch (e) {
-    platformVersion = '${e.message}';
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      _platformVersion = platformVersion;
+      _modelName = modelName;
+      _deviceName = deviceName;
+      _platform = platform; // Adding platform information to state
+      _token = tokenFirebase;
+    });
+
+    // print('Platform: $_platform');
+    // print('Platform Version: $_platformVersion');
+    // print('Model Name: $_modelName');
+    // print('Token: $_token');
+
+    api.updateDeviceInfo(
+      context,
+      _token,
+      _platform,
+      _platformVersion,
+      _modelName,
+    );
   }
-
-  // If the widget was removed from the tree while the asynchronous platform
-  // message was in flight, we want to discard the reply rather than calling
-  // setState to update our non-existent appearance.
-  if (!mounted) return;
-
-  setState(() {
-    _platformVersion = platformVersion;
-    _modelName = modelName;
-    _deviceName = deviceName;
-    _platform = platform; // Adding platform information to state
-    _token = tokenFirebase;
-  });
-
-  // print('Platform: $_platform');
-  // print('Platform Version: $_platformVersion');
-  // print('Model Name: $_modelName');
-  // print('Token: $_token');
-
-
-  api.updateDeviceInfo(
-  context,
-  _token,
-  _platform,
-  _platformVersion,
-  _modelName,
-);
-
-}
 
 //  @override
 // void dispose() {
@@ -173,12 +168,16 @@ Future<void> initPlatformState() async {
         return;
       }
 
+      double? newLatitude = locationData.latitude;
+      double? newLongitude = locationData.longitude;
+
       // Check if the location has changed significantly
-      if (latitude != locationData.latitude ||
-          longitude != locationData.longitude) {
+      if (newLatitude != null &&
+          newLongitude != null &&
+          (latitude != newLatitude || longitude != newLongitude)) {
         setState(() {
-          latitude = locationData.latitude;
-          longitude = locationData.longitude;
+          latitude = newLatitude;
+          longitude = newLongitude;
         });
 
         // Call the method to send location when the coordinates are available
@@ -851,6 +850,7 @@ Future<void> initPlatformState() async {
           });
         },
         child: Scaffold(
+          
           body: Container(
             width: size.width,
             height: size.height,
@@ -876,7 +876,7 @@ Future<void> initPlatformState() async {
                   Column(
                     children: [
                       SizedBox(
-                        height: 60,
+                        height: 50,
                       ),
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 25),

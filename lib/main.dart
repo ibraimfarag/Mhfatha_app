@@ -89,30 +89,31 @@ void main() async {
           if (success) {
             // Token is valid
           } else {
- showDialog(
-   context: context,
-   barrierDismissible: false,
-   builder: (BuildContext context) {
-     return AlertDialog(
-       title: Text(isEnglish ? 'Invalid' : 'خطأ'),
-       content: Text(message ?? 'Unknown error'),
-       actions: [
-         TextButton(
-           onPressed: () {
-             Provider.of<AuthProvider>(context, listen: false)
-                            .logout();             Navigator.pop(context);
-             
-             // Delay navigation to ensure the dialog is closed
-             Future.delayed(Duration(milliseconds: 300), () {
-               Navigator.pushNamed(context, '/login');
-             });
-           },
-           child: Text(isEnglish ? 'OK' : 'حسنا'),
-         ),
-       ],
-     );
-   },
- );
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text(isEnglish ? 'Invalid' : 'خطأ'),
+                  content: Text(message ?? 'Unknown error'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Provider.of<AuthProvider>(context, listen: false)
+                            .logout();
+                        Navigator.pop(context);
+
+                        // Delay navigation to ensure the dialog is closed
+                        Future.delayed(Duration(milliseconds: 300), () {
+                          Navigator.pushNamed(context, '/login');
+                        });
+                      },
+                      child: Text(isEnglish ? 'OK' : 'حسنا'),
+                    ),
+                  ],
+                );
+              },
+            );
           }
         }
       }
@@ -184,48 +185,54 @@ class _MhfathaAppState extends State<MhfathaApp> {
     bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
 
     return Consumer<AppState>(builder: (context, appState, child) {
-      return StatusBarManager(
-          translucent: false,
-          statusBarBrightness: Brightness.dark,
-          statusBarIconBrightness: Brightness.dark,
-          navigationBarBrightness: Brightness.dark,
-          child: MaterialApp(
-            navigatorKey: navigatorKey,
+      return MaterialApp(
+        navigatorKey: navigatorKey,
+        title: 'Mhfatha',
+        theme: ThemeData.light().copyWith(
+          primaryColor: Colors.red, // Change the primary color
+          hintColor:
+              const Color.fromARGB(255, 58, 52, 2), // Change the accent color
+          scaffoldBackgroundColor: Colors.white, // Change the background color
+          // Add more color customizations as needed
+        ),
+        darkTheme: ThemeData.dark(),
+        themeMode: appState.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+        debugShowCheckedModeBanner: false,
+        home: Builder(
+          builder: (BuildContext context) {
+            // Check if the user is authenticated
+            AuthProvider authProvider = Provider.of<AuthProvider>(context);
+            bool isAuthenticated = authProvider.isAuthenticated;
 
-            title: 'Mhfatha',
-            theme: ThemeData.light().copyWith(
-              primaryColor: Colors.red, // Change the primary color
-              hintColor: const Color.fromARGB(
-                  255, 58, 52, 2), // Change the accent color
-              scaffoldBackgroundColor:
-                  Colors.white, // Change the background color
-              // Add more color customizations as needed
-            ),
-
-            darkTheme: ThemeData.dark(),
-            themeMode: appState.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-            debugShowCheckedModeBanner: false,
-            home: Builder(
-              builder: (BuildContext context) {
-                // Check if the user is authenticated
-                AuthProvider authProvider = Provider.of<AuthProvider>(context);
-                bool isAuthenticated = authProvider.isAuthenticated;
-
-                // Return the appropriate screen based on authentication status
-                return isAuthenticated ? HomeScreen() : LoginScreen();
-              },
-            ),
-            routes: Routes.getRoutes(),
-            onGenerateRoute: (settings) {
-              return Routes.unknownRoute(settings);
-            },
-            builder: (context, child) {
-              // Wrap your app with Provider here
-              // Example: return MyProvider(child: child);
-              return child!;
-            },
-            // navigatorKey: GlobalKey(),
-          )); //matrial
+            // Return the appropriate screen based on authentication status
+            return isAuthenticated ? HomeScreen() : LoginScreen();
+          },
+        ),
+        routes: Routes.getRoutes(),
+        onGenerateRoute: (settings) {
+          return Routes.unknownRoute(settings);
+        },
+        builder: (context, child) {
+          // Wrap your app with Provider here
+          // Example: return MyProvider(child: child);
+          return Scaffold(
+            appBar: PreferredSize(
+    preferredSize: Size.fromHeight(0),
+    child: AppBar(
+      automaticallyImplyLeading: false,
+      backgroundColor:Color(0xFF080E27),
+      elevation: 0,
+    //   systemOverlayStyle: SystemUiOverlayStyle(
+    //     statusBarColor: Color(0xFF080E27),
+    //     statusBarIconBrightness: Brightness.light,
+    //   ),
+    ),
+  ),
+            body: child,
+          );
+        },
+        // navigatorKey: GlobalKey(),
+      ); //matrial
     });
   }
 
