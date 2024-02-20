@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     _getLocation();
     // Set up a timer to check location changes every 90 seconds
-    locationTimer = Timer.periodic(Duration(seconds: 3), (Timer timer) async {
+    locationTimer = Timer.periodic(Duration(seconds: 80), (Timer timer) async {
       await _checkAndSendLocation();
     });
 
@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     });
 
-    Timer(Duration(seconds: 3), () {
+    Timer(Duration(seconds: 5), () {
       if (mounted) {
         setState(() {
           isLoading = false;
@@ -75,6 +75,8 @@ class _HomeScreenState extends State<HomeScreen> {
     authProvider.updateUserData(context);
 
     requestPermissions();
+        initPlatformState();
+
   }
 
   Future<void> requestPermissions() async {
@@ -135,10 +137,10 @@ Future<void> initPlatformState() async {
     _token = tokenFirebase;
   });
 
-  print('Platform: $_platform');
-  print('Platform Version: $_platformVersion');
-  print('Model Name: $_modelName');
-  print('Token: $_token');
+  // print('Platform: $_platform');
+  // print('Platform Version: $_platformVersion');
+  // print('Model Name: $_modelName');
+  // print('Token: $_token');
 
 
   api.updateDeviceInfo(

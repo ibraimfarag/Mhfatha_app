@@ -216,3 +216,4 @@ export 'package:firebase_messaging/firebase_messaging.dart';
 export'package:pull_down_button/pull_down_button.dart';
 
 export 'package:searchfield/searchfield.dart';
+export 'package:statusbarmanager/statusbarmanager.dart';
