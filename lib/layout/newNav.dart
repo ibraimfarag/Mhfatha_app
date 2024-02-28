@@ -38,7 +38,7 @@ class _NewNavState extends State<NewNav> {
                 '/mainstores', currentRoute == '/mainstores'),
           if (authProvider.isAdmin)
             _buildNavItem(Icons.vaccines_outlined, isEnglish ? 'Manage' : 'ادارة',
-                '/mainstores', currentRoute == '/mainstores'),
+                '/admin', currentRoute == '/admin'),
           _buildNavItem(Icons.settings, isEnglish ? 'Settings' : 'الإعدادات',
               '/settings', currentRoute == '/settings'),
         ],

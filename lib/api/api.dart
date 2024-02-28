@@ -1019,6 +1019,40 @@ class Api {
       throw e;
     }
   }
+Future<Map<String, dynamic>> checkVersion(String platform) async {
+  final url = Uri.parse('$baseUrl/checkversion');
+  
+  try {
+    final http.Response response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(<String, String>{
+        'platform': platform,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // Parse the JSON response
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      // Extract version and required fields
+      String version = data['version'];
+      bool required = data['required'] == 1 ? true : false;
+      return {
+        'version': version,
+        'required': required,
+      };
+    } else {
+      // If the request was not successful, throw an error
+      throw Exception('Failed to check version: ${response.statusCode}');
+    }
+  } catch (e) {
+    // If an error occurs during the request, throw an error
+    throw Exception('Failed to check version: $e');
+  }
+}
+
 }
 
 void _showLoadingDialog(BuildContext context) {

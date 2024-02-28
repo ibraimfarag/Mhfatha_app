@@ -47,6 +47,8 @@ class _HomeScreenState extends State<HomeScreen> {
       _hardware = "";
   var _apiLevel;
   @override
+  String authName = '';
+
   void initState() {
     super.initState();
 
@@ -73,7 +75,9 @@ class _HomeScreenState extends State<HomeScreen> {
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
     authProvider.updateUserData(context);
-
+    setState(() {
+      authName = authProvider.user!['first_name'];
+    });
     requestPermissions();
     initPlatformState();
   }
@@ -292,12 +296,25 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _sendLocation() async {
-    AuthProvider authProvider =
+    AuthProvider? authProvider =
         Provider.of<AuthProvider>(context, listen: false);
 
     try {
+      if (authProvider == null) {
+        print('AuthProvider is null');
+        return;
+      }
+
       // Get the language display value from the app state
-      String language = Provider.of<AppState>(context, listen: false).display;
+      String language = Provider.of<AppState>(context, listen: false).display ??
+          'defaultLanguage';
+
+      if (latitude == null || longitude == null) {
+        _getLocation();
+
+        print('Latitude or longitude is null');
+        return;
+      }
 
       final response = await Api().sendLocation(
         authProvider,
@@ -318,7 +335,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // Convert each item in the list to a Map
           List<Map<String, dynamic>> validStores =
               stores.whereType<Map<String, dynamic>>().toList();
-// print('${validStores}');
+          // print('${validStores}');
           setState(() {
             filteredStores = validStores;
           });
@@ -836,8 +853,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
-    String authName = authProvider.user![
-        'first_name']; // Replace with the actual property holding the user's name
+    // Replace with the actual property holding the user's name
     //
 
     return DirectionalityWrapper(
@@ -850,7 +866,6 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         },
         child: Scaffold(
-          
           body: Container(
             width: size.width,
             height: size.height,

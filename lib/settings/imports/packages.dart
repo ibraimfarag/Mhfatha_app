@@ -111,3 +111,10 @@ export 'package:image_gallery_saver/image_gallery_saver.dart';
 
 export 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+// /* ----------------------------- sidebar drawer ----------------------------- */
+
+export 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
+
+// /* ------------------------- circular chart flutter ------------------------- */
+
+export  'package:circular_chart_flutter/circular_chart_flutter.dart';
