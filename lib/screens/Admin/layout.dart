@@ -44,31 +44,27 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
             padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
             color: Color(0xFF080E27),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
+              // crossAxisAlignment: CrossAxisAlignment.stretch,
+              // mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
                   padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        // crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
-                            mainAxisAlignment: isEnglish
-                                ? MainAxisAlignment.start
-                                : MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               IconButton(
                                 onPressed: _toggleDrawer,
-                                icon: const Icon(Icons.menu),
+                                icon: const Icon(Icons.menu,color:Color.fromARGB(253, 255, 255, 255)),
                               ),
                               // Add other widgets as needed
                             ],
                           ),
-                          if (widget.additionalWidgets != null)
-                            ...widget.additionalWidgets!,
 
                           // other widgets here
                         ],
@@ -76,6 +72,12 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                     ],
                   ),
                 ),
+
+                Container(
+                    child: Column(children: [
+                  if (widget.additionalWidgets != null)
+                    ...widget.additionalWidgets!,
+                ])),
                 SizedBox(height: 16),
                 Container(
                   width: double.infinity,
@@ -112,7 +114,7 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        // Handle drawer item 1 tap
+                        Navigator.pushNamed(context, '/admin');
                       },
                       child: Padding(
                         padding: EdgeInsets.all(16),
@@ -120,7 +122,38 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                           children: [
                             Icon(Icons.dashboard),
                             SizedBox(width: 16),
-                            Text('Dashboard'),
+                            Text(isEnglish ? 'Dashboard' : 'احصائيات'),
+                          ],
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/admin/users');
+                        // Handle drawer item 2 tap
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Row(
+                          children: [
+                            Icon(Icons.manage_accounts_outlined),
+                            SizedBox(width: 16),
+                            Text(isEnglish ? 'Users' : 'الاعضاء'),
+                          ],
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        // Handle drawer item 2 tap
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Row(
+                          children: [
+                            Icon(Icons.store_mall_directory_rounded),
+                            SizedBox(width: 16),
+                            Text(isEnglish ? 'Stores' : 'المتاجر'),
                           ],
                         ),
                       ),
@@ -135,7 +168,52 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                           children: [
                             Icon(Icons.settings),
                             SizedBox(width: 16),
-                            Text('Settings'),
+                            Text(isEnglish ? 'Settings' : 'الاعدادات'),
+                          ],
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        // Handle drawer item 2 tap
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Row(
+                          children: [
+                            Icon(Icons.notifications_on_outlined),
+                            SizedBox(width: 16),
+                            Text(isEnglish ? 'Notifications' : 'الاشعارات'),
+                          ],
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        // Handle drawer item 2 tap
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Row(
+                          children: [
+                            Icon(Icons.help_outline_sharp),
+                            SizedBox(width: 16),
+                            Text(isEnglish ? 'Requests' : 'الطلبات'),
+                          ],
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        // Handle drawer item 2 tap
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Row(
+                          children: [
+                            Icon(Icons.help_outline_sharp),
+                            SizedBox(width: 16),
+                            Text(isEnglish ? 'Accounts' : 'الحسابات'),
                           ],
                         ),
                       ),
@@ -181,27 +259,3 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
     }
   }
 }
-
-
-// Future<void> fetchDataFromApi(BuildContext context) async {
-//   try {
-//     final statisticsData = await AdminApi(context).fetchStatistics();
-//     final Map<String, dynamic> statistics = statisticsData['statistics'];
-//     final List<dynamic> users = statisticsData['users'];
-//     final List<dynamic> stores = statisticsData['stores'];
-//     final List<dynamic> requests = statisticsData['requests'];
-//     final List<dynamic> userDiscounts = statisticsData['user_discounts'];
-
-//     // Call the callback function to update the statistics
-//     updateStatistics({
-//       'statistics': statistics,
-//       'users': users,
-//       'stores': stores,
-//       'requests': requests,
-//       'userDiscounts': userDiscounts,
-//     });
-
-//   } catch (e) {
-//     print('Error: $e');
-//   }
-// }

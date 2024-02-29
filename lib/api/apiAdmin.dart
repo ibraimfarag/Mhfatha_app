@@ -38,6 +38,7 @@ class AdminApi {
     _timer.cancel();
   }
 
+
   Future<void> initializeData(BuildContext context) async {
     isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
     lang = Provider.of<AppState>(context, listen: false).display;
@@ -142,9 +143,11 @@ class AdminApi {
     }
   }
 
-  Future<Map<String, dynamic>> fetchStatistics() async {
+  Future<Map<String, dynamic>> fetchStatistics(BuildContext context) async {
     final url = Uri.parse('$baseUrl/admin/statistics');
 
+    await Future.delayed(Duration.zero);
+    _showLoadingDialog(context);
     try {
       final http.Response response = await http.get(
         url,
@@ -161,6 +164,8 @@ class AdminApi {
       );
 
       if (response.statusCode == 200) {
+        Navigator.of(context).pop();
+
         // Parse the JSON response
         final Map<String, dynamic> data = jsonDecode(response.body);
         return data;
@@ -173,16 +178,59 @@ class AdminApi {
       throw Exception('Failed to load statistics: $e');
     }
   }
+
+  Future<Map<String, dynamic>> actions(
+      BuildContext context, String userId, String query) async {
+    final url = Uri.parse('$baseUrl/admin/actions');
+
+    // Show loading dialog
+    _showLoadingDialog(context);
+
+    try {
+      final http.Response response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': bearerToken,
+        },
+        body: jsonEncode(<String, String>{
+          'user_id': userId,
+          'query': query,
+        }),
+      );
+
+      // Close loading dialog
+
+      if (response.statusCode == 200) {
+        // Parse the JSON response
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+        final Map<String, dynamic> data = jsonDecode(response.body);
+        return data;
+      } else {
+        // If the request was not successful, throw an error
+        throw Exception('Failed to perform action: ${response.statusCode}');
+      }
+    } catch (e) {
+      // If an error occurs during the request, throw an error
+      throw Exception('Failed to perform action: $e');
+    }
+  }
 }
 
 void _showLoadingDialog(BuildContext context) {
-  bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
-
-  QuickAlert.show(
+  showDialog(
     context: context,
-    type: QuickAlertType.loading,
-    customAsset: 'images/loading.gif',
-    title: isEnglish ? 'please wait' : 'يرجى الانتظار...',
-    text: isEnglish ? 'loading your data' : 'جاري تحميل البيانات',
+    barrierDismissible: false, // Prevent dialog from closing on outside tap
+    builder: (BuildContext context) {
+      return Dialog(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        child: Center(
+          child:
+              CircularProgressIndicator(), // Replace QuickAlert with CircularProgressIndicator
+        ),
+      );
+    },
   );
 }

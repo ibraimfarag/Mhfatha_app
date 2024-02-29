@@ -118,3 +118,6 @@ export 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 // /* ------------------------- circular chart flutter ------------------------- */
 
 export  'package:circular_chart_flutter/circular_chart_flutter.dart';
+
+// /* -------------------------------- fl_chart -------------------------------- */
+export 'package:fl_chart/fl_chart.dart';

@@ -40,3 +40,8 @@ export 'package:mhfatha/screens/vendor/discounts/mainDiscounts.dart';
 export 'package:mhfatha/screens/Admin/layout.dart';
 export 'package:mhfatha/screens/Admin/main.dart';
 
+export 'package:mhfatha/screens/Admin/user/view.dart';
+export 'package:mhfatha/screens/Admin/user/edit.dart';
+
+
+

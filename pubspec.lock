@@ -201,14 +201,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.0.4"
-  easy_dashboard:
-    dependency: "direct main"
+  equatable:
+    dependency: transitive
     description:
-      name: easy_dashboard
-      sha256: "753b924941b131ba14ed0634b255eac3c2a5ef653081fe76b0dbfc596175b8f6"
+      name: equatable
+      sha256: c2b87cb7756efdf69892005af546c56c0b5037f54d2a88269b4f347a505e3ca2
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.0.2"
+    version: "2.0.5"
   fake_async:
     dependency: transitive
     description:
@@ -321,6 +321,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.1.0"
+  fl_chart:
+    dependency: "direct main"
+    description:
+      name: fl_chart
+      sha256: "00b74ae680df6b1135bdbea00a7d1fc072a9180b7c3f3702e4b19a9943f5ed7d"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.66.2"
   flip_card:
     dependency: "direct main"
     description:
@@ -488,6 +496,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.2"
+  graphic:
+    dependency: "direct main"
+    description:
+      name: graphic
+      sha256: "1443f5b89e802c5ae6e6ffdbc0091f3808d74557b4794595b1aa8ffcf944cced"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.2.1"
   http:
     dependency: "direct main"
     description:
@@ -776,6 +792,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.8.3"
+  path_drawing:
+    dependency: transitive
+    description:
+      name: path_drawing
+      sha256: bbb1934c0cbb03091af082a6389ca2080345291ef07a5fa6d6e078ba8682f977
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.1"
   path_parsing:
     dependency: transitive
     description:
