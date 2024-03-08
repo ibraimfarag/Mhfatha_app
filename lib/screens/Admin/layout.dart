@@ -145,7 +145,7 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        // Handle drawer item 2 tap
+                        Navigator.pushNamed(context, '/admin/stores');
                       },
                       child: Padding(
                         padding: EdgeInsets.all(16),
@@ -190,7 +190,8 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        // Handle drawer item 2 tap
+                       
+                         Navigator.pushNamed(context, '/admin/requests');
                       },
                       child: Padding(
                         padding: EdgeInsets.all(16),

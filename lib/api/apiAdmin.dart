@@ -38,7 +38,6 @@ class AdminApi {
     _timer.cancel();
   }
 
-
   Future<void> initializeData(BuildContext context) async {
     isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
     lang = Provider.of<AppState>(context, listen: false).display;
@@ -216,6 +215,179 @@ class AdminApi {
       throw Exception('Failed to perform action: $e');
     }
   }
+
+  Future<Map<String, dynamic>> Storeactions(
+      BuildContext context, String storeID, String query) async {
+    final url = Uri.parse('$baseUrl/admin/store/actions');
+
+    // Show loading dialog
+    _showLoadingDialog(context);
+
+    try {
+      final http.Response response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': bearerToken,
+        },
+        body: jsonEncode(<String, String>{
+          'store_id': storeID,
+          'query': query,
+        }),
+      );
+
+      // Close loading dialog
+
+      if (response.statusCode == 200) {
+        // Parse the JSON response
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+        final Map<String, dynamic> data = jsonDecode(response.body);
+        return data;
+      } else {
+        // If the request was not successful, throw an error
+        throw Exception('Failed to perform action: ${response.statusCode}');
+      }
+    } catch (e) {
+      // If an error occurs during the request, throw an error
+      throw Exception('Failed to perform action: $e');
+    }
+  }
+
+  Future<bool> UpdateUser({
+    required String user_id,
+    required String first_name,
+    required String last_name,
+    required String birthday,
+    required String email,
+    required String region,
+    required String mobile,
+    File? imageFile,
+    required BuildContext context,
+  }) async {
+    final url = Uri.parse('$baseUrl/admin/user/update');
+
+    try {
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.loading,
+        customAsset: 'images/loading.gif',
+        title: isEnglish ? 'Loading' : 'انتظر قليلاً',
+        text: isEnglish ? 'Fetching your data' : 'جاري تحميل البيانات',
+      );
+
+      final request = http.MultipartRequest('POST', url)
+        // ..headers['Content-Type'] = 'application/json'
+        ..headers['Authorization'] = bearerToken
+        ..fields['lang'] = lang
+        ..fields['user_id'] = user_id
+        ..fields['first_name'] = first_name
+        ..fields['last_name'] = last_name
+        ..fields['birthday'] = birthday
+        ..fields['region'] = region
+        ..fields['mobile'] = mobile
+        ..fields['email'] = email;
+
+      if (imageFile != null) {
+        // Use the correct field name for the file, in this case, 'photo'
+        request.files
+            .add(await http.MultipartFile.fromPath('photo', imageFile.path));
+      }
+
+      final response = await request.send();
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(await response.stream.bytesToString());
+        final MessageC = jsonResponse['message'];
+        await authProvider?.updateUserData(context);
+
+        Navigator.pop(context);
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.success,
+          customAsset: 'images/success.gif',
+          text: '$MessageC',
+          onConfirmBtnTap: () async {
+            Navigator.of(context).pop();
+
+            // await fetchStatistics(context);
+            Navigator.pushNamed(context, '/admin/users'
+                // Pass the user data to the destination screen
+                );
+          },
+        );
+
+        print(MessageC);
+
+        return jsonResponse['success'];
+      } else {
+        final jsonResponse = jsonDecode(await response.stream.bytesToString());
+        Navigator.pop(context);
+        Navigator.pop(context);
+
+        // Extracting error messages from the jsonResponse
+        final errors = jsonResponse['errors'];
+        final errorMessages = errors.values.toList().join('\n');
+
+        QuickAlert.show(
+            context: context,
+            type: QuickAlertType.error,
+            title: isEnglish ? 'Error' : 'خطأ',
+            text: errorMessages.isNotEmpty
+                ? errorMessages
+                : 'Sorry, something went wrong',
+            confirmBtnText: isEnglish ? 'ok' : 'حسنا',
+            confirmBtnColor: Colors.red);
+        print(jsonResponse);
+        throw Exception(
+            'Failed to update user profile. Server responded with status code: ${response.statusCode} and error message: $jsonResponse');
+        print(jsonResponse);
+      }
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
+  
+  Future<Map<String, dynamic>> RequestActions(
+      BuildContext context, String requestID, String action) async {
+    final url = Uri.parse('$baseUrl/admin/requests');
+
+    // Show loading dialog
+    _showLoadingDialog(context);
+
+    try {
+      final http.Response response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': bearerToken,
+        },
+        body: jsonEncode(<String, String>{
+          'id': requestID,
+          'action': action,
+        }),
+      );
+
+      // Close loading dialog
+
+      if (response.statusCode == 200) {
+        // Parse the JSON response
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+        final Map<String, dynamic> data = jsonDecode(response.body);
+print(data);
+        return data;
+      } else {
+        // If the request was not successful, throw an error
+        throw Exception('Failed to perform action: ${response.statusCode}');
+      }
+    } catch (e) {
+      // If an error occurs during the request, throw an error
+      throw Exception('Failed to perform action: $e');
+    }
+  }
+
 }
 
 void _showLoadingDialog(BuildContext context) {

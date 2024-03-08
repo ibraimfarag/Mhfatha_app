@@ -8,6 +8,7 @@ import 'package:mhfatha/settings/imports.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart' as permission_handler;
 
 class VendorApi {
   static const String baseUrl = AppVariables.ApiUrl;
@@ -270,41 +271,53 @@ class VendorApi {
     }
   }
 
-  Future<void> downloadAndSaveImage(
-      String imageUrl, String fileName, BuildContext context) async {
-    final response = await http.get(Uri.parse(imageUrl));
-    final bytes = response.bodyBytes;
-
-    // Get the directory for storing images
-    final directory = await getApplicationDocumentsDirectory();
-    final imagePath = '${directory.path}/$fileName';
-
-    // Save the image file
-    await File(imagePath).writeAsBytes(bytes);
-
-    // Add image to the phone's image directory
-    final result = await ImageGallerySaver.saveFile(imagePath);
-    print('Image saved to gallery: $result');
-
-    // Show success message
-    QuickAlert.show(
-      context: context,
-      type: QuickAlertType.success,
-      customAsset: 'images/success.gif',
-      text: isEnglish ? 'Image saved to gallery' : 'تم حفظ الصورة بنجاح',
-      onConfirmBtnTap: () {
-        // Cancel the timer when 'onConfirmBtnTap' is called
-        _cancelTimer();
-        // Optionally, you can perform other actions here
-        Navigator.pop(context);
-      },
-      confirmBtnText: isEnglish ? 'ok' : 'حسنا',
-      confirmBtnColor: Color(0xFF0D2750),
-    );
-
-    // Pop context after 3 seconds
-    _startTimer(context);
+Future<void> downloadAndSaveImage(
+    String imageUrl, String fileName, BuildContext context) async {
+  // Check if permission is granted
+  permission_handler.PermissionStatus status = await permission_handler.Permission.storage.status;
+  if (!status.isGranted) {
+    // If permission is not granted, request it
+    status = await permission_handler.Permission.storage.request();
+    if (!status.isGranted) {
+      // Permission still not granted, handle accordingly (e.g., show a message)
+      return;
+    }
   }
+
+  final response = await http.get(Uri.parse(imageUrl));
+  final bytes = response.bodyBytes;
+
+  // Get the directory for storing images
+  final directory = await getApplicationDocumentsDirectory();
+  final imagePath = '${directory.path}/$fileName';
+
+  // Save the image file
+  await File(imagePath).writeAsBytes(bytes);
+
+  // Add image to the phone's image directory
+  final result = await ImageGallerySaver.saveFile(imagePath);
+  print('Image saved to gallery: $result');
+
+  // Show success message
+  QuickAlert.show(
+    context: context,
+    type: QuickAlertType.success,
+    customAsset: 'images/success.gif',
+    text: isEnglish ? 'Image saved to gallery' : 'تم حفظ الصورة بنجاح',
+    onConfirmBtnTap: () {
+      // Cancel the timer when 'onConfirmBtnTap' is called
+      _cancelTimer();
+      // Optionally, you can perform other actions here
+      Navigator.pop(context);
+    },
+    confirmBtnText: isEnglish ? 'ok' : 'حسنا',
+    confirmBtnColor: Color(0xFF0D2750),
+  );
+
+  // Pop context after 3 seconds
+  _startTimer(context);
+}
+
 
   Future<void> deleteStore(String storeId, BuildContext context) async {
     final url = Uri.parse('$baseUrl/vendor/store/delete');

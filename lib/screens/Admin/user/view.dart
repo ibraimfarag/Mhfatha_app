@@ -7,7 +7,6 @@ import 'package:permission_handler/permission_handler.dart'
     as permission_handler;
 
 class AdminViewUser extends StatefulWidget {
-  
   AdminViewUser({Key? key}) : super(key: key);
 
   @override
@@ -190,7 +189,14 @@ class _AdminViewUserState extends State<AdminViewUser> {
                                 child: PullDownButton(
                                   itemBuilder: (context) => [
                                     PullDownMenuItem(
-                                      onTap: () {},
+                                      onTap: () {
+                                        Navigator.pushNamed(
+                                          context,
+                                          '/admin/users/edit',
+                                          arguments:
+                                              usert, // Pass the user data to the destination screen
+                                        );
+                                      },
                                       title: isEnglish ? 'Edit' : 'تعديل',
                                       icon: Icons.edit,
                                       // enabled: store['verifcation'] == 1,
@@ -218,8 +224,7 @@ class _AdminViewUserState extends State<AdminViewUser> {
                                                   context,
                                                   '${usert['id']}',
                                                   'restore_temporary');
-                                                      fetchDataFromApi(context);
-
+                                              fetchDataFromApi(context);
                                             },
                                           );
                                         },
@@ -250,8 +255,7 @@ class _AdminViewUserState extends State<AdminViewUser> {
                                                   context,
                                                   '${usert['id']}',
                                                   'temporarily');
-                                                      fetchDataFromApi(context);
-
+                                              fetchDataFromApi(context);
                                             },
                                           );
                                         },
@@ -283,8 +287,7 @@ class _AdminViewUserState extends State<AdminViewUser> {
                                                   context,
                                                   '${usert['id']}',
                                                   'unban');
-                                                      fetchDataFromApi(context);
-
+                                              fetchDataFromApi(context);
                                             },
                                           );
                                         },
@@ -314,8 +317,7 @@ class _AdminViewUserState extends State<AdminViewUser> {
                                                   context,
                                                   '${usert['id']}',
                                                   'ban');
-                                                      fetchDataFromApi(context);
-
+                                              fetchDataFromApi(context);
                                             },
                                           );
                                         },
@@ -340,11 +342,10 @@ class _AdminViewUserState extends State<AdminViewUser> {
                                           confirmBtnColor: Color(0xFF0D2750),
                                           onConfirmBtnTap: () async {
                                             await AdminApi(context).actions(
-                                                  context,
-                                                  '${usert['id']}',
-                                                  'delete');
-                                                      fetchDataFromApi(context);
-
+                                                context,
+                                                '${usert['id']}',
+                                                'delete');
+                                            fetchDataFromApi(context);
                                           },
                                         );
                                       },
@@ -370,12 +371,11 @@ class _AdminViewUserState extends State<AdminViewUser> {
                                             onConfirmBtnTap: () async {
                                               // Perform the action to remove admin role here
                                               // Example: await YourApi(context).removeAdminRole('${usert['id']}', context);
-                                            await AdminApi(context).actions(
+                                              await AdminApi(context).actions(
                                                   context,
                                                   '${usert['id']}',
                                                   'remove_admin');
-                                                      fetchDataFromApi(context);
-
+                                              fetchDataFromApi(context);
                                             },
                                           );
                                         },
@@ -403,12 +403,11 @@ class _AdminViewUserState extends State<AdminViewUser> {
                                             onConfirmBtnTap: () async {
                                               // Perform the general action here
                                               // Example: await YourApi(context).performAction('${usert['id']}', context);
-                                             await AdminApi(context).actions(
+                                              await AdminApi(context).actions(
                                                   context,
                                                   '${usert['id']}',
                                                   'make_admin');
-                                                      fetchDataFromApi(context);
-
+                                              fetchDataFromApi(context);
                                             },
                                           );
                                         },
@@ -437,12 +436,11 @@ class _AdminViewUserState extends State<AdminViewUser> {
                                             onConfirmBtnTap: () async {
                                               // Perform the action to remove vendor role here
                                               // Example: await YourApi(context).removeVendorRole('${usert['id']}', context);
-                                            await AdminApi(context).actions(
+                                              await AdminApi(context).actions(
                                                   context,
                                                   '${usert['id']}',
                                                   'remove_vendor');
-                                                      fetchDataFromApi(context);
-
+                                              fetchDataFromApi(context);
                                             },
                                           );
                                         },
@@ -471,12 +469,11 @@ class _AdminViewUserState extends State<AdminViewUser> {
                                             onConfirmBtnTap: () async {
                                               // Perform the general action here
                                               // Example: await YourApi(context).performAction('${usert['id']}', context);
-                                            await AdminApi(context).actions(
+                                              await AdminApi(context).actions(
                                                   context,
                                                   '${usert['id']}',
                                                   'make_vendor');
-                                                      fetchDataFromApi(context);
-
+                                              fetchDataFromApi(context);
                                             },
                                           );
                                         },

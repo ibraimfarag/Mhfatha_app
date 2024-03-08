@@ -217,7 +217,7 @@ class _MainAdminState extends State<MainAdmin> {
                                     MediaQuery.of(context).size.width * 0.15),
                           ),
                           Text(
-                            'الخصومات الحالية',
+                            isEnglish?'Current discounts':'الخصومات الحالية',
                             style: TextStyle(color: Colors.white),
                           )
                         ],
@@ -251,7 +251,7 @@ class _MainAdminState extends State<MainAdmin> {
                                     MediaQuery.of(context).size.width * 0.15),
                           ),
                           Text(
-                            'خصومات المستفيدين',
+                            isEnglish?'Discounts':'خصومات المستفيدين',
                             style: TextStyle(color: Colors.white),
                           )
                         ],
@@ -290,7 +290,7 @@ class _MainAdminState extends State<MainAdmin> {
                                     MediaQuery.of(context).size.width * 0.1),
                           ),
                           Text(
-                            'مبيعات التجار',
+                            isEnglish?'Vendors sales':'مبيعات التجار',
                             style: TextStyle(color: Colors.white),
                           )
                         ],
@@ -329,7 +329,7 @@ class _MainAdminState extends State<MainAdmin> {
                                     MediaQuery.of(context).size.width * 0.1),
                           ),
                           Text(
-                            'ارباح متبقية',
+                            isEnglish?'Residual earnings':'ارباح متبقية',
                             style: TextStyle(color: Colors.white),
                           )
                         ],

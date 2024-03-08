@@ -43,5 +43,10 @@ export 'package:mhfatha/screens/Admin/main.dart';
 export 'package:mhfatha/screens/Admin/user/view.dart';
 export 'package:mhfatha/screens/Admin/user/edit.dart';
 
+export 'package:mhfatha/screens/Admin/stores/view.dart';
+
+
+export 'package:mhfatha/screens/Admin/requests/view.dart';
+
 
 

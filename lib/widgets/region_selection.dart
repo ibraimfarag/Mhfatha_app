@@ -98,7 +98,7 @@ void updateSelectedRegion(String newRegion) {
       children: [
         SizedBox(height: 20),
         Container(
-          margin: EdgeInsets.only(left: 45, right: 45),
+          // margin: EdgeInsets.only(left: 45, right: 45),
           alignment:
               isEnglish ? Alignment.centerLeft : Alignment.centerRight,
           child: Text(
@@ -112,7 +112,7 @@ void updateSelectedRegion(String newRegion) {
         ),
         SizedBox(height: 14),
 Container(
-  margin: EdgeInsets.only(left: 45, right: 45),
+  // margin: EdgeInsets.only(left: 45, right: 45),
   padding: EdgeInsets.only(left: 10, right: 10),
   decoration: BoxDecoration(
     color: widget.color,

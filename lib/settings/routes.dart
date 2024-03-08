@@ -24,6 +24,9 @@ class Routes {
   static String storeDiscounts ='/storediscounts';
   static String admin ='/admin';
   static String AdminViewUsers ='/admin/users';
+  static String AdminEditUsers ='/admin/users/edit';
+  static String AdminViewStoress ='/admin/stores';
+  static String AdminViewRequestss ='/admin/requests';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -49,6 +52,9 @@ class Routes {
       storeDiscounts : (context) => MainDiscounts(),
       admin : (context) => MainAdmin(),
       AdminViewUsers : (context) => AdminViewUser(),
+      AdminEditUsers : (context) => AdminEditUser(),
+      AdminViewStoress : (context) => AdminViewStores(),
+      AdminViewRequestss : (context) => AdminViewRequests(),
       
       
     };
