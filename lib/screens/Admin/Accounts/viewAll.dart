@@ -130,6 +130,8 @@ class _AdminViewStoreAccountsState extends State<AdminViewStoreAccounts> {
         Provider.of<AuthProvider>(context, listen: false);
 
     return MainAdminContainer(
+            showCustomAppBar: true,
+
       additionalWidgets: [
         Column(
           mainAxisAlignment: MainAxisAlignment.center,

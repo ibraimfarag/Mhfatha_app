@@ -86,7 +86,7 @@ class _MainStoresState extends State<MainStores> {
     String lang = Provider.of<AppState>(context, listen: false).display;
     return DirectionalityWrapper(
         child: Scaffold(
-          backgroundColor:Color(0xFFF3F4F7),
+      backgroundColor: Color(0xFFF3F4F7),
       body: SingleChildScrollView(
         child: Container(
             padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
@@ -375,7 +375,7 @@ class _MainStoresState extends State<MainStores> {
                     height: 100,
 
                     // width: double.infinity,
-                    width: 100,
+                    width: 80,
                     child: ClipRRect(
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(30),
@@ -399,7 +399,7 @@ class _MainStoresState extends State<MainStores> {
                               ? Alignment.centerLeft
                               : Alignment.centerRight,
                           child: Text(
-                            '${store['name']}',
+                            '${store['name'].length > 15 ? store['name'].substring(0, 15) + '...' : store['name']}',
                             style: TextStyle(
                               color: Colors.black87,
                               fontSize: 18,
@@ -407,6 +407,7 @@ class _MainStoresState extends State<MainStores> {
                             ),
                             textAlign:
                                 isEnglish ? TextAlign.left : TextAlign.right,
+                            overflow: TextOverflow.ellipsis, // Add this line
                           ),
                         ),
                       ),

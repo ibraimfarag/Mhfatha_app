@@ -189,7 +189,7 @@ class _AdminViewRequestsState extends State<AdminViewRequests> {
                                         ),
                                         Text(
                                           isEnglish
-                                              ? 'Tax Number: ${usert['store_info']['tax_number'] ?? 'N/A'}'
+                                              ? 'commercial id: ${usert['store_info']['tax_number'] ?? 'N/A'}'
                                               : 'السجل التجاري: ${usert['store_info']['tax_number'] ?? 'غير متاح'}',
                                         ),
                                         SizedBox(height: 8),

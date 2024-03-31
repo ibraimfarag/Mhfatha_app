@@ -11,8 +11,8 @@ class _NearByState extends State<NearBy> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    
   }
+
   Widget build(BuildContext context) {
     List<dynamic> filteredStores =
         ModalRoute.of(context)!.settings.arguments as List<dynamic>;
@@ -33,20 +33,20 @@ class _NearByState extends State<NearBy> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   CustomAppBar(
-                    onBackTap: () {
-        Navigator.pushReplacementNamed(context, '/home');
-                    },
-                    marginTop:30
-                  ),
+                      onBackTap: () {
+                        Navigator.pushReplacementNamed(context, '/home');
+                      },
+                      marginTop: 30),
                   // SizedBox(height: 3),
                   Container(
                     // width: 320,
                     // padding: const EdgeInsets.all(1.0),
                     margin: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                     child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(
@@ -57,16 +57,19 @@ class _NearByState extends State<NearBy> {
                                     ? 'Discounts Nearby '
                                     : ' الخصومات القريبة',
                                 style: TextStyle(
-                                    fontSize: 28,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                               ),
                             ],
                           ),
-                          SizedBox(
-                            width: 30,
-                          ),
-                          Column(
+                        ),
+                        SizedBox(
+                          width: 30, // Adjust the width as needed
+                        ),
+                        Expanded(
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               SizedBox(
@@ -75,12 +78,18 @@ class _NearByState extends State<NearBy> {
                               Image.asset(
                                 'images/nearby.gif', // Replace with the actual path to your GIF image
                                 height: 80, // Adjust the height as needed
+                                fit: BoxFit
+                                    .contain, // Ensure the image fits within the column
                               ),
                             ],
                           ),
-                        ]),
+                        ),
+                      ],
+                    ),
                   ),
-                  SizedBox(height: 16),
+                       SizedBox(
+                                height: 15,
+                              ),
                   // Build containers dynamically based on filteredStores
                   Container(
                       decoration: BoxDecoration(
@@ -114,7 +123,8 @@ class _NearByState extends State<NearBy> {
 
     return GestureDetector(
       onTap: () async {
-        Navigator.pushReplacementNamed(context, '/store-info', arguments: store);
+        Navigator.pushReplacementNamed(context, '/store-info',
+            arguments: store);
       },
       child: FadeInRight(
           child: Container(

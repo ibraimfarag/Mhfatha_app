@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:permission_handler/permission_handler.dart' as permission_handler;
+import 'package:permission_handler/permission_handler.dart'
+    as permission_handler;
 
 import 'package:mhfatha/settings/imports.dart';
 
@@ -43,7 +44,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
     }
   }
 
- String _platformVersion = 'Unknown',
+  String _platformVersion = 'Unknown',
       _imeiNo = "",
       _modelName = "",
       _manufacturerName = "",
@@ -53,22 +54,23 @@ class _RequestsScreenState extends State<RequestsScreen> {
       _hardware = "";
   var _apiLevel;
 
-  
   @override
   void initState() {
     super.initState();
     getUserDiscounts();
-        requestPermissions();
+    requestPermissions();
 
     // initPlatformState();
   }
 
   Future<void> requestPermissions() async {
     // Check if permissions are already granted
-    permission_handler.PermissionStatus permissionStatus = await permission_handler.Permission.phone.status;
+    permission_handler.PermissionStatus permissionStatus =
+        await permission_handler.Permission.phone.status;
     if (permissionStatus != permission_handler.PermissionStatus.granted) {
       // Request permissions
-      permission_handler.PermissionStatus status = await permission_handler.Permission.phone.request();
+      permission_handler.PermissionStatus status =
+          await permission_handler.Permission.phone.request();
       if (status != permission_handler.PermissionStatus.granted) {
         // Handle permission denied
         // You can display a message to the user or take appropriate action
@@ -80,7 +82,6 @@ class _RequestsScreenState extends State<RequestsScreen> {
     // Permissions granted, proceed with accessing device information
     initPlatformState();
   }
-
 
   Future<void> initPlatformState() async {
     late String platformVersion,
@@ -128,11 +129,9 @@ class _RequestsScreenState extends State<RequestsScreen> {
     print(_platformVersion);
     print(_modelName);
     print(_productName);
-    print(_apiLevel );
-    print(_manufacturerName );
+    print(_apiLevel);
+    print(_manufacturerName);
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -144,6 +143,8 @@ class _RequestsScreenState extends State<RequestsScreen> {
 
     return DirectionalityWrapper(
       child: Scaffold(
+        backgroundColor: Color(0xFFF3F4F7),
+
         body: SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
@@ -152,7 +153,6 @@ class _RequestsScreenState extends State<RequestsScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
-
                 Container(
                   padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
                   // height: 200,
@@ -242,7 +242,6 @@ class _RequestsScreenState extends State<RequestsScreen> {
                             ),
                           ],
                         ),
-
                       ]),
                 ),
                 SizedBox(height: 16),

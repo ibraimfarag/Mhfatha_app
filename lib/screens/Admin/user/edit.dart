@@ -21,7 +21,6 @@ class _AdminEditUserState extends State<AdminEditUser> {
   late AuthProvider authProvider; // Declare authProvider variable
   late Map<String, dynamic> usert;
 
-
   Color backgroundColor = Color.fromARGB(220, 255, 255, 255);
   Color ui = Color.fromARGB(220, 233, 233, 233);
   Color ui2 = Color.fromARGB(255, 113, 194, 110);
@@ -38,20 +37,17 @@ class _AdminEditUserState extends State<AdminEditUser> {
   void initState() {
     super.initState();
     fetchDataFromApi(context);
-    
   }
-    void didChangeDependencies() {
+
+  void didChangeDependencies() {
     super.didChangeDependencies();
     // Receive the user data passed from the previous screen
     usert = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     selectedRegion = '${usert['region']}';
-
   }
 
   Future<void> fetchDataFromApi(BuildContext context) async {
     try {
-
-
       setState(() {});
     } catch (e) {
       print('Error: $e');
@@ -79,8 +75,9 @@ class _AdminEditUserState extends State<AdminEditUser> {
     bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
-    
+
     return MainAdminContainer(
+      showCustomAppBar: true,
       additionalWidgets: [
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -113,25 +110,22 @@ class _AdminEditUserState extends State<AdminEditUser> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 20),
-                          ProfilePhotoWidget(
-                            isEnglish: isEnglish,
-                            labelcolor: colors,
-                            color: ui,
-                            label:
-                                isEnglish ? 'Profile Photo: ' : 'صورة الحساب: ',
-                            selectPhotoText:
-                                isEnglish ? 'Select Photo' : 'اختر صورة',
-                            changePhotoText:
-                                isEnglish ? 'Change Photo' : 'تغير  الصورة',
-                            removeText: isEnglish ? 'Remove' : 'إزالة',
-                            endurl: 'user_images/${usert['photo']}',
-                            onPhotoSelected: (path) {
-                              setState(() {
-                                _selectedProfileImagePath = path;
-                              });
-                              print('path : $path');
-                            },
-                          ),
+              ProfilePhotoWidget(
+                isEnglish: isEnglish,
+                labelcolor: colors,
+                color: ui,
+                label: isEnglish ? 'Profile Photo: ' : 'صورة الحساب: ',
+                selectPhotoText: isEnglish ? 'Select Photo' : 'اختر صورة',
+                changePhotoText: isEnglish ? 'Change Photo' : 'تغير  الصورة',
+                removeText: isEnglish ? 'Remove' : 'إزالة',
+                endurl: 'user_images/${usert['photo']}',
+                onPhotoSelected: (path) {
+                  setState(() {
+                    _selectedProfileImagePath = path;
+                  });
+                  print('path : $path');
+                },
+              ),
               SizedBox(height: 20),
               buildSettingItem(context, 'First Name', 'الاسم', () {
                 // Navigate to account settings screen
@@ -158,43 +152,39 @@ class _AdminEditUserState extends State<AdminEditUser> {
                 // Implement report logic
               }, email, ' ${usert['email']}'),
               Container(
-        margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-        padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
-        decoration: BoxDecoration(
-          color: Color(0xFFFFFFFF),
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child:
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
+                margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+                padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+                decoration: BoxDecoration(
+                  color: Color(0xFFFFFFFF),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Column(
+                      children: [
+                        RegionSelection(
+                          color: ui,
+                          labelcolor: colors,
+                          onRegionSelected: (value) {
+                            print('onRegionSelected: $value');
 
-                  Column(
-                    children: [
-                      RegionSelection(
-                        color: ui,
-                        labelcolor: colors,
-                        onRegionSelected: (value) {
-                          print('onRegionSelected: $value');
+                            setState(() {
+                              print(
+                                  'selectedRegion in AccountScreen: $selectedRegion');
+                              selectedRegion = value;
+                              // Update City with the value of selectedRegion
+                            });
 
-                          setState(() {
                             print(
                                 'selectedRegion in AccountScreen: $selectedRegion');
-                            selectedRegion = value;
-                            // Update City with the value of selectedRegion
-                          });
-
-                          print(
-                              'selectedRegion in AccountScreen: $selectedRegion');
-                        },
-                        selectedRegion: selectedRegion,
-                      ),
-                    ],
-                  ),
-
-                  
-                ],
-              ),
+                          },
+                          selectedRegion: selectedRegion,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
               SizedBox(
                 height: 24,
@@ -236,7 +226,7 @@ class _AdminEditUserState extends State<AdminEditUser> {
                                 // otp: /* Pass the OTP if needed */,
 
                                 );
-                                print(_selectedProfileImagePath);
+                            print(_selectedProfileImagePath);
                           });
                     },
                     style: ElevatedButton.styleFrom(

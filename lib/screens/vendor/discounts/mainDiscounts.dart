@@ -118,6 +118,7 @@ class _MainDiscountsState extends State<MainDiscounts> {
     String lang = Provider.of<AppState>(context, listen: false).display;
     return DirectionalityWrapper(
         child: Scaffold(
+      backgroundColor: Color(0xFFF3F4F7),
       key: _scaffoldKey,
       body: SingleChildScrollView(
         child: Container(
