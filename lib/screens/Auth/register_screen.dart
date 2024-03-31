@@ -1,5 +1,7 @@
 // lib\screens\Auth\login_screen.dart
 
+// ignore_for_file: prefer_const_constructors
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -20,6 +22,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Color colors = Color(0xFF05204a);
   String selectedGender = ''; // Default gender selection
   String selectedVendor = ''; // Default gender selection
+  bool _acceptTerms = false;
 
   DateTime? selectedDate;
 
@@ -40,8 +43,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.didChangeDependencies();
     // Fetch data here
     fetchFilteredStores();
-    
-
   }
 
   void fetchFilteredStores() async {
@@ -90,7 +91,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     Size size = MediaQuery.of(context).size;
     String lang = Provider.of<AppState>(context, listen: false).display;
     bool isDark = Provider.of<AppState>(context).isDarkMode;
-    
 
     return DirectionalityWrapper(
       child: Scaffold(
@@ -294,8 +294,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           ),
                                         ),
                                         Container(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 1, horizontal: 20),
+                                          padding: EdgeInsets.fromLTRB(
+                                              30, 15, 30, 15),
                                           decoration: BoxDecoration(
                                             color: Colors.grey[200],
                                             borderRadius:
@@ -389,6 +389,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   });
                                 },
                               ),
+
+                              /* -------------------------------------------------------------------------- */
+                              /*                               check box terms                              */
+                              /* -------------------------------------------------------------------------- */
+
+                              // Inside the Column widget
+                              Row(
+                                children: [
+                                  Checkbox(
+                                    value: _acceptTerms,
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        _acceptTerms = value ?? false;
+                                      });
+                                    },
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                          context, '/user/trems');
+                                    },
+                                    child: Text(
+                                      isEnglish
+                                          ? 'I accept the terms and conditions'
+                                          : 'أوافق على الشروط والأحكام',
+                                      style: TextStyle(
+                                          color: colors,
+                                          decoration: TextDecoration.underline),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+// After VendorJoinWidget
+
                               // /* -------------------------------------------------------------------------- */
                               // /* ------------------------------ submit button ----------------------------- */
 
@@ -421,34 +456,64 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         left: 40, right: 40, top: 50),
                                     child: ElevatedButton(
                                       onPressed: () async {
-                                        // Assuming you have controllers for the registration form fields
-                                        bool success = await Api().registerUser(
-                                          context: context,
-                                          lang: lang,
-                                          firstName: nameController.text,
-                                          lastName: familyNameController.text,
-                                          gender: selectedGender,
-                                          birthday: selectedDate != null
-                                              ? DateFormat('yyyy-MM-dd')
-                                                  .format(selectedDate!)
-                                              : '',
-                                          region: selectedRegion,
-                                          mobile: mobileController.text,
-                                          email: mailController.text,
-                                          password: passwordController.text,
-                                          confirmPasswordController:
-                                              confirmPasswordController.text,
-                                          isVendor: selectedVendor == '1'
-                                              ? 1
-                                              : 0, // Convert '1' or '0' to int
-                                          // imageFile: File(_selectedProfileImagePath ??''),
-                                          imageFile: _selectedProfileImagePath !=
-                                                  null
-                                              ? File(
-                                                  _selectedProfileImagePath ??
-                                                      '')
-                                              : null, // Pass null if no profile image
-                                        );
+                                        if (!_acceptTerms) {
+                                          // Show alert dialog if the terms are not accepted
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: Text(
+                                                  isEnglish
+                                                      ? 'Terms and Conditions'
+                                                      : 'الشروط والأحكام',
+                                                ),
+                                                content: Text(
+                                                  isEnglish
+                                                      ? 'Please accept the terms and conditions before registering.'
+                                                      : 'الرجاء قبول الشروط والأحكام قبل التسجيل.',
+                                                ),
+                                                actions: <Widget>[
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: Text('OK'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        } else {
+                                          // Proceed with registration if terms are accepted
+                                          bool success =
+                                              await Api().registerUser(
+                                            context: context,
+                                            lang: lang,
+                                            firstName: nameController.text,
+                                            lastName: familyNameController.text,
+                                            gender: selectedGender,
+                                            birthday: selectedDate != null
+                                                ? DateFormat('yyyy-MM-dd')
+                                                    .format(selectedDate!)
+                                                : '',
+                                            region: selectedRegion,
+                                            mobile: mobileController.text,
+                                            email: mailController.text,
+                                            password: passwordController.text,
+                                            confirmPasswordController:
+                                                confirmPasswordController.text,
+                                            isVendor: selectedVendor == '1'
+                                                ? 1
+                                                : 0, // Convert '1' or '0' to int
+                                            imageFile: _selectedProfileImagePath !=
+                                                    null
+                                                ? File(
+                                                    _selectedProfileImagePath ??
+                                                        '')
+                                                : null, // Pass null if no profile image
+                                          );
+                                        }
                                       },
                                       child: Text(
                                         isEnglish ? "REGISTER" : "تسجيل",

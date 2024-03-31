@@ -71,6 +71,7 @@ export 'package:flip_card/flip_card.dart';
 // /* ----------------------------- otp text field ----------------------------- */
 export 'package:otp_text_field/otp_text_field.dart';
 export 'package:otp_text_field/style.dart';
+export 'package:flutter_verification_code_field/flutter_verification_code_field.dart';
 
 
 // /* -------------------------------- firebase -------------------------------- */

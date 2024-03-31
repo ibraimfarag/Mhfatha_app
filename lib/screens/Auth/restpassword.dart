@@ -2,7 +2,6 @@
 
 import 'dart:io';
 
-import 'package:intl/intl.dart';
 import 'package:mhfatha/settings/imports.dart';
 
 class RestPassword extends StatefulWidget {
@@ -38,6 +37,7 @@ class _RestPasswordState extends State<RestPassword> {
 
     return DirectionalityWrapper(
       child: Scaffold(
+        backgroundColor: Color(0xFFF3F4F7),
         body: SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
@@ -167,8 +167,8 @@ class _RestPasswordState extends State<RestPassword> {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
         // Step 2 content here
         Text(OTPMsg,
@@ -176,19 +176,21 @@ class _RestPasswordState extends State<RestPassword> {
         SizedBox(
           height: 10,
         ),
-
-        OTPTextField(
-          controller: otpController,
-          length: 5,
-          width: MediaQuery.of(context).size.width,
-          fieldWidth: 30,
-          style: TextStyle(fontSize: 17),
-          textFieldAlignment: MainAxisAlignment.center,
-          fieldStyle: FieldStyle.underline,
-          onCompleted: (pin) {
-            enteredOtp = pin;
-            print("Completed: " + pin);
-          },
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: OTPTextField(
+            controller: otpController,
+            length: 5,
+            width: MediaQuery.of(context).size.width,
+            fieldWidth: 30,
+            style: TextStyle(fontSize: 17),
+            textFieldAlignment: MainAxisAlignment.center,
+            fieldStyle: FieldStyle.underline,
+            onCompleted: (pin) {
+              enteredOtp = pin;
+              print("Completed: " + pin);
+            },
+          ),
         ),
 
         SizedBox(
@@ -217,6 +219,17 @@ class _RestPasswordState extends State<RestPassword> {
                     currentStep = 3; // Move to the third step
                     passMsg = message['message'];
                   });
+                } else if (message['error'] != null) {
+                  setState(() {
+                    // Handle the error message here
+                  });
+                   
+                  QuickAlert.show(
+                    context: context,
+                    title: '',
+                    type: QuickAlertType.error,
+                    text: message['error'],
+                  );
                 }
               },
               style: ElevatedButton.styleFrom(

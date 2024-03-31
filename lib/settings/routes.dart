@@ -27,6 +27,16 @@ class Routes {
   static String AdminEditUsers ='/admin/users/edit';
   static String AdminViewStoress ='/admin/stores';
   static String AdminViewRequestss ='/admin/requests';
+  static String AdminViewAccountss ='/admin/accounts';
+  static String AdminViewStoreAccountss ='/admin/accounts/store';
+  static String AdminSendNotifis ='/admin/notification';
+  static String AdminViewSettingss ='/admin/ViewSettings';
+  static String AdminViewRegionss ='/admin/ViewSettings/Regions';
+  static String AdminViewCategoriess ='/admin/ViewSettings/Categoriess';
+  static String VENDORTrems ='/vendor/trems';
+  static String UserTremss ='/user/trems';
+
+
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -55,6 +65,14 @@ class Routes {
       AdminEditUsers : (context) => AdminEditUser(),
       AdminViewStoress : (context) => AdminViewStores(),
       AdminViewRequestss : (context) => AdminViewRequests(),
+      AdminViewAccountss : (context) => AdminViewAccounts(),
+      AdminViewStoreAccountss : (context) => AdminViewStoreAccounts(),
+      AdminSendNotifis : (context) => AdminSendNotifi(),
+      AdminViewSettingss : (context) => AdminViewSettings(),
+      AdminViewRegionss : (context) => AdminViewRegions(),
+      AdminViewCategoriess : (context) => AdminViewCategories(),
+      VENDORTrems : (context) => VendorTrems(),
+      UserTremss : (context) => UserTrems(),
       
       
     };

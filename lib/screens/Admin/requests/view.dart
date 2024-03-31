@@ -149,6 +149,78 @@ class _AdminViewRequestsState extends State<AdminViewRequests> {
                                       );
                                     }).toList(),
                                   ),
+                                  if (usert['store_info'] != null)
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          isEnglish
+                                              ? 'Store Information:'
+                                              : 'معلومات المتجر:',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox(height: 8),
+                                        Image.network(
+                                          'https://mhfatha.net/FrontEnd/assets/images/store_images/${usert['store_info']['photo']}',
+                                        ),
+                                        SizedBox(height: 8),
+                                        Text(
+                                          isEnglish
+                                              ? 'Location: ${usert['store_info']['location']}'
+                                              : 'العنوان: ${usert['store_info']['location']}',
+                                        ),
+                                        Text(
+                                          isEnglish
+                                              ? 'Phone: ${usert['store_info']['phone']}'
+                                              : 'الهاتف: ${usert['store_info']['phone']}',
+                                        ),
+                                        Text(
+                                          isEnglish
+                                              ? 'Region: ${usert['store_info']['region_name_en'] ?? 'N/A'}'
+                                              : 'المنطقة: ${usert['store_info']['region_name_ar'] ?? 'غير متاح'}',
+                                        ),
+                                        Text(
+                                          isEnglish
+                                              ? 'Category: ${usert['store_info']['category_name_en'] ?? 'N/A'}'
+                                              : 'الفئة: ${usert['store_info']['category_name_ar'] ?? 'غير متاح'}',
+                                        ),
+                                        Text(
+                                          isEnglish
+                                              ? 'Tax Number: ${usert['store_info']['tax_number'] ?? 'N/A'}'
+                                              : 'السجل التجاري: ${usert['store_info']['tax_number'] ?? 'غير متاح'}',
+                                        ),
+                                        SizedBox(height: 8),
+
+                                         buildIconButton(Icons.directions,
+                              isEnglish ? 'Directions' : 'الاتجاهات', () async {
+                            // Handle the directions action
+                            // Example coordinates (adjust with your store location)
+                            double latitude =
+                                double.parse('${usert['store_info']['latitude']}');
+                            double longitude =
+                                double.parse('${usert['store_info']['longitude']}');
+                            String label = '${usert['store_name']}';
+
+                            // launch(
+                            //     'https://www.google.com/maps/dir/?api=1&destination=$latitude,$longitude');
+
+                            // MapsLauncher.launchCoordinates(latitude, longitude);
+                            final availableMaps =
+                                await MapLauncher.isMapAvailable(MapType.google);
+                            print(
+                                availableMaps); // [AvailableMap { mapName: Google Maps, mapType: google }, ...]
+
+                            await MapLauncher.showMarker(
+                              mapType: MapType.google,
+                              coords: Coords(latitude, longitude),
+                              title: "$label",
+                            );
+                          }),
+                                      ],
+                                    ),
                                 ],
                               ),
                             ),
@@ -158,7 +230,6 @@ class _AdminViewRequestsState extends State<AdminViewRequests> {
                                 },
                                 child: PullDownButton(
                                   itemBuilder: (context) => [
-                           
                                     PullDownMenuItem(
                                       onTap: () async {
                                         QuickAlert.show(
@@ -174,8 +245,9 @@ class _AdminViewRequestsState extends State<AdminViewRequests> {
                                               isEnglish ? 'Yes' : 'نعم',
                                           confirmBtnColor: Color(0xFF0D2750),
                                           onConfirmBtnTap: () async {
-                                           await AdminApi(context).RequestActions(
-                                            context, '${usert['id']}', '1');
+                                            await AdminApi(context)
+                                                .RequestActions(context,
+                                                    '${usert['id']}', '1');
                                             fetchDataFromApi(context);
                                           },
                                         );
@@ -285,5 +357,20 @@ class _AdminViewRequestsState extends State<AdminViewRequests> {
       default:
         return Container(); // Return an empty container for unknown types
     }
+  }
+  Widget buildIconButton(IconData icon, String text, VoidCallback onPressed) {
+    return Column(
+      children: [
+        IconButton(
+          icon: Icon(icon),
+          onPressed: onPressed,
+          // Customize the color and size as needed
+        ),
+        Text(
+          text,
+          // Customize the style as needed
+        ),
+      ],
+    );
   }
 }

@@ -122,18 +122,26 @@ void main() async {
       }
     }
   });
+          // checkAndUpdateVersion(context);
+  WidgetsBinding.instance!.addPostFrameCallback((_) {
+    // This function will be called after the UI is built
+    late BuildContext context;
+    context = navigatorKey.currentContext!;
+    print('debug0');
+    checkAndUpdateVersion(context);
+    print('debug1');
+  });
 
 
-checkAndUpdateVersion();
 
 }
-Future<void> checkAndUpdateVersion() async {
+Future<void> checkAndUpdateVersion(BuildContext context) async {
   // Read YAML version
   final yamlString = await rootBundle.loadString('pubspec.yaml');
   final parsedYaml = loadYaml(yamlString);
   String currentVersion = parsedYaml['version'];
   print('Current YAML Version: $currentVersion');
-
+   
   // Determine platform
   String platform = Platform.isAndroid ? 'Android' : 'iOS';
   print('Platform: $platform');
@@ -149,7 +157,10 @@ Future<void> checkAndUpdateVersion() async {
 
   // Determine if English language is used
   bool isEnglish = Provider.of<AppState>(navigatorKey.currentContext!, listen: false).isEnglish;
-
+   bool isAuthenticated =
+          Provider.of<AuthProvider>(context, listen: false).isAuthenticated;
+              AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
   // Perform actions based on the version information
   if (apiVersion.compareTo(currentVersion) > 0 ) {
     // If API version is greater than current version and update is not required
@@ -181,25 +192,33 @@ showDialog(
     );
   },
 );
-
+  AdminApi(context).sendNotification(
+                    context: context,
+                    action: "sendToUser",
+                    body: "A new version ($apiVersion) is available.",
+                    title: "New Version Available",
+                    bodyArabic: "الإصدار الجديد ($apiVersion) متاح.",
+                    titleArabic: "إصدار جديد متاح",
+                    recipient_identifier: "${authProvider.user!['id']}");
+print('debug2');
     // Show a local notification with the API version
-    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-        FlutterLocalNotificationsPlugin();
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'new_version_notification_channel',
-      'New Version Notification',
-      importance: Importance.max,
-      priority: Priority.high,
-    );
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      isEnglish ? 'New Version Available' : 'إصدار جديد متاح',
-      isEnglish ? 'A new version ($apiVersion) is available.' : 'الإصدار الجديد ($apiVersion) متاح.',
-      platformChannelSpecifics,
-    );
+    // final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    //     FlutterLocalNotificationsPlugin();
+    // const AndroidNotificationDetails androidPlatformChannelSpecifics =
+    //     AndroidNotificationDetails(
+    //   'new_version_notification_channel',
+    //   'New Version Notification',
+    //   importance: Importance.max,
+    //   priority: Priority.high,
+    // );
+    // const NotificationDetails platformChannelSpecifics =
+    //     NotificationDetails(android: androidPlatformChannelSpecifics);
+    // await flutterLocalNotificationsPlugin.show(
+    //   0,
+    //   isEnglish ? 'New Version Available' : 'إصدار جديد متاح',
+    //   isEnglish ? 'A new version ($apiVersion) is available.' : 'الإصدار الجديد ($apiVersion) متاح.',
+    //   platformChannelSpecifics,
+    // );
   } else {
     // If update is not required or the API version is not greater than current version
     // Continue with app initialization

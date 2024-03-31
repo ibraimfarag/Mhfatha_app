@@ -134,6 +134,8 @@ class VendorApi {
           confirmBtnColor: Colors.red,
           onConfirmBtnTap: () {
             Navigator.of(context).pop();
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
             // Navigator.of(context).pop();
           },
         );

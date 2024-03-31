@@ -15,9 +15,15 @@ import 'package:mhfatha/settings/imports.dart';
 class MainAdminContainer extends StatefulWidget {
   final List<Widget>? additionalWidgets;
   final Widget? child;
+  final bool showCustomAppBar;
 
-  MainAdminContainer({Key? key, this.additionalWidgets, this.child})
-      : super(key: key);
+   MainAdminContainer({
+    Key? key,
+    this.additionalWidgets,
+    this.child,
+    this.showCustomAppBar = false, // Default value to show custom app bar
+  }) : super(key: key);
+
 
   @override
   _MainAdminContainerState createState() => _MainAdminContainerState();
@@ -47,30 +53,43 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
               // crossAxisAlignment: CrossAxisAlignment.stretch,
               // mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                  padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
-                  child: Row(
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        // crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
+                      child: Row(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                          Column(
+                            // crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              IconButton(
-                                onPressed: _toggleDrawer,
-                                icon: const Icon(Icons.menu,color:Color.fromARGB(253, 255, 255, 255)),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  IconButton(
+                                    onPressed: _toggleDrawer,
+                                    icon: const Icon(Icons.menu,
+                                        color:
+                                            Color.fromARGB(253, 255, 255, 255)),
+                                  ),
+                                  // Add other widgets as needed
+                                ],
                               ),
-                              // Add other widgets as needed
+
+                              // other widgets here
                             ],
                           ),
-
-                          // other widgets here
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                     if (widget.showCustomAppBar)
+                    CustomAppBar(
+                      onBackTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
                 ),
 
                 Container(
@@ -161,6 +180,7 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                     GestureDetector(
                       onTap: () {
                         // Handle drawer item 2 tap
+                        Navigator.pushNamed(context, '/admin/ViewSettings');
                       },
                       child: Padding(
                         padding: EdgeInsets.all(16),
@@ -175,7 +195,7 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        // Handle drawer item 2 tap
+                        Navigator.pushNamed(context, '/admin/notification');
                       },
                       child: Padding(
                         padding: EdgeInsets.all(16),
@@ -190,8 +210,7 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                     ),
                     GestureDetector(
                       onTap: () {
-                       
-                         Navigator.pushNamed(context, '/admin/requests');
+                        Navigator.pushNamed(context, '/admin/requests');
                       },
                       child: Padding(
                         padding: EdgeInsets.all(16),
@@ -206,7 +225,7 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        // Handle drawer item 2 tap
+                        Navigator.pushNamed(context, '/admin/accounts');
                       },
                       child: Padding(
                         padding: EdgeInsets.all(16),

@@ -1194,7 +1194,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Icons.store,
                                   'Nearby Discounts',
                                   'الخصومات القريبة',
-                                  'images/nearby.jpg', () {
+                                  'images/Unti.png', () {
                                 Navigator.pushNamed(context, '/nearby',
                                     arguments: filteredStores);
                               }),

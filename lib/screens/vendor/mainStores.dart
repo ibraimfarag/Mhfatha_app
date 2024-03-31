@@ -29,6 +29,7 @@ class _MainStoresState extends State<MainStores> {
   String pendingStoresCountt = '';
   String sumCountTimess = '';
   String sumTotalPaymentss = '';
+  String comission = '';
   @override
   void initState() {
     super.initState();
@@ -50,6 +51,7 @@ class _MainStoresState extends State<MainStores> {
     pendingStoresCountt = responseData['pendingStoresCount'].toString();
     sumCountTimess = responseData['sumCountTimes'].toString();
     sumTotalPaymentss = responseData['sumTotalPayments'].toString();
+    comission = responseData['commission'].toString();
 
     List<dynamic> discounts = jsonDecode(response)['userStores'];
 
@@ -84,6 +86,7 @@ class _MainStoresState extends State<MainStores> {
     String lang = Provider.of<AppState>(context, listen: false).display;
     return DirectionalityWrapper(
         child: Scaffold(
+          backgroundColor:Color(0xFFF3F4F7),
       body: SingleChildScrollView(
         child: Container(
             padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
@@ -93,64 +96,64 @@ class _MainStoresState extends State<MainStores> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    padding: EdgeInsets.fromLTRB(20, 60, 20, 5),
+                    padding: EdgeInsets.fromLTRB(20, 10, 20, 5),
                     // height: 200,
                     child: Column(children: [
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  height: 30,
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  isEnglish ? ' Welcome ' : ' مرحبا بك',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  ' ${authProvider.user!['first_name']}',
-                                  style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              width: 30,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                CircleAvatar(
-                                  radius: 60,
-                                  // Add your profile image here
-                                  backgroundImage: NetworkImage(
-                                      'https://mhfatha.net/FrontEnd/assets/images/user_images/${authProvider.user!['photo']}'),
-                                ),
-                              ],
-                            ),
-                          ]),
+                      // Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //     children: [
+                      //       Column(
+                      //         crossAxisAlignment: CrossAxisAlignment.start,
+                      //         children: [
+                      //           SizedBox(
+                      //             height: 30,
+                      //           ),
+                      //           SizedBox(
+                      //             height: 5,
+                      //           ),
+                      //           Text(
+                      //             isEnglish ? ' Welcome ' : ' مرحبا بك',
+                      //             style: TextStyle(
+                      //                 fontSize: 14,
+                      //                 fontWeight: FontWeight.bold,
+                      //                 color: Colors.white),
+                      //           ),
+                      //           SizedBox(
+                      //             height: 5,
+                      //           ),
+                      //           Text(
+                      //             ' ${authProvider.user!['first_name']}',
+                      //             style: TextStyle(
+                      //                 fontSize: 24,
+                      //                 fontWeight: FontWeight.bold,
+                      //                 color: Colors.white),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //       SizedBox(
+                      //         width: 30,
+                      //       ),
+                      //       Column(
+                      //         crossAxisAlignment: CrossAxisAlignment.end,
+                      //         children: [
+                      //           SizedBox(
+                      //             height: 20,
+                      //           ),
+                      //           CircleAvatar(
+                      //             radius: 60,
+                      //             // Add your profile image here
+                      //             backgroundImage: NetworkImage(
+                      //                 'https://mhfatha.net/FrontEnd/assets/images/user_images/${authProvider.user!['photo']}'),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ]),
                       SizedBox(height: 16),
                       Column(
                         children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Column(children: [
                                 Text(
@@ -199,7 +202,7 @@ class _MainStoresState extends State<MainStores> {
                           ),
                           SizedBox(height: 16),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
                                 isEnglish
@@ -218,6 +221,30 @@ class _MainStoresState extends State<MainStores> {
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 60,
+                              ),
+                              // Icon(
+                              //   Icons.attach_money,
+                              //   color: Colors.white,
+                              //   size: 24,
+                              // ),
+                              SizedBox(width: 10),
+                              Text(
+                                isEnglish
+                                    ? 'Current Commission: $comission%'
+                                    : 'نسبة العمولة الحالية: $comission %',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ],
@@ -286,8 +313,21 @@ class _MainStoresState extends State<MainStores> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            for (var store in VendorStores)
-                              buildStoreContainer(store),
+                            if (VendorStores.isNotEmpty)
+                              for (var store in VendorStores)
+                                buildStoreContainer(store),
+                            if (VendorStores.isEmpty)
+                              Center(
+                                child: Text(
+                                  isEnglish
+                                      ? "You haven't stores at the moment"
+                                      : "ليس لديك متاجر في الوقت الحالي",
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
                           ],
                         ),
                       ],

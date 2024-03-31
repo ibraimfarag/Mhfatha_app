@@ -970,6 +970,7 @@ class Api {
           'platform': platform,
           'platform_version': platformVersion,
           'platform_device': platformDevice,
+          'lang':lang
         }),
       );
 
@@ -1052,6 +1053,86 @@ Future<Map<String, dynamic>> checkVersion(String platform) async {
     throw Exception('Failed to check version: $e');
   }
 }
+  Future<Map<String, dynamic>> UserRequestActions(
+      BuildContext context, String action) async {
+    final url = Uri.parse('$baseUrl/auth/updateAuthUserStatus');
+    String lang = Provider.of<AppState>(context, listen: false).display;
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+
+    // Show loading dialog
+    _showLoadingDialog(context);
+
+    try {
+      final http.Response response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${authProvider.token}',
+        },
+        body: jsonEncode(<String, String>{
+          'lang': lang,
+          'action': action,
+        }),
+      );
+
+      // Close loading dialog
+
+      if (response.statusCode == 200) {
+        // Parse the JSON response
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+        final Map<String, dynamic> data = jsonDecode(response.body);
+print(data);
+        return data;
+      } else {
+        // If the request was not successful, throw an error
+        throw Exception('Failed to perform action: ${response.statusCode}');
+      }
+    } catch (e) {
+      // If an error occurs during the request, throw an error
+      throw Exception('Failed to perform action: $e');
+    }
+  }
+  Future<Map<String, dynamic>>tremsRequestActions(
+      BuildContext context, String user_type) async {
+    final url = Uri.parse('$baseUrl/TermsAndConditions');
+    String lang = Provider.of<AppState>(context, listen: false).display;
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+
+    // Show loading dialog
+    _showLoadingDialog(context);
+
+    try {
+      final http.Response response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(<String, String>{
+          // 'lang': lang,
+          'lang': lang,
+          'user_type': user_type,
+        }),
+      );
+
+      // Close loading dialog
+
+        if (response.statusCode == 200) {
+          Navigator.of(context).pop();
+        // Parse the JSON response correctly
+        final Map<String, dynamic> data = jsonDecode(response.body);
+        return data;
+      } else {
+        // If the request was not successful, throw an error
+        throw Exception('Failed to perform action: ${response.statusCode}');
+      }
+    } catch (e) {
+      // If an error occurs during the request, throw an error
+      throw Exception('Failed to perform action: $e');
+    }
+  }
 
 }
 

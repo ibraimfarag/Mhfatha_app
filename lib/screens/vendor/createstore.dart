@@ -210,7 +210,7 @@ Container(
                               vertical: 5,
                               horizontal: 0,
                             ),
-                            padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
+                            padding: EdgeInsets.fromLTRB(30, 15, 30, 15),
                             decoration: BoxDecoration(
                               color: Color(0xFFFFFFFF),
                               borderRadius: BorderRadius.circular(30),

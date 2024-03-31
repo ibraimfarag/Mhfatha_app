@@ -189,32 +189,41 @@ class _AccountScreenState extends State<AccountScreen> {
                             () {
                           // Implement report logic
                         }, email, ' ${authProvider.user!['email']}'),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Column(
-                              children: [
-                                RegionSelection(
-                                  color: ui,
-                                  labelcolor: colors,
-                                  onRegionSelected: (value) {
-                                    print('onRegionSelected: $value');
+                        Container(
+                          margin:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+                          padding: EdgeInsets.fromLTRB(30, 30, 30, 30),
+                          decoration: BoxDecoration(
+                            color: Color(0xFFFFFFFF),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Column(
+                                children: [
+                                  RegionSelection(
+                                    color: ui,
+                                    labelcolor: colors,
+                                    onRegionSelected: (value) {
+                                      print('onRegionSelected: $value');
 
-                                    setState(() {
+                                      setState(() {
+                                        print(
+                                            'selectedRegion in AccountScreen: $selectedRegion');
+                                        selectedRegion = value;
+                                        // Update City with the value of selectedRegion
+                                      });
+
                                       print(
                                           'selectedRegion in AccountScreen: $selectedRegion');
-                                      selectedRegion = value;
-                                      // Update City with the value of selectedRegion
-                                    });
-
-                                    print(
-                                        'selectedRegion in AccountScreen: $selectedRegion');
-                                  },
-                                  selectedRegion: selectedRegion,
-                                ),
-                              ],
-                            ),
-                          ],
+                                    },
+                                    selectedRegion: selectedRegion,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                         SizedBox(
                           height: 24,

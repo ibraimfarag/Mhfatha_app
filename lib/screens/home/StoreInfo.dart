@@ -247,11 +247,12 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
 
                             // MapsLauncher.launchCoordinates(latitude, longitude);
                             final availableMaps =
-                                await MapLauncher.installedMaps;
+                                await MapLauncher.isMapAvailable(MapType.google);
                             print(
                                 availableMaps); // [AvailableMap { mapName: Google Maps, mapType: google }, ...]
 
-                            await availableMaps.first.showMarker(
+                            await MapLauncher.showMarker(
+                              mapType: MapType.google,
                               coords: Coords(latitude, longitude),
                               title: "$label",
                             );
