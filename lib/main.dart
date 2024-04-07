@@ -323,6 +323,8 @@ class _MhfathaAppState extends State<MhfathaApp> {
           // Wrap your app with Provider here
           // Example: return MyProvider(child: child);
           return Scaffold(
+            resizeToAvoidBottomInset: false,
+
             appBar: PreferredSize(
               preferredSize: Size.fromHeight(0),
               child: AppBar(

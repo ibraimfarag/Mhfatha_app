@@ -1103,31 +1103,32 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                        alignment: isEnglish
-                            ? Alignment.centerLeft
-                            : Alignment.centerRight,
-                        child: Row(
-                          children: [
-                            Icon(Icons.store,
-                                color: isDark ? Colors.white : Colors.black,
-                                size: 24),
-                            SizedBox(width: 10),
-                            Text(
-                              isEnglish
-                                  ? 'Nearby Discounts'
-                                  : 'خصومات قريبة منك ',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
+                                  // SuggestionTextField(), // Place your SuggestionTextField here
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 20),
+                            alignment: isEnglish
+                                ? Alignment.centerLeft
+                                : Alignment.centerRight,
+                            child: Row(
+                              children: [
+                                Icon(Icons.store,
+                                    color: isDark ? Colors.white : Colors.black,
+                                    size: 24),
+                                SizedBox(width: 10),
+                                Text(
+                                  isEnglish
+                                      ? 'Nearby Discounts'
+                                      : 'خصومات قريبة منك ',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                      if (isLoading)
+                          ),
+                           if (isLoading)
                         Center(
                           child:
                               CircularProgressIndicator(), // Loading indicator
@@ -1168,6 +1169,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             textAlign: TextAlign.center,
                           ),
                         ),
+                      // SuggestionTextField(),
+                     
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 20),
                         child: SingleChildScrollView(

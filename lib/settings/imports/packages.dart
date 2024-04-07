@@ -47,6 +47,7 @@ export 'package:qr_code_scanner/qr_code_scanner.dart';
 // /* ------------------------------ image_picker ------------------------------ */
 
 export 'package:image_picker/image_picker.dart';
+export 'package:images_picker/images_picker.dart';
 
 
 // /* ------------------------ flutter_animate_on_scroll ----------------------- */
@@ -102,7 +103,7 @@ export  'package:flutter/services.dart';
 
 // /* ------------------------------- flutter map ------------------------------ */
 
-export 'package:flutter_map/flutter_map.dart';
+// export 'package:flutter_map/flutter_map.dart';
 
 // /* --------------------------- image gallery saver -------------------------- */
 

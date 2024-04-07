@@ -35,15 +35,30 @@ class _QrResponseState extends State<QrResponse> {
   String getEnglishDaysWord(int days) {
     return days > 1 ? 'Days' : 'Day';
   }
+
 @override
 void initState() {
   super.initState();
   responseDataMap = jsonDecode(widget.responseData);
   store = responseDataMap['store'];
-  discounts = responseDataMap['discounts'].values.toList();
-// discounts = responseDataMap['discounts'];
-   storeName = store['name'];
+  // Initialize discounts as an empty list
+  discounts = [];
+  // Check if the discounts key exists in the responseDataMap
+  if (responseDataMap.containsKey('discounts')) {
+    // If it exists and is a list, assign it to discounts
+    if (responseDataMap['discounts'] is List<dynamic>) {
+      discounts = responseDataMap['discounts'];
+              print('1');
+
+    }else{
+        discounts = responseDataMap['discounts'].values.toList();
+        print('2');
+// 
+    }
+  }
+  storeName = store['name'];
 }
+
 
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -57,6 +72,7 @@ void initState() {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
     return DirectionalityWrapper(
       child: Scaffold(
+        backgroundColor: Color(0xFFF3F4F7),
         body: SingleChildScrollView(
           // Wrap the Column with SingleChildScrollView
           child: Container(

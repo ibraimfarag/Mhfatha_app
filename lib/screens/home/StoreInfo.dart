@@ -71,7 +71,6 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
     // Retrieve the 'store' argument
     Map<String, dynamic>? storeData =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
-
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
 
     return DirectionalityWrapper(
@@ -241,6 +240,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                             double longitude =
                                 double.parse('${storeData?['longitude']}');
                             String label = '${storeData?['name']}';
+                            String description = isEnglish?'${storeData?['category_name_en']}':'${storeData?['category_name_ar']}';
 
                             // launch(
                             //     'https://www.google.com/maps/dir/?api=1&destination=$latitude,$longitude');
@@ -255,6 +255,8 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                               mapType: MapType.google,
                               coords: Coords(latitude, longitude),
                               title: "$label",
+                                    description: description,
+
                             );
                           }),
                           // buildIconButton(
@@ -457,8 +459,8 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                     children: [
                       Text(
                         Provider.of<AppState>(context).isEnglish
-                            ? 'store phone :'
-                            : 'جوال المتجر',
+                            ? 'Telephone / Store Number'
+                            : 'جوال / هاتف المتجر',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,

@@ -122,31 +122,200 @@ class _AdminViewRequestsState extends State<AdminViewRequests> {
                                         CrossAxisAlignment.start,
                                     children: (usert['differences'] ?? [])
                                         .map<Widget>((difference) {
-                                      return Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            isEnglish
-                                                ? 'change: ${difference['attribute_name_en']}'
-                                                : 'تغير: ${difference['attribute_name_ar']}',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
+                                      if (difference['attribute'] == 'photo') {
+                                        // If the attribute is 'photo', display old and new images with an arrow between them
+                                        return Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              isEnglish
+                                                  ? 'Change: Photo'
+                                                  : 'تغيير: الصورة',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
-                                          ),
-                                          Text(
-                                            isEnglish
-                                                ? 'Old Value: ${difference['old_value_en'] ?? 'N/A'}'
-                                                : 'القيمة القديمة: ${difference['old_value_ar'] ?? 'N/A'}',
-                                          ),
-                                          Text(
-                                            isEnglish
-                                                ? 'New Value: ${difference['new_value_en']}'
-                                                : 'القيمة الجديده: ${difference['new_value_ar']}',
-                                          ),
-                                          SizedBox(height: 8),
-                                        ],
-                                      );
+                                            SizedBox(height: 10),
+                                            Row(
+                                              children: [
+                                                // Display old image
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Container(
+                                                    height:
+                                                        100, // Set the desired height
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              30), // Set the border radius
+                                                    ),
+                                                    child: GestureDetector(
+                                                      onTap: () {
+                                                        // Handle the tap event to show the preview
+                                                        // You can implement your own logic to display the preview
+                                                        showDialog(
+                                                          context: context,
+                                                          builder: (BuildContext
+                                                              context) {
+                                                            return AlertDialog(
+                                                              content:
+                                                                  Container(
+                                                                width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width,
+                                                                height: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .height *
+                                                                    0.6,
+                                                                child: Image
+                                                                    .network(
+                                                                  'https://mhfatha.net/FrontEnd/assets/images/store_images/${difference['old_value_en']}',
+                                                                  fit: BoxFit
+                                                                      .cover, // Ensure the image covers the entire area
+                                                                ),
+                                                              ),
+                                                            );
+                                                          },
+                                                        );
+                                                      },
+                                                      child: Image.network(
+                                                        'https://mhfatha.net/FrontEnd/assets/images/store_images/${difference['old_value_en']}',
+                                                        fit: BoxFit
+                                                            .cover, // Ensure the image covers the entire area
+                                                        width:
+                                                            100, // Set the width to maintain aspect ratio
+                                                        height:
+                                                            100, // Set the height
+                                                        // Apply border radius directly to the image
+                                                        // You can adjust the value of the radius as needed
+                                                        // Here we set it to 30
+                                                        frameBuilder: (BuildContext
+                                                                context,
+                                                            Widget child,
+                                                            int? frame,
+                                                            bool
+                                                                wasSynchronouslyLoaded) {
+                                                          return ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        15), // Set the border radius
+                                                            child: child,
+                                                          );
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                // Arrow icon
+                                                Icon(Icons.arrow_forward),
+                                                // Display new image
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Container(
+                                                    height:
+                                                        100, // Set the desired height
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15), // Set the border radius
+                                                    ),
+                                                    child: GestureDetector(
+                                                      onTap: () {
+                                                        // Handle the tap event to show the preview
+                                                        // You can implement your own logic to display the preview
+                                                        showDialog(
+                                                          context: context,
+                                                          builder: (BuildContext
+                                                              context) {
+                                                            return AlertDialog(
+                                                              content:
+                                                                  Container(
+                                                                width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width,
+                                                                height: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .height *
+                                                                    0.6,
+                                                                child: Image
+                                                                    .network(
+                                                                  'https://mhfatha.net/FrontEnd/assets/images/store_images/${difference['new_value_en']}',
+                                                                  fit: BoxFit
+                                                                      .cover, // Ensure the image covers the entire area
+                                                                ),
+                                                              ),
+                                                            );
+                                                          },
+                                                        );
+                                                      },
+                                                      child: Image.network(
+                                                        'https://mhfatha.net/FrontEnd/assets/images/store_images/${difference['new_value_en']}',
+                                                        fit: BoxFit
+                                                            .cover, // Ensure the image covers the entire area
+                                                        width:
+                                                            100, // Set the width to maintain aspect ratio
+                                                        height:
+                                                            100, // Set the height
+                                                        // Apply border radius directly to the image
+                                                        // You can adjust the value of the radius as needed
+                                                        // Here we set it to 30
+                                                        frameBuilder: (BuildContext
+                                                                context,
+                                                            Widget child,
+                                                            int? frame,
+                                                            bool
+                                                                wasSynchronouslyLoaded) {
+                                                          return ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        15), // Set the border radius
+                                                            child: child,
+                                                          );
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 8),
+                                          ],
+                                        );
+                                      } else {
+                                        // For other attributes, display text as before
+                                        return Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              isEnglish
+                                                  ? 'Change: ${difference['attribute_name_en']}'
+                                                  : 'تغير: ${difference['attribute_name_ar']}',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Text(
+                                              isEnglish
+                                                  ? 'Old Value: ${difference['old_value_en'] ?? 'N/A'}'
+                                                  : 'القيمة القديمة: ${difference['old_value_ar'] ?? 'N/A'}',
+                                            ),
+                                            Text(
+                                              isEnglish
+                                                  ? 'New Value: ${difference['new_value_en']}'
+                                                  : 'القيمة الجديده: ${difference['new_value_ar']}',
+                                            ),
+                                            SizedBox(height: 8),
+                                          ],
+                                        );
+                                      }
                                     }).toList(),
                                   ),
                                   if (usert['store_info'] != null)
@@ -193,32 +362,36 @@ class _AdminViewRequestsState extends State<AdminViewRequests> {
                                               : 'السجل التجاري: ${usert['store_info']['tax_number'] ?? 'غير متاح'}',
                                         ),
                                         SizedBox(height: 8),
+                                        buildIconButton(
+                                            Icons.directions,
+                                            isEnglish
+                                                ? 'Directions'
+                                                : 'الاتجاهات', () async {
+                                          // Handle the directions action
+                                          // Example coordinates (adjust with your store location)
+                                          double latitude = double.parse(
+                                              '${usert['store_info']['latitude']}');
+                                          double longitude = double.parse(
+                                              '${usert['store_info']['longitude']}');
+                                          String label =
+                                              '${usert['store_name']}';
 
-                                         buildIconButton(Icons.directions,
-                              isEnglish ? 'Directions' : 'الاتجاهات', () async {
-                            // Handle the directions action
-                            // Example coordinates (adjust with your store location)
-                            double latitude =
-                                double.parse('${usert['store_info']['latitude']}');
-                            double longitude =
-                                double.parse('${usert['store_info']['longitude']}');
-                            String label = '${usert['store_name']}';
+                                          // launch(
+                                          //     'https://www.google.com/maps/dir/?api=1&destination=$latitude,$longitude');
 
-                            // launch(
-                            //     'https://www.google.com/maps/dir/?api=1&destination=$latitude,$longitude');
+                                          // MapsLauncher.launchCoordinates(latitude, longitude);
+                                          final availableMaps =
+                                              await MapLauncher.isMapAvailable(
+                                                  MapType.google);
+                                          print(
+                                              availableMaps); // [AvailableMap { mapName: Google Maps, mapType: google }, ...]
 
-                            // MapsLauncher.launchCoordinates(latitude, longitude);
-                            final availableMaps =
-                                await MapLauncher.isMapAvailable(MapType.google);
-                            print(
-                                availableMaps); // [AvailableMap { mapName: Google Maps, mapType: google }, ...]
-
-                            await MapLauncher.showMarker(
-                              mapType: MapType.google,
-                              coords: Coords(latitude, longitude),
-                              title: "$label",
-                            );
-                          }),
+                                          await MapLauncher.showMarker(
+                                            mapType: MapType.google,
+                                            coords: Coords(latitude, longitude),
+                                            title: "$label",
+                                          );
+                                        }),
                                       ],
                                     ),
                                 ],
@@ -358,6 +531,7 @@ class _AdminViewRequestsState extends State<AdminViewRequests> {
         return Container(); // Return an empty container for unknown types
     }
   }
+
   Widget buildIconButton(IconData icon, String text, VoidCallback onPressed) {
     return Column(
       children: [

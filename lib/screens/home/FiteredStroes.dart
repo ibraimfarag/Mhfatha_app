@@ -4,7 +4,8 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:mhfatha/settings/imports.dart';
-import 'package:permission_handler/permission_handler.dart' hide PermissionStatus;
+import 'package:permission_handler/permission_handler.dart'
+    hide PermissionStatus;
 import 'dart:async';
 
 class FiteredStroes extends StatefulWidget {
@@ -19,6 +20,9 @@ class _FiteredStroesState extends State<FiteredStroes> {
       '0'; // Initialize with an empty string or default value
   String selectedCategory =
       '0'; // Initialize with an empty string or default value
+      String userLatitude = '0';
+      String userLongitude = '0';
+
   List<dynamic> filteredStores = [];
   List<dynamic> regionList = [];
   List<dynamic> categoryList = [];
@@ -28,21 +32,22 @@ class _FiteredStroesState extends State<FiteredStroes> {
   void initState() {
     super.initState();
     // Call the fetchRegionList method from the Api class when the widget is initialized
-    _getLocation();
-    fetchFilteredStores();
-        
 
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+ 
+      _getLocation();
+    });
   }
+
   void didChangeDependencies() {
     super.didChangeDependencies();
-    
   }
+
 // Inside _FilteredStoresState class
   void fetchFilteredStores() async {
-    String userLatitude = "$latitude";
-    String userLongitude = "$longitude";
 
     try {
+      _getLocation;
       Map<String, dynamic> result = await api.filterStores(
         context,
         selectedRegion,
@@ -65,10 +70,14 @@ class _FiteredStroesState extends State<FiteredStroes> {
       // Handle errors
       print('Error fetching filtered stores: $e');
     }
+    print('userLatitude');
+    print(userLatitude);
+    print('userLongitude');
+    print(userLongitude);
   }
 
-    Future<void> _getLocation() async {
- Location location = Location();
+  Future<void> _getLocation() async {
+    Location location = Location();
     bool serviceEnabled;
     PermissionStatus permission;
 
@@ -131,57 +140,22 @@ class _FiteredStroesState extends State<FiteredStroes> {
       setState(() {
         latitude = locationData.latitude;
         longitude = locationData.longitude;
-      });
+        userLatitude = '$latitude';
+        userLongitude = '$longitude';
 
-      // Call the method to send location when the coordinates are available
-      if (latitude != null && longitude != null) {
-        await _sendLocation();
-      }
+
+      });
+      print('latitude');
+      print(latitude);
+      print('longitude');
+      print(longitude);
+     fetchFilteredStores();
     } catch (e) {
       print("Error getting location: $e");
     }
   }
 
 
-  Future<void> _sendLocation() async {
-    AuthProvider authProvider =
-        Provider.of<AuthProvider>(context, listen: false);
-
-    try {
-      // Get the language display value from the app state
-      String language = Provider.of<AppState>(context, listen: false).display;
-
-      final response = await Api().sendLocation(
-        authProvider,
-        latitude!,
-        longitude!,
-        language, // Include the language in the request
-      );
-
-      if (response.isNotEmpty) {
-        // Parse the JSON string to get the list of stores
-        Map<String, dynamic> jsonResponse = jsonDecode(response);
-
-        // Check if 'filteredStores' key exists and its type is correct
-        if (jsonResponse.containsKey('filteredStores') &&
-            jsonResponse['filteredStores'] is List<dynamic>) {
-          List<dynamic> stores = jsonResponse['filteredStores'];
-
-          // Convert each item in the list to a Map
-          List<Map<String, dynamic>> validStores =
-              stores.whereType<Map<String, dynamic>>().toList();
-// print('${validStores}');
-          setState(() {
-            filteredStores = validStores;
-          });
-        } else {
-          print('Invalid response format: ${response.toString()}');
-        }
-      }
-    } catch (e) {
-      print('Error during sending location: $e');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -224,107 +198,95 @@ class _FiteredStroesState extends State<FiteredStroes> {
                                     color: Colors.white),
                               ),
                               // Add some space between the text and the dropdowns
-                          
-                                  // First Dropdown
-                                  Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                              SizedBox(height: 20),
-                                    
-                                            Text(
-                                              isEnglish ? 'Region' : 'المدينة',
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white,
-                                              ),
-                                              
-                                            ),
-                                                   SizedBox(height: 10),
-                                            Container(
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 1, horizontal: 20),
-                                              decoration: BoxDecoration(
-                                                color: Colors.grey[200],
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                              ),
-                                              child: DropdownButton(
-                                                value: selectedRegion,
-                                                items: regionList.map((region) {
-                                                  return DropdownMenuItem(
-                                                    value: region['region_id']
-                                                        .toString(), // Use region_id as the value
-                                                    child: Text(
-                                                        region['region_name']),
-                                                  );
-                                                }).toList(),
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    selectedRegion =
-                                                        value.toString();
-                                                    // Perform actions when a region is selected, if needed
-                                                  });
-                                                  fetchFilteredStores();
-                                                },
-                                                underline: Container(),
-                                              ),
-                                            ),
-                                
-                                      ]),
-                                 
-                                 SizedBox(height: 10),
-                                 
-                                  Row(children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          isEnglish ? 'Categorie' : 'الفئة',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        
-                                 SizedBox(height: 10),
-                                        Container(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 3, horizontal: 20),
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey[200],
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                          ),
-                                          child: DropdownButton(
-                                            value: selectedCategory,
-                                            items: categoryList.map((category) {
-                                              return DropdownMenuItem(
-                                                value: category['category_id']
-                                                    .toString(), // Use category_id as the value
-                                                child: Text(
-                                                    category['category_name']),
-                                              );
-                                            }).toList(),
-                                            onChanged: (value) {
-                                              setState(() {
-                                                selectedCategory =
-                                                    value.toString();
 
-                                                // Perform actions when a category is selected, if needed
-                                              });
-                                              fetchFilteredStores();
-                                            },
-                                            underline: Container(),
-                                          ),
-                                        ),
-                                      ],
+                              // First Dropdown
+                              Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(height: 20),
+                                    Text(
+                                      isEnglish ? 'Region' : 'المدينة',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 1, horizontal: 20),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: DropdownButton(
+                                        value: selectedRegion,
+                                        items: regionList.map((region) {
+                                          return DropdownMenuItem(
+                                            value: region['region_id']
+                                                .toString(), // Use region_id as the value
+                                            child: Text(region['region_name']),
+                                          );
+                                        }).toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            selectedRegion = value.toString();
+                                            // Perform actions when a region is selected, if needed
+                                          });
+                                          fetchFilteredStores();
+                                        },
+                                        underline: Container(),
+                                      ),
                                     ),
                                   ]),
-                          
+
+                              SizedBox(height: 10),
+
+                              Row(children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      isEnglish ? 'Categorie' : 'الفئة',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 3, horizontal: 20),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: DropdownButton(
+                                        value: selectedCategory,
+                                        items: categoryList.map((category) {
+                                          return DropdownMenuItem(
+                                            value: category['category_id']
+                                                .toString(), // Use category_id as the value
+                                            child:
+                                                Text(category['category_name']),
+                                          );
+                                        }).toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            selectedCategory = value.toString();
+
+                                            // Perform actions when a category is selected, if needed
+                                          });
+                                          fetchFilteredStores();
+                                        },
+                                        underline: Container(),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ]),
                             ],
                           ),
                           SizedBox(

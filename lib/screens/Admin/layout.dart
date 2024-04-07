@@ -17,13 +17,12 @@ class MainAdminContainer extends StatefulWidget {
   final Widget? child;
   final bool showCustomAppBar;
 
-   MainAdminContainer({
+  MainAdminContainer({
     Key? key,
     this.additionalWidgets,
     this.child,
     this.showCustomAppBar = false, // Default value to show custom app bar
   }) : super(key: key);
-
 
   @override
   _MainAdminContainerState createState() => _MainAdminContainerState();
@@ -31,8 +30,32 @@ class MainAdminContainer extends StatefulWidget {
 
 class _MainAdminContainerState extends State<MainAdminContainer> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  int? RequestspadgesCount; // Simulating the padges count from API response
+  int? AccountsspadgesCount; // Simulating the padges count from API response
+  Map<String, dynamic>? statistics; // Make it nullable
 
   bool _isDrawerOpen = false;
+  @override
+  void initState() {
+    super.initState();
+    // Call the method to fetch data from the API
+    fetchDataFromApi(context);
+  }
+
+  Future<void> fetchDataFromApi(BuildContext context) async {
+    try {
+      final statisticsData = await AdminApi(context).fetchStatistics(context);
+      final Map<String, dynamic> statisticss = statisticsData['statistics'];
+
+      setState(() {
+        statistics = statisticss;
+        RequestspadgesCount = statistics!['requests_count'];
+        AccountsspadgesCount = statistics!['accounts_count'];
+      });
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +63,11 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
     String authName = authProvider.user!['first_name'];
+    bool isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom != 0.0;
 
     return DirectionalityWrapper(
       child: Scaffold(
+// resizeToAvoidBottomInset: false,
         backgroundColor: Color(0xFFF3F4F7),
         key: _scaffoldKey,
         body: SingleChildScrollView(
@@ -83,12 +108,12 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                         ],
                       ),
                     ),
-                     if (widget.showCustomAppBar)
-                    CustomAppBar(
-                      onBackTap: () {
-                        Navigator.pop(context);
-                      },
-                    ),
+                    if (widget.showCustomAppBar)
+                      CustomAppBar(
+                        onBackTap: () {
+                          Navigator.pop(context);
+                        },
+                      ),
                   ],
                 ),
 
@@ -219,10 +244,30 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                             Icon(Icons.help_outline_sharp),
                             SizedBox(width: 16),
                             Text(isEnglish ? 'Requests' : 'الطلبات'),
+                            // Conditionally display the badge based on padges_count
+                            if (RequestspadgesCount !=
+                                0) // Assuming padgesCount is the variable holding the count from API
+                              Container(
+                                padding: EdgeInsets.all(4),
+                                margin: EdgeInsets.only(left: 10, right: 10),
+                                decoration: BoxDecoration(
+                                  color: Colors
+                                      .red, // Customize the badge color as needed
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                child: Text(
+                                  RequestspadgesCount.toString(),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
                           ],
                         ),
                       ),
                     ),
+                    // Add GestureDetector for "Accounts" drawer item
                     GestureDetector(
                       onTap: () {
                         Navigator.pushNamed(context, '/admin/accounts');
@@ -234,6 +279,25 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                             Icon(Icons.help_outline_sharp),
                             SizedBox(width: 16),
                             Text(isEnglish ? 'Accounts' : 'الحسابات'),
+                            // Conditionally display the badge based on adminBadgesCount
+                            if (AccountsspadgesCount != null &&
+                                AccountsspadgesCount! > 0)
+                              Container(
+                                padding: EdgeInsets.all(4),
+                                margin: EdgeInsets.only(left: 10, right: 10),
+                                decoration: BoxDecoration(
+                                  color: Colors
+                                      .red, // Customize the badge color as needed
+                                  borderRadius: BorderRadius.circular(30),
+                                ),
+                                child: Text(
+                                  AccountsspadgesCount!.toString(),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
                           ],
                         ),
                       ),
@@ -254,6 +318,7 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
             ],
           ),
         ),
+
         bottomNavigationBar: NewNav(),
       ),
     );

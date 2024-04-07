@@ -186,7 +186,7 @@ class Api {
         // Convert the response data to a JSON string
         String jsonString = jsonEncode(jsonResponse);
 
-        print('responseeeeeee : $jsonString');
+        // print('responseeeeeee : $jsonString');
         return jsonString;
       } else {
         throw Exception(
@@ -275,6 +275,7 @@ class Api {
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(await response.stream.bytesToString());
+        // print(jsonResponse);
         if (jsonResponse['OTP'] == true) {
           // Display dialog if 'OTP' is true
           QuickAlert.show(
@@ -807,46 +808,65 @@ class Api {
     }
   }
 
-  Future<Map<String, dynamic>> filterStores(
-    BuildContext context,
-    String region,
-    String category,
-    String userLatitude,
-    String userLongitude,
-  ) async {
-    final url = Uri.parse('$baseUrl/filter-stores');
-    String lang = Provider.of<AppState>(context, listen: false).display;
-    AuthProvider authProvider =
-        Provider.of<AuthProvider>(context, listen: false);
-    bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
-    try {
-      final response = await http.post(
-        url,
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ${authProvider.token}',
-        },
-        body: jsonEncode(<String, dynamic>{
-          'lang': lang,
-          'region': region,
-          'category': category,
-          'user_latitude': userLatitude,
-          'user_longitude': userLongitude,
-        }),
-      );
+Future<Map<String, dynamic>> filterStores(
+  BuildContext context,
+  String region,
+  String category,
+  String userLatitude,
+  String userLongitude,
+) async {
+  final url = Uri.parse('$baseUrl/filter-stores');
+  String lang = Provider.of<AppState>(context, listen: false).display;
+  AuthProvider authProvider =
+      Provider.of<AuthProvider>(context, listen: false);
+  bool isEnglish =
+      Provider.of<AppState>(context, listen: false).isEnglish;
 
-      if (response.statusCode == 200) {
-        final jsonResponse = jsonDecode(response.body);
-        return jsonResponse;
-      } else {
-        throw Exception(
-            'Failed to filter stores. Server responded with status code: ${response.statusCode}');
-      }
-    } catch (e) {
+  // Show loading indicator
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    },
+  );
+
+  try {
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${authProvider.token}',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'lang': lang,
+        'region': region,
+        'category': category,
+        'user_latitude': userLatitude,
+        'user_longitude': userLongitude,
+      }),
+    );
+
+    // Close loading indicator
+    Navigator.of(context).pop();
+
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      return jsonResponse;
+    } else {
       throw Exception(
-          'Failed to filter stores. Check your internet connection.');
+          'Failed to filter stores. Server responded with status code: ${response.statusCode}');
     }
+  } catch (e) {
+    // Close loading indicator
+    Navigator.of(context).pop();
+
+    throw Exception('Failed to filter stores. Check your internet connection.');
   }
+}
+
 
   Future<String> changePassword(BuildContext context, String oldPassword,
       String newPassword, String confirmationNewPassword) async {
@@ -970,18 +990,18 @@ class Api {
           'platform': platform,
           'platform_version': platformVersion,
           'platform_device': platformDevice,
-          'lang':lang
+          'lang': lang
         }),
       );
 
       if (response.statusCode == 200) {
-        print('Device info updated successfully.');
+        // print('Device info updated successfully.');
       } else {
-        print(
-            'Failed to update device info. Server responded with status code: ${response.statusCode}');
+        // print(
+        //     'Failed to update device info. Server responded with status code: ${response.statusCode}');
       }
     } catch (e) {
-      print('Failed to update device info. Error: $e');
+      // print('Failed to update device info. Error: $e');
     }
   }
 
@@ -1008,51 +1028,53 @@ class Api {
         // print(jsonResponse);
         return jsonResponse; // Return the entire response
       } else {
-        print(
-            'Failed to update device info. Server responded with status code: ${response.statusCode}');
+        // print(
+        //     'Failed to update device info. Server responded with status code: ${response.statusCode}');
         // Throw an exception if the response status code is not 200
         throw Exception(
             'Failed to update device info. Server responded with status code: ${response.statusCode}');
       }
     } catch (e) {
       // Print and re-throw any caught exceptions
-      print('Failed to update device info. Error: $e');
+      // print('Failed to update device info. Error: $e');
       throw e;
     }
   }
-Future<Map<String, dynamic>> checkVersion(String platform) async {
-  final url = Uri.parse('$baseUrl/checkversion');
-  
-  try {
-    final http.Response response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(<String, String>{
-        'platform': platform,
-      }),
-    );
 
-    if (response.statusCode == 200) {
-      // Parse the JSON response
-      final Map<String, dynamic> data = jsonDecode(response.body);
-      // Extract version and required fields
-      String version = data['version'];
-      bool required = data['required'] == 1 ? true : false;
-      return {
-        'version': version,
-        'required': required,
-      };
-    } else {
-      // If the request was not successful, throw an error
-      throw Exception('Failed to check version: ${response.statusCode}');
+  Future<Map<String, dynamic>> checkVersion(String platform) async {
+    final url = Uri.parse('$baseUrl/checkversion');
+
+    try {
+      final http.Response response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(<String, String>{
+          'platform': platform,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        // Parse the JSON response
+        final Map<String, dynamic> data = jsonDecode(response.body);
+        // Extract version and required fields
+        String version = data['version'];
+        bool required = data['required'] == 1 ? true : false;
+        return {
+          'version': version,
+          'required': required,
+        };
+      } else {
+        // If the request was not successful, throw an error
+        throw Exception('Failed to check version: ${response.statusCode}');
+      }
+    } catch (e) {
+      // If an error occurs during the request, throw an error
+      throw Exception('Failed to check version: $e');
     }
-  } catch (e) {
-    // If an error occurs during the request, throw an error
-    throw Exception('Failed to check version: $e');
   }
-}
+
   Future<Map<String, dynamic>> UserRequestActions(
       BuildContext context, String action) async {
     final url = Uri.parse('$baseUrl/auth/updateAuthUserStatus');
@@ -1083,7 +1105,7 @@ Future<Map<String, dynamic>> checkVersion(String platform) async {
         Navigator.of(context).pop();
         Navigator.of(context).pop();
         final Map<String, dynamic> data = jsonDecode(response.body);
-print(data);
+        // print(data);
         return data;
       } else {
         // If the request was not successful, throw an error
@@ -1094,7 +1116,8 @@ print(data);
       throw Exception('Failed to perform action: $e');
     }
   }
-  Future<Map<String, dynamic>>tremsRequestActions(
+
+  Future<Map<String, dynamic>> tremsRequestActions(
       BuildContext context, String user_type) async {
     final url = Uri.parse('$baseUrl/TermsAndConditions');
     String lang = Provider.of<AppState>(context, listen: false).display;
@@ -1119,8 +1142,8 @@ print(data);
 
       // Close loading dialog
 
-        if (response.statusCode == 200) {
-          Navigator.of(context).pop();
+      if (response.statusCode == 200) {
+        Navigator.of(context).pop();
         // Parse the JSON response correctly
         final Map<String, dynamic> data = jsonDecode(response.body);
         return data;
@@ -1133,7 +1156,6 @@ print(data);
       throw Exception('Failed to perform action: $e');
     }
   }
-
 }
 
 void _showLoadingDialog(BuildContext context) {

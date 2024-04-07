@@ -35,3 +35,6 @@ export 'package:mhfatha/widgets/appbar.dart';
 // /* ---------------------------- WorkingDaysWidget --------------------------- */
 
 export 'package:mhfatha/widgets/working_days_widget.dart';
+
+// /* ------------------------------- Search Bar ------------------------------- */
+export 'package:mhfatha/widgets/search.dart';

@@ -81,7 +81,7 @@ void fetchCategorysAndCities() async {
     setState(() {});
   } catch (e) {
     // Handle errors
-    print('Error fetching categories and cities: $e');
+    // print('Error fetching categories and cities: $e');
 
     // Retry fetching after an error occurs
     await Future.delayed(Duration(seconds: 1)); // Add a delay before retrying

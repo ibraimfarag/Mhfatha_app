@@ -92,8 +92,8 @@ class VendorApi {
       }
 
       final response = await request.send();
-      print(workingdays);
-      print(response);
+      // print(workingdays);
+      // print(response);
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(await response.stream.bytesToString());
         final MessageC = jsonResponse['message'];
@@ -111,7 +111,7 @@ class VendorApi {
           },
         );
 
-        print(MessageC);
+        // print(MessageC);
 
         return jsonResponse['success'];
       } else {
@@ -140,13 +140,13 @@ class VendorApi {
           },
         );
 
-        print(jsonResponse);
+        // print(jsonResponse);
         throw Exception(
             'Failed to update user profile. Server responded with status code: ${response.statusCode} and error message: $jsonResponse');
-        print(jsonResponse);
+        // print(jsonResponse);
       }
     } catch (e) {
-      print(e);
+      // print(e);
       return false;
     }
   }
@@ -216,7 +216,7 @@ class VendorApi {
           },
         );
 
-        print(MessageC);
+        // print(MessageC);
 
         return jsonResponse['success'];
       } else {
@@ -237,13 +237,13 @@ class VendorApi {
                 : 'Sorry, something went wrong',
             confirmBtnText: isEnglish ? 'ok' : 'حسنا',
             confirmBtnColor: Colors.red);
-        print(jsonResponse);
+        // print(jsonResponse);
         throw Exception(
             'Failed to update user profile. Server responded with status code: ${response.statusCode} and error message: $jsonResponse');
-        print(jsonResponse);
+        // print(jsonResponse);
       }
     } catch (e) {
-      print(e);
+      // print(e);
       return false;
     }
   }
@@ -262,14 +262,14 @@ class VendorApi {
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         final imageUrl = jsonResponse['url'];
-        print(imageUrl);
+        // print(imageUrl);
         // Download the image
         await downloadAndSaveImage(imageUrl, 'store_qr_image.png', context);
       } else {
         throw Exception('Failed to get store QR image');
       }
     } catch (e) {
-      print('Error getting store QR image: $e');
+      // print('Error getting store QR image: $e');
     }
   }
 
@@ -298,7 +298,7 @@ Future<void> downloadAndSaveImage(
 
   // Add image to the phone's image directory
   final result = await ImageGallerySaver.saveFile(imagePath);
-  print('Image saved to gallery: $result');
+  // print('Image saved to gallery: $result');
 
   // Show success message
   QuickAlert.show(
@@ -365,7 +365,7 @@ Future<void> downloadAndSaveImage(
         );
       }
     } catch (e) {
-      print('Error deleting store: $e');
+      // print('Error deleting store: $e');
       // Show error message
       QuickAlert.show(
         context: context,
@@ -414,8 +414,8 @@ Future<void> downloadAndSaveImage(
       }
     } else {
       // Handle the error
-      print('Error: ${response.statusCode}');
-      print('Response body: ${response.body}');
+      // print('Error: ${response.statusCode}');
+      // print('Response body: ${response.body}');
       // Return an appropriate error message or throw an exception based on your error handling strategy
       return 'Error: Failed to fetch discounts';
     }
@@ -502,7 +502,7 @@ Future<void> downloadAndSaveImage(
         return false;
       }
     } catch (e) {
-      print('Error creating discount: $e');
+      // print('Error creating discount: $e');
       Navigator.of(context).pop();
 
       // Show error message
@@ -572,7 +572,7 @@ Future<void> downloadAndSaveImage(
         return false;
       }
     } catch (e) {
-      print('Error deleting discount: $e');
+      // print('Error deleting discount: $e');
 
       // Show error message
       QuickAlert.show(
