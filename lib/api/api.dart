@@ -275,7 +275,7 @@ class Api {
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(await response.stream.bytesToString());
-        // print(jsonResponse);
+        print(jsonResponse);
         if (jsonResponse['OTP'] == true) {
           // Display dialog if 'OTP' is true
           QuickAlert.show(

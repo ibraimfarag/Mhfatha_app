@@ -111,7 +111,7 @@ class VendorApi {
           },
         );
 
-        // print(MessageC);
+        print(MessageC);
 
         return jsonResponse['success'];
       } else {
@@ -140,7 +140,7 @@ class VendorApi {
           },
         );
 
-        // print(jsonResponse);
+        print(jsonResponse);
         throw Exception(
             'Failed to update user profile. Server responded with status code: ${response.statusCode} and error message: $jsonResponse');
         // print(jsonResponse);

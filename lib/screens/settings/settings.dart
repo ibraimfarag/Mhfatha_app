@@ -92,7 +92,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     ),
                                   ),
                                 ),
-                              if (authProvider.isAdmin || authProvider.isVendor)
+                                
+                              if (authProvider.isAdmin )
                                 Container(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 12, vertical: 6),
