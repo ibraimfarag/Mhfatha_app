@@ -187,7 +187,7 @@ SPEC CHECKSUMS:
   image_picker_ios: b545a5f16c0fa88e3ecbbce3ed4de45567a8ec18
   images_picker: fa9364e3a7d3083c49f865fcfb2b9e7cdc574d3a
   location: d5cf8598915965547c3f36761ae9cc4f4e87d22e
-  map_launcher: e325db1261d029ff33e08e03baccffe09593ffea
+  map_launcher: 5fde49ac9a52672bf99da746599f507b4490d7b5
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   nanopb: 438bc412db1928dac798aa6fd75726007be04262
   path_provider_foundation: 3784922295ac71e43754bd15e0653ccfd36a147c
