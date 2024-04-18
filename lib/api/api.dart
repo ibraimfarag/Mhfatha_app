@@ -808,65 +808,64 @@ class Api {
     }
   }
 
-Future<Map<String, dynamic>> filterStores(
-  BuildContext context,
-  String region,
-  String category,
-  String userLatitude,
-  String userLongitude,
-) async {
-  final url = Uri.parse('$baseUrl/filter-stores');
-  String lang = Provider.of<AppState>(context, listen: false).display;
-  AuthProvider authProvider =
-      Provider.of<AuthProvider>(context, listen: false);
-  bool isEnglish =
-      Provider.of<AppState>(context, listen: false).isEnglish;
+  Future<Map<String, dynamic>> filterStores(
+    BuildContext context,
+    String region,
+    String category,
+    String userLatitude,
+    String userLongitude,
+  ) async {
+    final url = Uri.parse('$baseUrl/filter-stores');
+    String lang = Provider.of<AppState>(context, listen: false).display;
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+    bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
 
-  // Show loading indicator
-  showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (BuildContext context) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    },
-  );
-
-  try {
-    final response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${authProvider.token}',
+    // Show loading indicator
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
       },
-      body: jsonEncode(<String, dynamic>{
-        'lang': lang,
-        'region': region,
-        'category': category,
-        'user_latitude': userLatitude,
-        'user_longitude': userLongitude,
-      }),
     );
 
-    // Close loading indicator
-    Navigator.of(context).pop();
+    try {
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${authProvider.token}',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'lang': lang,
+          'region': region,
+          'category': category,
+          'user_latitude': userLatitude,
+          'user_longitude': userLongitude,
+        }),
+      );
 
-    if (response.statusCode == 200) {
-      final jsonResponse = jsonDecode(response.body);
-      return jsonResponse;
-    } else {
+      // Close loading indicator
+      Navigator.of(context).pop();
+
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        return jsonResponse;
+      } else {
+        throw Exception(
+            'Failed to filter stores. Server responded with status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Close loading indicator
+      Navigator.of(context).pop();
+
       throw Exception(
-          'Failed to filter stores. Server responded with status code: ${response.statusCode}');
+          'Failed to filter stores. Check your internet connection.');
     }
-  } catch (e) {
-    // Close loading indicator
-    Navigator.of(context).pop();
-
-    throw Exception('Failed to filter stores. Check your internet connection.');
   }
-}
-
 
   Future<String> changePassword(BuildContext context, String oldPassword,
       String newPassword, String confirmationNewPassword) async {

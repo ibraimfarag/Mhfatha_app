@@ -89,6 +89,7 @@ dependencies:
   flutter_verification_code_field: ^1.0.4
   images_picker: ^1.2.11
   open_street_map_search_and_pick: ^0.1.1
+  flutter_image_compress: ^2.2.0
 
 
 
