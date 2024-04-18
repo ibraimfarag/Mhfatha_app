@@ -180,18 +180,30 @@ class _ProfilePhotoWidgetState extends State<ProfilePhotoWidget> {
       ),
     );
   }
+Future<String> compressImage(XFile imageFile) async {
+  // Check if the image is already compressed
+  if (imageFile.path.contains('compressed_')) {
+    return imageFile.path; // Return the path of the already compressed image
+  }
 
-  Future<String> compressImage(XFile imageFile) async {
-    Uint8List? result = await FlutterImageCompress.compressWithFile(
-      imageFile.path,
-      quality: 20, // Adjust the quality as needed
-    );
+  Uint8List? result = await FlutterImageCompress.compressWithFile(
+    imageFile.path,
+    quality: 20, // Adjust the quality as needed
+  );
 
-    final compressedFile = File('${imageFile.path}');
-    await compressedFile.writeAsBytes(result!);
- // Print the size of the compressed file
+  // Get the filename and extension of the original image file
+  String fileName = imageFile.path.split('/').last;
+  String compressedFileName = 'compressed_$fileName';
+
+  final compressedFile = File('${imageFile.path.replaceFirst(fileName, compressedFileName)}');
+  await compressedFile.writeAsBytes(result!);
+
+  // Print the size of the compressed file
   int compressedSize = await compressedFile.length();
   print('Compressed image size: ${compressedSize / 1024} KB');
-    return compressedFile.path;
-  }
+
+  return compressedFile.path;
+}
+
+
 }

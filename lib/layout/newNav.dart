@@ -14,7 +14,11 @@ class _NewNavState extends State<NewNav> {
     super.initState();
     // Call a function to fetch the badges count for admin from the API
     // _fetchAdminBadgesCount();
+     AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+    if (authProvider.isAdmin) {
+      // If the user is an admin, call the fetchDataFromApi method
       fetchDataFromApi(context);
+    }
   }
   Future<void> fetchDataFromApi(BuildContext context) async {
     try {
