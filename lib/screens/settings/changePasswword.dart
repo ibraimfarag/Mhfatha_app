@@ -123,15 +123,15 @@ class _ChangePasswordState extends State<ChangePassword> {
                             context, 'Current Password', 'كلمة السر الحالية',
                             () {
                           // Implement report logic
-                        }, currentPassword, ' '),
+                        }, currentPassword, ''),
                         buildSettingItem(
                             context, 'New Password', 'كلمة السر الجديدة', () {
                           // Implement report logic
-                        }, newpassword, ' '),
+                        }, newpassword, ''),
                         buildSettingItem(context, 'Confirm New Password',
                             'تأكيد كلمة السر الجديدة', () {
                           // Implement report logic
-                        }, confirmPassword, ' '),
+                        }, confirmPassword, ''),
                         SizedBox(
                           height: 24,
                         ),

@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 
 class Api {
   static const String baseUrl = AppVariables.ApiUrl;
-       final client = http.Client();
+  final client = http.Client();
 
   Future<String> checkInternetConnection(BuildContext context) async {
     try {
@@ -40,7 +40,6 @@ class Api {
     bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
     String lang = Provider.of<AppState>(context, listen: false).display;
     try {
-
       final response = await client.post(
         url,
         headers: <String, String>{
@@ -253,36 +252,39 @@ class Api {
     String enteredOtp = '';
 
     try {
+      Map<String, String> data = {
+        'lang': lang,
+        'first_name': firstName,
+        'last_name': lastName,
+        'gender': gender,
+        'birthday': birthday,
+        'region': region,
+        'mobile': mobile,
+        'email': email,
+        'password': password,
+        'password_confirmation': confirmPasswordController,
+        'is_vendor': isVendor.toString(),
+        'otp': enteredOtp,
+      };
 
-      final request = http.MultipartRequest('POST', url)
-        ..fields['lang'] = lang
-        ..fields['first_name'] = firstName
-        ..fields['last_name'] = lastName
-        ..fields['gender'] = gender
-        ..fields['birthday'] = birthday
-        ..fields['region'] = region
-        ..fields['mobile'] = mobile
-        ..fields['otp'] = enteredOtp
-        ..fields['email'] = email
-        ..fields['password'] = password
-        ..fields['password_confirmation'] = confirmPasswordController
-        ..fields['is_vendor'] = isVendor.toString();
-      // Use the correct field name for the file, in this case, 'photo'
-      // ..files.add(await http.MultipartFile.fromPath('photo', imageFile.path));
-      if (imageFile != null) {
-        // Use the correct field name for the file, in this case, 'photo'
-        request.files
-            .add(await http.MultipartFile.fromPath('photo', imageFile.path));
-      }
-      // final response = await request.send();
-          final response = await client.send(request); // Send the request
+      // Add image file if available
+      // if (imageFile != null) {
+      //   // Convert image file to bytes
+      //   List<int> imageBytes = await imageFile.readAsBytes();
+      //   // Encode bytes to base64 string
+      //   String base64Image = base64Encode(imageBytes);
+      //   // Add base64 encoded image to the data map
+      //   // print(base64Image);
+      //   data['photo_base64'] = base64Image;
+      // }
 
+      final response = await client.post(url, body: data);
 
       if (response.statusCode == 200) {
-        final jsonResponse = jsonDecode(await response.stream.bytesToString());
+        final jsonResponse = jsonDecode(response.body);
         print(jsonResponse);
         if (jsonResponse['OTP'] == true) {
-          // Display dialog if 'OTP' is true
+          // Display OTP dialog
           QuickAlert.show(
             context: context,
             type: QuickAlertType.custom,
@@ -319,31 +321,35 @@ class Api {
                       isEnglish ? 'Fetching your data' : 'جاري تحميل البيانات',
                 );
 
-                final request = http.MultipartRequest('POST', url)
-                  ..fields['lang'] = lang
-                  ..fields['first_name'] = firstName
-                  ..fields['last_name'] = lastName
-                  ..fields['gender'] = gender
-                  ..fields['birthday'] = birthday
-                  ..fields['region'] = region
-                  ..fields['mobile'] = mobile
-                  ..fields['email'] = email
-                  ..fields['password'] = password
-                  ..fields['password_confirmation'] = confirmPasswordController
-                  ..fields['otp'] = enteredOtp
-                  ..fields['is_vendor'] = isVendor.toString();
-                // Use the correct field name for the file, in this case, 'photo'
-                // ..files.add(await http.MultipartFile.fromPath('photo', imageFile.path));
+                Map<String, dynamic> requestBody = {
+                  'lang': lang,
+                  'first_name': firstName,
+                  'last_name': lastName,
+                  'gender': gender,
+                  'birthday': birthday,
+                  'region': region,
+                  'mobile': mobile,
+                  'email': email,
+                  'password': password,
+                  'password_confirmation': confirmPasswordController,
+                  'otp': enteredOtp,
+                  'is_vendor': isVendor.toString(),
+                };
+
+                // Add image data to request body if imageFile is not null
                 if (imageFile != null) {
-                  // Use the correct field name for the file, in this case, 'photo'
-                  request.files.add(await http.MultipartFile.fromPath(
-                      'photo', imageFile.path));
+                  // Convert image file to bytes
+                  List<int> imageBytes = await imageFile.readAsBytes();
+                  // Encode bytes to base64 string
+                  String base64Image = base64Encode(imageBytes);
+                  // Add base64 encoded image to the request body
+                  requestBody['photo_base64'] = base64Image;
                 }
-                final response = await request.send();
+
+                final response = await client.post(url, body: requestBody);
 
                 if (response.statusCode == 200) {
-                  final jsonResponse =
-                      jsonDecode(await response.stream.bytesToString());
+                  final jsonResponse = jsonDecode(response.body);
                   Navigator.of(context, rootNavigator: true).pop();
 
                   QuickAlert.show(
@@ -359,8 +365,7 @@ class Api {
 
                   return jsonResponse['success'];
                 } else {
-                  final jsonResponse =
-                      jsonDecode(await response.stream.bytesToString());
+                  final jsonResponse = jsonDecode(response.body);
                   final MeC = jsonResponse['error'];
                   Navigator.pop(context);
 
@@ -371,14 +376,15 @@ class Api {
                     text: '$MeC',
                   );
                 }
-              } catch (e) {}
+              } catch (e) {
+                // Handle exceptions
+              }
             },
           );
         }
         return true;
       } else {
-        final jsonResponse = jsonDecode(await response.stream.bytesToString());
-
+        final jsonResponse = jsonDecode(response.body);
         List<String> errorMessages = [];
         dynamic messages = jsonResponse['messages'];
 
@@ -697,7 +703,7 @@ class Api {
             .add(await http.MultipartFile.fromPath('photo', imageFile.path));
       }
 
-      final response =  await client.send(request);
+      final response = await client.send(request);
 
       if (response.statusCode == 200) {
         Navigator.pop(context);
