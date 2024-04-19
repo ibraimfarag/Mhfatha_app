@@ -13,7 +13,7 @@ import 'package:permission_handler/permission_handler.dart' as permission_handle
 class VendorApi {
   static const String baseUrl = AppVariables.ApiUrl;
   // final BuildContext context; // Add BuildContext as a parameter
-
+ final client = http.Client();
   // Constructor to initialize context
   VendorApi(BuildContext context) {
     initializeData(context);
@@ -91,7 +91,7 @@ class VendorApi {
             .add(await http.MultipartFile.fromPath('photo', imageFile.path));
       }
 
-      final response = await request.send();
+      final response = await client.send(request);
       // print(workingdays);
       // print(response);
       if (response.statusCode == 200) {
@@ -198,7 +198,7 @@ class VendorApi {
             .add(await http.MultipartFile.fromPath('photo', imageFile.path));
       }
 
-      final response = await request.send();
+      final response = await client.send(request);
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(await response.stream.bytesToString());
         final MessageC = jsonResponse['message'];
@@ -257,7 +257,7 @@ class VendorApi {
     final body = '{"storeId": "$storeId"}';
 
     try {
-      final response = await http.post(url, headers: headers, body: body);
+      final response = await client.post(url, headers: headers, body: body);
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
@@ -286,7 +286,7 @@ Future<void> downloadAndSaveImage(
     }
   }
 
-  final response = await http.get(Uri.parse(imageUrl));
+  final response = await client.get(Uri.parse(imageUrl));
   final bytes = response.bodyBytes;
 
   // Get the directory for storing images
@@ -330,7 +330,7 @@ Future<void> downloadAndSaveImage(
     final body = jsonEncode({'storeId': storeId, 'lang': lang});
 
     try {
-      final response = await http.post(url, headers: headers, body: body);
+      final response = await client.post(url, headers: headers, body: body);
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
@@ -386,7 +386,7 @@ Future<void> downloadAndSaveImage(
       "lang": lang
     };
 
-    final http.Response response = await http.post(
+    final http.Response response = await client.post(
       Uri.parse(apiUrl),
       headers: <String, String>{
         'Content-Type': 'application/json',
@@ -441,7 +441,7 @@ Future<void> downloadAndSaveImage(
         text: isEnglish ? 'Creating discount' : 'جاري إنشاء الخصم',
       );
 
-      final response = await http.post(
+      final response = await client.post(
         url,
         headers: {
           'Content-Type': 'application/json',
@@ -530,7 +530,7 @@ Future<void> downloadAndSaveImage(
     try {
       _showLoadingDialog(context);
 
-      final response = await http.post(url, headers: headers, body: body);
+      final response = await client.post(url, headers: headers, body: body);
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);

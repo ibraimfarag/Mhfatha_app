@@ -10,10 +10,11 @@ import 'package:http/http.dart' as http;
 
 class Api {
   static const String baseUrl = AppVariables.ApiUrl;
+       final client = http.Client();
 
   Future<String> checkInternetConnection(BuildContext context) async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl/check-network'));
+      final response = await client.get(Uri.parse('$baseUrl/check-network'));
 
       if (response.statusCode == 200) {
         Map<String, dynamic> data = json.decode(response.body);
@@ -39,7 +40,8 @@ class Api {
     bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
     String lang = Provider.of<AppState>(context, listen: false).display;
     try {
-      final response = await http.post(
+
+      final response = await client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -89,7 +91,7 @@ class Api {
     final url = Uri.parse('$baseUrl/nearby');
 
     try {
-      final response = await http.post(
+      final response = await client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -128,7 +130,7 @@ class Api {
     bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
     String lang = Provider.of<AppState>(context, listen: false).display;
     try {
-      final response = await http.post(
+      final response = await client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -162,7 +164,7 @@ class Api {
     final url = Uri.parse('$baseUrl/store-qr');
 
     try {
-      final response = await http.post(
+      final response = await client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -202,7 +204,7 @@ class Api {
     final url = Uri.parse('$baseUrl/discounts-post');
 
     try {
-      final response = await http.post(
+      final response = await client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -251,6 +253,7 @@ class Api {
     String enteredOtp = '';
 
     try {
+
       final request = http.MultipartRequest('POST', url)
         ..fields['lang'] = lang
         ..fields['first_name'] = firstName
@@ -271,7 +274,9 @@ class Api {
         request.files
             .add(await http.MultipartFile.fromPath('photo', imageFile.path));
       }
-      final response = await request.send();
+      // final response = await request.send();
+          final response = await client.send(request); // Send the request
+
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(await response.stream.bytesToString());
@@ -417,7 +422,7 @@ class Api {
     final url = Uri.parse('$baseUrl/stores/search-by-name');
 
     try {
-      final response = await http.post(
+      final response = await client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -454,7 +459,7 @@ class Api {
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
     try {
-      final response = await http.post(
+      final response = await client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -492,7 +497,7 @@ class Api {
     _showLoadingDialog(context);
 
     try {
-      final response = await http.post(
+      final response = await client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -529,7 +534,7 @@ class Api {
         Provider.of<AuthProvider>(context, listen: false);
 
     try {
-      final response = await http.post(
+      final response = await client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -560,7 +565,7 @@ class Api {
         Provider.of<AuthProvider>(context, listen: false);
 
     try {
-      final response = await http.post(
+      final response = await client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -589,7 +594,7 @@ class Api {
     final url = Uri.parse('$baseUrl/registerregions');
 
     try {
-      final response = await http.post(
+      final response = await client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -620,7 +625,7 @@ class Api {
         Provider.of<AuthProvider>(context, listen: false);
 
     try {
-      final response = await http.get(
+      final response = await client.get(
         url,
         headers: <String, String>{
           'Authorization': 'Bearer ${authProvider.token}',
@@ -692,7 +697,7 @@ class Api {
             .add(await http.MultipartFile.fromPath('photo', imageFile.path));
       }
 
-      final response = await request.send();
+      final response =  await client.send(request);
 
       if (response.statusCode == 200) {
         Navigator.pop(context);
@@ -833,7 +838,7 @@ class Api {
     );
 
     try {
-      final response = await http.post(
+      final response = await client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -875,7 +880,7 @@ class Api {
         Provider.of<AuthProvider>(context, listen: false);
 
     try {
-      final response = await http.post(
+      final response = await client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -929,7 +934,7 @@ class Api {
         Provider.of<AuthProvider>(context, listen: false);
 
     try {
-      final response = await http.post(
+      final response = await client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -978,7 +983,7 @@ class Api {
         Provider.of<AuthProvider>(context, listen: false);
 
     try {
-      final response = await http.post(
+      final response = await client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -1011,7 +1016,7 @@ class Api {
         Provider.of<AuthProvider>(context, listen: false);
 
     try {
-      final response = await http.post(
+      final response = await client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -1044,7 +1049,7 @@ class Api {
     final url = Uri.parse('$baseUrl/checkversion');
 
     try {
-      final http.Response response = await http.post(
+      final http.Response response = await client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -1085,7 +1090,7 @@ class Api {
     _showLoadingDialog(context);
 
     try {
-      final http.Response response = await http.post(
+      final http.Response response = await client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -1127,7 +1132,7 @@ class Api {
     _showLoadingDialog(context);
 
     try {
-      final http.Response response = await http.post(
+      final http.Response response = await client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',

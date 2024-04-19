@@ -17,7 +17,7 @@ class AdminApi {
   AdminApi(BuildContext context) {
     initializeData(context);
   }
-
+ final client = http.Client();
   bool isEnglish = false;
   String lang = '';
   String bearerToken = '';
@@ -92,7 +92,7 @@ class AdminApi {
             .add(await http.MultipartFile.fromPath('photo', imageFile.path));
       }
 
-      final response = await request.send();
+      final response = await client.send(request);
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(await response.stream.bytesToString());
         final MessageC = jsonResponse['message'];
@@ -150,7 +150,7 @@ class AdminApi {
     final int maxRetries = 3;
     while (retryCount < maxRetries) {
       try {
-        final http.Response response = await http.get(
+        final http.Response response = await client.get(
           url,
           headers: <String, String>{
             'Content-Type': 'application/json',
@@ -187,7 +187,7 @@ class AdminApi {
     _showLoadingDialog(context);
 
     try {
-      final http.Response response = await http.post(
+      final http.Response response = await client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -225,7 +225,7 @@ class AdminApi {
     _showLoadingDialog(context);
 
     try {
-      final http.Response response = await http.post(
+      final http.Response response = await client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -295,7 +295,7 @@ class AdminApi {
             .add(await http.MultipartFile.fromPath('photo', imageFile.path));
       }
 
-      final response = await request.send();
+      final response = await client.send(request);
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(await response.stream.bytesToString());
         final MessageC = jsonResponse['message'];
@@ -357,7 +357,7 @@ class AdminApi {
     _showLoadingDialog(context);
 
     try {
-      final http.Response response = await http.post(
+      final http.Response response = await client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -405,7 +405,7 @@ class AdminApi {
     _showLoadingDialog(context);
 
     try {
-      final http.Response response = await http.post(
+      final http.Response response = await client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -453,7 +453,7 @@ class AdminApi {
     _showLoadingDialog(context);
 
     try {
-      final http.Response response = await http.post(
+      final http.Response response = await client.post(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json',
@@ -507,7 +507,7 @@ class AdminApi {
     _showLoadingDialog(context);
 
     try {
-      final http.Response response = await http.post(
+      final http.Response response = await client.post(
         Uri.parse(url),
         headers: <String, String>{
           'Content-Type': 'application/json',
