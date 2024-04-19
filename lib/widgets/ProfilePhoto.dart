@@ -188,7 +188,7 @@ Future<String> compressImage(XFile imageFile) async {
 
   Uint8List? result = await FlutterImageCompress.compressWithFile(
     imageFile.path,
-    quality: 20, // Adjust the quality as needed
+    quality: 10, // Adjust the quality as needed
   );
 
   // Get the filename and extension of the original image file

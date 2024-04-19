@@ -185,6 +185,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             () {
                           // Implement report logic
                         }, mobile, ' ${authProvider.user!['mobile']}'),
+                        
                         buildSettingItem(context, 'Email', 'البريد الالكتروني',
                             () {
                           // Implement report logic
@@ -290,97 +291,126 @@ class _AccountScreenState extends State<AccountScreen> {
       bottomNavigationBar: NewNav(),
     ));
   }
+Widget buildSettingItem(
+  BuildContext context,
+  // IconData icon,
+  String englishTitle,
+  String arabicTitle,
+  VoidCallback onTap,
+  TextEditingController controller,
+  String preFilledText,
+) {
+  bool isEnglish = Provider.of<AppState>(context).isEnglish;
+  controller.text = preFilledText;
 
-  Widget buildSettingItem(
-    BuildContext context,
-    // IconData icon,
-    String englishTitle,
-    String arabicTitle,
-    VoidCallback onTap,
-    TextEditingController controller,
-    String preFilledText,
-  ) {
-    bool isEnglish = Provider.of<AppState>(context).isEnglish;
-    controller.text = preFilledText;
+  return InkWell(
+    onTap: onTap,
+    child: Container(
+      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+      padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+      decoration: BoxDecoration(
+        color: Color(0xFFFFFFFF),
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              // Icon(icon),
+              SizedBox(width: 10),
+              Text(isEnglish ? englishTitle : arabicTitle),
+            ],
+          ),
+          SizedBox(height: 10),
+          // Add TextField here
+          if (englishTitle.toLowerCase() == 'birthday') // Check if it's the birthday field
+            InkWell(
+              onTap: () async {
+                DateTime? pickedDate = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime.now(),
+                );
 
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-        padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
-        decoration: BoxDecoration(
-          color: Color(0xFFFFFFFF),
-          borderRadius: BorderRadius.circular(30),
-        ),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                // Icon(icon),
-                SizedBox(width: 10),
-                Text(isEnglish ? englishTitle : arabicTitle),
-              ],
-            ),
-            SizedBox(height: 10),
-            // Add TextField here
-            if (englishTitle.toLowerCase() ==
-                'birthday') // Check if it's the birthday field
-              InkWell(
-                onTap: () async {
-                  DateTime? pickedDate = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(1900),
-                    lastDate: DateTime.now(),
-                  );
-
-                  if (pickedDate != null && pickedDate != DateTime.now()) {
-                    controller.text =
-                        DateFormat('yyyy-MM-dd').format(pickedDate);
-                  }
-                },
-                child: AbsorbPointer(
-                  child: TextField(
-                    controller: controller,
-                    style: TextStyle(fontSize: 16, color: colors),
-                    decoration: InputDecoration(
-                      hintStyle: TextStyle(color: Colors.grey.shade700),
-                      filled: true,
-                      fillColor: ui,
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide(color: backgroundColor),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide(color: backgroundColor),
-                      ),
+                if (pickedDate != null && pickedDate != DateTime.now()) {
+                  controller.text =
+                      DateFormat('yyyy-MM-dd').format(pickedDate);
+                }
+              },
+              child: AbsorbPointer(
+                child: TextField(
+                  controller: controller,
+                  style: TextStyle(fontSize: 16, color: colors),
+                  decoration: InputDecoration(
+                    hintStyle: TextStyle(color: Colors.grey.shade700),
+                    filled: true,
+                    fillColor: ui,
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide: BorderSide(color: backgroundColor),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide: BorderSide(color: backgroundColor),
                     ),
                   ),
                 ),
-              )
-            else
-              TextField(
-                obscureText: false,
-                controller: controller,
-                style: TextStyle(fontSize: 16, color: colors),
-                decoration: InputDecoration(
-                  hintStyle: TextStyle(color: Colors.grey.shade700),
-                  filled: true,
-                  fillColor: ui,
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide(color: backgroundColor),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide: BorderSide(color: backgroundColor),
-                  ),
+              ),
+            )
+          else if (englishTitle.toLowerCase() == 'mobile number') // Check if it's the mobile number field
+            TextField(
+              obscureText: false,
+              controller: controller,
+              keyboardType: TextInputType.phone, // Set keyboard type to phone
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly, // Allow only numeric input
+                LengthLimitingTextInputFormatter(10), // Limit input to 10 characters
+              ],
+              style: TextStyle(fontSize: 16, color: colors),
+              decoration: InputDecoration(
+                hintStyle: TextStyle(color: Colors.grey.shade700),
+                filled: true,
+                fillColor: ui,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide(color: backgroundColor),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide(color: backgroundColor),
                 ),
               ),
-          ],
-        ),
+              onChanged: (value) {
+                if (value.length == 10) {
+                  // Hide keyboard after entering 10 digits
+                  FocusScope.of(context).requestFocus(FocusNode());
+                }
+              },
+            )
+          else
+            TextField(
+              obscureText: false,
+              controller: controller,
+              style: TextStyle(fontSize: 16, color: colors),
+              decoration: InputDecoration(
+                hintStyle: TextStyle(color: Colors.grey.shade700),
+                filled: true,
+                fillColor: ui,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide(color: backgroundColor),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: BorderSide(color: backgroundColor),
+                ),
+              ),
+            ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
+
 }
