@@ -501,7 +501,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                             mobile: mobileController.text,
                                             email: mailController.text,
                                             password: passwordController.text,
-                                            confirmPasswordController:
+                                            confirmPassword:
                                                 confirmPasswordController.text,
                                             isVendor: selectedVendor == '1'
                                                 ? 1

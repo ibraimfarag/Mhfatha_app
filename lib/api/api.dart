@@ -229,199 +229,371 @@ class Api {
     }
   }
 
+  // Future<bool> registerUser({
+  //   required BuildContext context,
+  //   required String lang,
+  //   required String firstName,
+  //   required String lastName,
+  //   required String gender,
+  //   required String birthday,
+  //   required String region,
+  //   required String mobile,
+  //   required String email,
+  //   required String password,
+  //   required String confirmPasswordController,
+  //   required int isVendor,
+  //   // File? imageFile,
+  //   String? otp,
+  // }) async {
+  //   final url = Uri.parse('$baseUrl/register-post');
+  //   bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
+  //   _showLoadingDialog(context);
+  //   OtpFieldController otpController = OtpFieldController();
+  //   String enteredOtp = '';
+
+  //   try {
+  //     Map<String, String> data = {
+  //       'lang': lang,
+  //       'first_name': firstName,
+  //       'last_name': lastName,
+  //       'gender': gender,
+  //       'birthday': birthday,
+  //       'region': region,
+  //       'mobile': mobile,
+  //       'email': email,
+  //       'password': password,
+  //       'password_confirmation': confirmPasswordController,
+  //       'is_vendor': isVendor.toString(),
+  //       'otp': enteredOtp,
+  //     };
+
+  //     // Add image file if available
+  //     // if (imageFile != null) {
+  //     //   // Convert image file to bytes
+  //     //   List<int> imageBytes = await imageFile.readAsBytes();
+  //     //   // Encode bytes to base64 string
+  //     //   String base64Image = base64Encode(imageBytes);
+  //     //   // Add base64 encoded image to the data map
+  //     //   // print(base64Image);
+  //     //   data['photo_base64'] = base64Image;
+  //     // }
+
+  //     final response = await client.post(url, body: data);
+
+  //     if (response.statusCode == 200) {
+  //       final jsonResponse = jsonDecode(response.body);
+  //       print(jsonResponse);
+  //       if (jsonResponse['OTP'] == true) {
+  //         // Display OTP dialog
+  //         QuickAlert.show(
+  //           context: context,
+  //           type: QuickAlertType.custom,
+  //           showCancelBtn: true,
+  //           barrierDismissible: true,
+  //           confirmBtnText: isEnglish ? 'verify' : 'تفعيل',
+  //           cancelBtnText: isEnglish ? 'cancel' : 'الغاء',
+  //           customAsset: 'images/MeG.gif',
+  //           widget: Column(
+  //             children: [
+  //               Text(jsonResponse['message']),
+  //               OTPTextField(
+  //                 controller: otpController,
+  //                 length: 5,
+  //                 width: MediaQuery.of(context).size.width,
+  //                 fieldWidth: 20,
+  //                 style: TextStyle(fontSize: 17),
+  //                 textFieldAlignment: MainAxisAlignment.spaceAround,
+  //                 fieldStyle: FieldStyle.underline,
+  //                 onCompleted: (pin) {
+  //                   enteredOtp = pin;
+  //                 },
+  //               ),
+  //             ],
+  //           ),
+  //           onConfirmBtnTap: () async {
+  //             try {
+  //               QuickAlert.show(
+  //                 context: context,
+  //                 type: QuickAlertType.loading,
+  //                 customAsset: 'images/loading.gif',
+  //                 title: isEnglish ? 'Loading' : 'انتظر قليلاً',
+  //                 text:
+  //                     isEnglish ? 'Fetching your data' : 'جاري تحميل البيانات',
+  //               );
+
+  //               Map<String, dynamic> requestBody = {
+  //                 'lang': lang,
+  //                 'first_name': firstName,
+  //                 'last_name': lastName,
+  //                 'gender': gender,
+  //                 'birthday': birthday,
+  //                 'region': region,
+  //                 'mobile': mobile,
+  //                 'email': email,
+  //                 'password': password,
+  //                 'password_confirmation': confirmPasswordController,
+  //                 'otp': enteredOtp,
+  //                 'is_vendor': isVendor.toString(),
+  //               };
+
+  //               // Add image data to request body if imageFile is not null
+  //               // if (imageFile != null) {
+  //               //   // Convert image file to bytes
+  //               //   List<int> imageBytes = await imageFile.readAsBytes();
+  //               //   // Encode bytes to base64 string
+  //               //   String base64Image = base64Encode(imageBytes);
+  //               //   // Add base64 encoded image to the request body
+  //               //   requestBody['photo_base64'] = base64Image;
+  //               // }
+
+  //               final response = await client.post(url, body: requestBody);
+
+  //               if (response.statusCode == 200) {
+  //                 final jsonResponse = jsonDecode(response.body);
+  //                 Navigator.of(context, rootNavigator: true).pop();
+
+  //                 QuickAlert.show(
+  //                   context: context,
+  //                   type: QuickAlertType.success,
+  //                   customAsset: 'images/success.gif',
+  //                   text: jsonResponse['message'] ?? '',
+  //                   onConfirmBtnTap: () {
+  //                     Navigator.pushNamed(context, '/login');
+  //                   },
+  //                   confirmBtnColor: Color(0xFF0D2750),
+  //                 );
+
+  //                 return jsonResponse['success'];
+  //               } else {
+  //                 final jsonResponse = jsonDecode(response.body);
+  //                 final MeC = jsonResponse['error'];
+  //                 Navigator.pop(context);
+
+  //                 QuickAlert.show(
+  //                   context: context,
+  //                   type: QuickAlertType.error,
+  //                   title: 'Oops...',
+  //                   text: '$MeC',
+  //                 );
+  //               }
+  //             } catch (e) {
+  //               // Handle exceptions
+  //             }
+  //           },
+  //         );
+  //       }
+  //       return true;
+  //     } else {
+  //       final jsonResponse = jsonDecode(response.body);
+  //       List<String> errorMessages = [];
+  //       dynamic messages = jsonResponse['messages'];
+
+  //       if (messages is Map<String, dynamic>) {
+  //         // Handle the case where 'messages' is a map
+  //         messages.forEach((field, errors) {
+  //           if (errors is List) {
+  //             errors.forEach((error) {
+  //               errorMessages.add('$error');
+  //             });
+  //           }
+  //         });
+  //       } else if (messages is List<dynamic>) {
+  //         // Handle the case where 'messages' is a list
+  //         errorMessages.addAll(messages.map((error) => '$error'));
+  //       }
+  //       Navigator.of(context, rootNavigator: true).pop();
+
+  //       QuickAlert.show(
+  //         context: context,
+  //         type: QuickAlertType.error,
+  //         title: isEnglish ? 'Registration Failed' : 'خطأ اثناء التسجيل',
+  //         widget: Column(
+  //           crossAxisAlignment:
+  //               isEnglish ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: errorMessages.map((message) => Text(message)).toList(),
+  //         ),
+  //       );
+
+  //       throw Exception(
+  //           'Failed to register. Server responded with status code: ${response.statusCode}');
+  //     }
+  //   } catch (e) {
+  //     return false;
+  //   }
+  // }
+
   Future<bool> registerUser({
-    required BuildContext context,
-    required String lang,
-    required String firstName,
-    required String lastName,
-    required String gender,
-    required String birthday,
-    required String region,
-    required String mobile,
-    required String email,
-    required String password,
-    required String confirmPasswordController,
-    required int isVendor,
-    // File? imageFile,
-    String? otp,
-  }) async {
-    final url = Uri.parse('$baseUrl/register-post');
-    bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
-    _showLoadingDialog(context);
-    OtpFieldController otpController = OtpFieldController();
-    String enteredOtp = '';
+  required BuildContext context,
+  required String lang,
+  required String firstName,
+  required String lastName,
+  required String gender,
+  required String birthday,
+  required String region,
+  required String mobile,
+  required String email,
+  required String password,
+  required String confirmPassword,
+  required int isVendor,
+  // File? imageFile,
+  String? otp,
+}) async {
+  final url = Uri.parse('$baseUrl/register-post');
+  bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
+  _showLoadingDialog(context);
+  OtpFieldController otpController = OtpFieldController();
+  String enteredOtp = otp ?? '';
 
-    try {
-      Map<String, String> data = {
-        'lang': lang,
-        'first_name': firstName,
-        'last_name': lastName,
-        'gender': gender,
-        'birthday': birthday,
-        'region': region,
-        'mobile': mobile,
-        'email': email,
-        'password': password,
-        'password_confirmation': confirmPasswordController,
-        'is_vendor': isVendor.toString(),
-        'otp': enteredOtp,
-      };
+  try {
+    Map<String, dynamic> data = {
+      'lang': lang,
+      'first_name': firstName,
+      'last_name': lastName,
+      'gender': gender,
+      'birthday': birthday,
+      'region': region,
+      'mobile': mobile,
+      'email': email,
+      'password': password,
+      'password_confirmation': confirmPassword,
+      'is_vendor': isVendor.toString(),
+      'otp': enteredOtp,
+    };
 
-      // Add image file if available
-      // if (imageFile != null) {
-      //   // Convert image file to bytes
-      //   List<int> imageBytes = await imageFile.readAsBytes();
-      //   // Encode bytes to base64 string
-      //   String base64Image = base64Encode(imageBytes);
-      //   // Add base64 encoded image to the data map
-      //   // print(base64Image);
-      //   data['photo_base64'] = base64Image;
-      // }
+    // Convert map to JSON string
+    String jsonBody = jsonEncode(data);
 
-      final response = await client.post(url, body: data);
+    // Setup headers for JSON content type
+    Map<String, String> headers = {
+      'Content-Type': 'application/json'
+    };
 
-      if (response.statusCode == 200) {
-        final jsonResponse = jsonDecode(response.body);
-        print(jsonResponse);
-        if (jsonResponse['OTP'] == true) {
-          // Display OTP dialog
-          QuickAlert.show(
-            context: context,
-            type: QuickAlertType.custom,
-            showCancelBtn: true,
-            barrierDismissible: true,
-            confirmBtnText: isEnglish ? 'verify' : 'تفعيل',
-            cancelBtnText: isEnglish ? 'cancel' : 'الغاء',
-            customAsset: 'images/MeG.gif',
-            widget: Column(
-              children: [
-                Text(jsonResponse['message']),
-                OTPTextField(
-                  controller: otpController,
-                  length: 5,
-                  width: MediaQuery.of(context).size.width,
-                  fieldWidth: 20,
-                  style: TextStyle(fontSize: 17),
-                  textFieldAlignment: MainAxisAlignment.spaceAround,
-                  fieldStyle: FieldStyle.underline,
-                  onCompleted: (pin) {
-                    enteredOtp = pin;
-                  },
-                ),
-              ],
-            ),
-            onConfirmBtnTap: () async {
-              try {
-                QuickAlert.show(
-                  context: context,
-                  type: QuickAlertType.loading,
-                  customAsset: 'images/loading.gif',
-                  title: isEnglish ? 'Loading' : 'انتظر قليلاً',
-                  text:
-                      isEnglish ? 'Fetching your data' : 'جاري تحميل البيانات',
-                );
+    final response = await http.post(url, headers: headers, body: jsonBody);
 
-                Map<String, dynamic> requestBody = {
-                  'lang': lang,
-                  'first_name': firstName,
-                  'last_name': lastName,
-                  'gender': gender,
-                  'birthday': birthday,
-                  'region': region,
-                  'mobile': mobile,
-                  'email': email,
-                  'password': password,
-                  'password_confirmation': confirmPasswordController,
-                  'otp': enteredOtp,
-                  'is_vendor': isVendor.toString(),
-                };
-
-                // Add image data to request body if imageFile is not null
-                // if (imageFile != null) {
-                //   // Convert image file to bytes
-                //   List<int> imageBytes = await imageFile.readAsBytes();
-                //   // Encode bytes to base64 string
-                //   String base64Image = base64Encode(imageBytes);
-                //   // Add base64 encoded image to the request body
-                //   requestBody['photo_base64'] = base64Image;
-                // }
-
-                final response = await client.post(url, body: requestBody);
-
-                if (response.statusCode == 200) {
-                  final jsonResponse = jsonDecode(response.body);
-                  Navigator.of(context, rootNavigator: true).pop();
-
-                  QuickAlert.show(
-                    context: context,
-                    type: QuickAlertType.success,
-                    customAsset: 'images/success.gif',
-                    text: jsonResponse['message'] ?? '',
-                    onConfirmBtnTap: () {
-                      Navigator.pushNamed(context, '/login');
-                    },
-                    confirmBtnColor: Color(0xFF0D2750),
-                  );
-
-                  return jsonResponse['success'];
-                } else {
-                  final jsonResponse = jsonDecode(response.body);
-                  final MeC = jsonResponse['error'];
-                  Navigator.pop(context);
-
-                  QuickAlert.show(
-                    context: context,
-                    type: QuickAlertType.error,
-                    title: 'Oops...',
-                    text: '$MeC',
-                  );
-                }
-              } catch (e) {
-                // Handle exceptions
-              }
-            },
-          );
-        }
-        return true;
-      } else {
-        final jsonResponse = jsonDecode(response.body);
-        List<String> errorMessages = [];
-        dynamic messages = jsonResponse['messages'];
-
-        if (messages is Map<String, dynamic>) {
-          // Handle the case where 'messages' is a map
-          messages.forEach((field, errors) {
-            if (errors is List) {
-              errors.forEach((error) {
-                errorMessages.add('$error');
-              });
-            }
-          });
-        } else if (messages is List<dynamic>) {
-          // Handle the case where 'messages' is a list
-          errorMessages.addAll(messages.map((error) => '$error'));
-        }
-        Navigator.of(context, rootNavigator: true).pop();
-
-        QuickAlert.show(
-          context: context,
-          type: QuickAlertType.error,
-          title: isEnglish ? 'Registration Failed' : 'خطأ اثناء التسجيل',
-          widget: Column(
-            crossAxisAlignment:
-                isEnglish ? CrossAxisAlignment.start : CrossAxisAlignment.end,
-            mainAxisSize: MainAxisSize.min,
-            children: errorMessages.map((message) => Text(message)).toList(),
-          ),
-        );
-
-        throw Exception(
-            'Failed to register. Server responded with status code: ${response.statusCode}');
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      print(jsonResponse);
+      if (jsonResponse['OTP'] == true) {
+        // Display OTP dialog
+        // Ensure correct usage of the OTP dialog here
+        return _handleOTPVerification(context, data, url, jsonResponse, isEnglish, otpController);
       }
-    } catch (e) {
+      return jsonResponse['success'] as bool;
+    } else {
+      // Handle errors
+      _handleRegistrationError(context, response, isEnglish);
       return false;
     }
+  } catch (e) {
+    Navigator.of(context, rootNavigator: true).pop(); // Ensure dialogs are closed in case of an error
+    return false;
   }
+}
+
+void _handleRegistrationError(BuildContext context, http.Response response, bool isEnglish) {
+  final jsonResponse = jsonDecode(response.body);
+  List<String> errorMessages = _extractErrorMessages(jsonResponse);
+  Navigator.of(context, rootNavigator: true).pop();
+
+  QuickAlert.show(
+    context: context,
+    type: QuickAlertType.error,
+    title: isEnglish ? 'Registration Failed' : 'خطأ اثناء التسجيل',
+    widget: Column(
+      crossAxisAlignment: isEnglish ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+      mainAxisSize: MainAxisSize.min,
+      children: errorMessages.map((message) => Text(message)).toList(),
+    ),
+  );
+}
+
+List<String> _extractErrorMessages(Map<String, dynamic> jsonResponse) {
+  List<String> errorMessages = [];
+  dynamic messages = jsonResponse['messages'];
+
+  if (messages is Map<String, dynamic>) {
+    messages.forEach((field, errors) {
+      if (errors is List) {
+        errors.forEach((error) {
+          errorMessages.add('$error');
+        });
+      }
+    });
+  } else if (messages is List<dynamic>) {
+    errorMessages.addAll(messages.map((error) => '$error'));
+  }
+  return errorMessages;
+}
+
+Future<bool> _handleOTPVerification(BuildContext context, Map<String, dynamic> data, Uri url, Map<String, dynamic> jsonResponse, bool isEnglish, OtpFieldController otpController) async {
+  QuickAlert.show(
+    context: context,
+    type: QuickAlertType.custom,
+    showCancelBtn: true,
+    barrierDismissible: true,
+    confirmBtnText: isEnglish ? 'Verify' : 'تفعيل',
+    cancelBtnText: isEnglish ? 'Cancel' : 'الغاء',
+    customAsset: 'images/MeG.gif',
+    widget: Column(
+      children: [
+        Text(jsonResponse['message']),
+        OTPTextField(
+          controller: otpController,
+          length: 5,
+          width: MediaQuery.of(context).size.width,
+          fieldWidth: 20,
+          style: TextStyle(fontSize: 17),
+          textFieldAlignment: MainAxisAlignment.spaceAround,
+          fieldStyle: FieldStyle.underline,
+          onCompleted: (pin) {
+            data['otp'] = pin; // Update OTP in data
+          },
+        ),
+      ],
+    ),
+    onConfirmBtnTap: () => _verifyOTP(context, data, url, isEnglish),
+  );
+  return false;
+}
+
+Future<bool> _verifyOTP(BuildContext context, Map<String, dynamic> data, Uri url, bool isEnglish) async {
+  String jsonBody = jsonEncode(data);
+  Map<String, String> headers = {'Content-Type': 'application/json'};
+  final response = await http.post(url, headers: headers, body: jsonBody);
+  return _processOTPResponse(context, response, isEnglish);
+}
+
+Future<bool> _processOTPResponse(BuildContext context, http.Response response, bool isEnglish) async {
+  if (response.statusCode == 200) {
+    final jsonResponse = jsonDecode(response.body);
+    Navigator.of(context, rootNavigator: true).pop(); // Close the OTP dialog
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.success,
+      customAsset: 'images/success.gif',
+      text: jsonResponse['message'] ?? '',
+      onConfirmBtnTap: () {
+        Navigator.pushNamed(context, '/login');
+      },
+      confirmBtnColor: Color(0xFF0D2750),
+    );
+    return true;
+  } else {
+    final jsonResponse = jsonDecode(response.body);
+    final MeC = jsonResponse['error'];
+    Navigator.pop(context); // Close the OTP dialog
+
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      title: 'Oops...',
+      text: '$MeC',
+    );
+    return false;
+  }
+}
+
 
   Future<String> searchStores(
       AuthProvider authProvider, String query, String lang) async {
