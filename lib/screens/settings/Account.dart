@@ -112,20 +112,20 @@ class _AccountScreenState extends State<AccountScreen> {
                           SizedBox(
                             width: 30,
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              SizedBox(
-                                height: 20,
-                              ),
-                              CircleAvatar(
-                                radius: 60,
-                                // Add your profile image here
-                                backgroundImage: NetworkImage(
-                                    'https://mhfatha.net/FrontEnd/assets/images/user_images/${authProvider.user!['photo']}'),
-                              ),
-                            ],
-                          ),
+                          // Column(
+                          //   crossAxisAlignment: CrossAxisAlignment.end,
+                          //   children: [
+                          //     SizedBox(
+                          //       height: 20,
+                          //     ),
+                          //     CircleAvatar(
+                          //       radius: 60,
+                          //       // Add your profile image here
+                          //       backgroundImage: NetworkImage(
+                          //           'https://mhfatha.net/FrontEnd/assets/images/user_images/${authProvider.user!['photo']}'),
+                          //     ),
+                          //   ],
+                          // ),
                         ]),
                   ),
                   SizedBox(height: 16),
@@ -142,25 +142,25 @@ class _AccountScreenState extends State<AccountScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 20),
-                        ProfilePhotoWidget(
-                          isEnglish: isEnglish,
-                          labelcolor: colors,
-                          color: ui,
-                          label: isEnglish
-                              ? 'Profile Photo: '
-                              : 'الصورة الشخصية: ',
-                          selectPhotoText:
-                              isEnglish ? 'Select Photo' : 'اختر صورة',
-                          changePhotoText:
-                              isEnglish ? 'Change Photo' : 'تغير  الصورة',
-                          removeText: isEnglish ? 'Remove' : 'إزالة',
-                          onPhotoSelected: (path) {
-                            setState(() {
-                              _selectedProfileImagePath = path;
-                            });
-                            print('path : $path');
-                          },
-                        ),
+                        // ProfilePhotoWidget(
+                        //   isEnglish: isEnglish,
+                        //   labelcolor: colors,
+                        //   color: ui,
+                        //   label: isEnglish
+                        //       ? 'Profile Photo: '
+                        //       : 'الصورة الشخصية: ',
+                        //   selectPhotoText:
+                        //       isEnglish ? 'Select Photo' : 'اختر صورة',
+                        //   changePhotoText:
+                        //       isEnglish ? 'Change Photo' : 'تغير  الصورة',
+                        //   removeText: isEnglish ? 'Remove' : 'إزالة',
+                        //   onPhotoSelected: (path) {
+                        //     setState(() {
+                        //       _selectedProfileImagePath = path;
+                        //     });
+                        //     print('path : $path');
+                        //   },
+                        // ),
                         SizedBox(height: 20),
                         buildSettingItem(context, 'First Name', 'الاسم', () {
                           // Navigate to account settings screen
@@ -259,12 +259,12 @@ class _AccountScreenState extends State<AccountScreen> {
                                           region: selectedRegion,
                                           mobile: mobile.text,
                                           email: email.text,
-                                          imageFile: _selectedProfileImagePath !=
-                                                  null
-                                              ? File(
-                                                  _selectedProfileImagePath ??
-                                                      '')
-                                              : null
+                                          // imageFile: _selectedProfileImagePath !=
+                                          //         null
+                                          //     ? File(
+                                          //         _selectedProfileImagePath ??
+                                          //             '')
+                                          //     : null
                                           // otp: /* Pass the OTP if needed */,
                                           );
                                     });

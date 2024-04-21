@@ -251,24 +251,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               // /* -------------------------------------------------------------------------- */
                               // /* ------------------------------ profile image ----------------------------- */
                               // /* -------------------------------------------------------------------------- */
-                              ProfilePhotoWidget(
-                                isEnglish: isEnglish,
-                                labelcolor: colors,
-                                color: ui,
-                                label: isEnglish
-                                    ? 'Profile photo: '
-                                    : 'الصورة الشخصية: ',
-                                selectPhotoText:
-                                    isEnglish ? 'Select Photo' : 'اختر صورة',
-                                changePhotoText:
-                                    isEnglish ? 'Change Photo' : 'تغير  الصورة',
-                                removeText: isEnglish ? 'Remove' : 'إزالة',
-                                onPhotoSelected: (path) {
-                                  setState(() {
-                                    _selectedProfileImagePath = path;
-                                  });
-                                },
-                              ),
+                              // ProfilePhotoWidget(
+                              //   isEnglish: isEnglish,
+                              //   labelcolor: colors,
+                              //   color: ui,
+                              //   label: isEnglish
+                              //       ? 'Profile photo: '
+                              //       : 'الصورة الشخصية: ',
+                              //   selectPhotoText:
+                              //       isEnglish ? 'Select Photo' : 'اختر صورة',
+                              //   changePhotoText:
+                              //       isEnglish ? 'Change Photo' : 'تغير  الصورة',
+                              //   removeText: isEnglish ? 'Remove' : 'إزالة',
+                              //   onPhotoSelected: (path) {
+                              //     setState(() {
+                              //       _selectedProfileImagePath = path;
+                              //     });
+                              //   },
+                              // ),
 
                               // /* -------------------------------------------------------------------------- */
                               // /* --------------------------------- Region --------------------------------- */
@@ -506,12 +506,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                             isVendor: selectedVendor == '1'
                                                 ? 1
                                                 : 0, // Convert '1' or '0' to int
-                                            imageFile: _selectedProfileImagePath !=
-                                                    null
-                                                ? File(
-                                                    _selectedProfileImagePath ??
-                                                        '')
-                                                : null, // Pass null if no profile image
+                                            // imageFile: _selectedProfileImagePath !=
+                                            //         null
+                                            //     ? File(
+                                            //         _selectedProfileImagePath ??
+                                            //             '')
+                                            //     : null, // Pass null if no profile image
                                           );
                                         }
                                       },

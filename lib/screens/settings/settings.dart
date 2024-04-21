@@ -117,20 +117,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           SizedBox(
                             width: 30,
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              SizedBox(
-                                height: 20,
-                              ),
-                              CircleAvatar(
-                                radius: 60,
-                                // Add your profile image here
-                                backgroundImage: NetworkImage(
-                                    'https://mhfatha.net/FrontEnd/assets/images/user_images/${authProvider.user!['photo']}'),
-                              ),
-                            ],
-                          ),
+                          // Column(
+                          //   crossAxisAlignment: CrossAxisAlignment.end,
+                          //   children: [
+                          //     SizedBox(
+                          //       height: 20,
+                          //     ),
+                          //     CircleAvatar(
+                          //       radius: 60,
+                          //       // Add your profile image here
+                          //       backgroundImage: NetworkImage(
+                          //           'https://mhfatha.net/FrontEnd/assets/images/user_images/${authProvider.user!['photo']}'),
+                          //     ),
+                          //   ],
+                          // ),
                         ]),
                   ),
                   SizedBox(height: 16),

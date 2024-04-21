@@ -131,12 +131,12 @@ class _AdminViewUserState extends State<AdminViewUser> {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CircleAvatar(
-                              backgroundImage: NetworkImage(
-                                  'https://mhfatha.net/FrontEnd/assets/images/user_images/${usert['photo']}'),
-                              // Placeholder avatar if no photo available
-                              // child: Icon(Icons.person),
-                            ),
+                            // CircleAvatar(
+                            //   backgroundImage: NetworkImage(
+                            //       'https://mhfatha.net/FrontEnd/assets/images/user_images/${usert['photo']}'),
+                            //   // Placeholder avatar if no photo available
+                            //   // child: Icon(Icons.person),
+                            // ),
                             SizedBox(width: 10),
                             Expanded(
                               child: Column(

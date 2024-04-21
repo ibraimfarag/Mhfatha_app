@@ -242,7 +242,7 @@ class Api {
     required String password,
     required String confirmPasswordController,
     required int isVendor,
-    File? imageFile,
+    // File? imageFile,
     String? otp,
   }) async {
     final url = Uri.parse('$baseUrl/register-post');
@@ -337,14 +337,14 @@ class Api {
                 };
 
                 // Add image data to request body if imageFile is not null
-                if (imageFile != null) {
-                  // Convert image file to bytes
-                  List<int> imageBytes = await imageFile.readAsBytes();
-                  // Encode bytes to base64 string
-                  String base64Image = base64Encode(imageBytes);
-                  // Add base64 encoded image to the request body
-                  requestBody['photo_base64'] = base64Image;
-                }
+                // if (imageFile != null) {
+                //   // Convert image file to bytes
+                //   List<int> imageBytes = await imageFile.readAsBytes();
+                //   // Encode bytes to base64 string
+                //   String base64Image = base64Encode(imageBytes);
+                //   // Add base64 encoded image to the request body
+                //   requestBody['photo_base64'] = base64Image;
+                // }
 
                 final response = await client.post(url, body: requestBody);
 
@@ -666,7 +666,7 @@ class Api {
     required String mobile,
     required String email,
     String? otp,
-    File? imageFile,
+    // File? imageFile,
     required BuildContext context,
   }) async {
     final url = Uri.parse('$baseUrl/auth/update');
@@ -697,11 +697,11 @@ class Api {
         ..fields['otp'] = enteredOtp
         ..fields['email'] = email;
 
-      if (imageFile != null) {
-        // Use the correct field name for the file, in this case, 'photo'
-        request.files
-            .add(await http.MultipartFile.fromPath('photo', imageFile.path));
-      }
+      // if (imageFile != null) {
+      //   // Use the correct field name for the file, in this case, 'photo'
+      //   request.files
+      //       .add(await http.MultipartFile.fromPath('photo', imageFile.path));
+      // }
 
       final response = await client.send(request);
 
@@ -760,11 +760,11 @@ class Api {
                   ..fields['otp'] = enteredOtp
                   ..fields['email'] = email;
 
-                if (imageFile != null) {
-                  // Use the correct field name for the file, in this case, 'photo'
-                  request.files.add(await http.MultipartFile.fromPath(
-                      'photo', imageFile.path));
-                }
+                // if (imageFile != null) {
+                //   // Use the correct field name for the file, in this case, 'photo'
+                //   request.files.add(await http.MultipartFile.fromPath(
+                //       'photo', imageFile.path));
+                // }
 
                 final response = await request.send();
 
