@@ -291,21 +291,22 @@ class Api {
         return false;
       }
     } catch (e) {
-    
       // Navigator.of(context, rootNavigator: true)
       //     .pop(); // Ensure dialogs are closed in case of an error
-    _showError(context, isEnglish, e.toString()); // Display error
+      _showError(context, isEnglish, e.toString()); // Display error
       return false;
     }
   }
-void _showError(BuildContext context, bool isEnglish, String errorMessage) {
-  QuickAlert.show(
-    context: context,
-    type: QuickAlertType.error,
-    title: isEnglish ? 'Error' : 'خطأ',
-    text: errorMessage,
-  );
-}
+
+  void _showError(BuildContext context, bool isEnglish, String errorMessage) {
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      title: isEnglish ? 'Error' : 'خطأ',
+      text: errorMessage,
+    );
+  }
+
   void _handleRegistrationError(
       BuildContext context, http.Response response, bool isEnglish) {
     final jsonResponse = jsonDecode(response.body);
@@ -379,11 +380,23 @@ void _showError(BuildContext context, bool isEnglish, String errorMessage) {
       onConfirmBtnTap: () async {
         // Properly handle async operation
         bool result = await _verifyOTP(context, data, url, isEnglish);
-        if (result) {
-          print("OTP Verification Success");
-        } else {
-          print("OTP Verification Failed");
-        }
+      if (result) {
+        print("OTP Verification Success");
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.success,
+          title: 'Success',
+          text: 'OTP verification successful.',
+        );
+      } else {
+        print("OTP Verification Failed");
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          title: 'Error',
+          text: 'OTP verification failed. Please try again.',
+        );
+      }
       },
     );
     return false;
