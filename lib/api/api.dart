@@ -380,23 +380,23 @@ class Api {
       onConfirmBtnTap: () async {
         // Properly handle async operation
         bool result = await _verifyOTP(context, data, url, isEnglish);
-      if (result) {
-        print("OTP Verification Success");
-        QuickAlert.show(
-          context: context,
-          type: QuickAlertType.success,
-          title: 'Success',
-          text: 'OTP verification successful.',
-        );
-      } else {
-        print("OTP Verification Failed");
-        QuickAlert.show(
-          context: context,
-          type: QuickAlertType.error,
-          title: 'Error',
-          text: 'OTP verification failed. Please try again.',
-        );
-      }
+        if (result) {
+          print("OTP Verification Success");
+          QuickAlert.show(
+            context: context,
+            type: QuickAlertType.success,
+            title: 'Success',
+            text: 'OTP verification successful.',
+          );
+        } else {
+          print("OTP Verification Failed");
+          QuickAlert.show(
+            context: context,
+            type: QuickAlertType.error,
+            title: 'Error',
+            text: 'OTP verification failed. Please try again.',
+          );
+        }
       },
     );
     return false;
