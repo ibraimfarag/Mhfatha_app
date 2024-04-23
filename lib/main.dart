@@ -73,6 +73,9 @@ void main() async {
   );
   late Timer timer;
 
+
+
+
   timer = Timer.periodic(Duration(seconds: 10), (timer) async {
     // Get the context outside the async function
     BuildContext? context = navigatorKey.currentContext;
@@ -80,12 +83,15 @@ void main() async {
     // Check if context is null to avoid errors
     if (context != null) {
       // Call the validateToken method
-      dynamic result = await Api().validateToken(context);
+
+      
       bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
       bool isAuthenticated =
           Provider.of<AuthProvider>(context, listen: false).isAuthenticated;
 
+ 
       if (isAuthenticated) {
+      dynamic result = await Api().validateToken(context);
         if (result is Map<String, dynamic>) {
           bool success = result['success'];
           String? message = result['message'];
@@ -122,7 +128,12 @@ void main() async {
       }
     }
   });
-          // checkAndUpdateVersion(context);
+
+
+
+
+
+  // checkAndUpdateVersion(context);
   WidgetsBinding.instance!.addPostFrameCallback((_) {
     // This function will be called after the UI is built
     late BuildContext context;
@@ -131,17 +142,15 @@ void main() async {
     checkAndUpdateVersion(context);
     print('debug1');
   });
-
-
-
 }
+
 Future<void> checkAndUpdateVersion(BuildContext context) async {
   // Read YAML version
   final yamlString = await rootBundle.loadString('pubspec.yaml');
   final parsedYaml = loadYaml(yamlString);
   String currentVersion = parsedYaml['version'];
   print('Current YAML Version: $currentVersion');
-   
+
   // Determine platform
   String platform = Platform.isAndroid ? 'Android' : 'iOS';
   print('Platform: $platform');
@@ -156,51 +165,55 @@ Future<void> checkAndUpdateVersion(BuildContext context) async {
   print('Required: $required');
 
   // Determine if English language is used
-  bool isEnglish = Provider.of<AppState>(navigatorKey.currentContext!, listen: false).isEnglish;
-   bool isAuthenticated =
-          Provider.of<AuthProvider>(context, listen: false).isAuthenticated;
-              AuthProvider authProvider =
-        Provider.of<AuthProvider>(context, listen: false);
+  bool isEnglish =
+      Provider.of<AppState>(navigatorKey.currentContext!, listen: false)
+          .isEnglish;
+  bool isAuthenticated =
+      Provider.of<AuthProvider>(context, listen: false).isAuthenticated;
+  AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
   // Perform actions based on the version information
-  if (apiVersion.compareTo(currentVersion) > 0 ) {
+  if (apiVersion.compareTo(currentVersion) > 0) {
     // If API version is greater than current version and update is not required
     // Display a popup with the API version
-showDialog(
-  context: navigatorKey.currentContext!,
-  barrierDismissible: !required, // Prevent dismissing the dialog if update is required
-  builder: (BuildContext context) {
-    return Directionality(
-      textDirection: isEnglish ? TextDirection.ltr : TextDirection.rtl,
-      child: AlertDialog(
-        title: Text(
-          isEnglish ? 'New Version Available' : 'إصدار جديد متاح',
+    showDialog(
+      context: navigatorKey.currentContext!,
+      barrierDismissible:
+          !required, // Prevent dismissing the dialog if update is required
+      builder: (BuildContext context) {
+        return Directionality(
           textDirection: isEnglish ? TextDirection.ltr : TextDirection.rtl,
-        ),
-        content: Text(
-          isEnglish ? 'A new version ($apiVersion) is available.' : 'الإصدار الجديد ($apiVersion) متاح.',
-          textDirection: isEnglish ? TextDirection.ltr : TextDirection.rtl,
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text(isEnglish ? 'Update' : 'تحديث'),
+          child: AlertDialog(
+            title: Text(
+              isEnglish ? 'New Version Available' : 'إصدار جديد متاح',
+              textDirection: isEnglish ? TextDirection.ltr : TextDirection.rtl,
+            ),
+            content: Text(
+              isEnglish
+                  ? 'A new version ($apiVersion) is available.'
+                  : 'الإصدار الجديد ($apiVersion) متاح.',
+              textDirection: isEnglish ? TextDirection.ltr : TextDirection.rtl,
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(isEnglish ? 'Update' : 'تحديث'),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
-  },
-);
-  AdminApi(context).sendNotification(
-                    context: context,
-                    action: "sendToUser",
-                    body: "A new version ($apiVersion) is available.",
-                    title: "New Version Available",
-                    bodyArabic: "الإصدار الجديد ($apiVersion) متاح.",
-                    titleArabic: "إصدار جديد متاح",
-                    recipient_identifier: "${authProvider.user!['id']}");
-print('debug2');
+    AdminApi(context).sendNotification(
+        context: context,
+        action: "sendToUser",
+        body: "A new version ($apiVersion) is available.",
+        title: "New Version Available",
+        bodyArabic: "الإصدار الجديد ($apiVersion) متاح.",
+        titleArabic: "إصدار جديد متاح",
+        recipient_identifier: "${authProvider.user!['id']}");
+    print('debug2');
     // Show a local notification with the API version
     // final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     //     FlutterLocalNotificationsPlugin();
@@ -224,9 +237,6 @@ print('debug2');
     // Continue with app initialization
   }
 }
-
-
-
 
 Future<void> _handleFirebaseMessage(RemoteMessage message,
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) async {
@@ -324,7 +334,6 @@ class _MhfathaAppState extends State<MhfathaApp> {
           // Example: return MyProvider(child: child);
           return Scaffold(
             resizeToAvoidBottomInset: false,
-
             appBar: PreferredSize(
               preferredSize: Size.fromHeight(0),
               child: AppBar(

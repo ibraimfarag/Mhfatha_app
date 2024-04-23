@@ -351,11 +351,12 @@ class Api {
       Map<String, dynamic> jsonResponse,
       bool isEnglish,
       OtpFieldController otpController) async {
+        
     QuickAlert.show(
       context: context,
       type: QuickAlertType.custom,
       showCancelBtn: true,
-      barrierDismissible: true,
+      barrierDismissible: false,
       confirmBtnText: isEnglish ? 'Verify' : 'تفعيل',
       cancelBtnText: isEnglish ? 'Cancel' : 'الغاء',
       customAsset: 'images/MeG.gif',
@@ -380,24 +381,29 @@ class Api {
       onConfirmBtnTap: () async {
         // Properly handle async operation
         bool result = await _verifyOTP(context, data, url, isEnglish);
-        if (result) {
-          print("OTP Verification Success");
-          QuickAlert.show(
-            context: context,
-            type: QuickAlertType.success,
-            title: 'Success',
-            text: 'OTP verification successful.',
-          );
-        } else {
-          print("OTP Verification Failed");
-          QuickAlert.show(
-            context: context,
-            type: QuickAlertType.error,
-            title: 'Error',
-            text: 'OTP verification failed. Please try again.',
-          );
-        }
+        print(result);
+        // if (result) {
+        //   print("OTP Verification Success");
+          // QuickAlert.show(
+          //   context: context,
+          //   type: QuickAlertType.success,
+          //   title: 'Success',
+          //   text: 'OTP verification successful.',
+          // );
+        // } else {
+        //   print("OTP Verification Failed");
+          // QuickAlert.show(
+          //   context: context,
+          //   type: QuickAlertType.error,
+          //   title: 'Error',
+          //   text: 'OTP verification failed. Please try again.',
+          // );
+        // }
       },
+        onCancelBtnTap: () {
+    Navigator.pop(context); // Dismisses the QuickAlert dialog
+    Navigator.pop(context); // Dismisses the QuickAlert dialog
+  }
     );
     return false;
   }
@@ -415,10 +421,25 @@ class Api {
     }
   }
 
-  Future<bool> _processOTPResponse(
-      BuildContext context, http.Response response, bool isEnglish) async {
-    if (response.statusCode == 200) {
-      final jsonResponse = jsonDecode(response.body);
+Future<bool> _processOTPResponse(
+    BuildContext context, http.Response response, bool isEnglish) async {
+  if (response.statusCode == 200) {
+    final jsonResponse = jsonDecode(response.body);
+
+    // Check if OTP validation is still required
+    if (jsonResponse['OTP'] == true) {
+      // Reinvoke OTP verification
+      OtpFieldController otpController = OtpFieldController();  // Assuming you have access to reinitialize or reset this controller
+      return await _handleOTPVerification(
+        context,
+        jsonResponse['data'],  // Assuming this contains the required data to resend OTP or verify
+        Uri.parse('$baseUrl/verify-otp'),  // Assuming you have a separate URL for OTP verification
+        jsonResponse,
+        isEnglish,
+        otpController
+      );
+    } else {
+      // Success and navigate to login
       Navigator.of(context, rootNavigator: true).pop(); // Close the OTP dialog
       QuickAlert.show(
         context: context,
@@ -431,20 +452,25 @@ class Api {
         confirmBtnColor: Color(0xFF0D2750),
       );
       return true;
-    } else {
-      final jsonResponse = jsonDecode(response.body);
-      final MeC = jsonResponse['error'];
-      Navigator.pop(context); // Close the OTP dialog
-
-      QuickAlert.show(
-        context: context,
-        type: QuickAlertType.error,
-        title: 'Oops...',
-        text: '$MeC',
-      );
-      return false;
     }
+  } else {
+    final jsonResponse = jsonDecode(response.body);
+    final errorMessage = jsonResponse['error'];
+    Navigator.pop(context); // Close the OTP dialog
+
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      title: 'OoOops...',
+      text: errorMessage,
+      onConfirmBtnTap: () async {
+        Navigator.pop(context);
+        Navigator.pop(context);
+      }
+    );
+    return false;
   }
+}
 
   Future<String> searchStores(
       AuthProvider authProvider, String query, String lang) async {

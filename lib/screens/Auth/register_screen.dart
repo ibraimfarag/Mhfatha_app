@@ -79,7 +79,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       }
     } catch (e) {
       // Handle errors
-      print('Error fetching filtered stores: $e');
+      print('Eeerror fetching filtered stores: $e');
     }
   }
 
