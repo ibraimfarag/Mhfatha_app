@@ -229,269 +229,141 @@ class Api {
     }
   }
 
-  Future<bool> registerUser({
-    required BuildContext context,
-    required String lang,
-    required String firstName,
-    required String lastName,
-    required String gender,
-    required String birthday,
-    required String region,
-    required String mobile,
-    required String email,
-    required String password,
-    required String confirmPassword,
-    required int isVendor,
-    // File? imageFile,
-    String? otp,
-  }) async {
-    final url = Uri.parse('$baseUrl/register-post');
-    bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
-    _showLoadingDialog(context);
-    OtpFieldController otpController = OtpFieldController();
-    String enteredOtp = otp ?? '';
+Future<bool> registerUser({
+  required BuildContext context,
+  required String lang,
+  required String firstName,
+  required String lastName,
+  required String gender,
+  required String birthday,
+  required String region,
+  required String mobile,
+  required String email,
+  required String password,
+  required String confirmPassword,
+  required int isVendor,
+  String? otp,
+}) async {
+  final url = Uri.parse('$baseUrl/register-post');
+  bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
+  _showLoadingDialog(context);
+  OtpFieldController otpController = OtpFieldController();
+  String enteredOtp = otp ?? '';
 
-    try {
-      Map<String, dynamic> data = {
-        'lang': lang,
-        'first_name': firstName,
-        'last_name': lastName,
-        'gender': gender,
-        'birthday': birthday,
-        'region': region,
-        'mobile': mobile,
-        'email': email,
-        'password': password,
-        'password_confirmation': confirmPassword,
-        'is_vendor': isVendor.toString(),
-        'otp': enteredOtp,
-      };
-
-      // Convert map to JSON string
-      String jsonBody = jsonEncode(data);
-
-      // Setup headers for JSON content type
-      Map<String, String> headers = {'Content-Type': 'application/json'};
-
-      final response = await client.post(url, headers: headers, body: jsonBody);
-
-      if (response.statusCode == 200) {
-        final jsonResponse = jsonDecode(response.body);
-        print(jsonResponse);
-        if (jsonResponse['OTP'] == true) {
-          // Display OTP dialog
-          // Ensure correct usage of the OTP dialog here
-          return _handleOTPVerification(
-              context, data, url, jsonResponse, isEnglish, otpController);
-        }
-        return jsonResponse['success'] as bool;
-      } else {
-        // Handle errors
-        _handleRegistrationError(context, response, isEnglish);
-        return false;
-      }
-    } catch (e) {
-      // Navigator.of(context, rootNavigator: true)
-      //     .pop(); // Ensure dialogs are closed in case of an error
-      _showError(context, isEnglish, e.toString()); // Display error
-      return false;
-    }
-  }
-
-void _showError(BuildContext context, bool isEnglish, String errorMessage) {
-  QuickAlert.show(
-    context: context,
-    type: QuickAlertType.error,
-    title: isEnglish ? 'Error' : 'خطأ',
-    widget: Container(
-      padding: EdgeInsets.all(10),  // Adds padding around the text
-      constraints: BoxConstraints(maxHeight: 200), // Limits the height of the container
-      child: SingleChildScrollView(
-        child: Text(errorMessage,
-          style: TextStyle(fontSize: 16), // Ensures text is legible
-        ),
-      ),
-    ),
-    confirmBtnText: isEnglish ? 'OK' : 'موافق'
-  );
-}
-
-
-  void _handleRegistrationError(
-      BuildContext context, http.Response response, bool isEnglish) {
-    final jsonResponse = jsonDecode(response.body);
-    List<String> errorMessages = _extractErrorMessages(jsonResponse);
-    Navigator.of(context, rootNavigator: true).pop();
-
-    QuickAlert.show(
-      context: context,
-      type: QuickAlertType.error,
-      title: isEnglish ? 'Registration Failed' : 'خطأ اثناء التسجيل',
-      widget: Column(
-        crossAxisAlignment:
-            isEnglish ? CrossAxisAlignment.start : CrossAxisAlignment.end,
-        mainAxisSize: MainAxisSize.min,
-        children: errorMessages.map((message) => Text(message)).toList(),
-      ),
-    );
-  }
-
-  List<String> _extractErrorMessages(Map<String, dynamic> jsonResponse) {
-    List<String> errorMessages = [];
-    dynamic messages = jsonResponse['messages'];
-
-    if (messages is Map<String, dynamic>) {
-      messages.forEach((field, errors) {
-        if (errors is List) {
-          errors.forEach((error) {
-            errorMessages.add('$error');
-          });
-        }
-      });
-    } else if (messages is List<dynamic>) {
-      errorMessages.addAll(messages.map((error) => '$error'));
-    }
-    return errorMessages;
-  }
-Future<bool> _handleOTPVerification(
-    BuildContext context,
-    Map<String, dynamic> data,
-    Uri url,
-    Map<String, dynamic> jsonResponse,
-    bool isEnglish,
-    OtpFieldController otpController) async {
-  
-  QuickAlert.show(
-    context: context,
-    type: QuickAlertType.custom,
-    showCancelBtn: true,
-    barrierDismissible: false,
-    confirmBtnText: isEnglish ? 'Verify' : 'تفعيل',
-    cancelBtnText: isEnglish ? 'Cancel' : 'الغاء',
-    customAsset: 'images/MeG.gif',
-    widget: Column(
-      children: [
-        Text(jsonResponse['message']),
-        OTPTextField(
-          controller: otpController,
-          length: 5,
-          width: MediaQuery.of(context).size.width,
-          fieldWidth: 20,
-          style: TextStyle(fontSize: 17),
-          textFieldAlignment: MainAxisAlignment.spaceAround,
-          fieldStyle: FieldStyle.underline,
-          onCompleted: (pin) {
-            print("OTP Entered: $pin"); // Debug to check the entered OTP
-            data['otp'] = pin; // Update OTP in data
-          },
-        ),
-      ],
-    ),
-onConfirmBtnTap: () async {
   try {
-    bool result = await _verifyOTP(context, data, url, isEnglish, otpController);
-    if (result) {
-      Navigator.of(context).pop(); // Close the OTP input dialog
-      QuickAlert.show(
-        context: context,
-        type: QuickAlertType.success,
-        title: 'Success',
-        text: 'OTP verification successful.',
-        confirmBtnText: 'OK',
-        onConfirmBtnTap: () {
-          Navigator.pushNamed(context, '/login');
-        },
-        customAsset: 'images/success.gif',
-      );
-    }
-  } catch (e) {
-    // This catch block now handles any errors thrown from _verifyOTP
-    Navigator.of(context).pop(); // Close the OTP input dialog
-    QuickAlert.show(
-      context: context,
-      type: QuickAlertType.error,
-      title: 'Verification Failed',
-      text: e.toString(), // Displaying the actual error message received
-      confirmBtnText: isEnglish ? 'OK' : 'حسنًا',
-      onConfirmBtnTap: () {
-        Navigator.pop(context); // Optionally close the alert dialog or handle otherwise
-      }
-    );
-  }
-},
+    Map<String, dynamic> data = {
+      'lang': lang,
+      'first_name': firstName,
+      'last_name': lastName,
+      'gender': gender,
+      'birthday': birthday,
+      'region': region,
+      'mobile': mobile,
+      'email': email,
+      'password': password,
+      'password_confirmation': confirmPassword,
+      'is_vendor': isVendor.toString(),
+      'otp': enteredOtp,
+    };
 
-    onCancelBtnTap: () {
-      Navigator.pop(context); // Dismisses the QuickAlert dialog
-      Navigator.pop(context); // Dismisses the QuickAlert dialog
-    }
-  );
-  return false;
-}
-
-
-// Ensure that OtpFieldController is passed to _verifyOTP
-Future<bool> _verifyOTP(BuildContext context, Map<String, dynamic> data,
-    Uri url, bool isEnglish, OtpFieldController otpController) async {
-  try {
     String jsonBody = jsonEncode(data);
-    Map<String, String> headers = {'Content-Type': 'application/json'};
-    final response = await client.post(url, headers: headers, body: jsonBody);
+
+    final response = await client.post(
+      url,
+      body: jsonBody,
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    Navigator.of(context, rootNavigator: true).pop(); // Close the loading dialog
     if (response.statusCode == 200) {
-      return _processOTPResponse(context, response, isEnglish, otpController);
+      final jsonResponse = jsonDecode(response.body);
+      if (jsonResponse['OTP'] == true) {
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.custom,
+          showCancelBtn: true,
+          barrierDismissible: false,
+          confirmBtnText: isEnglish ? 'Verify' : 'تفعيل',
+          cancelBtnText: isEnglish ? 'Cancel' : 'الغاء',
+          customAsset: 'images/MeG.gif',
+          widget: Column(
+            children: [
+              Text(jsonResponse['message']),
+              OTPTextField(
+                controller: otpController,
+                length: 5,
+                width: MediaQuery.of(context).size.width,
+                fieldWidth: 20,
+                style: TextStyle(fontSize: 17),
+                textFieldAlignment: MainAxisAlignment.spaceAround,
+                fieldStyle: FieldStyle.underline,
+                onCompleted: (pin) async {
+                  data['otp'] = pin; // Update data map with entered OTP
+            
+                },
+               
+              ),
+            ],
+          ),
+          onConfirmBtnTap: () async {
+
+                        jsonBody = jsonEncode(data); // Re-encode JSON body with OTP
+                  final otpResponse = await client.post(
+                    url,
+                    body: jsonBody,
+                    headers: {'Content-Type': 'application/json'},
+                  );
+
+                  final otpJsonResponse = jsonDecode(otpResponse.body);
+
+                  
+                  if (otpResponse.statusCode == 200) {
+                    QuickAlert.show(
+                      context: context,
+                      type: QuickAlertType.success,
+                      text: otpJsonResponse['message'],
+                      onConfirmBtnTap: () {
+                        Navigator.pushNamed(context, '/login');
+                      },
+                    );
+                    return otpJsonResponse['success']; // Return true, indicating success
+                  } else {
+                    QuickAlert.show(
+                      context: context,
+                      type: QuickAlertType.error,
+                      title: 'Verification Failed',
+                      text: otpJsonResponse['message'],
+                    );
+                    return otpJsonResponse['success']; // Return false, indicating failure
+                  }
+                 }
+        );
+        return false; // Return false, OTP needs to be verified
+      } else {
+        return jsonResponse['success']; // Return success status from API
+      }
     } else {
       final jsonResponse = jsonDecode(response.body);
-      String errorMessage = jsonResponse['error'] ?? "An unexpected error occurred.";
-      throw Exception(errorMessage);
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        title: isEnglish ? 'Registration Failed' : 'خطأ اثناء التسجيل',
+        text: jsonResponse['message'],
+      );
+      return false;
     }
   } catch (e) {
-    _showError(context, isEnglish, e.toString()); // Use _showError to display the error from catch
-    return false;
-  }
-}
-
-
-
-Future<bool> _processOTPResponse(
-    BuildContext context, http.Response response, bool isEnglish, OtpFieldController otpController) async {
-  if (response.statusCode == 200) {
-    final jsonResponse = jsonDecode(response.body);
-    Navigator.of(context, rootNavigator: true).pop(); // Close the OTP dialog
-
-    // Check if another OTP is needed, for example, if the first OTP was wrong
-    if (jsonResponse['OTP'] == true) {
-      return _handleOTPVerification(
-          context, jsonResponse['data'], Uri.parse('$baseUrl/register-post'), jsonResponse, isEnglish, otpController);
-    }
-
-    QuickAlert.show(
-      context: context,
-      type: QuickAlertType.success,
-      customAsset: 'images/success.gif',
-      text: jsonResponse['message'] ?? '',
-      onConfirmBtnTap: () {
-        Navigator.pushNamed(context, '/login');
-      },
-      confirmBtnColor: Color(0xFF0D2750),
-    );
-    return true;
-  } else {
-    final jsonResponse = jsonDecode(response.body);
-    final String error = jsonResponse['error'] ?? 'Unknown error occurred.';
-    Navigator.pop(context); // Close the OTP dialog
-
+    Navigator.of(context).pop(); // Ensure the dialog is closed in case of error
     QuickAlert.show(
       context: context,
       type: QuickAlertType.error,
-      title: 'OoOops...',
-      text: error,
-      onConfirmBtnTap: () async {
-         Navigator.pop(context); // Ensures any other open dialog is closed
-         Navigator.pop(context); // Navigate back from the current page (usually registration form)
-      }
+      title: 'Error',
+      text: 'An unexpected error occurred. Please try again.',
     );
     return false;
   }
 }
+
 
   Future<String> searchStores(
       AuthProvider authProvider, String query, String lang) async {
