@@ -298,14 +298,24 @@ class Api {
     }
   }
 
-  void _showError(BuildContext context, bool isEnglish, String errorMessage) {
-    QuickAlert.show(
-      context: context,
-      type: QuickAlertType.error,
-      title: isEnglish ? 'Error' : 'خطأ',
-      text: errorMessage,
-    );
-  }
+void _showError(BuildContext context, bool isEnglish, String errorMessage) {
+  QuickAlert.show(
+    context: context,
+    type: QuickAlertType.error,
+    title: isEnglish ? 'Error' : 'خطأ',
+    widget: Container(
+      padding: EdgeInsets.all(10),  // Adds padding around the text
+      constraints: BoxConstraints(maxHeight: 200), // Limits the height of the container
+      child: SingleChildScrollView(
+        child: Text(errorMessage,
+          style: TextStyle(fontSize: 16), // Ensures text is legible
+        ),
+      ),
+    ),
+    confirmBtnText: isEnglish ? 'OK' : 'موافق'
+  );
+}
+
 
   void _handleRegistrationError(
       BuildContext context, http.Response response, bool isEnglish) {
