@@ -228,7 +228,6 @@ class Api {
       return false; // Include error message with failure flag
     }
   }
-
 Future<bool> registerUser({
   required BuildContext context,
   required String lang,
@@ -299,44 +298,40 @@ Future<bool> registerUser({
                 fieldStyle: FieldStyle.underline,
                 onCompleted: (pin) async {
                   data['otp'] = pin; // Update data map with entered OTP
-            
                 },
-               
               ),
             ],
           ),
           onConfirmBtnTap: () async {
+            jsonBody = jsonEncode(data); // Re-encode JSON body with OTP
+            final otpResponse = await client.post(
+              url,
+              body: jsonBody,
+              headers: {'Content-Type': 'application/json'},
+            );
 
-                        jsonBody = jsonEncode(data); // Re-encode JSON body with OTP
-                  final otpResponse = await client.post(
-                    url,
-                    body: jsonBody,
-                    headers: {'Content-Type': 'application/json'},
-                  );
-
-                  final otpJsonResponse = jsonDecode(otpResponse.body);
-
-                  
-                  if (otpResponse.statusCode == 200) {
-                    QuickAlert.show(
-                      context: context,
-                      type: QuickAlertType.success,
-                      text: otpJsonResponse['message'],
-                      onConfirmBtnTap: () {
-                        Navigator.pushNamed(context, '/login');
-                      },
-                    );
-                    return otpJsonResponse['success']; // Return true, indicating success
-                  } else {
-                    QuickAlert.show(
-                      context: context,
-                      type: QuickAlertType.error,
-                      title: 'Verification Failed',
-                      text: otpJsonResponse['message'],
-                    );
-                    return otpJsonResponse['success']; // Return false, indicating failure
-                  }
-                 }
+            final otpJsonResponse = jsonDecode(otpResponse.body);
+            
+            if (otpResponse.statusCode == 200) {
+              QuickAlert.show(
+                context: context,
+                type: QuickAlertType.success,
+                text: otpJsonResponse['message'],
+                onConfirmBtnTap: () {
+                  Navigator.pushNamed(context, '/login');
+                },
+              );
+              return otpJsonResponse['success']; // Return true, indicating success
+            } else {
+              QuickAlert.show(
+                context: context,
+                type: QuickAlertType.error,
+                title: 'Verification Failed [${otpResponse.statusCode}]',
+                text: otpJsonResponse['message'],
+              );
+              return otpJsonResponse['success']; // Return false, indicating failure
+            }
+          }
         );
         return false; // Return false, OTP needs to be verified
       } else {
@@ -347,87 +342,74 @@ Future<bool> registerUser({
       QuickAlert.show(
         context: context,
         type: QuickAlertType.error,
-        title: isEnglish ? 'Registration Failed' : 'خطأ اثناء التسجيل',
+        title: isEnglish ? 'Registration Failed [${response.statusCode}]' : 'خطأ اثناء التسجيل [${response.statusCode}]',
         text: jsonResponse['message'],
       );
       return false;
     }
   } catch (e, stackTrace) {
-  // Close any open dialogs first
-  // Navigator.of(context, rootNavigator: true).pop();
+    String errorMessage = 'An unexpected error occurred. Please try again.';
+    int? statusCode;
 
-  String errorMessage = 'An unexpected error occurred. Please try again.';
-  
-  // Enhanced error message handling to ensure all details are captured
-  if (e is http.Response) {
-    // This means it's an HTTP error, and you might want to parse JSON response
-    try {
-      final response = jsonDecode(e.body);
-      if (response['message'] != null) {
-        errorMessage = response['message'];
-      } else {
-        errorMessage = 'Error occurred: ${response.toString()}';
+    // Enhanced error message handling to ensure all details are captured
+    if (e is http.Response) {
+      statusCode = e.statusCode;
+      try {
+        final response = jsonDecode(e.body);
+        if (response['message'] != null) {
+          errorMessage = response['message'];
+        } else {
+          errorMessage = 'Error occurred: ${response.toString()}';
+        }
+      } catch (jsonError) {
+        errorMessage = 'Error parsing error response: $jsonError';
       }
-    } catch (jsonError) {
-      // If JSON parsing fails, use a generic message or log the error
-      errorMessage = 'Error parsing error response: $jsonError';
+    } else if (e is Exception) {
+      errorMessage = 'Exception: ${e.toString()}';
+      print('Stack Trace: $stackTrace');
+    } else {
+      errorMessage = 'Error: ${e.toString()}';
+      print('Error Stack Trace: $stackTrace');
     }
-  } else if (e is Exception) {
-    // If it's a generic exception, display its message and capture stack trace
-    errorMessage = 'Exception: ${e.toString()}';
-    // Optional: Log the stack trace or use it for more detailed error diagnostics
-    print('Stack Trace: $stackTrace');
-  } else {
-    // If it's not an exception but an error, handle accordingly
-    errorMessage = 'Error: ${e.toString()}';
-    print('Error Stack Trace: $stackTrace');
-  }
 
-  // For lengthy error messages, ensure they are displayed properly in the UI
-  if (errorMessage.length > 200) {
-    errorMessage = errorMessage.substring(0, 200) + '... [See logs for full error]';
-  }
-QuickAlert.show(
-  context: context,
-  type: QuickAlertType.error,
-  title: 'Error',
-  widget: Column(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      Text(
-        errorMessage.length > 200 ? '${errorMessage.substring(0, 200)}...' : errorMessage,
-        style: TextStyle(fontSize: 14),
-      ),
-      if (errorMessage.length > 200)
-        TextButton(
-          child: Text('Show more', style: TextStyle(color: Colors.blue)),
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: Text('Full Error Message'),
-                content: SingleChildScrollView(
-                  child: Text(errorMessage),
-                ),
-                actions: [
-                  TextButton(
-                    child: Text('Close'),
-                    onPressed: () => Navigator.of(context).pop(),
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      title: statusCode != null ? 'Error [${statusCode}]' : 'Error',
+      widget: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            errorMessage.length > 200 ? '${errorMessage.substring(0, 200)}...' : errorMessage,
+            style: TextStyle(fontSize: 14),
+          ),
+          if (errorMessage.length > 200)
+            TextButton(
+              child: Text('Show more', style: TextStyle(color: Colors.blue)),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text('Full Error Message'),
+                    content: SingleChildScrollView(
+                      child: Text(errorMessage),
+                    ),
+                    actions: [
+                      TextButton(
+                        child: Text('Close'),
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            );
-          },
-        ),
-    ],
-  ),
-);
+                );
+              },
+            ),
+        ],
+      ),
+    );
 
-
-  return false;
-}
-
-
+    return false;
+  }
 }
 
 
