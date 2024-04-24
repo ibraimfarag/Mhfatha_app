@@ -354,7 +354,7 @@ Future<bool> registerUser({
     }
   } catch (e, stackTrace) {
   // Close any open dialogs first
-  Navigator.of(context, rootNavigator: true).pop();
+  // Navigator.of(context, rootNavigator: true).pop();
 
   String errorMessage = 'An unexpected error occurred. Please try again.';
   
