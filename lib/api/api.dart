@@ -228,190 +228,242 @@ class Api {
       return false; // Include error message with failure flag
     }
   }
-Future<bool> registerUser({
-  required BuildContext context,
-  required String lang,
-  required String firstName,
-  required String lastName,
-  required String gender,
-  required String birthday,
-  required String region,
-  required String mobile,
-  required String email,
-  required String password,
-  required String confirmPassword,
-  required int isVendor,
-  String? otp,
-}) async {
-  final url = Uri.parse('$baseUrl/register-post');
-  bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
-  _showLoadingDialog(context);
-  OtpFieldController otpController = OtpFieldController();
-  String enteredOtp = otp ?? '';
 
-  try {
-    Map<String, dynamic> data = {
-      'lang': lang,
-      'first_name': firstName,
-      'last_name': lastName,
-      'gender': gender,
-      'birthday': birthday,
-      'region': region,
-      'mobile': mobile,
-      'email': email,
-      'password': password,
-      'password_confirmation': confirmPassword,
-      'is_vendor': isVendor.toString(),
-      'otp': enteredOtp,
-    };
+  Future<bool> registerUser({
+    required BuildContext context,
+    required String lang,
+    required String firstName,
+    required String lastName,
+    required String gender,
+    required String birthday,
+    required String region,
+    required String mobile,
+    required String email,
+    required String password,
+    required String confirmPassword,
+    required int isVendor,
+    String? otp,
+  }) async {
+    final url = Uri.parse('$baseUrl/register-post');
+    bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
+    _showLoadingDialog(context);
+    OtpFieldController otpController = OtpFieldController();
+    String enteredOtp = otp ?? '';
 
-    String jsonBody = jsonEncode(data);
+    try {
+      Map<String, dynamic> data = {
+        'lang': lang,
+        'first_name': firstName,
+        'last_name': lastName,
+        'gender': gender,
+        'birthday': birthday,
+        'region': region,
+        'mobile': mobile,
+        'email': email,
+        'password': password,
+        'password_confirmation': confirmPassword,
+        'is_vendor': isVendor.toString(),
+        'otp': enteredOtp,
+      };
 
-    final response = await client.post(
-      url,
-      body: jsonBody,
-      headers: {'Content-Type': 'application/json'},
-    );
+      String jsonBody = jsonEncode(data);
 
-    Navigator.of(context, rootNavigator: true).pop(); // Close the loading dialog
-    if (response.statusCode == 200) {
-      final jsonResponse = jsonDecode(response.body);
-      if (jsonResponse['OTP'] == true) {
+      final response = await http.post(
+        url,
+        body: jsonBody,
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      Navigator.of(context, rootNavigator: true)
+          .pop(); // Close the loading dialog
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        if (jsonResponse['OTP'] == true) {
+          QuickAlert.show(
+              context: context,
+              type: QuickAlertType.custom,
+              showCancelBtn: true,
+              barrierDismissible: false,
+              confirmBtnText: isEnglish ? 'Verify' : 'تفعيل',
+              cancelBtnText: isEnglish ? 'Cancel' : 'الغاء',
+              customAsset: 'images/MeG.gif',
+              widget: Column(
+                children: [
+                  Text(jsonResponse['message']),
+                  OTPTextField(
+                    controller: otpController,
+                    length: 5,
+                    width: MediaQuery.of(context).size.width,
+                    fieldWidth: 20,
+                    style: TextStyle(fontSize: 17),
+                    textFieldAlignment: MainAxisAlignment.spaceAround,
+                    fieldStyle: FieldStyle.underline,
+                    onCompleted: (pin) async {
+                      data['otp'] = pin; // Update data map with entered OTP
+                    },
+                  ),
+                ],
+              ),
+              onConfirmBtnTap: () async {
+                jsonBody = jsonEncode(data); // Re-encode JSON body with OTP
+                final otpResponse = await http.post(
+                  url,
+                  body: jsonBody,
+                  headers: {'Content-Type': 'application/json'},
+                );
+
+                final otpJsonResponse = jsonDecode(otpResponse.body);
+
+                if (otpResponse.statusCode == 200) {
+                  QuickAlert.show(
+                    context: context,
+                    type: QuickAlertType.success,
+                    text: otpJsonResponse['message'],
+                    onConfirmBtnTap: () {
+                      Navigator.pushNamed(context, '/login');
+                    },
+                  );
+                  return otpJsonResponse[
+                      'success']; // Return true, indicating success
+                } else if (otpResponse.statusCode == 500) {
+                  String errorMessage =
+                      'A server error occurred. Please try again later.';
+                  // Try to parse the JSON response to get more detailed error information if available
+                  try {
+                    if (otpJsonResponse['error'] != null) {
+                      errorMessage = otpJsonResponse['error'];
+                    } else if (otpJsonResponse['message'] != null) {
+                      errorMessage = otpJsonResponse['message'];
+                    }
+                  } catch (e) {
+                    // Log the error or handle parsing failure
+                    print('Error parsing server error response: $e');
+                  }
+
+                  QuickAlert.show(
+                    context: context,
+                    type: QuickAlertType.error,
+                    title: 'Server Error [${otpResponse.statusCode}]',
+                    text: errorMessage,
+                  );
+                  return otpJsonResponse[
+                      'success']; // Return false, indicating failure due to server error
+                } else {
+                  QuickAlert.show(
+                    context: context,
+                    type: QuickAlertType.error,
+                    title: 'Verification Failed [${otpResponse.statusCode}]',
+                    text: otpJsonResponse['message'],
+                  );
+                  return otpJsonResponse[
+                      'success']; // Return false, indicating failure
+                }
+              });
+          return false; // Return false, OTP needs to be verified
+        } else {
+          return jsonResponse['success']; // Return success status from API
+        }
+      } else if (response.statusCode == 500) {
+        final jsonResponse = jsonDecode(response.body);
+        String errorMessage =
+            'A server error occurred. Please try again later.';
+        // Try to parse the JSON response to get more detailed error information if available
+        try {
+          if (jsonResponse['error'] != null) {
+            errorMessage = jsonResponse['error'];
+          } else if (jsonResponse['message'] != null) {
+            errorMessage = jsonResponse['message'];
+          }
+        } catch (e) {
+          // Log the error or handle parsing failure
+          print('Error parsing server error response: $e');
+        }
+
         QuickAlert.show(
           context: context,
-          type: QuickAlertType.custom,
-          showCancelBtn: true,
-          barrierDismissible: false,
-          confirmBtnText: isEnglish ? 'Verify' : 'تفعيل',
-          cancelBtnText: isEnglish ? 'Cancel' : 'الغاء',
-          customAsset: 'images/MeG.gif',
-          widget: Column(
-            children: [
-              Text(jsonResponse['message']),
-              OTPTextField(
-                controller: otpController,
-                length: 5,
-                width: MediaQuery.of(context).size.width,
-                fieldWidth: 20,
-                style: TextStyle(fontSize: 17),
-                textFieldAlignment: MainAxisAlignment.spaceAround,
-                fieldStyle: FieldStyle.underline,
-                onCompleted: (pin) async {
-                  data['otp'] = pin; // Update data map with entered OTP
-                },
-              ),
-            ],
-          ),
-          onConfirmBtnTap: () async {
-            jsonBody = jsonEncode(data); // Re-encode JSON body with OTP
-            final otpResponse = await client.post(
-              url,
-              body: jsonBody,
-              headers: {'Content-Type': 'application/json'},
-            );
-
-            final otpJsonResponse = jsonDecode(otpResponse.body);
-            
-            if (otpResponse.statusCode == 200) {
-              QuickAlert.show(
-                context: context,
-                type: QuickAlertType.success,
-                text: otpJsonResponse['message'],
-                onConfirmBtnTap: () {
-                  Navigator.pushNamed(context, '/login');
-                },
-              );
-              return otpJsonResponse['success']; // Return true, indicating success
-            } else {
-              QuickAlert.show(
-                context: context,
-                type: QuickAlertType.error,
-                title: 'Verification Failed [${otpResponse.statusCode}]',
-                text: otpJsonResponse['message'],
-              );
-              return otpJsonResponse['success']; // Return false, indicating failure
-            }
-          }
+          type: QuickAlertType.error,
+          title: 'Server Error  [${jsonResponse.statusCode}]',
+          text: errorMessage,
         );
-        return false; // Return false, OTP needs to be verified
+        return false; // Return false, indicating failure due to server error
       } else {
-        return jsonResponse['success']; // Return success status from API
+        final jsonResponse = jsonDecode(response.body);
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.error,
+          title: isEnglish
+              ? 'Registration Failed [${response.statusCode}]'
+              : 'خطأ اثناء التسجيل [${response.statusCode}]',
+          text: jsonResponse['message'],
+        );
+        return false;
       }
-    } else {
-      final jsonResponse = jsonDecode(response.body);
+    } catch (e, stackTrace) {
+      String errorMessage = 'An unexpected error occurred. Please try again.';
+      int? statusCode;
+
+      // Enhanced error message handling to ensure all details are captured
+      if (e is http.Response) {
+        statusCode = e.statusCode;
+        try {
+          final response = jsonDecode(e.body);
+          if (response['message'] != null) {
+            errorMessage = response['message'];
+          } else {
+            errorMessage = 'Error occurred: ${response.toString()}';
+          }
+        } catch (jsonError) {
+          errorMessage = 'Error parsing error response: $jsonError';
+        }
+      } else if (e is Exception) {
+        errorMessage = 'Exception: ${e.toString()}';
+        print('Stack Trace: $stackTrace');
+      } else {
+        errorMessage = 'Error: ${e.toString()}';
+        print('Error Stack Trace: $stackTrace');
+      }
+
       QuickAlert.show(
         context: context,
         type: QuickAlertType.error,
-        title: isEnglish ? 'Registration Failed [${response.statusCode}]' : 'خطأ اثناء التسجيل [${response.statusCode}]',
-        text: jsonResponse['message'],
+        title: statusCode != null ? 'Error [${statusCode}]' : 'Error',
+        widget: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              errorMessage.length > 200
+                  ? '${errorMessage.substring(0, 200)}...'
+                  : errorMessage,
+              style: TextStyle(fontSize: 14),
+            ),
+            if (errorMessage.length > 200)
+              TextButton(
+                child: Text('Show more', style: TextStyle(color: Colors.blue)),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text('Full Error Message'),
+                      content: SingleChildScrollView(
+                        child: Text(errorMessage),
+                      ),
+                      actions: [
+                        TextButton(
+                          child: Text('Close'),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+          ],
+        ),
       );
+
       return false;
     }
-  } catch (e, stackTrace) {
-    String errorMessage = 'An unexpected error occurred. Please try again.';
-    int? statusCode;
-
-    // Enhanced error message handling to ensure all details are captured
-    if (e is http.Response) {
-      statusCode = e.statusCode;
-      try {
-        final response = jsonDecode(e.body);
-        if (response['message'] != null) {
-          errorMessage = response['message'];
-        } else {
-          errorMessage = 'Error occurred: ${response.toString()}';
-        }
-      } catch (jsonError) {
-        errorMessage = 'Error parsing error response: $jsonError';
-      }
-    } else if (e is Exception) {
-      errorMessage = 'Exception: ${e.toString()}';
-      print('Stack Trace: $stackTrace');
-    } else {
-      errorMessage = 'Error: ${e.toString()}';
-      print('Error Stack Trace: $stackTrace');
-    }
-
-    QuickAlert.show(
-      context: context,
-      type: QuickAlertType.error,
-      title: statusCode != null ? 'Error [${statusCode}]' : 'Error',
-      widget: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            errorMessage.length > 200 ? '${errorMessage.substring(0, 200)}...' : errorMessage,
-            style: TextStyle(fontSize: 14),
-          ),
-          if (errorMessage.length > 200)
-            TextButton(
-              child: Text('Show more', style: TextStyle(color: Colors.blue)),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: Text('Full Error Message'),
-                    content: SingleChildScrollView(
-                      child: Text(errorMessage),
-                    ),
-                    actions: [
-                      TextButton(
-                        child: Text('Close'),
-                        onPressed: () => Navigator.of(context).pop(),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-        ],
-      ),
-    );
-
-    return false;
   }
-}
-
 
   Future<String> searchStores(
       AuthProvider authProvider, String query, String lang) async {
