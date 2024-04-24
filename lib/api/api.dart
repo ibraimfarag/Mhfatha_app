@@ -330,24 +330,49 @@ class Api {
                       'A server error occurred. Please try again later.';
                   // Try to parse the JSON response to get more detailed error information if available
                   try {
-                    if (otpJsonResponse['error'] != null) {
+                    if (otpJsonResponse.containsKey('error')) {
                       errorMessage = otpJsonResponse['error'];
-                    } else if (otpJsonResponse['message'] != null) {
+                    } else if (otpJsonResponse.containsKey('message')) {
                       errorMessage = otpJsonResponse['message'];
+                    } else {
+                      // Fallback to using the entire response body as the error message
+                      errorMessage = "Error ${otpResponse.statusCode}: " +
+                          otpResponse.body;
                     }
                   } catch (e) {
                     // Log the error or handle parsing failure
                     print('Error parsing server error response: $e');
+                    errorMessage = "Error parsing response: $e";
                   }
 
+                  // Display the initial alert with an option to expand for more details
                   QuickAlert.show(
                     context: context,
                     type: QuickAlertType.error,
                     title: 'Server Error [${otpResponse.statusCode}]',
                     text: errorMessage,
+                    widget: TextButton(
+                      child: Text('Show more',
+                          style: TextStyle(color: Colors.blue)),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text('Full Error Report'),
+                            content: SingleChildScrollView(
+                                child: Text(errorMessage)),
+                            actions: [
+                              TextButton(
+                                child: Text('Close'),
+                                onPressed: () => Navigator.of(context).pop(),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                   );
-                  return otpJsonResponse[
-                      'success']; // Return false, indicating failure due to server error
+                  return otpJsonResponse['success'];
                 } else {
                   QuickAlert.show(
                     context: context,
@@ -367,25 +392,43 @@ class Api {
         final jsonResponse = jsonDecode(response.body);
         String errorMessage =
             'A server error occurred. Please try again later.';
-        // Try to parse the JSON response to get more detailed error information if available
-        try {
-          if (jsonResponse['error'] != null) {
-            errorMessage = jsonResponse['error'];
-          } else if (jsonResponse['message'] != null) {
-            errorMessage = jsonResponse['message'];
-          }
-        } catch (e) {
-          // Log the error or handle parsing failure
-          print('Error parsing server error response: $e');
+
+        if (jsonResponse.containsKey('error')) {
+          errorMessage = jsonResponse['error'];
+        } else if (jsonResponse.containsKey('message')) {
+          errorMessage = jsonResponse['message'];
+        } else {
+          errorMessage = "Error ${response.statusCode}: " + response.body;
         }
 
+        // Display the initial alert with an option to expand for more details
         QuickAlert.show(
           context: context,
           type: QuickAlertType.error,
-          title: 'Server Error  [${jsonResponse.statusCode}]',
+          title: 'Server Error [500]',
           text: errorMessage,
+          widget: TextButton(
+            child: Text('Show more', style: TextStyle(color: Colors.blue)),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text('Full Error Report'),
+                  content: SingleChildScrollView(
+                    child: Text(errorMessage),
+                  ),
+                  actions: [
+                    TextButton(
+                      child: Text('Close'),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         );
-        return false; // Return false, indicating failure due to server error
+        return false;
       } else {
         final jsonResponse = jsonDecode(response.body);
         QuickAlert.show(
