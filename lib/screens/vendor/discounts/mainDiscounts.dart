@@ -73,33 +73,38 @@ class _MainDiscountsState extends State<MainDiscounts> {
     }
   }
 
-  Future<void> selectDate(TextEditingController controller) async {
-    DateTime? selectedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: ThemeData.light().copyWith(
-            primaryColor:
-                Color(0xFF080E27), // Change this to your desired color
-            // accentColor: Color(0xFF080E27), // Change this to your desired color
-            colorScheme: ColorScheme.light(
-              primary: Color(0xFF080E27), // Change this to your desired color
+  Future<void> selectDate(
+      BuildContext context, TextEditingController controller) async {
+    try {
+      DateTime currentDate = await Api().fetchCurrentDateFromApi();
+      DateTime? selectedDate = await showDatePicker(
+        context: context,
+        initialDate: currentDate,
+        firstDate: currentDate,
+        lastDate: DateTime(2101),
+        builder: (BuildContext context, Widget? child) {
+          return Theme(
+            data: ThemeData.light().copyWith(
+              primaryColor:
+                  Color(0xFF080E27), // Change this to your desired color
+              colorScheme: ColorScheme.light(
+                primary: Color(0xFF080E27), // Change this to your desired color
+              ),
+              buttonTheme: ButtonThemeData(
+                textTheme: ButtonTextTheme.primary,
+              ),
             ),
-            buttonTheme: ButtonThemeData(
-              textTheme: ButtonTextTheme.primary,
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
+            child: child!,
+          );
+        },
+      );
 
-    if (selectedDate != null && selectedDate != controller.text) {
-      // Update the controller with the selected date
-      controller.text = DateFormat('yyyy-MM-dd').format(selectedDate);
+      if (selectedDate != null) {
+        controller.text = DateFormat('yyyy-MM-dd').format(selectedDate);
+      }
+    } catch (e) {
+      // Handle errors here, possibly showing an error message or logging the error
+      print("Error fetching current date: $e");
     }
   }
 
@@ -288,8 +293,8 @@ class _MainDiscountsState extends State<MainDiscounts> {
                                       ),
                                       SizedBox(height: 10),
                                       GestureDetector(
-                                        onTap: () =>
-                                            selectDate(startDateController),
+                                        onTap: () => selectDate(context,
+                                            startDateController), // Pass `context` explicitly here
                                         child: AbsorbPointer(
                                           child: TextFormField(
                                             controller: startDateController,
@@ -305,15 +310,12 @@ class _MainDiscountsState extends State<MainDiscounts> {
                                               focusedBorder:
                                                   UnderlineInputBorder(
                                                 borderSide: BorderSide(
-                                                    color: Color(
-                                                        0xFF080E27)), // Bottom border color when focused
+                                                    color: Color(0xFF080E27)),
                                               ),
                                               labelStyle: TextStyle(
-                                                  color: Color(
-                                                      0xFF080E27)), // Label text color
+                                                  color: Color(0xFF080E27)),
                                               hintStyle: TextStyle(
-                                                  color: Color(
-                                                      0xFF080E27)), // Hint text color
+                                                  color: Color(0xFF080E27)),
                                             ),
                                             textAlign: isEnglish
                                                 ? TextAlign.left
@@ -323,8 +325,8 @@ class _MainDiscountsState extends State<MainDiscounts> {
                                       ),
                                       SizedBox(height: 10),
                                       GestureDetector(
-                                        onTap: () =>
-                                            selectDate(endDateController),
+                                        onTap: () => selectDate(context,
+                                            endDateController), // Corrected to include `context`
                                         child: AbsorbPointer(
                                           child: TextFormField(
                                             controller: endDateController,

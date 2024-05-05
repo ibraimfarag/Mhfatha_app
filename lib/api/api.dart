@@ -1251,6 +1251,21 @@ class Api {
       throw Exception('Failed to perform action: $e');
     }
   }
+
+Future<DateTime> fetchCurrentDateFromApi() async {
+
+  final response = await client.get(Uri.parse('$baseUrl/time-and-date'));
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
+    // Directly parse the ISO 8601 string from your API
+    return DateTime.parse(data['time_and_date'].replaceFirst(' ', 'T'));
+  } else {
+    throw Exception('Failed to load date from API');
+  }
+}
+
+
+
 }
 
 void _showLoadingDialog(BuildContext context) {
