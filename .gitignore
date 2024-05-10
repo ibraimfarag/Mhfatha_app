@@ -42,3 +42,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+android/fastlane/service_account_key.json
+android/service_account_key.json
+android/key_files.zip
