@@ -31,7 +31,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.19.6
+          flutter-version: 3.13.8
 
       - name: Install Flutter dependencies
         run: flutter pub get
@@ -73,7 +73,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v1
         with:
-          flutter-version: 3.16.9
+          flutter-version: 3.13.8
       - run: flutter pub get
       - run: flutter build appbundle --release
       - name: Upload artifact to Github
