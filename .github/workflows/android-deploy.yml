@@ -39,7 +39,15 @@ jobs:
       - name: Install Flutter dependencies
         run: flutter pub get
         # Add build runner commands here if you have any
+      - name: Navigate to Android directory
+        run: cd android
 
+      - name: Update Gradle wrapper
+        run: |
+          ./gradlew wrapper --gradle-version=8.4
+
+      - name: Return to project root directory
+        run: cd ..
       - name: Build the Bundle
         run: flutter build appbundle --release
       - name: Upload artifact to Github
