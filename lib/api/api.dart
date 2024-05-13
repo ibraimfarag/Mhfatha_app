@@ -29,6 +29,45 @@ class Api {
     }
   }
 
+  Future<Map<String, String>> support(BuildContext context) async {
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+    try {
+      // Define headers
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${authProvider.token}',
+      };
+
+      // Make the HTTP GET request with headers
+      final response = await http.get(
+        Uri.parse('$baseUrl/contact-us'),
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        // Parse the response body as JSON
+        Map<String, dynamic> responseData = json.decode(response.body);
+
+        // Extract the 'contacts' object from the response data
+        Map<String, dynamic> contactsData = responseData['contacts'];
+
+        // Extract WhatsApp and email from contacts data
+        String whatsapp = contactsData['whatsapp'];
+        String email = contactsData['email'];
+
+        // Return WhatsApp and email
+        return {'whatsapp': whatsapp, 'email': email};
+      } else {
+        // If the response status code is not 200, return an empty map
+        return {};
+      }
+    } catch (e) {
+      // If an error occurs, return an empty map
+      return {};
+    }
+  }
+
   Future<bool> loginUser(
     BuildContext context,
     AuthProvider authProvider,
@@ -1252,20 +1291,16 @@ class Api {
     }
   }
 
-Future<DateTime> fetchCurrentDateFromApi() async {
-
-  final response = await client.get(Uri.parse('$baseUrl/time-and-date'));
-  if (response.statusCode == 200) {
-    final data = jsonDecode(response.body);
-    // Directly parse the ISO 8601 string from your API
-    return DateTime.parse(data['time_and_date'].replaceFirst(' ', 'T'));
-  } else {
-    throw Exception('Failed to load date from API');
+  Future<DateTime> fetchCurrentDateFromApi() async {
+    final response = await client.get(Uri.parse('$baseUrl/time-and-date'));
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      // Directly parse the ISO 8601 string from your API
+      return DateTime.parse(data['time_and_date'].replaceFirst(' ', 'T'));
+    } else {
+      throw Exception('Failed to load date from API');
+    }
   }
-}
-
-
-
 }
 
 void _showLoadingDialog(BuildContext context) {

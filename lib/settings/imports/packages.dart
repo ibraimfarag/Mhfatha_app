@@ -123,3 +123,6 @@ export  'package:circular_chart_flutter/circular_chart_flutter.dart';
 
 // /* -------------------------------- fl_chart -------------------------------- */
 export 'package:fl_chart/fl_chart.dart';
+
+// /* ------------------------------ url_launcher ------------------------------ */
+export 'package:url_launcher/url_launcher.dart';
