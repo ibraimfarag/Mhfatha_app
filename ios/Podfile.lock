@@ -124,6 +124,8 @@ PODS:
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - url_launcher_ios (0.0.1):
+    - Flutter
   - ZLPhotoBrowser (4.2.5):
     - ZLPhotoBrowser/Core (= 4.2.5)
   - ZLPhotoBrowser/Core (4.2.5)
@@ -146,6 +148,7 @@ DEPENDENCIES:
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
 SPEC REPOS:
   trunk:
@@ -200,6 +203,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/qr_code_scanner/ios"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
   device_information: d652f6dcea86bdc5300ffd495486de1d5047bf4f
@@ -233,6 +238,7 @@ SPEC CHECKSUMS:
   SDWebImage: 40b0b4053e36c660a764958bff99eed16610acbb
   SDWebImageWebPCoder: e38c0a70396191361d60c092933e22c20d5b1380
   shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
+  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
   ZLPhotoBrowser: 4bfab86b851042e18d7f413284472aa68759626a
 
 PODFILE CHECKSUM: 41f2f8a58e8982679a18d8179fc517ee03bb7441
