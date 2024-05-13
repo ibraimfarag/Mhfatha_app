@@ -341,115 +341,111 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         //     },
                         //   ),
                         // ),
-
-                        Container(
-                          margin:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-                          padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
-                          decoration: BoxDecoration(
-                            color: Color(0xFFFFFFFF),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      // Handle WhatsApp chat
-                                      // You can use a package like url_launcher to open WhatsApp with a chat number
-                                      launch(
-                                          'https://wa.me/1234567890'); // Replace with your WhatsApp chat number
-                                    },
-                                    child: Image.asset(
+                        if (whatsapp != null || email != null)
+                          Container(
+                            margin: EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 0),
+                            padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+                            decoration: BoxDecoration(
+                              color: Color(0xFFFFFFFF),
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Image.asset(
                                       'assets/icon/support.png', // Replace with your WhatsApp icon asset path
                                       width: 24, // Adjust width as needed
                                       height: 24, // Adjust height as needed
                                     ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  Text(
-                                    isEnglish
-                                        ? 'Contact Support via'
-                                        : 'الدعم الفني عبر',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                                    SizedBox(width: 10),
+                                    Text(
+                                      isEnglish
+                                          ? 'Contact Support via'
+                                          : 'الدعم الفني عبر',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 10),
-                              Row(
-                                children: [
-                                  SizedBox(
-                                      width:
-                                          30), // Adjust as needed for spacing
-                                  GestureDetector(
-                                    onTap: () async {
-                                      final String phoneNumber = whatsapp; // Replace with your WhatsApp phone number
-                                      final String whatsappUrl =
-                                          'https://wa.me/$phoneNumber';
-                                      if (await canLaunch(whatsappUrl)) {
-                                        await launch(whatsappUrl);
-                                      } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                                'WhatsApp is not installed on your device.'),
-                                          ),
-                                        );
-                                      }
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Image.asset(
-                                          'assets/icon/whatsaap.png', // Replace with your email icon asset path
-                                          width: 24, // Adjust width as needed
-                                          height: 24, // Adjust height as needed
-                                        ),
-                                        SizedBox(width: 5),
-                                        Text(
-                                          'WhatsApp',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-
-                                  SizedBox(width: 20),
-                                  GestureDetector(
-                                      onTap: () {
-                                        // Handle email
-                                        launchUrl(Uri.parse(
-                                            'mailto:$email')); // Replace with your email address
-                                      },
-                                      child: Row(
-                                        children: [
-                                          Image.asset(
-                                            'assets/icon/email.png', // Replace with your email icon asset path
-                                            width: 24, // Adjust width as needed
-                                            height:
-                                                24, // Adjust height as needed
-                                          ),
-                                          SizedBox(width: 5),
-                                          Text(
-                                            'Email',
-                                            style: TextStyle(
-                                              fontSize: 14,
+                                  ],
+                                ),
+                                SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    SizedBox(width: 30),
+                                    if (whatsapp !=
+                                        null) // Adjust as needed for spacing
+                                      GestureDetector(
+                                        onTap: () async {
+                                          final String phoneNumber =
+                                              whatsapp; // Replace with your WhatsApp phone number
+                                          final String whatsappUrl =
+                                              'https://wa.me/$phoneNumber';
+                                          if (await canLaunch(whatsappUrl)) {
+                                            await launch(whatsappUrl);
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                    'WhatsApp is not installed on your device.'),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Image.asset(
+                                              'assets/icon/whatsaap.png', // Replace with your email icon asset path
+                                              width:
+                                                  24, // Adjust width as needed
+                                              height:
+                                                  24, // Adjust height as needed
                                             ),
-                                          ),
-                                        ],
-                                      )),
-                                ],
-                              ),
-                            ],
+                                            SizedBox(width: 5),
+                                            Text(
+                                              'WhatsApp',
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    SizedBox(width: 20),
+                                    if (email != null)
+                                      GestureDetector(
+                                          onTap: () {
+                                            // Handle email
+                                            launchUrl(Uri.parse(
+                                                'mailto:$email')); // Replace with your email address
+                                          },
+                                          child: Row(
+                                            children: [
+                                              Image.asset(
+                                                'assets/icon/email.png', // Replace with your email icon asset path
+                                                width:
+                                                    24, // Adjust width as needed
+                                                height:
+                                                    24, // Adjust height as needed
+                                              ),
+                                              SizedBox(width: 5),
+                                              Text(
+                                                'Email',
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            ],
+                                          )),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
 
                         SizedBox(
                           height: 10,
