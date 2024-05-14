@@ -273,8 +273,8 @@ Container(
                           ),
                           buildSettingItem(
                             context,
-                            'Mobile Number',
-                            'رقم الجوال',
+                            'Telephone / Store Number'
+                            , 'جوال / هاتف المتجر',
                             () {},
                             mobile,
                             '',
