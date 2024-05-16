@@ -38,3 +38,5 @@ export 'package:mhfatha/widgets/working_days_widget.dart';
 
 // /* ------------------------------- Search Bar ------------------------------- */
 export 'package:mhfatha/widgets/search.dart';
+
+export 'package:mhfatha/widgets/searchfield.dart';

@@ -88,9 +88,7 @@ export 'package:firebase_messaging/firebase_messaging.dart';
 
 export'package:pull_down_button/pull_down_button.dart';
 
-// /* ------------------------------ search field ------------------------------ */
 
-export 'package:searchfield/searchfield.dart';
 
 // /* --------------------------- status bar manager --------------------------- */
 export 'package:statusbarmanager/statusbarmanager.dart';

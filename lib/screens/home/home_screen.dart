@@ -1041,56 +1041,60 @@ class _HomeScreenState extends State<HomeScreen> {
                                   var parts = e.split(' - ');
                                   var name = parts[0];
                                   var id = parts[1];
-                                  return SearchFieldListItem<String>(e,
-                                      child: GestureDetector(
-                                        onTap: () async {
-                                          // Handle the tap action here, e.g., navigate to a new screen
-                                          print('Tapped on item with id: $id');
-                                          String storeDetails =
-                                              await Api().getStoreDetails(
-                                            context,
-                                            authProvider,
-                                            int.parse(id),
-                                            latitude!,
-                                            longitude!,
-                                          );
+                                  var gestureDetector = GestureDetector(
+    onTap: () async {
+      // Handle the tap action here, e.g., navigate to a new screen
+      print('Tapped on item with id: $id');
+      String storeDetails = await Api().getStoreDetails(
+        context,
+        authProvider,
+        int.parse(id),
+        latitude!,
+        longitude!,
+      );
 
-                                          // Parse the store details JSON
-                                          Map<String, dynamic> storeDetailsMap =
-                                              jsonDecode(storeDetails);
-                                          Map<String, dynamic> store =
-                                              storeDetailsMap['store'];
-                                          Navigator.pushNamed(
-                                              context, '/store-info',
-                                              arguments: store);
+      // Parse the store details JSON
+      Map<String, dynamic> storeDetailsMap = jsonDecode(storeDetails);
+      Map<String, dynamic> store = storeDetailsMap['store'];
+      Navigator.pushNamed(context, '/store-info', arguments: store);
 
-                                          print(store);
-                                        },
-                                        child: Row(
-                                          crossAxisAlignment: isEnglish
-                                              ? CrossAxisAlignment.start
-                                              : CrossAxisAlignment.end,
-                                          mainAxisAlignment: isEnglish
-                                              ? MainAxisAlignment.start
-                                              : MainAxisAlignment.end,
-                                          children: [
-                                            Container(
-                                              margin: EdgeInsets.symmetric(
-                                                  horizontal: 20),
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 0),
-                                                child: Text(
-                                                  '$name',
-                                                  textAlign: isEnglish
-                                                      ? TextAlign.start
-                                                      : TextAlign.end,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ));
+      print(store);
+    },
+    child: Row(
+      crossAxisAlignment: isEnglish
+          ? CrossAxisAlignment.start
+          : CrossAxisAlignment.end,
+      mainAxisAlignment: isEnglish
+          ? MainAxisAlignment.start
+          : MainAxisAlignment.end,
+      children: [
+        Container(
+              width: MediaQuery.of(context).size.width - 100, 
+        height: 40,
+        // color: Colors.red,
+          margin: EdgeInsets.symmetric(horizontal: 20),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 0),
+            child: Text(
+              '$name',
+              textAlign: isEnglish ? TextAlign.start : TextAlign.end,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+
+return SearchFieldListItem<String>(
+  child: Row(
+    children: [
+      Container(
+     // Set the background color to red
+        child: gestureDetector,
+      ),
+    ],
+  ),
+);
                                 }).toList(),
                                 focusNode: focus,
                                 suggestionState: Suggestion.expand,
@@ -1103,32 +1107,32 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-                                  // SuggestionTextField(), // Place your SuggestionTextField here
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 20),
-                            alignment: isEnglish
-                                ? Alignment.centerLeft
-                                : Alignment.centerRight,
-                            child: Row(
-                              children: [
-                                Icon(Icons.store,
-                                    color: isDark ? Colors.white : Colors.black,
-                                    size: 24),
-                                SizedBox(width: 10),
-                                Text(
-                                  isEnglish
-                                      ? 'Nearby Discounts'
-                                      : 'خصومات قريبة منك ',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
+                      // SuggestionTextField(), // Place your SuggestionTextField here
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                        alignment: isEnglish
+                            ? Alignment.centerLeft
+                            : Alignment.centerRight,
+                        child: Row(
+                          children: [
+                            Icon(Icons.store,
+                                color: isDark ? Colors.white : Colors.black,
+                                size: 24),
+                            SizedBox(width: 10),
+                            Text(
+                              isEnglish
+                                  ? 'Nearby Discounts'
+                                  : 'خصومات قريبة منك ',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                           if (isLoading)
+                          ],
+                        ),
+                      ),
+                      if (isLoading)
                         Center(
                           child:
                               CircularProgressIndicator(), // Loading indicator
@@ -1170,7 +1174,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       // SuggestionTextField(),
-                     
+
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 20),
                         child: SingleChildScrollView(

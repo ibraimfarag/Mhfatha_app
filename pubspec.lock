@@ -1056,14 +1056,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.27.7"
-  searchfield:
-    dependency: "direct main"
-    description:
-      name: searchfield
-      sha256: "84aafe53669a1353e8ff400e7e74457fa3dc0e22998e29a784417284b845ffb8"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.9.9"
   shared_preferences:
     dependency: "direct main"
     description:
