@@ -273,8 +273,8 @@ class Api {
     required String lang,
     required String firstName,
     required String lastName,
-    required String gender,
-    required String birthday,
+    String? gender, // Making gender optional
+    String? birthday, // Making birthday optional
     required String region,
     required String mobile,
     required String email,
@@ -294,8 +294,6 @@ class Api {
         'lang': lang,
         'first_name': firstName,
         'last_name': lastName,
-        'gender': gender,
-        'birthday': birthday,
         'region': region,
         'mobile': mobile,
         'email': email,
@@ -304,7 +302,15 @@ class Api {
         'is_vendor': isVendor.toString(),
         'otp': enteredOtp,
       };
+  // Add gender to the data if provided
+    if (gender != null) {
+      data['gender'] = gender;
+    }
 
+    // Add birthday to the data if provided
+    if (birthday != null) {
+      data['birthday'] = birthday;
+    }
       String jsonBody = jsonEncode(data);
 
       final response = await http.post(

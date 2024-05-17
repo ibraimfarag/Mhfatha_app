@@ -20,11 +20,10 @@ class DatePickerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-            bool isDark = Provider.of<AppState>(context).isDarkMode;
+    bool isDark = Provider.of<AppState>(context).isDarkMode;
 
     return Container(
       margin: EdgeInsets.only(left: 40, right: 40, top: 10),
-      
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -36,6 +35,13 @@ class DatePickerWidget extends StatelessWidget {
               fontWeight: FontWeight.normal,
             ),
           ),
+          Text(
+            isEnglish ? '(optional)' : '(اختياري)',
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey.shade600,
+            ),
+          ),
           SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -43,20 +49,22 @@ class DatePickerWidget extends StatelessWidget {
               if (selectedDate == null)
                 Container(
                   width: 200,
-  decoration: BoxDecoration(
-                                // color: isDark? Color.fromARGB(251, 34, 34, 34):Color(0xFFF0F0F0),
-                                borderRadius: BorderRadius.circular(30),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color:isDark? Color.fromARGB(250, 17, 17, 17): Colors.grey.withOpacity(0.5),
-                                    spreadRadius:
-                                        5, // Negative spreadRadius makes the shadow inside
-                                    blurRadius: 7,
-                                    offset: Offset(0,
-                                        3), // changes the position of the shadow
-                                  ),
-                                ],
-                              ),
+                  decoration: BoxDecoration(
+                    // color: isDark? Color.fromARGB(251, 34, 34, 34):Color(0xFFF0F0F0),
+                    borderRadius: BorderRadius.circular(30),
+                    boxShadow: [
+                      BoxShadow(
+                        color: isDark
+                            ? Color.fromARGB(250, 17, 17, 17)
+                            : Colors.grey.withOpacity(0.5),
+                        spreadRadius:
+                            5, // Negative spreadRadius makes the shadow inside
+                        blurRadius: 7,
+                        offset:
+                            Offset(0, 3), // changes the position of the shadow
+                      ),
+                    ],
+                  ),
                   child: ElevatedButton(
                     onPressed: () async {
                       DateTime? pickedDate = await showDatePicker(
@@ -74,8 +82,7 @@ class DatePickerWidget extends StatelessWidget {
                       primary: color,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(360),
-                              side: BorderSide(color: color, width: 0),
-
+                        side: BorderSide(color: color, width: 0),
                       ),
                     ),
                     child: Text(

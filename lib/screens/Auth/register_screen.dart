@@ -247,6 +247,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     ? 'Birthday: '
                                     : 'تاريخ الميلاد: ',
                               ),
+                              SizedBox(height: 5),
 
                               // /* -------------------------------------------------------------------------- */
                               // /* ------------------------------ profile image ----------------------------- */
@@ -277,51 +278,53 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 40, vertical: 20),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          isEnglish ? 'Region' : 'المدينة',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            color: colors,
+                                  Flexible(
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 40, vertical: 20),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            isEnglish ? 'Region' : 'المدينة',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: colors,
+                                            ),
                                           ),
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.fromLTRB(
-                                              30, 15, 30, 15),
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey[200],
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                          ),
-                                          child: DropdownButton<String>(
-                                            value: selectedRegion,
-                                            hint: Text(isEnglish
-                                                ? 'Select Region'
-                                                : 'اختر المنطقة'),
-                                            onChanged: (String? newValue) {
-                                              setState(() {
-                                                selectedRegion = newValue!;
-                                              });
+                                          Container(
+                                            padding: EdgeInsets.fromLTRB(
+                                                20, 15, 20, 15),
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey[200],
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                            ),
+                                            child: DropdownButton<String>(
+                                              value: selectedRegion,
+                                              hint: Text(isEnglish
+                                                  ? 'Select Region'
+                                                  : 'اختر المنطقة'),
+                                              onChanged: (String? newValue) {
+                                                setState(() {
+                                                  selectedRegion = newValue!;
+                                                });
 
-                                              print(selectedRegion);
-                                            },
-                                            items: regionDropdownItems.map(
-                                                (DropdownMenuItem<String>
-                                                    item) {
-                                              return item;
-                                            }).toList(),
-                                            underline: Container(),
+                                                print(selectedRegion);
+                                              },
+                                              items: regionDropdownItems.map(
+                                                  (DropdownMenuItem<String>
+                                                      item) {
+                                                return item;
+                                              }).toList(),
+                                              underline: Container(),
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -485,34 +488,66 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                             },
                                           );
                                         } else {
-                                          // Proceed with registration if terms are accepted
-                                          bool success =
-                                              await Api().registerUser(
-                                            context: context,
-                                            lang: lang,
-                                            firstName: nameController.text,
-                                            lastName: familyNameController.text,
-                                            gender: selectedGender,
-                                            birthday: selectedDate != null
-                                                ? DateFormat('yyyy-MM-dd')
-                                                    .format(selectedDate!)
-                                                : '',
-                                            region: selectedRegion,
-                                            mobile: mobileController.text,
-                                            email: mailController.text,
-                                            password: passwordController.text,
-                                            confirmPassword:
-                                                confirmPasswordController.text,
-                                            isVendor: selectedVendor == '1'
-                                                ? 1
-                                                : 0, // Convert '1' or '0' to int
-                                            // imageFile: _selectedProfileImagePath !=
-                                            //         null
-                                            //     ? File(
-                                            //         _selectedProfileImagePath ??
-                                            //             '')
-                                            //     : null, // Pass null if no profile image
-                                          );
+                                          // Check if the mobile number is valid
+                                          if (mobileController.text.length !=
+                                                  10 ||
+                                              !RegExp(r'^[5,6,9]\d{9}$')
+                                                  .hasMatch(
+                                                      mobileController.text)) {
+                                            // Show alert dialog for invalid mobile number
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  title: Text(
+                                                    isEnglish
+                                                        ? 'Invalid Mobile Number'
+                                                        : 'رقم الجوال غير صالح',
+                                                  ),
+                                                  content: Text(
+                                                    isEnglish
+                                                        ? 'You must enter your Saudi mobile number (10 digits).'
+                                                        : 'يجب إدخال رقم الجوال السعودي (10 أرقام).',
+                                                  ),
+                                                  actions: <Widget>[
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: Text('OK'),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          } else {
+                                            // Proceed with registration if terms are accepted and mobile number is valid
+                                            bool success =
+                                                await Api().registerUser(
+                                              context: context,
+                                              lang: lang,
+                                              firstName: nameController.text,
+                                              lastName:
+                                                  familyNameController.text,
+                                              gender: selectedGender.isNotEmpty
+                                                  ? selectedGender
+                                                  : null,
+                                              birthday: selectedDate != null
+                                                  ? DateFormat('yyyy-MM-dd')
+                                                      .format(selectedDate!)
+                                                  : null,
+                                              region: selectedRegion,
+                                              mobile: mobileController.text,
+                                              email: mailController.text,
+                                              password: passwordController.text,
+                                              confirmPassword:
+                                                  confirmPasswordController
+                                                      .text,
+                                              isVendor:
+                                                  selectedVendor == '1' ? 1 : 0,
+                                            );
+                                          }
                                         }
                                       },
                                       child: Text(
