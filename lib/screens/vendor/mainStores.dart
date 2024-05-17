@@ -149,108 +149,108 @@ class _MainStoresState extends State<MainStores> {
                       //       ),
                       //     ]),
                       SizedBox(height: 16),
-                      Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Column(children: [
-                                Text(
-                                  isEnglish
-                                      ? 'Purchases Times'
-                                      : 'عدد مرات الشراء',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                Text(
-                                  isEnglish
-                                      ? ' $sumCountTimess'
-                                      : '$sumCountTimess',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ]),
-                              SizedBox(width: 20),
-                              Column(
-                                children: [
-                                  Text(
-                                    isEnglish
-                                        ? 'Total Profits'
-                                        : 'الأرباح الإجمالية',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  Text(
-                                    isEnglish
-                                        ? '$sumTotalPaymentss SAR'
-                                        : '$sumTotalPaymentss ريال',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                          SizedBox(height: 16),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                isEnglish
-                                    ? 'Verified Stores: $verifiedStoresCountt'
-                                    : 'المتاجر الموثقة: $verifiedStoresCountt',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              SizedBox(width: 20),
-                              Text(
-                                isEnglish
-                                    ? 'Pending Stores: $pendingStoresCountt'
-                                    : 'المتاجر المعلقة: $pendingStoresCountt',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                height: 60,
-                              ),
-                              // Icon(
-                              //   Icons.attach_money,
-                              //   color: Colors.white,
-                              //   size: 24,
-                              // ),
-                              SizedBox(width: 10),
-                              Text(
-                                isEnglish
-                                    ? 'Current Commission: $comission%'
-                                    : 'نسبة العمولة الحالية: $comission %',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      )
+                      // Column(
+                      //   children: [
+                      //     Row(
+                      //       mainAxisAlignment: MainAxisAlignment.center,
+                      //       crossAxisAlignment: CrossAxisAlignment.center,
+                      //       children: [
+                      //         Column(children: [
+                      //           Text(
+                      //             isEnglish
+                      //                 ? 'Purchases Times'
+                      //                 : 'عدد مرات الشراء',
+                      //             style: TextStyle(
+                      //               color: Colors.white,
+                      //               fontSize: 16,
+                      //             ),
+                      //           ),
+                      //           Text(
+                      //             isEnglish
+                      //                 ? ' $sumCountTimess'
+                      //                 : '$sumCountTimess',
+                      //             style: TextStyle(
+                      //               color: Colors.white,
+                      //               fontSize: 16,
+                      //             ),
+                      //           ),
+                      //         ]),
+                      //         SizedBox(width: 20),
+                      //         Column(
+                      //           children: [
+                      //             Text(
+                      //               isEnglish
+                      //                   ? 'Total Profits'
+                      //                   : 'الأرباح الإجمالية',
+                      //               style: TextStyle(
+                      //                 color: Colors.white,
+                      //                 fontSize: 16,
+                      //               ),
+                      //             ),
+                      //             Text(
+                      //               isEnglish
+                      //                   ? '$sumTotalPaymentss SAR'
+                      //                   : '$sumTotalPaymentss ريال',
+                      //               style: TextStyle(
+                      //                 color: Colors.white,
+                      //                 fontSize: 16,
+                      //               ),
+                      //             ),
+                      //           ],
+                      //         )
+                      //       ],
+                      //     ),
+                      //     SizedBox(height: 16),
+                      //     Row(
+                      //       mainAxisAlignment: MainAxisAlignment.center,
+                      //       children: [
+                      //         Text(
+                      //           isEnglish
+                      //               ? 'Verified Stores: $verifiedStoresCountt'
+                      //               : 'المتاجر الموثقة: $verifiedStoresCountt',
+                      //           style: TextStyle(
+                      //             color: Colors.white,
+                      //             fontSize: 16,
+                      //           ),
+                      //         ),
+                      //         SizedBox(width: 20),
+                      //         Text(
+                      //           isEnglish
+                      //               ? 'Pending Stores: $pendingStoresCountt'
+                      //               : 'المتاجر المعلقة: $pendingStoresCountt',
+                      //           style: TextStyle(
+                      //             color: Colors.white,
+                      //             fontSize: 16,
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //     Row(
+                      //       mainAxisAlignment: MainAxisAlignment.center,
+                      //       children: [
+                      //         SizedBox(
+                      //           height: 60,
+                      //         ),
+                      //         // Icon(
+                      //         //   Icons.attach_money,
+                      //         //   color: Colors.white,
+                      //         //   size: 24,
+                      //         // ),
+                      //         SizedBox(width: 10),
+                      //         Text(
+                      //           isEnglish
+                      //               ? 'Current Commission: $comission%'
+                      //               : 'نسبة العمولة الحالية: $comission %',
+                      //           style: TextStyle(
+                      //             color: Colors.white,
+                      //             fontSize: 16,
+                      //             fontWeight: FontWeight.bold,
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ],
+                      // )
                     ]),
                   ),
                   SizedBox(height: 16),

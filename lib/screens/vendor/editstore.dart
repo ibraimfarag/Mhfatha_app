@@ -670,7 +670,7 @@ class _EditStoreState extends State<EditStore> {
               ],
             ),
             SizedBox(height: 10),
-            if (englishTitle.toLowerCase() == 'mobile number' ||
+            if (englishTitle.toLowerCase() == 'telephone / store number' ||
                 englishTitle.toLowerCase() == 'commercial register')
               TextField(
                 obscureText: false,

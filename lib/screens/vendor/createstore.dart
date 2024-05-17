@@ -403,7 +403,7 @@ Container(
               ],
             ),
             SizedBox(height: 10),
-            if (englishTitle.toLowerCase() == 'mobile number' ||
+            if (englishTitle.toLowerCase() == 'telephone / store number' ||
                 englishTitle.toLowerCase() == 'commercial register')
               TextField(
                 obscureText: false,
