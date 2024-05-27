@@ -4,12 +4,12 @@ import 'package:provider/provider.dart';
 import 'package:mhfatha/settings/imports.dart';
 import 'dart:io'; // Import dart:io library for File class
 
-class ReportScreen extends StatefulWidget {
+class MainSupportingRepor extends StatefulWidget {
   @override
-  _ReportScreenState createState() => _ReportScreenState();
+  _MainSupportingReporState createState() => _MainSupportingReporState();
 }
 
-class _ReportScreenState extends State<ReportScreen> {
+class _MainSupportingReporState extends State<MainSupportingRepor> {
   String selectedReport = '';
   TextEditingController detailsController = TextEditingController();
   TextEditingController additionalPhoneController = TextEditingController();
@@ -48,7 +48,7 @@ List<String> fileNames = []; // List to store selected file names
 
   Future<void> fetchSupportReasons() async {
     try {
-      final reasons = await Api().getSupportReasons(context, 'vendor');
+      final reasons = await Api().getSupportReasons(context, '');
       setState(() {
         supportReasons = reasons;
         isLoading = false;
@@ -71,16 +71,16 @@ List<String> fileNames = []; // List to store selected file names
   String additionalPhone = additionalPhoneController.text.trim();
 
   // Check if the phone number is valid
-  if (additionalPhone.length != 10) {
-    // Show an error message or handle the case where the phone number is invalid
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-          content: Text(isEnglish
-              ? 'Phone number must be exactly 10 digits.'
-              : 'يجب أن يكون رقم الهاتف مكونًا من 10 أرقام.')),
-    );
-    return;
-  }
+if (additionalPhone.isNotEmpty && additionalPhone.length != 10) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+        content: Text(isEnglish
+            ? 'Phone number must be exactly 10 digits if provided.'
+            : 'يجب أن يكون رقم الهاتف مكونًا من 10 أرقام إذا تم تقديمه.')),
+  );
+  return;
+}
+
 
   // Call createSupportRequest function with the necessary data
   Api()
@@ -89,8 +89,8 @@ List<String> fileNames = []; // List to store selected file names
     optionId: optionId,
     message: details,
     parentId: 2,
-    storeId: store!['id'],
-    discountId: discounts!['id'],
+
+
     additionalPhone:additionalPhone,
     attachments: selectedFiles.map((file) => file.path).toList(),
 

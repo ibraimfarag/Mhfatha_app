@@ -491,9 +491,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           // Check if the mobile number is valid
                                           if (mobileController.text.length !=
                                                   10 ||
-                                              !RegExp(r'^[5,6,9]\d{9}$')
-                                                  .hasMatch(
-                                                      mobileController.text)) {
+                                              !RegExp(r'^[0-9]{10}$').hasMatch(
+                                                  mobileController.text)) {
                                             // Show alert dialog for invalid mobile number
                                             showDialog(
                                               context: context,

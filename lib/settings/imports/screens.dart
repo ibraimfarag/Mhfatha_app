@@ -21,6 +21,11 @@ export 'package:mhfatha/screens/settings/changePasswword.dart';
 export 'package:mhfatha/screens/settings/trems/user.dart';
 export 'package:mhfatha/screens/settings/trems/vendor.dart';
 
+// /* ------------------------------- Supporting ------------------------------- */
+export 'package:mhfatha/screens/settings/support/main.dart';
+export 'package:mhfatha/screens/settings/support/report.dart';
+export 'package:mhfatha/screens/settings/support/ticket.dart';
+
 /* -------------------------------- QrScreen ------------------------ */
 export 'package:mhfatha/screens/QR/qr_screen.dart';
 export 'package:mhfatha/screens/QR/qr_response.dart';
@@ -34,6 +39,7 @@ export 'package:mhfatha/screens/requests/main.dart';
 export 'package:mhfatha/screens/vendor/mainStores.dart';
 export 'package:mhfatha/screens/vendor/createstore.dart';
 export 'package:mhfatha/screens/vendor/editstore.dart';
+export 'package:mhfatha/screens/vendor/details.dart';
 export 'package:mhfatha/screens/vendor/discounts/mainDiscounts.dart';
 
 
@@ -41,6 +47,10 @@ export 'package:mhfatha/screens/vendor/discounts/mainDiscounts.dart';
 
 export 'package:mhfatha/screens/Admin/layout.dart';
 export 'package:mhfatha/screens/Admin/main.dart';
+
+
+export 'package:mhfatha/screens/Admin/support/ticket.dart';
+export 'package:mhfatha/screens/Admin/support/main.dart';
 
 export 'package:mhfatha/screens/Admin/user/view.dart';
 export 'package:mhfatha/screens/Admin/user/edit.dart';

@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:mhfatha/settings/imports.dart';
+import 'package:http_parser/http_parser.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -302,15 +303,15 @@ class Api {
         'is_vendor': isVendor.toString(),
         'otp': enteredOtp,
       };
-  // Add gender to the data if provided
-    if (gender != null) {
-      data['gender'] = gender;
-    }
+      // Add gender to the data if provided
+      if (gender != null) {
+        data['gender'] = gender;
+      }
 
-    // Add birthday to the data if provided
-    if (birthday != null) {
-      data['birthday'] = birthday;
-    }
+      // Add birthday to the data if provided
+      if (birthday != null) {
+        data['birthday'] = birthday;
+      }
       String jsonBody = jsonEncode(data);
 
       final response = await http.post(
@@ -323,6 +324,7 @@ class Api {
           .pop(); // Close the loading dialog
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
+        print(jsonResponse);
         if (jsonResponse['OTP'] == true) {
           QuickAlert.show(
               context: context,
@@ -422,7 +424,7 @@ class Api {
                   QuickAlert.show(
                     context: context,
                     type: QuickAlertType.error,
-                    title: 'Verification Failed [${otpResponse.statusCode}]',
+                    title: 'Verification Failed',
                     text: otpJsonResponse['message'],
                   );
                   return otpJsonResponse[
@@ -433,122 +435,30 @@ class Api {
         } else {
           return jsonResponse['success']; // Return success status from API
         }
-      } else if (response.statusCode == 500) {
-        final jsonResponse = jsonDecode(response.body);
-        String errorMessage =
-            'A server error occurred. Please try again later.';
-
-        if (jsonResponse.containsKey('error')) {
-          errorMessage = jsonResponse['error'];
-        } else if (jsonResponse.containsKey('message')) {
-          errorMessage = jsonResponse['message'];
-        } else {
-          errorMessage = "Error ${response.statusCode}: " + response.body;
-        }
-
-        // Display the initial alert with an option to expand for more details
-        QuickAlert.show(
-          context: context,
-          type: QuickAlertType.error,
-          title: 'Server Error [500]',
-          text: errorMessage,
-          widget: TextButton(
-            child: Text('Show more', style: TextStyle(color: Colors.blue)),
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: Text('Full Error Report'),
-                  content: SingleChildScrollView(
-                    child: Text(errorMessage),
-                  ),
-                  actions: [
-                    TextButton(
-                      child: Text('Close'),
-                      onPressed: () => Navigator.of(context).pop(),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        );
-        return false;
       } else {
         final jsonResponse = jsonDecode(response.body);
+
+        // Check if the 'messages' field is an array and join them into a single string
+        String errorMessage = '';
+        if (jsonResponse['messages'] is List) {
+          errorMessage = (jsonResponse['messages'] as List).join('\n');
+        } else {
+          errorMessage = jsonResponse['messages'].toString();
+        }
+
         QuickAlert.show(
           context: context,
           type: QuickAlertType.error,
-          title: isEnglish
-              ? 'Registration Failed [${response.statusCode}]'
-              : 'خطأ اثناء التسجيل [${response.statusCode}]',
-          text: jsonResponse['message'],
+          title: isEnglish ? 'Registration Failed ' : 'خطأ اثناء التسجيل ',
+          widget: Text(
+            errorMessage,
+            textAlign: TextAlign.start,
+          ),
         );
+        print(jsonResponse);
         return false;
       }
     } catch (e, stackTrace) {
-      String errorMessage = 'An unexpected error occurred. Please try again.';
-      int? statusCode;
-
-      // Enhanced error message handling to ensure all details are captured
-      if (e is http.Response) {
-        statusCode = e.statusCode;
-        try {
-          final response = jsonDecode(e.body);
-          if (response['message'] != null) {
-            errorMessage = response['message'];
-          } else {
-            errorMessage = 'Error occurred: ${response.toString()}';
-          }
-        } catch (jsonError) {
-          errorMessage = 'Error parsing error response: $jsonError';
-        }
-      } else if (e is Exception) {
-        errorMessage = 'Exception: ${e.toString()}';
-        print('Stack Trace: $stackTrace');
-      } else {
-        errorMessage = 'Error: ${e.toString()}';
-        print('Error Stack Trace: $stackTrace');
-      }
-
-      QuickAlert.show(
-        context: context,
-        type: QuickAlertType.error,
-        title: statusCode != null ? 'Error [${statusCode}]' : 'Error',
-        widget: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              errorMessage.length > 200
-                  ? '${errorMessage.substring(0, 200)}...'
-                  : errorMessage,
-              style: TextStyle(fontSize: 14),
-            ),
-            if (errorMessage.length > 200)
-              TextButton(
-                child: Text('Show more', style: TextStyle(color: Colors.blue)),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text('Full Error Message'),
-                      content: SingleChildScrollView(
-                        child: Text(errorMessage),
-                      ),
-                      actions: [
-                        TextButton(
-                          child: Text('Close'),
-                          onPressed: () => Navigator.of(context).pop(),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-          ],
-        ),
-      );
-
       return false;
     }
   }
@@ -1305,6 +1215,364 @@ class Api {
       return DateTime.parse(data['time_and_date'].replaceFirst(' ', 'T'));
     } else {
       throw Exception('Failed to load date from API');
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getSupportReasons(
+      BuildContext context, String criteria) async {
+    final url = Uri.parse('$baseUrl/supporting/get-resons');
+    String lang = Provider.of<AppState>(context, listen: false).display;
+
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+
+    // Show loading dialog
+    _showLoadingDialog(context);
+
+    try {
+      final http.Response response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${authProvider.token}',
+        },
+        body: jsonEncode(<String, String>{
+          'criteria': criteria,
+        }),
+      );
+
+      // Close loading dialog
+      Navigator.of(context).pop();
+
+      if (response.statusCode == 200) {
+        // Parse the JSON response correctly
+        final List<dynamic> data = jsonDecode(response.body);
+        return data.cast<Map<String, dynamic>>();
+      } else {
+        // If the request was not successful, throw an error
+        throw Exception('Failed to perform action: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Close loading dialog in case of an error
+      Navigator.of(context).pop();
+      // If an error occurs during the request, throw an error
+      throw Exception('Failed to perform action: $e');
+    }
+  }
+
+  Future<void> createSupportRequest(
+    BuildContext context, {
+    int? optionId,
+    int? parentId,
+    int? storeId,
+    int? discountId,
+    String message = '',
+    List<String> attachments = const [],
+    String additionalPhone = '',
+  }) async {
+    final url = Uri.parse('$baseUrl/supporting/create');
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+    String lang = Provider.of<AppState>(context, listen: false).display;
+    bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
+
+    _showLoadingDialog(context);
+
+    try {
+      var request = http.MultipartRequest('POST', url);
+      request.headers.addAll(<String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${authProvider.token}',
+      });
+
+      // Add optionId, parentId, storeId, and discountId as fields
+      if (optionId != null) request.fields['option_id'] = optionId.toString();
+      if (parentId != null) request.fields['parent_id'] = parentId.toString();
+      if (storeId != null) request.fields['store_id'] = storeId.toString();
+      if (discountId != null)
+        request.fields['discount_id'] = discountId.toString();
+      // Add message, additionalPhone, and lang as fields
+      if (message.isNotEmpty) request.fields['description[message]'] = message;
+      if (additionalPhone.isNotEmpty)
+        request.fields['additional_phone'] = additionalPhone;
+      if (lang.isNotEmpty) request.fields['lang'] = lang;
+
+      // Concatenate file paths into a single string separated by a delimiter
+      String attachedFiles = attachments.join(',');
+
+      // Add the concatenated file paths to the description[attached] field
+      request.fields['description[attached]'] = attachedFiles;
+
+      // Upload files and add them to the request
+      for (String filePath in attachments) {
+        File file = File(filePath);
+        String fileName = file.path.split('/').last;
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'description[attached][]', // Adjust field name if needed
+            filePath,
+            filename: fileName,
+            contentType: MediaType('application', 'octet-stream'),
+          ),
+        );
+      }
+
+      // Send the request
+      var streamedResponse = await request.send();
+
+      // Check the response
+      if (streamedResponse.statusCode == 201) {
+        // Get the response body
+        var responseJson = await streamedResponse.stream.bytesToString();
+
+        // Parse the response
+        var responseData = json.decode(responseJson);
+
+        // Display a quick alert with the message and ticket number
+
+        QuickAlert.show(
+          context: context,
+          type: QuickAlertType.success,
+          customAsset: 'images/success.gif',
+          widget: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Center(
+                child: Text(
+                  responseData['message'], // Center the message
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(height: 10), // Add some spacing
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      responseData['ticketNumber'], // Center the ticket number
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(width: 10), // Add some spacing
+                    IconButton(
+                      icon: Icon(Icons.copy),
+                      onPressed: () {
+                        // Copy ticket number to clipboard
+                        Clipboard.setData(
+                            ClipboardData(text: responseData['ticketNumber']));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content:
+                                  Text('Ticket number copied to clipboard')),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          onConfirmBtnTap: () {
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+            Navigator.pushNamed(context, '/home'
+                // Pass the store data to the route
+                );
+          },
+          confirmBtnText: isEnglish ? 'ok' : 'حسنا',
+          confirmBtnColor: Color(0xFF0D2750),
+        );
+      } else {
+        throw Exception(
+            'Failed to create support request: ${streamedResponse.reasonPhrase}');
+      }
+    } catch (e) {
+      Navigator.of(context).pop();
+      throw Exception('Failed to create support request: $e');
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getSupportTickets(
+      {String? criteria, String? postId, required BuildContext context}) async {
+    final url = Uri.parse('$baseUrl/supporting/get');
+    String lang = Provider.of<AppState>(context, listen: false).display;
+
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+
+    // Show loading dialog
+    // _showLoadingDialog(context);
+
+    try {
+      final http.Response response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${authProvider.token}',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'lang': lang,
+          'criteria': criteria,
+          'postId': postId
+        }),
+      );
+
+      // print(jsonDecode(response.body));
+
+      if (response.statusCode == 200) {
+        // Parse the JSON response correctly
+        final List<dynamic> data = jsonDecode(response.body);
+        List<Map<String, dynamic>> supportTickets =
+            data.cast<Map<String, dynamic>>();
+
+        supportTickets = supportTickets.map((ticket) {
+          // Parse description if it's a string
+          if (ticket['description'] is String) {
+            try {
+              ticket['description'] = jsonDecode(ticket['description']);
+            } catch (e) {
+              // print('Failed to parse description: $e');
+              // Handle parsing error, perhaps by setting description to an empty map or null
+              ticket['description'] = {}; // or null
+            }
+          }
+
+          // print('ticketttt $ticket');
+          return ticket;
+        }).toList();
+
+//  print('supportTickets $supportTickets');
+        return supportTickets;
+      } else {
+        throw Exception('Failed to perform action: ${response.statusCode}');
+      }
+    } catch (e) {
+      print(e);
+      throw Exception('Failed to perform action: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> changeStatusSupportTickets({
+    String? status,
+    String? postId,
+    required BuildContext context,
+  }) async {
+    final url = Uri.parse('$baseUrl/supporting/changeStatus');
+    String lang = Provider.of<AppState>(context, listen: false).display;
+
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+
+    try {
+      final http.Response response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${authProvider.token}',
+        },
+        body: jsonEncode(<String, dynamic>{
+          'lang': lang,
+          'status': status,
+          'id': postId,
+        }),
+      );
+
+      print(jsonDecode(response.body));
+
+      if (response.statusCode == 200) {
+        // Parse the JSON response correctly
+        final Map<String, dynamic> data = jsonDecode(response.body);
+
+        return {
+          'statusCode': response.statusCode,
+          'data': data,
+        };
+      } else {
+        // Return status code and null data
+        return {
+          'statusCode': response.statusCode,
+        };
+      }
+    } catch (e) {
+      print('action: $e');
+      throw Exception('Failed to perform action: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> updateSupportRequest(
+    BuildContext context, {
+    String id = '',
+    String criteria = '',
+    String type = '',
+    String message = '',
+    List<String> attachments = const [],
+  }) async {
+    final url = Uri.parse('$baseUrl/supporting/update');
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+    String lang = Provider.of<AppState>(context, listen: false).display;
+    bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
+
+    // _showLoadingDialog(context);
+
+    try {
+      var request = http.MultipartRequest('POST', url);
+      request.headers.addAll(<String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${authProvider.token}',
+      });
+
+      // Add optionId, parentId, storeId, and discountId as fields
+      if (id != null) request.fields['id'] = id.toString();
+      if (criteria != null) request.fields['criteria'] = criteria.toString();
+      if (type != null)
+        request.fields['description[message_type]'] = type.toString();
+      if (message.isNotEmpty) request.fields['description[message]'] = message;
+      if (lang.isNotEmpty) request.fields['lang'] = lang;
+
+      // Concatenate file paths into a single string separated by a delimiter
+      String attachedFiles = attachments.join(',');
+
+      // Add the concatenated file paths to the description[attached] field
+      request.fields['description[attached]'] = attachedFiles;
+
+      // Upload files and add them to the request
+      for (String filePath in attachments) {
+        File file = File(filePath);
+        String fileName = file.path.split('/').last;
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'description[attached][]', // Adjust field name if needed
+            filePath,
+            filename: fileName,
+            contentType: MediaType('application', 'octet-stream'),
+          ),
+        );
+      }
+
+      // Send the request
+      var streamedResponse = await request.send();
+      var responseString = await streamedResponse.stream
+          .bytesToString(); // Store the response in a variable
+
+      // print(request.fields);
+      // print(streamedResponse.statusCode);
+      // print(responseString);
+      // Check the response
+      if (streamedResponse.statusCode == 200) {
+        var responseData = json.decode(responseString);
+        // print(responseData);
+        return {
+          'statusCode': streamedResponse.statusCode,
+          'data': responseData
+        };
+      } else {
+        throw Exception(
+            'Failed to update support request: ${streamedResponse.reasonPhrase}');
+      }
+    } catch (e) {
+      Navigator.of(context).pop();
+      throw Exception('Failed to create support request: $e');
     }
   }
 }

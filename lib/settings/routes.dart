@@ -1,9 +1,14 @@
 // lib\settings\routes.dart
+
 import 'package:mhfatha/settings/imports.dart';
 
 class Routes {
+  // /* -------------------------------------------------------------------------- */
+  // /*                                    Auth                                    */
+  // /* -------------------------------------------------------------------------- */
   static  String login = '/login';
   static  String register = '/register';
+
   static  String home = '/home';
   static  String settings = '/settings';
   static String storeInfo = '/store-info';
@@ -18,10 +23,26 @@ class Routes {
   static String filteredStores ='/filteredStores';
   static String changePasswword ='/changePasswword';
   static String restPassword ='/restpassword';
+  static String UserTremss ='/user/trems';
+
+  /* ------------------------------- supporting ------------------------------- */
+  static String MainSupport ='/support';
+  static String MainSupportreport ='/support/report';
+  static String SupportTicket ='/support/ticket';
+
+// /* -------------------------------------------------------------------------- */
+// /*                                   Vendor                                   */
+// /* -------------------------------------------------------------------------- */
   static String vendorsMain ='/mainstores';
+  static String vendorsStoreDetails ='/storedetails';
   static String createstore ='/createstore';
   static String editstore ='/editstore';
   static String storeDiscounts ='/storediscounts';
+  static String VENDORTrems ='/vendor/trems';
+
+// /* -------------------------------------------------------------------------- */
+// /*                                  Dashboard                                 */
+// /* -------------------------------------------------------------------------- */
   static String admin ='/admin';
   static String AdminViewUsers ='/admin/users';
   static String AdminEditUsers ='/admin/users/edit';
@@ -33,8 +54,8 @@ class Routes {
   static String AdminViewSettingss ='/admin/ViewSettings';
   static String AdminViewRegionss ='/admin/ViewSettings/Regions';
   static String AdminViewCategoriess ='/admin/ViewSettings/Categoriess';
-  static String VENDORTrems ='/vendor/trems';
-  static String UserTremss ='/user/trems';
+  static String Viewtickets ='/admin/supporting/view';
+  static String AdminTickets ='/admin/supporting/update';
 
 
 
@@ -73,16 +94,24 @@ class Routes {
       AdminViewCategoriess : (context) => AdminViewCategories(),
       VENDORTrems : (context) => VendorTrems(),
       UserTremss : (context) => UserTrems(),
+      vendorsStoreDetails : (context) => StoreDetails(),
+      MainSupport : (context) => MainSupporting(),
+      MainSupportreport : (context) => MainSupportingRepor(),
+      SupportTicket : (context) => MHTicket(),
+    Viewtickets : (context) => MainAdminSupporting(),
+      AdminTickets : (context) => MHAdminTicket(),
       
       
     };
   }
 
-  static MaterialPageRoute unknownRoute(RouteSettings settings) {
-    return MaterialPageRoute(
-      builder: (context) => LoginScreen(),
-    );
-  }
+static MaterialPageRoute unknownRoute(RouteSettings settings) {
+  print('Unknown route: ${settings.name}');
+  return MaterialPageRoute(
+    builder: (context) => ErrorScreen(),
+  );
+}
+
 }
 
 class ErrorScreen extends StatelessWidget {

@@ -124,3 +124,10 @@ export 'package:fl_chart/fl_chart.dart';
 
 // /* ------------------------------ url_launcher ------------------------------ */
 export 'package:url_launcher/url_launcher.dart';
+
+// /* ------------------------------- file_picker ------------------------------ */
+export 'package:file_picker/file_picker.dart';
+
+// /* ------------------------------- file_picker ------------------------------ */
+
+export 'package:flutter_downloader/flutter_downloader.dart';

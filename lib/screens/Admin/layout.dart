@@ -150,159 +150,218 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
           backgroundColor: Colors.transparent,
           child: Row(
             children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 0.45,
-                color: Colors.white,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/admin');
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.all(16),
-                        child: Row(
-                          children: [
-                            Icon(Icons.dashboard),
-                            SizedBox(width: 16),
-                            Text(isEnglish ? 'Dashboard' : 'احصائيات'),
-                          ],
+              Flexible(
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.60,
+                  color: Colors.white,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.fromLTRB(
+                            10, 40, 10, 20), // Set the margins
+                        child: Image.network(
+                          'https://mhfatha.net/FrontEnd/assets/images/logo/dr-logo.png',
+                          width: MediaQuery.of(context).size.width * 0.50,
                         ),
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/admin/users');
-                        // Handle drawer item 2 tap
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.all(16),
-                        child: Row(
-                          children: [
-                            Icon(Icons.manage_accounts_outlined),
-                            SizedBox(width: 16),
-                            Text(isEnglish ? 'Users' : 'الاعضاء'),
-                          ],
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/admin');
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Row(
+                            children: [
+                              Icon(Icons.dashboard),
+                              SizedBox(width: 16),
+                              Text(isEnglish ? 'Dashboard' : 'احصائيات'),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/admin/stores');
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.all(16),
-                        child: Row(
-                          children: [
-                            Icon(Icons.store_mall_directory_rounded),
-                            SizedBox(width: 16),
-                            Text(isEnglish ? 'Stores' : 'المتاجر'),
-                          ],
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/admin/users');
+                          // Handle drawer item 2 tap
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Row(
+                            children: [
+                              Icon(Icons.manage_accounts_outlined),
+                              SizedBox(width: 16),
+                              Text(isEnglish ? 'Users' : 'الاعضاء'),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        // Handle drawer item 2 tap
-                        Navigator.pushNamed(context, '/admin/ViewSettings');
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.all(16),
-                        child: Row(
-                          children: [
-                            Icon(Icons.settings),
-                            SizedBox(width: 16),
-                            Text(isEnglish ? 'Settings' : 'الاعدادات'),
-                          ],
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/admin/stores');
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Row(
+                            children: [
+                              Icon(Icons.store_mall_directory_rounded),
+                              SizedBox(width: 16),
+                              Text(isEnglish ? 'Stores' : 'المتاجر'),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/admin/notification');
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.all(16),
-                        child: Row(
-                          children: [
-                            Icon(Icons.notifications_on_outlined),
-                            SizedBox(width: 16),
-                            Text(isEnglish ? 'Notifications' : 'الاشعارات'),
-                          ],
+                      GestureDetector(
+                        onTap: () {
+                          // Handle drawer item 2 tap
+                          Navigator.pushNamed(context, '/admin/ViewSettings');
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Row(
+                            children: [
+                              Icon(Icons.settings),
+                              SizedBox(width: 16),
+                              Text(isEnglish ? 'Settings' : 'الاعدادات'),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/admin/requests');
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.all(16),
-                        child: Row(
-                          children: [
-                            Icon(Icons.help_outline_sharp),
-                            SizedBox(width: 16),
-                            Text(isEnglish ? 'Requests' : 'الطلبات'),
-                            // Conditionally display the badge based on padges_count
-                            if (RequestspadgesCount !=
-                                0) // Assuming padgesCount is the variable holding the count from API
-                              Container(
-                                padding: EdgeInsets.all(4),
-                                margin: EdgeInsets.only(left: 10, right: 10),
-                                decoration: BoxDecoration(
-                                  color: Colors
-                                      .red, // Customize the badge color as needed
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                child: Text(
-                                  RequestspadgesCount.toString(),
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/admin/notification');
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Row(
+                            children: [
+                              Icon(Icons.notifications_on_outlined),
+                              SizedBox(width: 16),
+                              Text(isEnglish ? 'Notifications' : 'الاشعارات'),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/admin/requests');
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Row(
+                            children: [
+                              Icon(Icons.help_outline_sharp),
+                              SizedBox(width: 16),
+                              Text(isEnglish ? 'Requests' : 'الطلبات'),
+                              // Conditionally display the badge based on padges_count
+                              if (RequestspadgesCount !=
+                                  0) // Assuming padgesCount is the variable holding the count from API
+                                Container(
+                                  padding: EdgeInsets.all(4),
+                                  margin: EdgeInsets.only(left: 10, right: 10),
+                                  decoration: BoxDecoration(
+                                    color: Colors
+                                        .red, // Customize the badge color as needed
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  child: Text(
+                                    RequestspadgesCount.toString(),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    // Add GestureDetector for "Accounts" drawer item
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/admin/accounts');
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.all(16),
-                        child: Row(
-                          children: [
-                            Icon(Icons.help_outline_sharp),
-                            SizedBox(width: 16),
-                            Text(isEnglish ? 'Accounts' : 'الحسابات'),
-                            // Conditionally display the badge based on adminBadgesCount
-                            if (AccountsspadgesCount != null &&
-                                AccountsspadgesCount! > 0)
-                              Container(
-                                padding: EdgeInsets.all(4),
-                                margin: EdgeInsets.only(left: 10, right: 10),
-                                decoration: BoxDecoration(
-                                  color: Colors
-                                      .red, // Customize the badge color as needed
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
+                      // Add GestureDetector for "Accounts" drawer item
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/admin/accounts');
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Row(
+                            children: [
+                              Icon(Icons.account_balance_rounded),
+                              SizedBox(width: 16),
+                              Flexible(
+                                fit: FlexFit
+                                    .tight, // Ensures that the Row occupies all available space
                                 child: Text(
-                                  AccountsspadgesCount!.toString(),
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
+                                  isEnglish ? 'Accounts' : 'الحسابات',
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              // Conditionally display the badge based on adminBadgesCount
+                              if (AccountsspadgesCount != null &&
+                                  AccountsspadgesCount! > 0)
+                                Container(
+                                  padding: EdgeInsets.all(4),
+                                  margin: EdgeInsets.only(left: 10, right: 10),
+                                  decoration: BoxDecoration(
+                                    color: Colors
+                                        .red, // Customize the badge color as needed
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  child: Text(
+                                    AccountsspadgesCount!.toString(),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/admin/supporting/view');
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Row(
+                            children: [
+                              Icon(Icons.support_agent_outlined),
+                              SizedBox(width: 16),
+                              Flexible(
+                                fit: FlexFit
+                                    .tight, // Ensures that the Row occupies all available space
+                                child: Text(
+                                  isEnglish ? 'Tech support' : 'الدعم الفني',
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              // Conditionally display the badge based on adminBadgesCount
+                              if (AccountsspadgesCount != null &&
+                                  AccountsspadgesCount! > 0)
+                                Container(
+                                  padding: EdgeInsets.all(4),
+                                  margin: EdgeInsets.only(left: 10, right: 10),
+                                  decoration: BoxDecoration(
+                                    color: Colors
+                                        .red, // Customize the badge color as needed
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  child: Text(
+                                    AccountsspadgesCount!.toString(),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               GestureDetector(
@@ -311,7 +370,7 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                   Navigator.of(context).pop();
                 },
                 child: Container(
-                  width: MediaQuery.of(context).size.width * 0.55,
+                  width: MediaQuery.of(context).size.width * 0.45,
                   color: Color.fromARGB(0, 0, 0, 0),
                 ),
               ),

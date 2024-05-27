@@ -68,7 +68,7 @@ class _MainStoresState extends State<MainStores> {
       });
       // print('User Discounts Response: $response');
     } catch (e) {
-      print('Error getting user discountssss: $e');
+      // print('Error getting user discountssss: $e');
     }
   }
 
@@ -95,168 +95,35 @@ class _MainStoresState extends State<MainStores> {
                 // crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
-                    padding: EdgeInsets.fromLTRB(20, 10, 20, 5),
-                    // height: 200,
-                    child: Column(children: [
-                      // Row(
-                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //     children: [
-                      //       Column(
-                      //         crossAxisAlignment: CrossAxisAlignment.start,
-                      //         children: [
-                      //           SizedBox(
-                      //             height: 30,
-                      //           ),
-                      //           SizedBox(
-                      //             height: 5,
-                      //           ),
-                      //           Text(
-                      //             isEnglish ? ' Welcome ' : ' مرحبا بك',
-                      //             style: TextStyle(
-                      //                 fontSize: 14,
-                      //                 fontWeight: FontWeight.bold,
-                      //                 color: Colors.white),
-                      //           ),
-                      //           SizedBox(
-                      //             height: 5,
-                      //           ),
-                      //           Text(
-                      //             ' ${authProvider.user!['first_name']}',
-                      //             style: TextStyle(
-                      //                 fontSize: 24,
-                      //                 fontWeight: FontWeight.bold,
-                      //                 color: Colors.white),
-                      //           ),
-                      //         ],
-                      //       ),
-                      //       SizedBox(
-                      //         width: 30,
-                      //       ),
-                      //       Column(
-                      //         crossAxisAlignment: CrossAxisAlignment.end,
-                      //         children: [
-                      //           SizedBox(
-                      //             height: 20,
-                      //           ),
-                      //           CircleAvatar(
-                      //             radius: 60,
-                      //             // Add your profile image here
-                      //             backgroundImage: NetworkImage(
-                      //                 'https://mhfatha.net/FrontEnd/assets/images/user_images/${authProvider.user!['photo']}'),
-                      //           ),
-                      //         ],
-                      //       ),
-                      //     ]),
-                      SizedBox(height: 16),
-                      // Column(
-                      //   children: [
-                      //     Row(
-                      //       mainAxisAlignment: MainAxisAlignment.center,
-                      //       crossAxisAlignment: CrossAxisAlignment.center,
-                      //       children: [
-                      //         Column(children: [
-                      //           Text(
-                      //             isEnglish
-                      //                 ? 'Purchases Times'
-                      //                 : 'عدد مرات الشراء',
-                      //             style: TextStyle(
-                      //               color: Colors.white,
-                      //               fontSize: 16,
-                      //             ),
-                      //           ),
-                      //           Text(
-                      //             isEnglish
-                      //                 ? ' $sumCountTimess'
-                      //                 : '$sumCountTimess',
-                      //             style: TextStyle(
-                      //               color: Colors.white,
-                      //               fontSize: 16,
-                      //             ),
-                      //           ),
-                      //         ]),
-                      //         SizedBox(width: 20),
-                      //         Column(
-                      //           children: [
-                      //             Text(
-                      //               isEnglish
-                      //                   ? 'Total Profits'
-                      //                   : 'الأرباح الإجمالية',
-                      //               style: TextStyle(
-                      //                 color: Colors.white,
-                      //                 fontSize: 16,
-                      //               ),
-                      //             ),
-                      //             Text(
-                      //               isEnglish
-                      //                   ? '$sumTotalPaymentss SAR'
-                      //                   : '$sumTotalPaymentss ريال',
-                      //               style: TextStyle(
-                      //                 color: Colors.white,
-                      //                 fontSize: 16,
-                      //               ),
-                      //             ),
-                      //           ],
-                      //         )
-                      //       ],
-                      //     ),
-                      //     SizedBox(height: 16),
-                      //     Row(
-                      //       mainAxisAlignment: MainAxisAlignment.center,
-                      //       children: [
-                      //         Text(
-                      //           isEnglish
-                      //               ? 'Verified Stores: $verifiedStoresCountt'
-                      //               : 'المتاجر الموثقة: $verifiedStoresCountt',
-                      //           style: TextStyle(
-                      //             color: Colors.white,
-                      //             fontSize: 16,
-                      //           ),
-                      //         ),
-                      //         SizedBox(width: 20),
-                      //         Text(
-                      //           isEnglish
-                      //               ? 'Pending Stores: $pendingStoresCountt'
-                      //               : 'المتاجر المعلقة: $pendingStoresCountt',
-                      //           style: TextStyle(
-                      //             color: Colors.white,
-                      //             fontSize: 16,
-                      //           ),
-                      //         ),
-                      //       ],
-                      //     ),
-                      //     Row(
-                      //       mainAxisAlignment: MainAxisAlignment.center,
-                      //       children: [
-                      //         SizedBox(
-                      //           height: 60,
-                      //         ),
-                      //         // Icon(
-                      //         //   Icons.attach_money,
-                      //         //   color: Colors.white,
-                      //         //   size: 24,
-                      //         // ),
-                      //         SizedBox(width: 10),
-                      //         Text(
-                      //           isEnglish
-                      //               ? 'Current Commission: $comission%'
-                      //               : 'نسبة العمولة الحالية: $comission %',
-                      //           style: TextStyle(
-                      //             color: Colors.white,
-                      //             fontSize: 16,
-                      //             fontWeight: FontWeight.bold,
-                      //           ),
-                      //         ),
-                      //       ],
-                      //     ),
-                      //   ],
-                      // )
-                    ]),
-                  ),
-                  SizedBox(height: 16),
+                 
+                  SizedBox(height: 6),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
+                      Column(children: [
+
+                         Text(
+                                '$comission %',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+
+                         Text(
+                                isEnglish
+                                    ? 'Current Commission'
+                                    : 'نسبة العمولة الحالية',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 30),
+                      ],),
+                      
                       GestureDetector(
                         onTap: () {
                           Navigator.pushNamed(context, '/createstore');
@@ -478,6 +345,26 @@ class _MainStoresState extends State<MainStores> {
                           ),
                         ),
                       ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                        child: Align(
+                          alignment: isEnglish
+                              ? Alignment.centerLeft
+                              : Alignment.centerRight,
+                          child: Text(
+                            isEnglish
+                                ? 'Debit: ${store['depit']} SAR'
+                                : 'مديونيه ${store['depit']} ريال',
+                            style: TextStyle(
+                              color: Colors.black87,
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal,
+                            ),
+                            textAlign:
+                                isEnglish ? TextAlign.left : TextAlign.right,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   PullDownButton(
@@ -518,6 +405,26 @@ class _MainStoresState extends State<MainStores> {
                         enabled: store['verifcation'] == 1,
                         icon: Icons.discount,
                       ),
+
+   if (
+        store['storeDetails']['months'] != null &&
+        store['storeDetails']['months'].isNotEmpty)
+
+                      PullDownMenuItem(
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/storedetails',
+                            arguments:
+                                store, // Pass the store data to the route
+                          );
+                        },
+                        title: isEnglish ? 'Accounts details' : 'تفاصيل الحسابات',
+                        enabled: store['verifcation'] == 1,
+                        icon: Icons.monetization_on,
+                      ),
+
+
                       PullDownMenuItem(
                         onTap: () {
                           QuickAlert.show(

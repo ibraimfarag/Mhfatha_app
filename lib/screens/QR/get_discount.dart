@@ -351,7 +351,11 @@ class _GetDiscountState extends State<GetDiscount> {
                                   onConfirmBtnTap: () async {
                                     Navigator.pop(context);
                                     Navigator.pushNamed(context, '/report',
-                                        arguments: store);
+                                        arguments: {
+                                          'store': store,
+                                          'discount':
+                                              discount, // Pass the discount variable here
+                                        });
                                   },
 // confirmBtnColor:themeColor
                                 );

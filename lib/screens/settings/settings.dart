@@ -223,11 +223,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             'Change Password', 'تغيير كلمة السر ', () {
                           Navigator.pushNamed(context, '/changePasswword');
                         }),
-                        // buildSettingItem(
-                        //     context, Icons.privacy_tip, 'Privacy', 'الخصوصية',
-                        //     () {
-                        //   Navigator.pushNamed(context, '/NotificationReceiver');
-                        // }),
+                        buildSettingItem(
+                            context, Icons.privacy_tip, 'technical support', 'الدعم الفني',
+                            () {
+                          Navigator.pushNamed(context, '/support');
+                        }),
 
                         // buildSettingItem(
                         //     context, Icons.report, 'Report', 'الإبلاغ', () {
@@ -325,7 +325,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               },
                             );
                           }),
-
+                        
                         // buildSettingItem(
                         //     context, Icons.message, 'Messages', 'الرسائل', () {
                         //   // Implement messages logic
