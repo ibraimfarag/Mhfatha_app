@@ -75,18 +75,15 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
 
     return DirectionalityWrapper(
       child: Scaffold(
-        body: SingleChildScrollView(
+        body:  Stack(
+          children: [SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 0),
+            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
-                CustomAppBar(
-                    onBackTap: () {
-                      Navigator.pop(context);
-                    },
-                    iconColor: Colors.black),
+             
                 Container(
                   width: 600,
                   margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -96,6 +93,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                   ),
                   child: Column(
                     children: [
+                      
                       Container(
                         width: 500,
                         margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -106,34 +104,55 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
+                            
                             Container(
-                              height: 200,
-                              width: 500,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(0),
-                                  topRight: Radius.circular(0),
-                                ),
-                                child: ShaderMask(
-                                  shaderCallback: (Rect bounds) {
-                                    return LinearGradient(
-                                      begin: Alignment.bottomCenter,
-                                      end: Alignment.topCenter,
-                                      colors: [
-                                        Colors.transparent,
-                                        Colors.black.withOpacity(0.8)
-                                      ],
-                                      stops: [0.0, 1.0],
-                                    ).createShader(bounds);
-                                  },
-                                  blendMode: BlendMode.dstIn,
-                                  child: Image.network(
-                                    'https://mhfatha.net/FrontEnd/assets/images/store_images/${storeData?['photo']}',
-                                    fit: BoxFit.cover,
+                            width: 500,
+                            margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 3, 12, 19),
+                              borderRadius: BorderRadius.circular(0),
+                            ),
+                            child: Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(0),
+                                    topRight: Radius.circular(0),
+                                  ),
+                                  child: ShaderMask(
+                                    shaderCallback: (Rect bounds) {
+                                      return LinearGradient(
+                                        begin: Alignment.bottomCenter,
+                                        end: Alignment.topCenter,
+                                        colors: [
+                                          Colors.transparent,
+                                          Colors.black.withOpacity(0.8)
+                                        ],
+                                        stops: [0.0, 1.0],
+                                      ).createShader(bounds);
+                                    },
+                                    blendMode: BlendMode.dstIn,
+                                    child: Image.network(
+                                      'https://mhfatha.net/FrontEnd/assets/images/store_images/${storeData?['photo']}',
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                      height: 200,
+                                    ),
                                   ),
                                 ),
-                              ),
+                                Align(
+                                  alignment: isEnglish? Alignment.topLeft:Alignment.topRight,
+                                  child: IconButton(
+                                    icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
+                          ),
+                            
                             Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 20, vertical: 15),
@@ -513,6 +532,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
             ),
           ),
         ),
+        ])
       ),
     );
   }

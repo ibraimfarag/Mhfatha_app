@@ -322,10 +322,10 @@ class _MhfathaAppState extends State<MhfathaApp> {
             bool isAuthenticated = authProvider.isAuthenticated;
 
             // Return the appropriate screen based on authentication status
-            return isAuthenticated ? HomeScreen() : LoginScreen();
+            return  HomeScreen() ;
           },
         ),
-        routes: Routes.getRoutes(),
+        routes: Routes.getRoutes(context),
         onGenerateRoute: (settings) {
           return Routes.unknownRoute(settings);
         },

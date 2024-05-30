@@ -338,24 +338,24 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                                 ),
                               ),
                               // Conditionally display the badge based on adminBadgesCount
-                              if (AccountsspadgesCount != null &&
-                                  AccountsspadgesCount! > 0)
-                                Container(
-                                  padding: EdgeInsets.all(4),
-                                  margin: EdgeInsets.only(left: 10, right: 10),
-                                  decoration: BoxDecoration(
-                                    color: Colors
-                                        .red, // Customize the badge color as needed
-                                    borderRadius: BorderRadius.circular(30),
-                                  ),
-                                  child: Text(
-                                    AccountsspadgesCount!.toString(),
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
+                              // if (AccountsspadgesCount != null &&
+                              //     AccountsspadgesCount! > 0)
+                              //   Container(
+                              //     padding: EdgeInsets.all(4),
+                              //     margin: EdgeInsets.only(left: 10, right: 10),
+                              //     decoration: BoxDecoration(
+                              //       color: Colors
+                              //           .red, // Customize the badge color as needed
+                              //       borderRadius: BorderRadius.circular(30),
+                              //     ),
+                              //     child: Text(
+                              //       AccountsspadgesCount!.toString(),
+                              //       style: TextStyle(
+                              //         color: Colors.white,
+                              //         fontWeight: FontWeight.bold,
+                              //       ),
+                              //     ),
+                              //   ),
                             ],
                           ),
                         ),

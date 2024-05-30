@@ -16,9 +16,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
     authProvider.updateUserData(context);
+    isAuthenticated = authProvider.isAuthenticated;
     fetchContactsData();
   }
 
+  bool isAuthenticated = false;
   Map<String, String> _contactsData = {};
 
   void didChangeDependencies() {
@@ -43,11 +45,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
     bool isDarkMode = Provider.of<AppState>(context).isDarkMode;
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
+
     Api api = Api();
     Color ui = Color.fromARGB(255, 250, 82, 82);
 
     return DirectionalityWrapper(
         child: Scaffold(
+      backgroundColor: Color(0xFFF3F4F7),
       body: SingleChildScrollView(
         child: Container(
             padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
@@ -81,52 +85,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               SizedBox(
                                 height: 5,
                               ),
-                              Text(
-                                ' ${authProvider.user!['first_name']}',
-                                style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
-                              ),
+                              if (isAuthenticated)
+                                Text(
+                                  ' ${authProvider.user!['first_name']}',
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
                               SizedBox(height: 5),
-                              if (!authProvider.isAdmin & authProvider.isVendor)
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 6),
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 0),
-                                  decoration: BoxDecoration(
-                                    color: Colors.yellow,
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Text(
-                                    isEnglish ? 'Vendor' : 'تاجر',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              if (authProvider.isAdmin)
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 6),
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 0),
-                                  decoration: BoxDecoration(
-                                    color: Colors.yellow,
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Text(
-                                    isEnglish ? 'Admin' : 'مدير',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
                             ],
                           ),
                           SizedBox(
@@ -212,120 +179,127 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
 
                         // Other Settings...
-                        buildSettingItem(context, Icons.settings,
-                            'Account Settings', 'إعدادات الحساب', () async {
-                          // Navigate to account settings screen
-                          Navigator.pushNamed(context, '/account');
-                          await authProvider.updateUserData(context);
-                        }),
-
-                        buildSettingItem(context, Icons.password,
-                            'Change Password', 'تغيير كلمة السر ', () {
-                          Navigator.pushNamed(context, '/changePasswword');
-                        }),
-                        buildSettingItem(
-                            context, Icons.privacy_tip, 'technical support', 'الدعم الفني',
-                            () {
-                          Navigator.pushNamed(context, '/support');
-                        }),
+                        if (isAuthenticated)
+                          buildSettingItem(context, Icons.settings,
+                              'Account Settings', 'إعدادات الحساب', () async {
+                            // Navigate to account settings screen
+                            Navigator.pushNamed(context, '/account');
+                            await authProvider.updateUserData(context);
+                          }),
+                        if (isAuthenticated)
+                          buildSettingItem(context, Icons.password,
+                              'Change Password', 'تغيير كلمة السر ', () {
+                            Navigator.pushNamed(context, '/changePasswword');
+                          }),
+                        if (isAuthenticated)
+                          buildSettingItem(context, Icons.privacy_tip,
+                              'technical support', 'الدعم الفني', () {
+                            Navigator.pushNamed(context, '/support');
+                          }),
 
                         // buildSettingItem(
                         //     context, Icons.report, 'Report', 'الإبلاغ', () {
                         //   // Implement report logic
                         // }),
-                        if (!authProvider.isVendor)
-                          buildSettingItem(
-                              context,
-                              Icons.policy,
-                              'Vendor Policy and Terms',
-                              'سياسة وشروط المستفيد', () {
-                            Navigator.of(context).pushNamed('/user/trems');
+                        if (isAuthenticated)
+                          if (!authProvider.isVendor)
+                            buildSettingItem(
+                                context,
+                                Icons.policy,
+                                'Vendor Policy and Terms',
+                                'سياسة وشروط المستفيد', () {
+                              Navigator.of(context).pushNamed('/user/trems');
 
-                            // Implement report logic
-                          }),
-                        if (!authProvider.isVendor)
-                          buildSettingItem(context, Icons.shopping_basket,
-                              'Get Vendor Account', 'تحويل الى حساب تاجر', () {
-                            QuickAlert.show(
-                              context: context,
-                              type: QuickAlertType.confirm,
-                              customAsset: 'images/confirm.gif',
-                              text: isEnglish
-                                  ? 'Are you sure you want to become a vendor account?'
-                                  : 'هل أنت متأكد من تحويل الحساب إلى حساب تاجر؟',
-                              widget: Column(
-                                children: [
-                                  SizedBox(height: 10),
-                                  GestureDetector(
-                                    onTap: () {
-                                      // Navigate to the terms and conditions screen
-                                      Navigator.pushNamed(
-                                          context, '/vendor/trems');
-                                    },
-                                    child: Text(
-                                      isEnglish
-                                          ? 'Terms And Conditions Policy click here to read'
-                                          : 'انقر هنا لقراءة سياسة الشروط والأحكام',
-                                      style: TextStyle(
-                                        color: Colors.blue,
-                                        decoration: TextDecoration.underline,
+                              // Implement report logic
+                            }),
+                        if (isAuthenticated)
+                          if (!authProvider.isVendor)
+                            buildSettingItem(
+                                context,
+                                Icons.shopping_basket,
+                                'Get Vendor Account',
+                                'تحويل الى حساب تاجر', () {
+                              QuickAlert.show(
+                                context: context,
+                                type: QuickAlertType.confirm,
+                                customAsset: 'images/confirm.gif',
+                                text: isEnglish
+                                    ? 'Are you sure you want to become a vendor account?'
+                                    : 'هل أنت متأكد من تحويل الحساب إلى حساب تاجر؟',
+                                widget: Column(
+                                  children: [
+                                    SizedBox(height: 10),
+                                    GestureDetector(
+                                      onTap: () {
+                                        // Navigate to the terms and conditions screen
+                                        Navigator.pushNamed(
+                                            context, '/vendor/trems');
+                                      },
+                                      child: Text(
+                                        isEnglish
+                                            ? 'Terms And Conditions Policy click here to read'
+                                            : 'انقر هنا لقراءة سياسة الشروط والأحكام',
+                                        style: TextStyle(
+                                          color: Colors.blue,
+                                          decoration: TextDecoration.underline,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    isEnglish
-                                        ? 'By choosing "Yes", you accept and agree to the Terms and Conditions.'
-                                        : 'باختيارك "نعم"، فإنك توافق وتقبل الشروط والأحكام.',
-                                    style: TextStyle(fontSize: 12),
-                                  ),
-                                ],
-                              ),
-                              cancelBtnText: isEnglish ? 'No' : 'لا',
-                              confirmBtnText: isEnglish ? 'Yes' : 'نعم',
-                              confirmBtnColor: Color(0xFF0D2750),
-                              onConfirmBtnTap: () async {
-                                await Api().UserRequestActions(
-                                    context, 'go to vendor');
-                              },
-                            );
-                          }),
+                                    SizedBox(height: 10),
+                                    Text(
+                                      isEnglish
+                                          ? 'By choosing "Yes", you accept and agree to the Terms and Conditions.'
+                                          : 'باختيارك "نعم"، فإنك توافق وتقبل الشروط والأحكام.',
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                  ],
+                                ),
+                                cancelBtnText: isEnglish ? 'No' : 'لا',
+                                confirmBtnText: isEnglish ? 'Yes' : 'نعم',
+                                confirmBtnColor: Color(0xFF0D2750),
+                                onConfirmBtnTap: () async {
+                                  await Api().UserRequestActions(
+                                      context, 'go to vendor');
+                                },
+                              );
+                            }),
+                        if (isAuthenticated)
+                          if (authProvider.isVendor)
+                            buildSettingItem(
+                                context,
+                                Icons.policy,
+                                'Vendor Policy and Terms',
+                                'سياسة وشروط التاجر', () {
+                              Navigator.of(context).pushNamed('/vendor/trems');
+                              // Implement report logic
+                            }),
+                        if (isAuthenticated)
+                          if (authProvider.isVendor)
+                            buildSettingItem(
+                                context,
+                                Icons.person_rounded,
+                                'Back Beneficiary Account',
+                                'تحويل الى حساب مستفيد', () async {
+                              QuickAlert.show(
+                                context: context,
+                                type: QuickAlertType.confirm,
+                                customAsset: 'images/confirm.gif',
+                                text: isEnglish
+                                    ? 'Are you sure be user account?'
+                                    : 'هل أنت متاكد من تحويل الي حساب مستفيد ؟',
+                                cancelBtnText: isEnglish ? 'No' : 'لا',
+                                confirmBtnText: isEnglish ? 'Yes' : 'نعم',
+                                confirmBtnColor: Color(0xFF0D2750),
+                                onConfirmBtnTap: () async {
+                                  await Api().UserRequestActions(
+                                      context, 'go to user');
 
-                        if (authProvider.isVendor)
-                          buildSettingItem(
-                              context,
-                              Icons.policy,
-                              'Vendor Policy and Terms',
-                              'سياسة وشروط التاجر', () {
-                            Navigator.of(context).pushNamed('/vendor/trems');
-                            // Implement report logic
-                          }),
-                        if (authProvider.isVendor)
-                          buildSettingItem(
-                              context,
-                              Icons.person_rounded,
-                              'Back Beneficiary Account',
-                              'تحويل الى حساب مستفيد', () async {
-                            QuickAlert.show(
-                              context: context,
-                              type: QuickAlertType.confirm,
-                              customAsset: 'images/confirm.gif',
-                              text: isEnglish
-                                  ? 'Are you sure be user account?'
-                                  : 'هل أنت متاكد من تحويل الي حساب مستفيد ؟',
-                              cancelBtnText: isEnglish ? 'No' : 'لا',
-                              confirmBtnText: isEnglish ? 'Yes' : 'نعم',
-                              confirmBtnColor: Color(0xFF0D2750),
-                              onConfirmBtnTap: () async {
-                                await Api()
-                                    .UserRequestActions(context, 'go to user');
+                                  Navigator.of(context)
+                                      .pushReplacementNamed('/settings');
+                                },
+                              );
+                            }),
 
-                                Navigator.of(context)
-                                    .pushReplacementNamed('/settings');
-                              },
-                            );
-                          }),
-                        
                         // buildSettingItem(
                         //     context, Icons.message, 'Messages', 'الرسائل', () {
                         //   // Implement messages logic
@@ -450,113 +424,116 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         SizedBox(
                           height: 10,
                         ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 60, // Set the height of the button
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  QuickAlert.show(
-                                      context: context,
-                                      type: QuickAlertType.confirm,
-                                      customAsset: 'images/confirm.gif',
-                                      text: isEnglish
-                                          ? 'are you sure you want delete your account?'
-                                          : 'هل انت متأكد من حذف الحساب؟',
-                                      confirmBtnText: isEnglish ? 'Yes' : 'نعم',
-                                      cancelBtnText: isEnglish ? 'No' : 'لا',
-                                      confirmBtnColor: Color(0xFF0D2750),
-                                      onConfirmBtnTap: () async {
-                                        await Api().UserRequestActions(
-                                            context, 'go to delete');
+                        if (isAuthenticated)
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 60, // Set the height of the button
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    QuickAlert.show(
+                                        context: context,
+                                        type: QuickAlertType.confirm,
+                                        customAsset: 'images/confirm.gif',
+                                        text: isEnglish
+                                            ? 'are you sure you want delete your account?'
+                                            : 'هل انت متأكد من حذف الحساب؟',
+                                        confirmBtnText:
+                                            isEnglish ? 'Yes' : 'نعم',
+                                        cancelBtnText: isEnglish ? 'No' : 'لا',
+                                        confirmBtnColor: Color(0xFF0D2750),
+                                        onConfirmBtnTap: () async {
+                                          await Api().UserRequestActions(
+                                              context, 'go to delete');
 
-                                        // Call the logout method from AuthProvider
-                                        Provider.of<AuthProvider>(context,
-                                                listen: false)
-                                            .logout();
+                                          // Call the logout method from AuthProvider
+                                          Provider.of<AuthProvider>(context,
+                                                  listen: false)
+                                              .logout();
 
-                                        // Navigate to the login screen or perform any other necessary actions
-                                        Navigator.pushNamedAndRemoveUntil(
-                                            context,
-                                            Routes.login,
-                                            (route) => false);
-                                      });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  primary: ui, // Set the background color
-                                  shape: isEnglish
-                                      ? RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(30),
-                                            bottomLeft: Radius.circular(30),
+                                          // Navigate to the login screen or perform any other necessary actions
+                                          Navigator.pushNamedAndRemoveUntil(
+                                              context,
+                                              Routes.home,
+                                              (route) => false);
+                                        });
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    primary: ui, // Set the background color
+                                    shape: isEnglish
+                                        ? RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(30),
+                                              bottomLeft: Radius.circular(30),
+                                            ),
+                                          )
+                                        : RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(30),
+                                              bottomRight: Radius.circular(30),
+                                            ),
                                           ),
-                                        )
-                                      : RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(30),
-                                            bottomRight: Radius.circular(30),
-                                          ),
-                                        ),
-                                ),
-                                child: Text(
-                                  isEnglish ? 'Delete Account' : 'حذف الحساب',
-                                  style: TextStyle(color: Colors.white),
+                                  ),
+                                  child: Text(
+                                    isEnglish ? 'Delete Account' : 'حذف الحساب',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 60, // Set the height of the button
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  QuickAlert.show(
-                                      context: context,
-                                      type: QuickAlertType.confirm,
-                                      customAsset: 'images/confirm.gif',
-                                      text: isEnglish
-                                          ? 'are you sure you want logout?'
-                                          : 'هل انت متأكد من عملية تسجيل الخروج من الحساب؟',
-                                      confirmBtnText: isEnglish ? 'Yes' : 'نعم',
-                                      cancelBtnText: isEnglish ? 'No' : 'لا',
-                                      confirmBtnColor: Color(0xFF0D2750),
-                                      onConfirmBtnTap: () {
-                                        // Call the logout method from AuthProvider
-                                        Provider.of<AuthProvider>(context,
-                                                listen: false)
-                                            .logout();
+                              SizedBox(
+                                height: 60, // Set the height of the button
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    QuickAlert.show(
+                                        context: context,
+                                        type: QuickAlertType.confirm,
+                                        customAsset: 'images/confirm.gif',
+                                        text: isEnglish
+                                            ? 'are you sure you want logout?'
+                                            : 'هل انت متأكد من عملية تسجيل الخروج من الحساب؟',
+                                        confirmBtnText:
+                                            isEnglish ? 'Yes' : 'نعم',
+                                        cancelBtnText: isEnglish ? 'No' : 'لا',
+                                        confirmBtnColor: Color(0xFF0D2750),
+                                        onConfirmBtnTap: () {
+                                          // Call the logout method from AuthProvider
+                                          Provider.of<AuthProvider>(context,
+                                                  listen: false)
+                                              .logout();
 
-                                        // Navigate to the login screen or perform any other necessary actions
-                                        Navigator.pushNamedAndRemoveUntil(
-                                            context,
-                                            Routes.login,
-                                            (route) => false);
-                                      });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  primary: ui, // Set the background color
-                                  shape: isEnglish
-                                      ? RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(30),
-                                            bottomRight: Radius.circular(30),
+                                          // Navigate to the login screen or perform any other necessary actions
+                                          Navigator.pushNamedAndRemoveUntil(
+                                              context,
+                                              Routes.home,
+                                              (route) => false);
+                                        });
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    primary: ui, // Set the background color
+                                    shape: isEnglish
+                                        ? RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(30),
+                                              bottomRight: Radius.circular(30),
+                                            ),
+                                          )
+                                        : RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(30),
+                                              bottomLeft: Radius.circular(30),
+                                            ),
                                           ),
-                                        )
-                                      : RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(30),
-                                            bottomLeft: Radius.circular(30),
-                                          ),
-                                        ),
-                                ),
-                                child: Text(
-                                  isEnglish ? 'Logout' : 'تسجيل الخروج',
-                                  style: TextStyle(color: Colors.white),
+                                  ),
+                                  child: Text(
+                                    isEnglish ? 'Logout' : 'تسجيل الخروج',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
                         // Logout Button
                       ],
                     ),

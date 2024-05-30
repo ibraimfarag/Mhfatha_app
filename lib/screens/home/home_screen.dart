@@ -75,8 +75,13 @@ class _HomeScreenState extends State<HomeScreen> {
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
     authProvider.updateUserData(context);
+        bool isAuthenticated = authProvider.isAuthenticated;
+
     setState(() {
+   if (isAuthenticated) {
       authName = authProvider.user!['first_name'];
+   }
+
     });
     requestPermissions();
     initPlatformState();
@@ -851,8 +856,10 @@ class _HomeScreenState extends State<HomeScreen> {
     Size size = MediaQuery.of(context).size;
     String lang = Provider.of<AppState>(context, listen: false).display;
 
-    AuthProvider authProvider =
+AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
+    authProvider.updateUserData(context);
+        bool isAuthenticated = authProvider.isAuthenticated;
     // Replace with the actual property holding the user's name
     //
 
@@ -910,6 +917,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: 20,
                       ),
+                         if (isAuthenticated) 
                       Container(
                         margin: EdgeInsets.symmetric(horizontal: 25),
                         child: Align(
