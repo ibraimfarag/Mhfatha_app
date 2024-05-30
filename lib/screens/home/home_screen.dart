@@ -21,8 +21,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  double? latitude;
-  double? longitude;
+  double latitude = 30.0444; // Fake latitude
+  double longitude = 31.2357; // Fake longitude
+
   // Declare a GlobalKey for the QR code scanner
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Api api = Api();
@@ -277,8 +278,8 @@ class _HomeScreenState extends State<HomeScreen> {
       }
 
       setState(() {
-        latitude = locationData.latitude;
-        longitude = locationData.longitude;
+        latitude = locationData.latitude!;
+        longitude = locationData.longitude!;
       });
 
       // Call the method to send location when the coordinates are available
@@ -320,11 +321,17 @@ class _HomeScreenState extends State<HomeScreen> {
         print('Latitude or longitude is null');
         return;
       }
+      if (latitude == 30.0444 || longitude == 31.2357) {
+        _getLocation();
+
+        print('get new Latitude and longitude');
+        return;
+      }
 
       final response = await Api().sendLocation(
         authProvider,
-        latitude!,
-        longitude!,
+        latitude,
+        longitude,
         language, // Include the language in the request
       );
 
