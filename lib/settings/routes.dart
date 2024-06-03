@@ -56,8 +56,8 @@ class Routes {
       settings: (context) => SettingsScreen(),
 
       // Routes that require authentication
-      qrscanner: (context) => RouteGuard(screen: QrScanner()),
-      qrresponse: (context) => RouteGuard(screen: QrResponse(responseData: '')),
+      qrscanner: (context) =>  QrScanner(),
+      qrresponse: (context) =>  QrResponse(responseData: ''),
       getDiscount: (context) => RouteGuard(screen: GetDiscount()),
       report: (context) => RouteGuard(screen: ReportScreen()),
       request: (context) => RouteGuard(screen: RequestsScreen()),
@@ -97,7 +97,6 @@ class Routes {
     );
   }
 }
-
 class RouteGuard extends StatelessWidget {
   final Widget screen;
 
@@ -108,10 +107,109 @@ class RouteGuard extends StatelessWidget {
     AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
     bool isAuthenticated = authProvider.isAuthenticated;
 
+    bool isEnglish = Provider.of<AppState>(context, listen: false).isEnglish;
+
     if (isAuthenticated) {
       return screen;
     } else {
-      return LoginScreen();
+      // Show a dialog with login and sign-up options
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              titlePadding: EdgeInsets.zero,
+              contentPadding: EdgeInsets.only(top: 16, bottom: 16),
+              title: Stack(
+                children: [
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: Text(
+                        isEnglish ? 'Authentication Required' : 'يجب تسجيل الدخول',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    child: IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Text(
+                      isEnglish
+                          ? 'You need to be logged in to access this feature.'
+                          : 'تحتاج إلى تسجيل الدخول للوصول إلى هذه الميزة.',
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pushNamed(Routes.login);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.blue,
+                          onPrimary: Colors.white,
+                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Text(
+                          isEnglish ? 'Login' : 'تسجيل الدخول',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pushNamed(Routes.register);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.green,
+                          onPrimary: Colors.white,
+                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Text(
+                          isEnglish ? 'Sign Up' : 'تسجيل',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      });
+
+      // Return an empty container while the dialog is being shown
+      return Container();
     }
   }
 }

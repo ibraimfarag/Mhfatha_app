@@ -64,6 +64,9 @@ class _NewNavState extends State<NewNav> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _buildNavItem(Icons.home, isEnglish ? 'Home' : 'الرئيسية', '/home', currentRoute == '/home'),
+              if (!authProvider.isAuthenticated)
+          _buildNavItem(Icons.account_circle, isEnglish ? 'Account' : 'الحساب', '/login', currentRoute == '/login'),
+              if (authProvider.isAuthenticated)
           _buildNavItem(Icons.wallet, isEnglish ? 'My Wallet' : 'محفظتي', '/requests', currentRoute == '/requests'),
           if (authProvider.isVendor)
             _buildNavItem(Icons.store, isEnglish ? 'My Stores' : 'متاجري', '/mainstores', currentRoute == '/mainstores'),

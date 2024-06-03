@@ -55,37 +55,35 @@ class _HomeScreenState extends State<HomeScreen> {
 
     _getLocation();
     // Set up a timer to check location changes every 90 seconds
-    locationTimer = Timer.periodic(Duration(seconds: 80), (Timer timer) async {
-      await _checkAndSendLocation();
-    });
+    // locationTimer = Timer.periodic(Duration(seconds: 80), (Timer timer) async {
+      // await _checkAndSendLocation();
+    // });
 
-    reloadTimer = Timer.periodic(Duration(seconds: 2), (Timer timer) {
-      if (filteredStores.isEmpty) {
-        _reloadFilteredStores();
-      }
-    });
+    // reloadTimer = Timer.periodic(Duration(seconds: 2), (Timer timer) {
+    //   if (filteredStores.isEmpty) {
+    //     _reloadFilteredStores();
+    //   }
+    // });
 
-    Timer(Duration(seconds: 5), () {
-      if (mounted) {
-        setState(() {
-          isLoading = false;
-        });
-      }
-    });
+ 
 
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
-    authProvider.updateUserData(context);
-        bool isAuthenticated = authProvider.isAuthenticated;
+
+    bool isAuthenticated = authProvider.isAuthenticated;
+    if (isAuthenticated) {
+      authProvider.updateUserData(context);
+    }
 
     setState(() {
-   if (isAuthenticated) {
-      authName = authProvider.user!['first_name'];
-   }
-
+      if (isAuthenticated) {
+        authName = authProvider.user!['first_name'];
+      }
     });
     requestPermissions();
     initPlatformState();
+
+
   }
 
   Future<void> requestPermissions() async {
@@ -304,13 +302,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _sendLocation() async {
     AuthProvider? authProvider =
         Provider.of<AuthProvider>(context, listen: false);
-
     try {
+       setState(() {
+ isLoading = true;
+     });
       if (authProvider == null) {
         print('AuthProvider is null');
         return;
       }
-
+   
       // Get the language display value from the app state
       String language = Provider.of<AppState>(context, listen: false).display ??
           'defaultLanguage';
@@ -355,6 +355,19 @@ class _HomeScreenState extends State<HomeScreen> {
           print('Invalid response format: ${response.toString()}');
         }
       }
+             // Timer(Duration(seconds: 5), () {
+         if (filteredStores.isEmpty) {
+      Timer(Duration(seconds: 15), () {
+        setState(() {
+          isLoading = false;
+        });
+      });
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+    }
+    // });
     } catch (e) {
       print('Error during sending location: $e');
     }
@@ -863,10 +876,12 @@ class _HomeScreenState extends State<HomeScreen> {
     Size size = MediaQuery.of(context).size;
     String lang = Provider.of<AppState>(context, listen: false).display;
 
-AuthProvider authProvider =
+    AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
-    authProvider.updateUserData(context);
-        bool isAuthenticated = authProvider.isAuthenticated;
+    bool isAuthenticated = authProvider.isAuthenticated;
+    if (isAuthenticated) {
+      authProvider.updateUserData(context);
+    }
     // Replace with the actual property holding the user's name
     //
 
@@ -924,25 +939,25 @@ AuthProvider authProvider =
                       SizedBox(
                         height: 20,
                       ),
-                         if (isAuthenticated) 
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: 25),
-                        child: Align(
-                          alignment: isEnglish
-                              ? Alignment.centerLeft
-                              : Alignment.centerRight,
-                          child: Text(
-                            isEnglish
-                                ? 'Welcome back $authName'
-                                : 'مرحبًا $authName',
-                            style: TextStyle(
-                              fontSize: MediaQuery.of(context).size.width *
-                                  0.04, // Adjust the multiplier as needed
-                              fontWeight: FontWeight.bold,
+                      if (isAuthenticated)
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 25),
+                          child: Align(
+                            alignment: isEnglish
+                                ? Alignment.centerLeft
+                                : Alignment.centerRight,
+                            child: Text(
+                              isEnglish
+                                  ? 'Welcome back $authName'
+                                  : 'مرحبًا $authName',
+                              style: TextStyle(
+                                fontSize: MediaQuery.of(context).size.width *
+                                    0.04, // Adjust the multiplier as needed
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
-                      ),
                       Padding(
                         padding:
                             EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -1057,59 +1072,71 @@ AuthProvider authProvider =
                                   var name = parts[0];
                                   var id = parts[1];
                                   var gestureDetector = GestureDetector(
-    onTap: () async {
-      // Handle the tap action here, e.g., navigate to a new screen
-      print('Tapped on item with id: $id');
-      String storeDetails = await Api().getStoreDetails(
-        context,
-        authProvider,
-        int.parse(id),
-        latitude!,
-        longitude!,
-      );
+                                    onTap: () async {
+                                      // Handle the tap action here, e.g., navigate to a new screen
+                                      print('Tapped on item with id: $id');
+                                      String storeDetails =
+                                          await Api().getStoreDetails(
+                                        context,
+                                        authProvider,
+                                        int.parse(id),
+                                        latitude!,
+                                        longitude!,
+                                      );
 
-      // Parse the store details JSON
-      Map<String, dynamic> storeDetailsMap = jsonDecode(storeDetails);
-      Map<String, dynamic> store = storeDetailsMap['store'];
-      Navigator.pushNamed(context, '/store-info', arguments: store);
+                                      // Parse the store details JSON
+                                      Map<String, dynamic> storeDetailsMap =
+                                          jsonDecode(storeDetails);
+                                      Map<String, dynamic> store =
+                                          storeDetailsMap['store'];
+                                      Navigator.pushNamed(
+                                          context, '/store-info',
+                                          arguments: store);
 
-      print(store);
-    },
-    child: Row(
-      crossAxisAlignment: isEnglish
-          ? CrossAxisAlignment.start
-          : CrossAxisAlignment.end,
-      mainAxisAlignment: isEnglish
-          ? MainAxisAlignment.start
-          : MainAxisAlignment.end,
-      children: [
-        Container(
-              width: MediaQuery.of(context).size.width - 100, 
-        height: 40,
-        // color: Colors.red,
-          margin: EdgeInsets.symmetric(horizontal: 20),
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 0),
-            child: Text(
-              '$name',
-              textAlign: isEnglish ? TextAlign.start : TextAlign.end,
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
+                                      print(store);
+                                    },
+                                    child: Row(
+                                      crossAxisAlignment: isEnglish
+                                          ? CrossAxisAlignment.start
+                                          : CrossAxisAlignment.end,
+                                      mainAxisAlignment: isEnglish
+                                          ? MainAxisAlignment.start
+                                          : MainAxisAlignment.end,
+                                      children: [
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width -
+                                              100,
+                                          height: 40,
+                                          // color: Colors.red,
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 0),
+                                            child: Text(
+                                              '$name',
+                                              textAlign: isEnglish
+                                                  ? TextAlign.start
+                                                  : TextAlign.end,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
 
-return SearchFieldListItem<String>(
-  child: Row(
-    children: [
-      Container(
-     // Set the background color to red
-        child: gestureDetector,
-      ),
-    ],
-  ),
-);
+                                  return SearchFieldListItem<String>(
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          // Set the background color to red
+                                          child: gestureDetector,
+                                        ),
+                                      ],
+                                    ),
+                                  );
                                 }).toList(),
                                 focusNode: focus,
                                 suggestionState: Suggestion.expand,
@@ -1129,28 +1156,38 @@ return SearchFieldListItem<String>(
                         alignment: isEnglish
                             ? Alignment.centerLeft
                             : Alignment.centerRight,
-                        child: Row(
-                          children: [
-                            Icon(Icons.store,
-                                color: isDark ? Colors.white : Colors.black,
-                                size: 24),
-                            SizedBox(width: 10),
-                            Text(
-                              isEnglish
-                                  ? 'Nearby Discounts'
-                                  : 'خصومات قريبة منك ',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
+                        child:   Row(
+          children: [
+            Icon(Icons.store, color: isDark ? Colors.white : Colors.black, size: 24),
+            SizedBox(width: 10),
+            Text(
+              isEnglish ? 'Nearby Discounts' : 'خصومات قريبة منك ',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Spacer(),
+            IconButton(
+              icon: Row(
+                children: [
+                  Icon(Icons.refresh, color: isDark ? Colors.white : Colors.black),
+                  SizedBox(width: 5),
+                  
+                ],
+              ),
+              onPressed: _sendLocation,
+            ),
+          ],
+        ),
                       ),
                       if (isLoading)
                         Center(
                           child:
-                              CircularProgressIndicator(), // Loading indicator
+                            Image.asset(
+          'images/loading_stores.gif', // Path to the GIF image file
+          height: 150,
+        ),
                         )
                       else if (filteredStores.isNotEmpty)
                         Container(
@@ -1173,6 +1210,7 @@ return SearchFieldListItem<String>(
                           ),
                         )
                       else
+                      
                         Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Text(
