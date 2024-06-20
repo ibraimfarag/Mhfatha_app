@@ -1,12 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:mhfatha/settings/imports.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:yaml/yaml.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'package:path/path.dart' as path;
 
 import 'dart:io';
 
@@ -68,7 +63,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => DarkModeProvider()),
         ChangeNotifierProvider(create: (context) => AuthProvider()),
       ],
-      child: MhfathaApp(),
+      child: const MhfathaApp(),
     ),
   );
   late Timer timer;
@@ -76,7 +71,7 @@ void main() async {
 
 
 
-  timer = Timer.periodic(Duration(seconds: 10), (timer) async {
+  timer = Timer.periodic(const Duration(seconds: 10), (timer) async {
     // Get the context outside the async function
     BuildContext? context = navigatorKey.currentContext;
 
@@ -134,7 +129,7 @@ void main() async {
 
 
   // checkAndUpdateVersion(context);
-  WidgetsBinding.instance!.addPostFrameCallback((_) {
+  WidgetsBinding.instance.addPostFrameCallback((_) {
     // This function will be called after the UI is built
     late BuildContext context;
     context = navigatorKey.currentContext!;
@@ -143,7 +138,22 @@ void main() async {
     print('debug1');
   });
 }
+void _launchStore() async {
+  String url = '';
+  if (Platform.isIOS) {
+    // Replace 'YOUR_APP_ID' with your actual app id
+    url = 'https://apps.apple.com/us/app/mhfatha/id6475014076';
+  } else if (Platform.isAndroid) {
+    // Replace 'YOUR_PACKAGE_NAME' with your actual package name
+    url = 'https://play.google.com/store/apps/details?id=com.app.mhfatha&pcampaignid=web_share';
+  }
 
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
 Future<void> checkAndUpdateVersion(BuildContext context) async {
   // Read YAML version
   final yamlString = await rootBundle.loadString('pubspec.yaml');
@@ -196,7 +206,10 @@ Future<void> checkAndUpdateVersion(BuildContext context) async {
             actions: <Widget>[
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context);
+                  // Navigator.pop(context);
+                                  _launchStore();
+                Navigator.pop(context);
+
                 },
                 child: Text(isEnglish ? 'Update' : 'تحديث'),
               ),
@@ -205,6 +218,9 @@ Future<void> checkAndUpdateVersion(BuildContext context) async {
         );
       },
     );
+
+
+    
     AdminApi(context).sendNotification(
         context: context,
         action: "sendToUser",
@@ -322,7 +338,7 @@ class _MhfathaAppState extends State<MhfathaApp> {
             bool isAuthenticated = authProvider.isAuthenticated;
 
             // Return the appropriate screen based on authentication status
-            return  HomeScreen() ;
+            return  const HomeScreen() ;
           },
         ),
         routes: Routes.getRoutes(context),
@@ -335,10 +351,10 @@ class _MhfathaAppState extends State<MhfathaApp> {
           return Scaffold(
             resizeToAvoidBottomInset: false,
             appBar: PreferredSize(
-              preferredSize: Size.fromHeight(0),
+              preferredSize: const Size.fromHeight(0),
               child: AppBar(
                 automaticallyImplyLeading: false,
-                backgroundColor: Color(0xFF080E27),
+                backgroundColor: const Color(0xFF080E27),
                 elevation: 0,
                 //   systemOverlayStyle: SystemUiOverlayStyle(
                 //     statusBarColor: Color(0xFF080E27),

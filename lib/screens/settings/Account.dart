@@ -1,11 +1,12 @@
 // lib\screens\settings\settings.dart
 
-import 'dart:io';
 
 import 'package:intl/intl.dart';
 import 'package:mhfatha/settings/imports.dart';
 
 class AccountScreen extends StatefulWidget {
+  const AccountScreen({super.key});
+
   @override
   State<AccountScreen> createState() => _AccountScreenState();
 }
@@ -13,10 +14,10 @@ class AccountScreen extends StatefulWidget {
 class _AccountScreenState extends State<AccountScreen> {
   late AuthProvider authProvider; // Declare authProvider variable
 
-  Color backgroundColor = Color.fromARGB(220, 255, 255, 255);
-  Color ui = Color.fromARGB(220, 233, 233, 233);
-  Color ui2 = Color.fromARGB(255, 113, 194, 110);
-  Color colors = Color(0xFF05204a);
+  Color backgroundColor = const Color.fromARGB(220, 255, 255, 255);
+  Color ui = const Color.fromARGB(220, 233, 233, 233);
+  Color ui2 = const Color.fromARGB(255, 113, 194, 110);
+  Color colors = const Color(0xFF05204a);
   TextEditingController first_name = TextEditingController();
   TextEditingController last_name = TextEditingController();
   TextEditingController email = TextEditingController();
@@ -51,6 +52,7 @@ class _AccountScreenState extends State<AccountScreen> {
     }
   }
 
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
   }
@@ -67,7 +69,7 @@ class _AccountScreenState extends State<AccountScreen> {
         child: Scaffold(
       body: SingleChildScrollView(
         child: Container(
-            color: Color(0xFF080E27), // Set background color to #080e27
+            color: const Color(0xFF080E27), // Set background color to #080e27
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
@@ -79,7 +81,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     marginTop: 30,
                   ),
                   Container(
-                    padding: EdgeInsets.fromLTRB(20, 0, 20, 5),
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 5),
                     // height: 200,
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -87,29 +89,29 @@ class _AccountScreenState extends State<AccountScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
                               Text(
                                 isEnglish ? ' Welcome ' : ' مرحبا بك',
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
                               Text(
                                 ' ${authProvider.user!['first_name']}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white),
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 30,
                           ),
                           // Column(
@@ -128,10 +130,10 @@ class _AccountScreenState extends State<AccountScreen> {
                           // ),
                         ]),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Container(
-                    padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    decoration: BoxDecoration(
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    decoration: const BoxDecoration(
                       color: Color(0xFFF3F4F7),
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(40),
@@ -141,7 +143,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         // ProfilePhotoWidget(
                         //   isEnglish: isEnglish,
                         //   labelcolor: colors,
@@ -161,7 +163,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         //     print('path : $path');
                         //   },
                         // ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         buildSettingItem(context, 'First Name', 'الاسم', () {
                           // Navigate to account settings screen
                           // Navigator.pushNamed(context, Routes.accountSettings);
@@ -192,10 +194,10 @@ class _AccountScreenState extends State<AccountScreen> {
                         }, email, ' ${authProvider.user!['email']}'),
                         Container(
                           margin:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-                          padding: EdgeInsets.fromLTRB(30, 30, 30, 30),
+                              const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+                          padding: const EdgeInsets.fromLTRB(30, 30, 30, 30),
                           decoration: BoxDecoration(
-                            color: Color(0xFFFFFFFF),
+                            color: const Color(0xFFFFFFFF),
                             borderRadius: BorderRadius.circular(30),
                           ),
                           child: Row(
@@ -226,7 +228,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             ],
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 24,
                         ),
                         Row(
@@ -244,7 +246,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                         : 'هل انت متاكد من تحديث البيانات الشخصية',
                                     confirmBtnText: isEnglish ? 'Yes' : 'نعم',
                                     cancelBtnText: isEnglish ? 'No' : 'لا',
-                                    confirmBtnColor: Color(0xFF0D2750),
+                                    confirmBtnColor: const Color(0xFF0D2750),
                                     onConfirmBtnTap: () async {
                                       Navigator.pop(context);
 
@@ -288,7 +290,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 ])),
       ),
       // bottomNavigationBar: BottomNavBar(initialIndex: 2),
-      bottomNavigationBar: NewNav(),
+      bottomNavigationBar: const NewNav(),
     ));
   }
 Widget buildSettingItem(
@@ -306,10 +308,10 @@ Widget buildSettingItem(
   return InkWell(
     onTap: onTap,
     child: Container(
-      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-      padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+      padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
       decoration: BoxDecoration(
-        color: Color(0xFFFFFFFF),
+        color: const Color(0xFFFFFFFF),
         borderRadius: BorderRadius.circular(30),
       ),
       child: Column(
@@ -317,11 +319,11 @@ Widget buildSettingItem(
           Row(
             children: [
               // Icon(icon),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
               Text(isEnglish ? englishTitle : arabicTitle),
             ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           // Add TextField here
           if (englishTitle.toLowerCase() == 'birthday') // Check if it's the birthday field
             InkWell(

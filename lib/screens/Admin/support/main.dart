@@ -1,13 +1,10 @@
-import 'dart:convert';
-import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:mhfatha/settings/imports.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class MainAdminSupporting extends StatefulWidget {
+  const MainAdminSupporting({super.key});
+
   @override
   State<MainAdminSupporting> createState() => _MainAdminSupportingState();
 }
@@ -15,10 +12,10 @@ class MainAdminSupporting extends StatefulWidget {
 class _MainAdminSupportingState extends State<MainAdminSupporting> {
   late AuthProvider authProvider; // Declare authProvider variable
   Api api = Api();
-  Color backgroundColor = Color.fromARGB(220, 255, 255, 255);
-  Color ui = Color.fromARGB(220, 233, 233, 233);
-  Color ui2 = Color.fromARGB(255, 113, 194, 110);
-  Color colors = Color(0xFF05204a);
+  Color backgroundColor = const Color.fromARGB(220, 255, 255, 255);
+  Color ui = const Color.fromARGB(220, 233, 233, 233);
+  Color ui2 = const Color.fromARGB(255, 113, 194, 110);
+  Color colors = const Color(0xFF05204a);
 
   List<Map<String, dynamic>> supportTickets = []; // Add this line
   List<Map<String, dynamic>> filteredTickets = []; // Add this line
@@ -31,10 +28,11 @@ class _MainAdminSupportingState extends State<MainAdminSupporting> {
     authProvider = Provider.of<AuthProvider>(context, listen: false);
     Api api = Api(); // Initialize vendorApi in initState
     final vendorApi = VendorApi(context);
-    WidgetsBinding.instance!.addPostFrameCallback((_) {});
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
     fetchSupportTickets();
   }
 
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
   }
@@ -94,11 +92,11 @@ class _MainAdminSupportingState extends State<MainAdminSupporting> {
     String lang = Provider.of<AppState>(context, listen: false).display;
     return DirectionalityWrapper(
         child: Scaffold(
-      backgroundColor: Color(0xFFF3F4F7),
+      backgroundColor: const Color(0xFFF3F4F7),
       body: SingleChildScrollView(
         child: Container(
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-            color: Color(0xFF080E27), // Set background color to #080e27
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+            color: const Color(0xFF080E27), // Set background color to #080e27
             child: Column(
                 // crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
@@ -110,10 +108,10 @@ class _MainAdminSupportingState extends State<MainAdminSupporting> {
                     marginTop: 30,
                   ),
                   Container(
-                    padding: EdgeInsets.fromLTRB(20, 1, 20, 5),
+                    padding: const EdgeInsets.fromLTRB(20, 1, 20, 5),
                     // height: 200,
                     child: Column(children: [
-                      SizedBox(height: 1),
+                      const SizedBox(height: 1),
                       Column(
                         children: [
                           Row(
@@ -125,7 +123,7 @@ class _MainAdminSupportingState extends State<MainAdminSupporting> {
                                   isEnglish
                                       ? 'Technical Support'
                                       : 'الدعم الفني',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold),
@@ -133,16 +131,16 @@ class _MainAdminSupportingState extends State<MainAdminSupporting> {
                               ]),
                             ],
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                         ],
                       )
                     ]),
                   ),
-                  SizedBox(height: 6),
+                  const SizedBox(height: 6),
                   Container(
                     width: double.infinity,
-                    padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    decoration: BoxDecoration(
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    decoration: const BoxDecoration(
                       color: Color(0xFFF3F4F7),
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(40),
@@ -164,14 +162,14 @@ class _MainAdminSupportingState extends State<MainAdminSupporting> {
                             hintText: isEnglish
                                 ? 'Enter ticket number'
                                 : 'أدخل رقم التذكرة',
-                            prefixIcon: Icon(Icons.search),
+                            prefixIcon: const Icon(Icons.search),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(20.0),
                             ),
                           ),
                         ),
-                        SizedBox(height: 20),
-                        Row(
+                        const SizedBox(height: 20),
+                        const Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [],
@@ -187,8 +185,8 @@ class _MainAdminSupportingState extends State<MainAdminSupporting> {
                                 },
                                 child: Container(
                                   width: screenWidth * 0.9,
-                                  margin: EdgeInsets.symmetric(vertical: 10),
-                                  padding: EdgeInsets.all(10),
+                                  margin: const EdgeInsets.symmetric(vertical: 10),
+                                  padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
                                     color: Colors.grey[200],
                                     borderRadius: BorderRadius.circular(20),
@@ -197,7 +195,7 @@ class _MainAdminSupportingState extends State<MainAdminSupporting> {
                                         color: Colors.grey.withOpacity(0.2),
                                         spreadRadius: 5,
                                         blurRadius: 7,
-                                        offset: Offset(0, 3),
+                                        offset: const Offset(0, 3),
                                       ),
                                     ],
                                   ),
@@ -213,13 +211,13 @@ class _MainAdminSupportingState extends State<MainAdminSupporting> {
                                             isEnglish
                                                 ? 'Ticket Number: ${ticket['ticket_number']}'
                                                 : 'رقم التذكرة: ${ticket['ticket_number']}',
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 16,
                                             ),
                                           ),
                                           PopupMenuButton<String>(
-                                            icon: Icon(Icons.more_vert),
+                                            icon: const Icon(Icons.more_vert),
                                             itemBuilder:
                                                 (BuildContext context) {
                                               List<PopupMenuEntry<String>>
@@ -273,7 +271,7 @@ class _MainAdminSupportingState extends State<MainAdminSupporting> {
           context: context,
           type: QuickAlertType.success,
           customAsset: 'images/success.gif',
-          confirmBtnColor: Color(0xFF0D2750),
+          confirmBtnColor: const Color(0xFF0D2750),
           text: isEnglish 
                 ? 'Ticket ${ticket['ticket_number']} status changed to $actionText successfully'
                 : 'تم تغيير حالة التذكرة ${ticket['ticket_number']} إلى $actionText بنجاح',
@@ -303,7 +301,7 @@ class _MainAdminSupportingState extends State<MainAdminSupporting> {
           context: context,
           type: QuickAlertType.success,
           customAsset: 'images/success.gif',
-          confirmBtnColor: Color(0xFF0D2750),
+          confirmBtnColor: const Color(0xFF0D2750),
           text: isEnglish 
                 ? 'Ticket ${ticket['ticket_number']} status changed to $actionText successfully'
                 : 'تم تغيير حالة التذكرة ${ticket['ticket_number']} إلى $actionText بنجاح',
@@ -348,7 +346,7 @@ class _MainAdminSupportingState extends State<MainAdminSupporting> {
                   ),
                 ])),
       ),
-      bottomNavigationBar: NewNav(),
+      bottomNavigationBar: const NewNav(),
     ));
   }
 }

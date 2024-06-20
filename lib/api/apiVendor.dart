@@ -1,8 +1,6 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:mhfatha/settings/imports.dart';
 
 import 'dart:convert';
@@ -29,7 +27,7 @@ class VendorApi {
 
 // Function to start the timer
   void _startTimer(BuildContext context) {
-    _timer = Timer(Duration(seconds: 3), () {
+    _timer = Timer(const Duration(seconds: 3), () {
       Navigator.of(context).pop();
     });
   }
@@ -313,7 +311,7 @@ Future<void> downloadAndSaveImage(
       Navigator.pop(context);
     },
     confirmBtnText: isEnglish ? 'ok' : 'حسنا',
-    confirmBtnColor: Color(0xFF0D2750),
+    confirmBtnColor: const Color(0xFF0D2750),
   );
 
   // Pop context after 3 seconds
@@ -348,7 +346,7 @@ Future<void> downloadAndSaveImage(
             Navigator.of(context).pushReplacementNamed('/mainstores');
           },
           confirmBtnText: isEnglish ? 'ok' : 'حسنا',
-          confirmBtnColor: Color(0xFF0D2750),
+          confirmBtnColor: const Color(0xFF0D2750),
         );
       } else {
         final jsonResponse = jsonDecode(response.body);
@@ -379,7 +377,7 @@ Future<void> downloadAndSaveImage(
   }
 
   Future<dynamic> fetchDiscounts(String storeId, BuildContext context) async {
-    final String apiUrl = '$baseUrl/vendor/store/discounts';
+    const String apiUrl = '$baseUrl/vendor/store/discounts';
 
     final Map<String, dynamic> requestData = {
       "store_id": storeId,
@@ -478,7 +476,7 @@ Future<void> downloadAndSaveImage(
             );
           },
           confirmBtnText: isEnglish ? 'ok' : 'حسنا',
-          confirmBtnColor: Color(0xFF0D2750),
+          confirmBtnColor: const Color(0xFF0D2750),
         );
 
         return true;
@@ -549,7 +547,7 @@ Future<void> downloadAndSaveImage(
             // You may add additional navigation logic here if needed
           },
           confirmBtnText: isEnglish ? 'ok' : 'حسنا',
-          confirmBtnColor: Color(0xFF0D2750),
+          confirmBtnColor: const Color(0xFF0D2750),
         );
         return true;
       } else {

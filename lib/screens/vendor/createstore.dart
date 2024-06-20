@@ -1,13 +1,12 @@
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:mhfatha/settings/imports.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:open_street_map_search_and_pick/open_street_map_search_and_pick.dart';
 
 class CreateStore extends StatefulWidget {
+  const CreateStore({super.key});
+
   @override
   State<CreateStore> createState() => _CreateStoreState();
 }
@@ -16,10 +15,10 @@ class _CreateStoreState extends State<CreateStore> {
   late AuthProvider authProvider; // Declare authProvider variable
   late VendorApi vendorApi; // Declare vendorApi variable
 
-  Color backgroundColor = Color.fromARGB(220, 255, 255, 255);
-  Color ui = Color.fromARGB(220, 233, 233, 233);
-  Color ui2 = Color.fromARGB(255, 113, 194, 110);
-  Color colors = Color(0xFF05204a);
+  Color backgroundColor = const Color.fromARGB(220, 255, 255, 255);
+  Color ui = const Color.fromARGB(220, 233, 233, 233);
+  Color ui2 = const Color.fromARGB(255, 113, 194, 110);
+  Color colors = const Color(0xFF05204a);
   TextEditingController store_name = TextEditingController();
   TextEditingController address = TextEditingController();
   TextEditingController latitude = TextEditingController();
@@ -73,6 +72,7 @@ class _CreateStoreState extends State<CreateStore> {
     // }
   }
 
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
   }
@@ -89,8 +89,8 @@ class _CreateStoreState extends State<CreateStore> {
       child: Scaffold(
         body: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-            color: Color(0xFF080E27), // Set background color to #080e27
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+            color: const Color(0xFF080E27), // Set background color to #080e27
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -101,7 +101,7 @@ class _CreateStoreState extends State<CreateStore> {
                   marginTop: 30,
                 ),
 Container(
-  margin: EdgeInsets.fromLTRB(20, 0, 20, 5),
+  margin: const EdgeInsets.fromLTRB(20, 0, 20, 5),
   height: 200,
   child: Column(
     children: [
@@ -131,8 +131,8 @@ Container(
 ),
 
                 Container(
-                  padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                  decoration: BoxDecoration(
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  decoration: const BoxDecoration(
                     color: Color(0xFFF3F4F7),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(40),
@@ -142,7 +142,7 @@ Container(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 24),
+                      const SizedBox(height: 24),
                       Column(
                         children: [
                           ProfilePhotoWidget(
@@ -172,13 +172,13 @@ Container(
                             ' ',
                           ),
                           Container(
-                            margin: EdgeInsets.symmetric(
+                            margin: const EdgeInsets.symmetric(
                               vertical: 5,
                               horizontal: 0,
                             ),
-                            padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
+                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
                             decoration: BoxDecoration(
-                              color: Color(0xFFFFFFFF),
+                              color: const Color(0xFFFFFFFF),
                               borderRadius: BorderRadius.circular(30),
                             ),
                             child: Row(
@@ -206,13 +206,13 @@ Container(
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.symmetric(
+                            margin: const EdgeInsets.symmetric(
                               vertical: 5,
                               horizontal: 0,
                             ),
-                            padding: EdgeInsets.fromLTRB(30, 15, 30, 15),
+                            padding: const EdgeInsets.fromLTRB(30, 15, 30, 15),
                             decoration: BoxDecoration(
-                              color: Color(0xFFFFFFFF),
+                              color: const Color(0xFFFFFFFF),
                               borderRadius: BorderRadius.circular(30),
                             ),
                             child: Row(
@@ -244,18 +244,18 @@ Container(
                               _openMap();
                             },
                             child: Container(
-                              margin: EdgeInsets.symmetric(
+                              margin: const EdgeInsets.symmetric(
                                 vertical: 5,
                                 horizontal: 0,
                               ),
-                              padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+                              padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
                               decoration: BoxDecoration(
-                                color: Color(0xFFFFFFFF),
+                                color: const Color(0xFFFFFFFF),
                                 borderRadius: BorderRadius.circular(30),
                               ),
                               child: Row(
                                 children: [
-                                  SizedBox(width: 10),
+                                  const SizedBox(width: 10),
                                   Text(isEnglish
                                       ? 'Select On Map'
                                       : 'حدد على الخريطة'),
@@ -288,27 +288,27 @@ Container(
                             '',
                           ),
                           Container(
-                              margin: EdgeInsets.symmetric(
+                              margin: const EdgeInsets.symmetric(
                                   vertical: 5, horizontal: 0),
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                   vertical: 5, horizontal: 0),
                               decoration: BoxDecoration(
-                                color: Color(0xFFFFFFFF),
+                                color: const Color(0xFFFFFFFF),
                                 borderRadius: BorderRadius.circular(30),
                               ),
                               child: Column(
                                 children: [
-                                  SizedBox(height: 20),
+                                  const SizedBox(height: 20),
                                   Text(
                                     isEnglish
                                         ? 'Select Working Days and times'
                                         : 'حدد أيام و أوقات العمل',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  SizedBox(height: 10),
+                                  const SizedBox(height: 10),
                                   buildDayTimeSelector('Sunday'),
                                   buildDayTimeSelector('Monday'),
                                   buildDayTimeSelector('Tuesday'),
@@ -329,7 +329,7 @@ Container(
                                       : 'هل انت متأكد من معلومات المتجر؟',
                                   confirmBtnText: isEnglish ? 'Yes' : 'نعم',
                                   cancelBtnText: isEnglish ? 'No' : 'لا',
-                                  confirmBtnColor: Color(0xFF0D2750),
+                                  confirmBtnColor: const Color(0xFF0D2750),
                                   onConfirmBtnTap: () async {
                                     bool success = await vendorApi.createstore(
                                         context: context,
@@ -357,7 +357,7 @@ Container(
                             ),
                             child: Text(
                               isEnglish ? 'Create Store' : 'انشاء المتجر',
-                              style: TextStyle(color: Colors.black),
+                              style: const TextStyle(color: Colors.black),
                             ),
                           ),
                         ],
@@ -369,7 +369,7 @@ Container(
             ),
           ),
         ),
-        bottomNavigationBar: NewNav(),
+        bottomNavigationBar: const NewNav(),
       ),
     );
   }
@@ -388,21 +388,21 @@ Container(
     return InkWell(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-        padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+        padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
         decoration: BoxDecoration(
-          color: Color(0xFFFFFFFF),
+          color: const Color(0xFFFFFFFF),
           borderRadius: BorderRadius.circular(30),
         ),
         child: Column(
           children: [
             Row(
               children: [
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Text(isEnglish ? englishTitle : arabicTitle),
               ],
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             if (englishTitle.toLowerCase() == 'telephone / store number' ||
                 englishTitle.toLowerCase() == 'commercial register')
               TextField(
@@ -468,10 +468,10 @@ Widget buildDayTimeSelector(String day) {
   double screenWidth = MediaQuery.of(context).size.width;
 
   return Container(
-    margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+    margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
     decoration: BoxDecoration(
-      color: Color.fromARGB(20, 71, 71, 71),
+      color: const Color.fromARGB(20, 71, 71, 71),
       borderRadius: BorderRadius.circular(30),
     ),
     child: Column(
@@ -485,10 +485,10 @@ Widget buildDayTimeSelector(String day) {
               onChanged: (value) {
                 setState(() {
                   selectedDays[day] = value!;
-                  if (value!) {
+                  if (value) {
                     // If the day is selected, set default opening and closing times
-                    openingTimes[day] = TimeOfDay(hour: 8, minute: 0);
-                    closingTimes[day] = TimeOfDay(hour: 12, minute: 0);
+                    openingTimes[day] = const TimeOfDay(hour: 8, minute: 0);
+                    closingTimes[day] = const TimeOfDay(hour: 12, minute: 0);
                     
                     // Update workingDays with the selected opening and closing times
                     workingDays[day] ??= {}; // Ensure the inner map is initialized
@@ -502,12 +502,12 @@ Widget buildDayTimeSelector(String day) {
                   print('Updated workingDays: $workingDays');
                 });
               },
-              activeColor: Color(0xFF1D365C),
+              activeColor: const Color(0xFF1D365C),
             ),
             Text(
               isEnglish ? getEnglishDayName(day) : getArabicDayName(day),
               style: TextStyle(
-                color: Color(0xFF1D365C),
+                color: const Color(0xFF1D365C),
                 fontSize: screenWidth * 0.04, // Adjust the font size dynamically
                 fontWeight: FontWeight.bold,
               ),
@@ -529,7 +529,7 @@ Widget buildDayTimeSelector(String day) {
                 onPressed: () async {
                   final selectedTime = await showTimePicker(
                     context: context,
-                    initialTime: openingTimes[day] ?? TimeOfDay(hour: 9, minute: 0),
+                    initialTime: openingTimes[day] ?? const TimeOfDay(hour: 9, minute: 0),
                   );
                   if (selectedTime != null) {
                     setState(() {
@@ -546,7 +546,7 @@ Widget buildDayTimeSelector(String day) {
                   openingTimes[day]?.format(context) ?? '- - : - -',
                   style: TextStyle(
                     fontSize: screenWidth * 0.035, // Adjust the font size dynamically
-                    color: Color(0xFF1D365C),
+                    color: const Color(0xFF1D365C),
                   ),
                 ),
               ),
@@ -561,7 +561,7 @@ Widget buildDayTimeSelector(String day) {
                 onPressed: () async {
                   final selectedTime = await showTimePicker(
                     context: context,
-                    initialTime: closingTimes[day] ?? TimeOfDay(hour: 12, minute: 0),
+                    initialTime: closingTimes[day] ?? const TimeOfDay(hour: 12, minute: 0),
                   );
                   if (selectedTime != null) {
                     setState(() {
@@ -578,7 +578,7 @@ Widget buildDayTimeSelector(String day) {
                   closingTimes[day]?.format(context) ?? '- - : - -',
                   style: TextStyle(
                     fontSize: screenWidth * 0.035, // Adjust the font size dynamically
-                    color: Color(0xFF1D365C),
+                    color: const Color(0xFF1D365C),
                   ),
                 ),
               ),
@@ -658,7 +658,7 @@ Widget buildDayTimeSelector(String day) {
         builder: (context) => MapScreen(
           onLocationSelected: (addressName, location) {
             // Update the address text field with the selected location
-            address.text = '$addressName';
+            address.text = addressName;
             latitude.text = '${location.latitude}';
             longitude.text = '${location.longitude}';
             print('${latitude.text},${longitude.text},${address.text}');
@@ -691,7 +691,7 @@ class _MapScreenState extends State<MapScreen> {
       body: OpenStreetMapSearchAndPick(
         buttonTextStyle:
             const TextStyle(fontSize: 18, fontStyle: FontStyle.normal),
-        buttonColor: Color(0xFF080E27),
+        buttonColor: const Color(0xFF080E27),
         buttonText: isEnglish ? 'Set Current Location' : 'اختر الموقع الحالي',
         locationPinIconColor: Colors.red,
         locationPinText: '',

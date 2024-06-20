@@ -29,7 +29,7 @@ class _VendorJoinWidgetState extends State<VendorJoinWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 40, right: 40, top: 10),
+      margin: const EdgeInsets.only(left: 40, right: 40, top: 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,7 +42,7 @@ class _VendorJoinWidgetState extends State<VendorJoinWidget> {
               fontWeight: FontWeight.normal,
             ),
           ),
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
           Row(
                     mainAxisAlignment: MainAxisAlignment.end,
 

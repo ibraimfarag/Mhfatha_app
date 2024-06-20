@@ -1,11 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:permission_handler/permission_handler.dart'
     as permission_handler;
 
 import 'package:mhfatha/settings/imports.dart';
 
 class RequestsScreen extends StatefulWidget {
+  const RequestsScreen({super.key});
+
   @override
   _RequestsScreenState createState() => _RequestsScreenState();
 }
@@ -143,18 +144,18 @@ class _RequestsScreenState extends State<RequestsScreen> {
 
     return DirectionalityWrapper(
       child: Scaffold(
-        backgroundColor: Color(0xFFF3F4F7),
+        backgroundColor: const Color(0xFFF3F4F7),
 
         body: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-            color: Color(0xFF080E27), // Set background color to #080e27
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+            color: const Color(0xFF080E27), // Set background color to #080e27
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 5),
                   // height: 200,
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -162,14 +163,14 @@ class _RequestsScreenState extends State<RequestsScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(
+                            const SizedBox(
                               height: 30,
                             ),
                             Text(
                               isEnglish
                                   ? 'Welcome back, $authName!'
                                   : 'مرحبًا  $authName!',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
@@ -178,19 +179,19 @@ class _RequestsScreenState extends State<RequestsScreen> {
                               isEnglish
                                   ? ' Gained $totalDiscountsCount Discount'
                                   : ' حصلت على $totalDiscountsCount خصم  ',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 5,
                             ),
                             Text(
                               isEnglish
                                   ? ' Total Payments'
                                   : ' اجمالي المدفوعات  ',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
@@ -199,19 +200,19 @@ class _RequestsScreenState extends State<RequestsScreen> {
                               isEnglish
                                   ? '  $totalDiscount SAR'
                                   : '  $totalDiscount ريال  ',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 5,
                             ),
                             Text(
                               isEnglish
                                   ? ' Total Savings '
                                   : ' اجمالي التوفير ',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
@@ -220,20 +221,20 @@ class _RequestsScreenState extends State<RequestsScreen> {
                               isEnglish
                                   ? '   $totalSavings SAR'
                                   : '  $totalSavings ريال  ',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 30,
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            SizedBox(
+                            const SizedBox(
                               height: 20,
                             ),
                             Image.asset(
@@ -244,9 +245,9 @@ class _RequestsScreenState extends State<RequestsScreen> {
                         ),
                       ]),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Color(0xFFF3F4F7),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(40),
@@ -256,11 +257,11 @@ class _RequestsScreenState extends State<RequestsScreen> {
                   child: Column(children: [
                     if (userDiscounts.isEmpty)
                       Container(
-                        padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
+                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 5),
                         margin:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                            const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                         decoration: BoxDecoration(
-                          color: Color(0xFFFFFFFF),
+                          color: const Color(0xFFFFFFFF),
                           borderRadius: BorderRadius.circular(30),
                         ),
                         child: Center(
@@ -268,18 +269,18 @@ class _RequestsScreenState extends State<RequestsScreen> {
                             isEnglish
                                 ? 'You haven\'t received any discounts yet.'
                                 : 'لم تتلقى أي خصومات حتى الآن.',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
                     for (var discount in userDiscounts)
                       Container(
-                        padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
+                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 5),
                         margin:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                            const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                         decoration: BoxDecoration(
-                          color: Color(0xFFFFFFFF),
+                          color: const Color(0xFFFFFFFF),
                           borderRadius: BorderRadius.circular(30),
                         ),
                         child: Column(
@@ -289,18 +290,18 @@ class _RequestsScreenState extends State<RequestsScreen> {
                               isEnglish
                                   ? ' ${discount['discount_category']} from ${discount['store_name']}'
                                   : ' ${discount['discount_category']} من ${discount['store_name']}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                             Text(
                               '${isEnglish ? 'Total Payment' : 'المبلغ الإجمالي'}: ${isEnglish ? '${discount['total_payment']} SAR' : '${discount['total_payment']} ريال'}',
-                              style: TextStyle(fontSize: 16),
+                              style: const TextStyle(fontSize: 16),
                             ),
                             Text(
                               '${isEnglish ? 'After Discount' : 'بعد الخصم'}: ${isEnglish ? '${discount['after_discount']} SAR' : '${discount['after_discount']} ريال'} ',
-                              style: TextStyle(fontSize: 16),
+                              style: const TextStyle(fontSize: 16),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             Row(
@@ -308,14 +309,14 @@ class _RequestsScreenState extends State<RequestsScreen> {
                               children: [
                                 Text(
                                   '${discount['date']}',
-                                  style: TextStyle(fontSize: 14),
+                                  style: const TextStyle(fontSize: 14),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 5,
                                 ),
                                 Text(
                                   '${discount['hour']} ',
-                                  style: TextStyle(fontSize: 14),
+                                  style: const TextStyle(fontSize: 14),
                                 ),
                               ],
                             ),
@@ -330,7 +331,7 @@ class _RequestsScreenState extends State<RequestsScreen> {
           ),
         ),
         // bottomNavigationBar: BottomNavBar(initialIndex: 1),
-        bottomNavigationBar: NewNav(),
+        bottomNavigationBar: const NewNav(),
       ),
     );
   }

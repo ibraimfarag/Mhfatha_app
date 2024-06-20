@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:mhfatha/settings/imports.dart'; // Import your dependencies
-import 'package:http_parser/http_parser.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
 class MHAdminTicket extends StatefulWidget {
+  const MHAdminTicket({super.key});
+
   @override
   State<MHAdminTicket> createState() => _MHAdminTicketState();
 }
@@ -13,15 +13,15 @@ class MHAdminTicket extends StatefulWidget {
 class _MHAdminTicketState extends State<MHAdminTicket> {
   late AuthProvider authProvider;
   Api api = Api();
-  Color backgroundColor = Color.fromARGB(220, 255, 255, 255);
-  Color ui = Color.fromARGB(220, 233, 233, 233);
-  Color ui2 = Color.fromARGB(255, 113, 194, 110);
-  Color colors = Color(0xFF05204a);
+  Color backgroundColor = const Color.fromARGB(220, 255, 255, 255);
+  Color ui = const Color.fromARGB(220, 233, 233, 233);
+  Color ui2 = const Color.fromARGB(255, 113, 194, 110);
+  Color colors = const Color(0xFF05204a);
 
   Map<String, dynamic>?
       ticketData; // Declare a variable to hold the ticket data
   List<dynamic> messages = [];
-  TextEditingController _messageController = TextEditingController();
+  final TextEditingController _messageController = TextEditingController();
   List<String> attachments = [];
   String ticketNumber = '';
   String ticketStatus = '';
@@ -52,7 +52,7 @@ class _MHAdminTicketState extends State<MHAdminTicket> {
     super.dispose();
   }
   void _startPolling() {
-    _timer = Timer.periodic(Duration(seconds: 30), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 30), (timer) {
       if (mounted) {
         // Check if the widget is still mounted before fetching data
         Fetchdata();
@@ -75,7 +75,7 @@ class _MHAdminTicketState extends State<MHAdminTicket> {
     Api api = Api(); // Initialize vendorApi in initState
     final vendorApi = VendorApi(context);
 
-    WidgetsBinding.instance!.addPostFrameCallback((_) {});
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
   }
 
   Future<void> _updateSupportRequest() async {
@@ -85,7 +85,7 @@ class _MHAdminTicketState extends State<MHAdminTicket> {
       context: context,
       barrierDismissible: false, // Prevent dialog from closing on outside tap
       builder: (BuildContext context) {
-        return Dialog(
+        return const Dialog(
           backgroundColor: Colors.transparent,
           elevation: 0,
           child: Center(
@@ -123,7 +123,7 @@ class _MHAdminTicketState extends State<MHAdminTicket> {
               statusCode['data']['complaintSuggestion']['description'];
           List<dynamic> parsedDescription = json.decode(descriptionData);
           List<Map<String, dynamic>> allMessages = [];
-          parsedDescription.forEach((item) {
+          for (var item in parsedDescription) {
             allMessages.add({
               "message_type": item["message_type"],
               "message": item["message"],
@@ -131,7 +131,7 @@ class _MHAdminTicketState extends State<MHAdminTicket> {
               "read": item["read"],
               "attached": item["attached"]
             });
-          });
+          }
 
           // Set messages state
           messages = allMessages;
@@ -160,7 +160,7 @@ class _MHAdminTicketState extends State<MHAdminTicket> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return Dialog(
+        return const Dialog(
           backgroundColor: Colors.transparent,
           elevation: 0,
           child: Center(
@@ -190,7 +190,7 @@ class _MHAdminTicketState extends State<MHAdminTicket> {
               response['data']['complaintSuggestion']['description'];
           List<dynamic> parsedDescription = json.decode(descriptionData);
           List<Map<String, dynamic>> allMessages = [];
-          parsedDescription.forEach((item) {
+          for (var item in parsedDescription) {
             allMessages.add({
               "message_type": item["message_type"],
               "message": item["message"],
@@ -198,7 +198,7 @@ class _MHAdminTicketState extends State<MHAdminTicket> {
               "read": item["read"],
               "attached": item["attached"]
             });
-          });
+          }
 
           // Set messages state
           messages = allMessages;
@@ -223,13 +223,13 @@ class _MHAdminTicketState extends State<MHAdminTicket> {
     }
   }
 
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
-          duration: Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 300),
           curve: Curves.easeOut,
         );
       }
@@ -247,11 +247,11 @@ class _MHAdminTicketState extends State<MHAdminTicket> {
 
     return DirectionalityWrapper(
       child: Scaffold(
-        backgroundColor: Color(0xFFF3F4F7),
+        backgroundColor: const Color(0xFFF3F4F7),
         body: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-            color: Color(0xFF080E27),
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+            color: const Color(0xFF080E27),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -262,7 +262,7 @@ class _MHAdminTicketState extends State<MHAdminTicket> {
                   marginTop: 30,
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(20, 1, 20, 1),
+                  padding: const EdgeInsets.fromLTRB(20, 1, 20, 1),
                   child: Column(
                     children: [
                       Column(
@@ -275,9 +275,9 @@ class _MHAdminTicketState extends State<MHAdminTicket> {
                                 children: [
                                   Text(
                                     isEnglish
-                                        ? '$ticketNumber'
-                                        : '$ticketNumber',
-                                    style: TextStyle(
+                                        ? ticketNumber
+                                        : ticketNumber,
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 26,
                                       fontWeight: FontWeight.bold,
@@ -285,9 +285,9 @@ class _MHAdminTicketState extends State<MHAdminTicket> {
                                   ),
                                   Text(
                                     isEnglish
-                                        ? '$ticketStatus'
-                                        : '$ticketStatus',
-                                    style: TextStyle(
+                                        ? ticketStatus
+                                        : ticketStatus,
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -297,13 +297,13 @@ class _MHAdminTicketState extends State<MHAdminTicket> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 16),
-                          Row(
+                          const SizedBox(height: 16),
+                          const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [],
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                         ],
                       )
                     ],
@@ -313,8 +313,8 @@ class _MHAdminTicketState extends State<MHAdminTicket> {
                   // height: screenHeight,
 
                   width: double.infinity,
-                  padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                  decoration: BoxDecoration(
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  decoration: const BoxDecoration(
                     color: Color(0xFFF3F4F7),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(40),
@@ -324,13 +324,13 @@ class _MHAdminTicketState extends State<MHAdminTicket> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 20),
-                      Row(
+                      const SizedBox(height: 20),
+                      const Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [],
                       ),
-                      Container(
+                      SizedBox(
                         height: screenWidth * 1.05,
                         child: SingleChildScrollView(
                           controller: _scrollController,
@@ -350,8 +350,8 @@ class _MHAdminTicketState extends State<MHAdminTicket> {
 
                               return Align(
                                 child: Container(
-                                  margin: EdgeInsets.symmetric(vertical: 5),
-                                  padding: EdgeInsets.all(10),
+                                  margin: const EdgeInsets.symmetric(vertical: 5),
+                                  padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
                                     color: messageColor.withOpacity(0.1),
                                     borderRadius: BorderRadius.circular(10),
@@ -376,14 +376,14 @@ class _MHAdminTicketState extends State<MHAdminTicket> {
                                           ),
                                           if (attachedFiles != null &&
                                               attachedFiles.isNotEmpty)
-                                            Divider(),
+                                            const Divider(),
                                           if (attachedFiles != null &&
                                               attachedFiles.isNotEmpty)
                                             Text(
                                               isEnglish
                                                   ? 'Attachments'
                                                   : 'المرفقات',
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 color: Colors.grey,
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.bold,
@@ -485,11 +485,11 @@ class _MHAdminTicketState extends State<MHAdminTicket> {
                                                   } else {
                                                     return Row(
                                                       children: [
-                                                        Icon(Icons.attach_file),
-                                                        SizedBox(width: 5),
+                                                        const Icon(Icons.attach_file),
+                                                        const SizedBox(width: 5),
                                                         Text(
                                                           'Attachment: $fileUrl',
-                                                          style: TextStyle(
+                                                          style: const TextStyle(
                                                               color:
                                                                   Colors.grey),
                                                         ),
@@ -501,23 +501,23 @@ class _MHAdminTicketState extends State<MHAdminTicket> {
                                                 }
                                               }).toList(),
                                             ),
-                                          SizedBox(height: 5),
+                                          const SizedBox(height: 5),
                                           Text(
                                             'Date: ${messageDate ?? 'No date'}',
                                             style:
-                                                TextStyle(color: Colors.grey),
+                                                const TextStyle(color: Colors.grey),
                                           ),
                                         ],
                                       ),
                                       if (messageType == 'support')
-                                        SizedBox(width: 10),
+                                        const SizedBox(width: 10),
                                       if (messageType ==
                                           'support') // Add profile image for support messages
-                                        CircleAvatar(
+                                        const CircleAvatar(
                                           backgroundImage: NetworkImage(
                                               'https://mhfatha.net/FrontEnd/assets/images/supporting/customer-service-support.png'), // Use the URL of the network image
                                         ),
-                                      SizedBox(
+                                      const SizedBox(
                                           width:
                                               10), // Add space between profile image and message content
                                     ],
@@ -530,7 +530,7 @@ class _MHAdminTicketState extends State<MHAdminTicket> {
                       ),
                       Container(
                         padding:
-                            EdgeInsets.symmetric(horizontal: 1, vertical: 5),
+                            const EdgeInsets.symmetric(horizontal: 1, vertical: 5),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           // color: Colors.white,
@@ -558,12 +558,12 @@ class _MHAdminTicketState extends State<MHAdminTicket> {
 
                                 if (result != null) {
                                   // Loop through each selected file
-                                  result.files.forEach((file) {
+                                  for (var file in result.files) {
                                     // Add file path to attachments list if not null
                                     if (file.path != null) {
                                       attachments.add(file.path!);
                                     }
-                                  });
+                                  }
 
                                   // Update UI if needed
                                   setState(() {});
@@ -571,7 +571,7 @@ class _MHAdminTicketState extends State<MHAdminTicket> {
                                   // User canceled the picker
                                 }
                               },
-                              icon: Icon(Icons.attach_file),
+                              icon: const Icon(Icons.attach_file),
                             ),
                             suffixIcon: ticketStatus == 'closed'
                                 ? null
@@ -579,7 +579,7 @@ class _MHAdminTicketState extends State<MHAdminTicket> {
                                     onPressed: () {
                                       _updateSupportRequest();
                                     },
-                                    icon: Icon(Icons.send),
+                                    icon: const Icon(Icons.send),
                                   ),
                           ),
                           // You can use a TextEditingController to get the text input

@@ -1,9 +1,10 @@
 // lib\screens\settings\settings.dart
 
 import 'package:mhfatha/settings/imports.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends StatefulWidget {
+  const SettingsScreen({super.key});
+
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
 }
@@ -23,6 +24,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool isAuthenticated = false;
   Map<String, String> _contactsData = {};
 
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
   }
@@ -47,21 +49,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
         Provider.of<AuthProvider>(context, listen: false);
 
     Api api = Api();
-    Color ui = Color.fromARGB(255, 250, 82, 82);
+    Color ui = const Color.fromARGB(255, 250, 82, 82);
 
     return DirectionalityWrapper(
         child: Scaffold(
-      backgroundColor: Color(0xFFF3F4F7),
+      backgroundColor: const Color(0xFFF3F4F7),
       body: SingleChildScrollView(
         child: Container(
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-            color: Color(0xFF080E27), // Set background color to #080e27
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+            color: const Color(0xFF080E27), // Set background color to #080e27
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    padding: EdgeInsets.fromLTRB(20, 60, 20, 5),
+                    padding: const EdgeInsets.fromLTRB(20, 60, 20, 5),
                     // height: 200,
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -69,34 +71,34 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 height: 30,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
                               Text(
                                 isEnglish ? ' Welcome ' : ' مرحبا بك',
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
                               if (isAuthenticated)
                                 Text(
                                   ' ${authProvider.user!['first_name']}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 24,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white),
                                 ),
-                              SizedBox(height: 5),
+                              const SizedBox(height: 5),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 30,
                           ),
                           // Column(
@@ -115,10 +117,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           // ),
                         ]),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Container(
-                    padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    decoration: BoxDecoration(
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    decoration: const BoxDecoration(
                       color: Color(0xFFF3F4F7),
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(40),
@@ -128,29 +130,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
 
                         // Language Section
 // Language Section
                         Container(
-                          padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-                          margin: EdgeInsets.fromLTRB(0, 0, 0, 5),
+                          padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                          margin: const EdgeInsets.fromLTRB(0, 0, 0, 5),
                           decoration: BoxDecoration(
-                            color: Color(0xFFFFFFFF),
+                            color: const Color(0xFFFFFFFF),
                             borderRadius: BorderRadius.circular(30),
                           ),
                           child: Row(
                             children: [
-                              Icon(Icons.language),
-                              SizedBox(width: 10),
+                              const Icon(Icons.language),
+                              const SizedBox(width: 10),
                               Text(isEnglish ? 'Language' : 'اللغة'),
-                              SizedBox(width: 10),
+                              const SizedBox(width: 10),
                               Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(30),
                                   color: Colors.white,
                                 ),
-                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
                                 child: DropdownButton<String>(
                                   value: isEnglish ? 'English' : 'العربية',
                                   onChanged: (String? newValue) {
@@ -228,7 +230,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     : 'هل أنت متأكد من تحويل الحساب إلى حساب تاجر؟',
                                 widget: Column(
                                   children: [
-                                    SizedBox(height: 10),
+                                    const SizedBox(height: 10),
                                     GestureDetector(
                                       onTap: () {
                                         // Navigate to the terms and conditions screen
@@ -239,24 +241,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                         isEnglish
                                             ? 'Terms And Conditions Policy click here to read'
                                             : 'انقر هنا لقراءة سياسة الشروط والأحكام',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color: Colors.blue,
                                           decoration: TextDecoration.underline,
                                         ),
                                       ),
                                     ),
-                                    SizedBox(height: 10),
+                                    const SizedBox(height: 10),
                                     Text(
                                       isEnglish
                                           ? 'By choosing "Yes", you accept and agree to the Terms and Conditions.'
                                           : 'باختيارك "نعم"، فإنك توافق وتقبل الشروط والأحكام.',
-                                      style: TextStyle(fontSize: 12),
+                                      style: const TextStyle(fontSize: 12),
                                     ),
                                   ],
                                 ),
                                 cancelBtnText: isEnglish ? 'No' : 'لا',
                                 confirmBtnText: isEnglish ? 'Yes' : 'نعم',
-                                confirmBtnColor: Color(0xFF0D2750),
+                                confirmBtnColor: const Color(0xFF0D2750),
                                 onConfirmBtnTap: () async {
                                   await Api().UserRequestActions(
                                       context, 'go to vendor');
@@ -289,7 +291,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     : 'هل أنت متاكد من تحويل الي حساب مستفيد ؟',
                                 cancelBtnText: isEnglish ? 'No' : 'لا',
                                 confirmBtnText: isEnglish ? 'Yes' : 'نعم',
-                                confirmBtnColor: Color(0xFF0D2750),
+                                confirmBtnColor: const Color(0xFF0D2750),
                                 onConfirmBtnTap: () async {
                                   await Api().UserRequestActions(
                                       context, 'go to user');
@@ -317,11 +319,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         // ),
                         if (whatsapp != null || email != null)
                           Container(
-                            margin: EdgeInsets.symmetric(
+                            margin: const EdgeInsets.symmetric(
                                 vertical: 5, horizontal: 0),
-                            padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+                            padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
                             decoration: BoxDecoration(
-                              color: Color(0xFFFFFFFF),
+                              color: const Color(0xFFFFFFFF),
                               borderRadius: BorderRadius.circular(30),
                             ),
                             child: Column(
@@ -334,94 +336,92 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       width: 24, // Adjust width as needed
                                       height: 24, // Adjust height as needed
                                     ),
-                                    SizedBox(width: 10),
+                                    const SizedBox(width: 10),
                                     Text(
                                       isEnglish
                                           ? 'Contact Support via'
                                           : 'الدعم الفني عبر',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 Row(
                                   children: [
-                                    SizedBox(width: 30),
-                                    if (whatsapp !=
-                                        null) // Adjust as needed for spacing
-                                      GestureDetector(
-                                        onTap: () async {
-                                          final String phoneNumber =
-                                              whatsapp; // Replace with your WhatsApp phone number
-                                          final String whatsappUrl =
-                                              'https://wa.me/$phoneNumber';
-                                          if (await canLaunch(whatsappUrl)) {
-                                            await launch(whatsappUrl);
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                    'WhatsApp is not installed on your device.'),
-                                              ),
-                                            );
-                                          }
+                                    const SizedBox(width: 30),
+                                    // Adjust as needed for spacing
+                                    GestureDetector(
+                                      onTap: () async {
+                                        final String phoneNumber =
+                                            whatsapp; // Replace with your WhatsApp phone number
+                                        final String whatsappUrl =
+                                            'https://wa.me/$phoneNumber';
+                                        if (await canLaunch(whatsappUrl)) {
+                                          await launch(whatsappUrl);
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                  'WhatsApp is not installed on your device.'),
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Image.asset(
+                                            'assets/icon/whatsaap.png', // Replace with your email icon asset path
+                                            width:
+                                                24, // Adjust width as needed
+                                            height:
+                                                24, // Adjust height as needed
+                                          ),
+                                          const SizedBox(width: 5),
+                                          const Text(
+                                            'WhatsApp',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(width: 20),
+                                    GestureDetector(
+                                        onTap: () {
+                                          // Handle email
+                                          launchUrl(Uri.parse(
+                                              'mailto:$email')); // Replace with your email address
                                         },
                                         child: Row(
                                           children: [
                                             Image.asset(
-                                              'assets/icon/whatsaap.png', // Replace with your email icon asset path
+                                              'assets/icon/email.png', // Replace with your email icon asset path
                                               width:
                                                   24, // Adjust width as needed
                                               height:
                                                   24, // Adjust height as needed
                                             ),
-                                            SizedBox(width: 5),
-                                            Text(
-                                              'WhatsApp',
+                                            const SizedBox(width: 5),
+                                            const Text(
+                                              'Email',
                                               style: TextStyle(
                                                 fontSize: 14,
                                               ),
                                             ),
                                           ],
-                                        ),
-                                      ),
-                                    SizedBox(width: 20),
-                                    if (email != null)
-                                      GestureDetector(
-                                          onTap: () {
-                                            // Handle email
-                                            launchUrl(Uri.parse(
-                                                'mailto:$email')); // Replace with your email address
-                                          },
-                                          child: Row(
-                                            children: [
-                                              Image.asset(
-                                                'assets/icon/email.png', // Replace with your email icon asset path
-                                                width:
-                                                    24, // Adjust width as needed
-                                                height:
-                                                    24, // Adjust height as needed
-                                              ),
-                                              SizedBox(width: 5),
-                                              Text(
-                                                'Email',
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                ),
-                                              ),
-                                            ],
-                                          )),
+                                        )),
                                   ],
                                 ),
                               ],
                             ),
                           ),
 
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         if (isAuthenticated)
@@ -443,7 +443,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                         confirmBtnText:
                                             isEnglish ? 'Yes' : 'نعم',
                                         cancelBtnText: isEnglish ? 'No' : 'لا',
-                                        confirmBtnColor: Color(0xFF0D2750),
+                                        confirmBtnColor: const Color(0xFF0D2750),
                                         onConfirmBtnTap: () async {
                                           await Api().UserRequestActions(
                                               context, 'go to delete');
@@ -463,13 +463,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   style: ElevatedButton.styleFrom(
                                     primary: ui, // Set the background color
                                     shape: isEnglish
-                                        ? RoundedRectangleBorder(
+                                        ? const RoundedRectangleBorder(
                                             borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(30),
                                               bottomLeft: Radius.circular(30),
                                             ),
                                           )
-                                        : RoundedRectangleBorder(
+                                        : const RoundedRectangleBorder(
                                             borderRadius: BorderRadius.only(
                                               topRight: Radius.circular(30),
                                               bottomRight: Radius.circular(30),
@@ -478,7 +478,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   ),
                                   child: Text(
                                     isEnglish ? 'Delete Account' : 'حذف الحساب',
-                                    style: TextStyle(color: Colors.white),
+                                    style: const TextStyle(color: Colors.white),
                                   ),
                                 ),
                               ),
@@ -496,7 +496,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                         confirmBtnText:
                                             isEnglish ? 'Yes' : 'نعم',
                                         cancelBtnText: isEnglish ? 'No' : 'لا',
-                                        confirmBtnColor: Color(0xFF0D2750),
+                                        confirmBtnColor: const Color(0xFF0D2750),
                                         onConfirmBtnTap: () {
                                           // Call the logout method from AuthProvider
                                           Provider.of<AuthProvider>(context,
@@ -513,13 +513,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   style: ElevatedButton.styleFrom(
                                     primary: ui, // Set the background color
                                     shape: isEnglish
-                                        ? RoundedRectangleBorder(
+                                        ? const RoundedRectangleBorder(
                                             borderRadius: BorderRadius.only(
                                               topRight: Radius.circular(30),
                                               bottomRight: Radius.circular(30),
                                             ),
                                           )
-                                        : RoundedRectangleBorder(
+                                        : const RoundedRectangleBorder(
                                             borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(30),
                                               bottomLeft: Radius.circular(30),
@@ -528,7 +528,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   ),
                                   child: Text(
                                     isEnglish ? 'Logout' : 'تسجيل الخروج',
-                                    style: TextStyle(color: Colors.white),
+                                    style: const TextStyle(color: Colors.white),
                                   ),
                                 ),
                               ),
@@ -541,7 +541,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ])),
       ),
       // bottomNavigationBar: BottomNav(initialIndex: 2),
-      bottomNavigationBar: NewNav(),
+      bottomNavigationBar: const NewNav(),
     ));
   }
 
@@ -557,16 +557,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return InkWell(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-        padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+        padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
         decoration: BoxDecoration(
-          color: Color(0xFFFFFFFF),
+          color: const Color(0xFFFFFFFF),
           borderRadius: BorderRadius.circular(30),
         ),
         child: Row(
           children: [
             Icon(icon),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Text(isEnglish ? englishTitle : arabicTitle),
           ],
         ),

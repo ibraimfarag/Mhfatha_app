@@ -5,7 +5,7 @@ class StoresCarousel extends StatelessWidget {
   final IconData icon;
   final List<Map<String, dynamic>> stores;
 
- StoresCarousel({
+ const StoresCarousel({super.key, 
     required this.title,
     required this.icon,
     required this.stores,
@@ -32,7 +32,7 @@ class StoresCarousel extends StatelessWidget {
                   child: Text(
                     title,
                     textAlign: TextAlign.right,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 18,
                       fontFamily: AppVariables.serviceFontFamily,
@@ -65,16 +65,16 @@ class StoresCarousel extends StatelessWidget {
                 // height: 100,
                 margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 3, 12, 19),
+                  color: const Color.fromARGB(255, 3, 12, 19),
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: Column(
                   children: [
                     // Image with gradient
-                    Container(
+                    SizedBox(
                       height: 100,
                       child: ClipRRect(
-                        borderRadius: BorderRadius.only(
+                        borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(15),
                           topRight: Radius.circular(15),
                         ),
@@ -87,7 +87,7 @@ class StoresCarousel extends StatelessWidget {
                                 Colors.transparent,
                                 Colors.black.withOpacity(0.8)
                               ],
-                              stops: [0.0, 1.0],
+                              stops: const [0.0, 1.0],
                             ).createShader(bounds);
                           },
                           blendMode: BlendMode.dstIn,
@@ -101,7 +101,7 @@ class StoresCarousel extends StatelessWidget {
                     // Text widget for store name
                     Container(
                       padding: const EdgeInsets.all(8.0),
-                      child: Align(
+                      child: const Align(
                         alignment: Alignment.centerRight,
                         child: Text(
                           'اسم المتجر',
@@ -123,7 +123,7 @@ class StoresCarousel extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.local_offer,
                                 color: Colors.white,
                                 size: 18,
@@ -133,7 +133,7 @@ class StoresCarousel extends StatelessWidget {
                                 onPressed: () {
                                   // Handle onPressed for "الخصومات" button
                                 },
-                                child: Text(
+                                child: const Text(
                                   'الخصومات',
                                   style: TextStyle(
                                     color: Colors.white,
@@ -146,14 +146,14 @@ class StoresCarousel extends StatelessWidget {
                           ),
                           Row(
                             children: [
-                              Icon(Icons.location_on,
+                              const Icon(Icons.location_on,
                                   color: Colors.white, size: 18),
                               const SizedBox(width: 1),
                               TextButton(
                                 onPressed: () {
                                   // Handle onPressed for "يبعد 5 كم" button
                                 },
-                                child: Text(
+                                child: const Text(
                                   'يبعد 5 كم',
                                   style: TextStyle(
                                     color: Colors.white,
@@ -187,7 +187,7 @@ class StoresCarousel extends StatelessWidget {
               enlargeCenterPage: false,
               enableInfiniteScroll: true,
               autoPlayCurve: Curves.fastOutSlowIn,
-              autoPlayAnimationDuration: Duration(milliseconds: 4000),
+              autoPlayAnimationDuration: const Duration(milliseconds: 4000),
               viewportFraction: 0.6,
             ),
           ),

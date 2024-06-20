@@ -1,11 +1,12 @@
 // lib\screens\settings\settings.dart
 
-import 'dart:io';
 
 import 'package:intl/intl.dart';
 import 'package:mhfatha/settings/imports.dart';
 
 class ChangePassword extends StatefulWidget {
+  const ChangePassword({super.key});
+
   @override
   State<ChangePassword> createState() => _ChangePasswordState();
 }
@@ -13,10 +14,10 @@ class ChangePassword extends StatefulWidget {
 class _ChangePasswordState extends State<ChangePassword> {
   late AuthProvider authProvider; // Declare authProvider variable
 
-  Color backgroundColor = Color.fromARGB(220, 255, 255, 255);
-  Color ui = Color.fromARGB(220, 233, 233, 233);
-  Color ui2 = Color.fromARGB(255, 113, 194, 110);
-  Color colors = Color(0xFF05204a);
+  Color backgroundColor = const Color.fromARGB(220, 255, 255, 255);
+  Color ui = const Color.fromARGB(220, 233, 233, 233);
+  Color ui2 = const Color.fromARGB(255, 113, 194, 110);
+  Color colors = const Color(0xFF05204a);
   TextEditingController currentPassword = TextEditingController();
   TextEditingController newpassword = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
@@ -28,6 +29,7 @@ class _ChangePasswordState extends State<ChangePassword> {
     authProvider = Provider.of<AuthProvider>(context, listen: false);
   }
 
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
   }
@@ -44,7 +46,7 @@ class _ChangePasswordState extends State<ChangePassword> {
         child: Scaffold(
       body: SingleChildScrollView(
         child: Container(
-            color: Color(0xFF080E27), // Set background color to #080e27
+            color: const Color(0xFF080E27), // Set background color to #080e27
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
@@ -56,7 +58,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     marginTop: 30,
                   ),
                   Container(
-                    padding: EdgeInsets.fromLTRB(20, 0, 20, 5),
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 5),
                     // height: 200,
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -64,29 +66,29 @@ class _ChangePasswordState extends State<ChangePassword> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
                               Text(
                                 isEnglish ? ' Welcome ' : ' مرحبا بك',
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 5,
                               ),
                               Text(
                                 ' ${authProvider.user!['first_name']}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white),
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 30,
                           ),
                           // Column(
@@ -105,10 +107,10 @@ class _ChangePasswordState extends State<ChangePassword> {
                           // ),
                         ]),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Container(
-                    padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    decoration: BoxDecoration(
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    decoration: const BoxDecoration(
                       color: Color(0xFFF3F4F7),
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(40),
@@ -118,7 +120,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         buildSettingItem(
                             context, 'Current Password', 'كلمة السر الحالية',
                             () {
@@ -132,7 +134,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                             'تأكيد كلمة السر الجديدة', () {
                           // Implement report logic
                         }, confirmPassword, ''),
-                        SizedBox(
+                        const SizedBox(
                           height: 24,
                         ),
                         Row(
@@ -152,7 +154,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                       : 'هل انت متاكد من تحديث البيانات الشخصية',
                                   confirmBtnText: isEnglish ? 'Yes' : 'نعم',
                                   cancelBtnText: isEnglish ? 'No' : 'لا',
-                                  confirmBtnColor: Color(0xFF0D2750),
+                                  confirmBtnColor: const Color(0xFF0D2750),
                                   onConfirmBtnTap: () async {
                                     Navigator.pop(context);
                                     String oldPassword = currentPassword
@@ -194,7 +196,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 ])),
       ),
       // bottomNavigationBar: BottomNavBar(initialIndex: 2),
-      bottomNavigationBar: NewNav(),
+      bottomNavigationBar: const NewNav(),
     ));
   }
 
@@ -213,10 +215,10 @@ class _ChangePasswordState extends State<ChangePassword> {
     return InkWell(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-        padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+        padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
         decoration: BoxDecoration(
-          color: Color(0xFFFFFFFF),
+          color: const Color(0xFFFFFFFF),
           borderRadius: BorderRadius.circular(30),
         ),
         child: Column(
@@ -224,11 +226,11 @@ class _ChangePasswordState extends State<ChangePassword> {
             Row(
               children: [
                 // Icon(icon),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Text(isEnglish ? englishTitle : arabicTitle),
               ],
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             // Add TextField here
             if (englishTitle.toLowerCase() ==
                 'birthday') // Check if it's the birthday field

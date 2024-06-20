@@ -1,12 +1,8 @@
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:mhfatha/settings/imports.dart';
-import 'package:permission_handler/permission_handler.dart'
-    as permission_handler;
 
 class MainAdmin extends StatefulWidget {
-  MainAdmin({Key? key}) : super(key: key);
+  const MainAdmin({Key? key}) : super(key: key);
 
   @override
   _MainAdminState createState() => _MainAdminState();
@@ -52,7 +48,7 @@ class _MainAdminState extends State<MainAdmin> {
           children: [
             Text(
               isEnglish ? 'Dashboard' : 'لوحة التحكم',
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -88,7 +84,7 @@ class _MainAdminState extends State<MainAdmin> {
                         Container(
                           width: MediaQuery.of(context).size.width * 0.03,
                           height: MediaQuery.of(context).size.width * 0.03,
-                          color: Color(0xFF16276B),
+                          color: const Color(0xFF16276B),
                         ),
                         SizedBox(
                             width: MediaQuery.of(context).size.width * 0.01),
@@ -100,7 +96,7 @@ class _MainAdminState extends State<MainAdmin> {
                         Container(
                           width: MediaQuery.of(context).size.width * 0.03,
                           height: MediaQuery.of(context).size.width * 0.03,
-                          color: Color(0xFF080E27),
+                          color: const Color(0xFF080E27),
                         ),
                         SizedBox(
                             width: MediaQuery.of(context).size.width * 0.01),
@@ -109,7 +105,7 @@ class _MainAdminState extends State<MainAdmin> {
                     ),
                   ],
                 ),
-                Container(
+                SizedBox(
                   height: MediaQuery.of(context).size.width * 0.3,
                   width: MediaQuery.of(context).size.width * 0.3,
                   child: PieChart(
@@ -119,7 +115,7 @@ class _MainAdminState extends State<MainAdmin> {
                           MediaQuery.of(context).size.width * 0.12,
                       sections: [
                         PieChartSectionData(
-                          color: Color(0xFF080E27),
+                          color: const Color(0xFF080E27),
                           value: statistics!['vendors_count'].toDouble(),
                           title: '${statistics!['vendors_percentage']} ',
                           radius: MediaQuery.of(context).size.width * 0.1,
@@ -130,7 +126,7 @@ class _MainAdminState extends State<MainAdmin> {
                           ),
                         ),
                         PieChartSectionData(
-                          color: Color(0xFF16276B),
+                          color: const Color(0xFF16276B),
                           value: statistics!['non_vendors_count'].toDouble(),
                           title: ' ${statistics!['non_vendors_percentage']}',
                           radius: MediaQuery.of(context).size.width * 0.1,
@@ -142,7 +138,7 @@ class _MainAdminState extends State<MainAdmin> {
                         ),
                       ],
                     ),
-                    swapAnimationDuration: Duration(milliseconds: 800),
+                    swapAnimationDuration: const Duration(milliseconds: 800),
                     swapAnimationCurve: Curves.easeInOutBack,
                   ),
                 ),
@@ -157,7 +153,7 @@ class _MainAdminState extends State<MainAdmin> {
                   0,
                   MediaQuery.of(context).size.width * 0.02),
               decoration: BoxDecoration(
-                color: Color(0xFF080E27),
+                color: const Color(0xFF080E27),
                 borderRadius: BorderRadius.circular(15),
               ),
               padding: EdgeInsets.symmetric(
@@ -171,10 +167,10 @@ class _MainAdminState extends State<MainAdmin> {
                     isEnglish
                         ? ' Users: ${statistics!['non_vendors_count']}'
                         : ' المستفدين: ${statistics!['non_vendors_count']}',
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
-                  Text(
+                  const Text(
                     '  |  ',
                     style: TextStyle(color: Colors.white),
                   ),
@@ -182,7 +178,7 @@ class _MainAdminState extends State<MainAdmin> {
                     isEnglish
                         ? ' Vendors: ${statistics!['vendors_count']}'
                         : 'التجار: ${statistics!['vendors_count']}',
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -197,7 +193,7 @@ class _MainAdminState extends State<MainAdmin> {
                   margin: EdgeInsets.only(
                       bottom: MediaQuery.of(context).size.width * 0.02),
                   decoration: BoxDecoration(
-                    color: Color(0xFF080E27),
+                    color: const Color(0xFF080E27),
                     borderRadius: BorderRadius.circular(15),
                   ),
                   padding: EdgeInsets.symmetric(
@@ -218,7 +214,7 @@ class _MainAdminState extends State<MainAdmin> {
                           ),
                           Text(
                             isEnglish?'Current discounts':'الخصومات الحالية',
-                            style: TextStyle(color: Colors.white),
+                            style: const TextStyle(color: Colors.white),
                           )
                         ],
                       )
@@ -231,7 +227,7 @@ class _MainAdminState extends State<MainAdmin> {
                   margin: EdgeInsets.only(
                       bottom: MediaQuery.of(context).size.width * 0.02),
                   decoration: BoxDecoration(
-                    color: Color(0xFF080E27),
+                    color: const Color(0xFF080E27),
                     borderRadius: BorderRadius.circular(15),
                   ),
                   padding: EdgeInsets.symmetric(
@@ -252,7 +248,7 @@ class _MainAdminState extends State<MainAdmin> {
                           ),
                           Text(
                             isEnglish?'Discounts':'خصومات المستفيدين',
-                            style: TextStyle(color: Colors.white),
+                            style: const TextStyle(color: Colors.white),
                           )
                         ],
                       )
@@ -270,7 +266,7 @@ class _MainAdminState extends State<MainAdmin> {
                   margin: EdgeInsets.only(
                       bottom: MediaQuery.of(context).size.width * 0.02),
                   decoration: BoxDecoration(
-                    color: Color(0xFF080E27),
+                    color: const Color(0xFF080E27),
                     borderRadius: BorderRadius.circular(15),
                   ),
                   padding: EdgeInsets.symmetric(
@@ -291,7 +287,7 @@ class _MainAdminState extends State<MainAdmin> {
                           ),
                           Text(
                             isEnglish?'Vendors sales':'مبيعات التجار',
-                            style: TextStyle(color: Colors.white),
+                            style: const TextStyle(color: Colors.white),
                           )
                         ],
                       )
@@ -309,7 +305,7 @@ class _MainAdminState extends State<MainAdmin> {
                   margin: EdgeInsets.only(
                       bottom: MediaQuery.of(context).size.width * 0.02),
                   decoration: BoxDecoration(
-                    color: Color(0xFF080E27),
+                    color: const Color(0xFF080E27),
                     borderRadius: BorderRadius.circular(15),
                   ),
                   padding: EdgeInsets.symmetric(
@@ -330,7 +326,7 @@ class _MainAdminState extends State<MainAdmin> {
                           ),
                           Text(
                             isEnglish?'Residual earnings':'ارباح متبقية',
-                            style: TextStyle(color: Colors.white),
+                            style: const TextStyle(color: Colors.white),
                           )
                         ],
                       )

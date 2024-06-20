@@ -1,15 +1,12 @@
 import 'package:mhfatha/settings/imports.dart';
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 
 class WeekdaysSelector extends StatefulWidget {
   final Function(Map<String, Map<String, String>>) onChanged;
   final Map<String, Map<String, String>> workingDays;
 
-  WeekdaysSelector({required this.onChanged, required this.workingDays});
+  const WeekdaysSelector({super.key, required this.onChanged, required this.workingDays});
 
   @override
   _WeekdaysSelectorState createState() => _WeekdaysSelectorState();
@@ -77,24 +74,24 @@ class _WeekdaysSelectorState extends State<WeekdaysSelector> {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
 
     return  Container(
-                    margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-                    padding:  EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                    margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+                    padding:  const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                     decoration: BoxDecoration(
-                      color: Color(0xFFFFFFFF),
+                      color: const Color(0xFFFFFFFF),
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Text(
           isEnglish ? 'Select working Days' : 'حدد أيام العمل',
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -119,10 +116,10 @@ class _WeekdaysSelectorState extends State<WeekdaysSelector> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+          margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
               decoration: BoxDecoration(
-                      color: Color.fromARGB(20, 71, 71, 71),
+                      color: const Color.fromARGB(20, 71, 71, 71),
                       borderRadius: BorderRadius.circular(30),
                     ),
           child: Column(
@@ -145,13 +142,13 @@ class _WeekdaysSelectorState extends State<WeekdaysSelector> {
                       updateWorkingDaysArray();
                       widget.onChanged(widget.workingDays);
                     },
-                    activeColor: Color(0xFF1D365C),
-                    inactiveThumbColor: Color(0xFF1D365C),
-                    inactiveTrackColor: Color.fromARGB(255, 255, 255, 255),
+                    activeColor: const Color(0xFF1D365C),
+                    inactiveThumbColor: const Color(0xFF1D365C),
+                    inactiveTrackColor: const Color.fromARGB(255, 255, 255, 255),
                   ),
                   Text(
                     localizedDay,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Color(0xFF1D365C),
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -162,7 +159,7 @@ class _WeekdaysSelectorState extends State<WeekdaysSelector> {
               if (getSwitchValue(day)) ...[
                 Row(
                   children: [
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     Text(isEnglish ? 'Open Time: ' : 'وقت الفتح: '),
                     TextButton(
                       onPressed: () async {
@@ -180,12 +177,12 @@ class _WeekdaysSelectorState extends State<WeekdaysSelector> {
                       },
                       child: Text(
                         openingTimes[day]?.format(context) ?? 'Select Time',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Color(0xFF1D365C),
                         ),
                       ),
                     ),
-                    SizedBox(width: 5),
+                    const SizedBox(width: 5),
                     Text(isEnglish ? 'Close Time: ' : 'وقت الإغلاق: '),
                     TextButton(
                       onPressed: () async {
@@ -203,7 +200,7 @@ class _WeekdaysSelectorState extends State<WeekdaysSelector> {
                       },
                       child: Text(
                         closingTimes[day]?.format(context) ?? 'Select Time',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Color(0xFF1D365C),
                         ),
                       ),

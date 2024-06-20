@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:mhfatha/settings/imports.dart';
 import 'dart:io'; // Import dart:io library for File class
 
 class MainSupportingRepor extends StatefulWidget {
+  const MainSupportingRepor({super.key});
+
   @override
   _MainSupportingReporState createState() => _MainSupportingReporState();
 }
@@ -25,7 +24,7 @@ List<String> fileNames = []; // List to store selected file names
   void initState() {
     super.initState();
     Api api = Api(); // Initialize vendorApi in initState
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       fetchSupportReasons();
     });
     additionalPhoneController.addListener(() {
@@ -117,7 +116,7 @@ if (additionalPhone.isNotEmpty && additionalPhone.length != 10) {
       child: Scaffold(
         body: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
@@ -129,25 +128,25 @@ if (additionalPhone.isNotEmpty && additionalPhone.length != 10) {
                   iconColor: const Color.fromARGB(146, 0, 0, 0),
                   marginTop: 30,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Text(
                   isEnglish ? 'Choose a Report Reason:' : 'اختر سبب البلاغ:',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 isLoading
-                    ? Center(child: CircularProgressIndicator())
+                    ? const Center(child: CircularProgressIndicator())
                     : Container(
-                        margin: EdgeInsets.only(left: 2, right: 2),
+                        margin: const EdgeInsets.only(left: 2, right: 2),
                         decoration: BoxDecoration(
-                          color: Color(0xFFF0F0F0),
+                          color: const Color(0xFFF0F0F0),
                           borderRadius: BorderRadius.circular(30),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.grey.withOpacity(0.3),
                               spreadRadius: 5,
                               blurRadius: 7,
-                              offset: Offset(0, 3),
+                              offset: const Offset(0, 3),
                             ),
                           ],
                         ),
@@ -171,7 +170,7 @@ if (additionalPhone.isNotEmpty && additionalPhone.length != 10) {
                                 ),
                               );
                             }).toList(),
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               border: InputBorder.none,
                               contentPadding: EdgeInsets.symmetric(
                                   vertical: 10, horizontal: 10),
@@ -186,67 +185,67 @@ if (additionalPhone.isNotEmpty && additionalPhone.length != 10) {
                         ),
                       ),
 
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Text(
                   isEnglish ? 'Additional Details:' : 'تفاصيل إضافية:',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 // Text field for additional details
                 Container(
-                  margin: EdgeInsets.only(left: 2, right: 2),
+                  margin: const EdgeInsets.only(left: 2, right: 2),
                   decoration: BoxDecoration(
-                    color: Color(0xFFF0F0F0),
+                    color: const Color(0xFFF0F0F0),
                     borderRadius: BorderRadius.circular(30),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.5),
                         spreadRadius: 5,
                         blurRadius: 7,
-                        offset: Offset(0, 3),
+                        offset: const Offset(0, 3),
                       ),
                     ],
                   ),
                   child: TextField(
                     controller: detailsController,
                     maxLines: 5,
-                    style: TextStyle(fontSize: 16, color: Colors.black),
+                    style: const TextStyle(fontSize: 16, color: Colors.black),
                     decoration: InputDecoration(
                       hintText: isEnglish
                           ? 'Write additional details...'
                           : 'اكتب تفاصيل إضافية...',
                       hintStyle: TextStyle(color: Colors.grey.shade700),
                       filled: true,
-                      fillColor: Color(0xFFF0F0F0),
+                      fillColor: const Color(0xFFF0F0F0),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide(color: Colors.transparent),
+                        borderSide: const BorderSide(color: Colors.transparent),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide(color: Colors.transparent),
+                        borderSide: const BorderSide(color: Colors.transparent),
                       ),
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 // Text field for additional phone
                 Text(
                   isEnglish ? 'Additional Phone' : 'رقم الجوال الإضافي',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Container(
-                  margin: EdgeInsets.only(left: 2, right: 2),
+                  margin: const EdgeInsets.only(left: 2, right: 2),
                   decoration: BoxDecoration(
-                    color: Color(0xFFF0F0F0),
+                    color: const Color(0xFFF0F0F0),
                     borderRadius: BorderRadius.circular(30),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.3),
                         spreadRadius: 5,
                         blurRadius: 7,
-                        offset: Offset(0, 3),
+                        offset: const Offset(0, 3),
                       ),
                     ],
                   ),
@@ -257,7 +256,7 @@ if (additionalPhone.isNotEmpty && additionalPhone.length != 10) {
                       FilteringTextInputFormatter.digitsOnly,
                       LengthLimitingTextInputFormatter(10),
                     ],
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       border: InputBorder.none,
                       contentPadding: EdgeInsets.symmetric(
                           vertical: 10,
@@ -265,13 +264,13 @@ if (additionalPhone.isNotEmpty && additionalPhone.length != 10) {
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Text(
                   isEnglish ? 'Upload File:' : 'تحميل الملف:',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                 ),
 
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
 
                 GestureDetector(
                   onTap: () async {
@@ -289,16 +288,16 @@ if (additionalPhone.isNotEmpty && additionalPhone.length != 10) {
                     }
                   },
                   child: Container(
-                    margin: EdgeInsets.only(left: 2, right: 2),
+                    margin: const EdgeInsets.only(left: 2, right: 2),
                     decoration: BoxDecoration(
-                      color: Color(0xFFF0F0F0),
+                      color: const Color(0xFFF0F0F0),
                       borderRadius: BorderRadius.circular(30),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.3),
                           spreadRadius: 5,
                           blurRadius: 7,
-                          offset: Offset(0, 3),
+                          offset: const Offset(0, 3),
                         ),
                       ],
                     ),
@@ -336,22 +335,22 @@ if (additionalPhone.isNotEmpty && additionalPhone.length != 10) {
                                   : 'قم بتحميل ملفك...',
                               hintStyle: TextStyle(color: Colors.grey.shade700),
                               filled: true,
-                              fillColor: Color(0xFFF0F0F0),
+                              fillColor: const Color(0xFFF0F0F0),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
                                 borderSide:
-                                    BorderSide(color: Colors.transparent),
+                                    const BorderSide(color: Colors.transparent),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
                                 borderSide:
-                                    BorderSide(color: Colors.transparent),
+                                    const BorderSide(color: Colors.transparent),
                               ),
                             ),
                           ),
                         ),
                         IconButton(
-                          icon: Icon(Icons.attach_file),
+                          icon: const Icon(Icons.attach_file),
                                     onPressed: () async {
             if (selectedFiles.length >= 5) {
               // Show a message or dialog indicating that the maximum limit has been reached
@@ -377,7 +376,7 @@ if (additionalPhone.isNotEmpty && additionalPhone.length != 10) {
                     ),
                   ),
                 ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
 SingleChildScrollView(
   scrollDirection: Axis.horizontal,
   child: Row(
@@ -386,22 +385,22 @@ SingleChildScrollView(
       File file = entry.value;
       String fileName = fileNames[index];
       if (fileName.length > 15) {
-        fileName = fileName.substring(0, 12) + '...';
+        fileName = '${fileName.substring(0, 12)}...';
       }
       return Stack(
         children: [
           Container(
-            margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            padding: EdgeInsets.all(10),
+            margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: Color(0xFFF0F0F0),
+              color: const Color(0xFFF0F0F0),
               borderRadius: BorderRadius.circular(30),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.3),
                   spreadRadius: 5,
                   blurRadius: 7,
-                  offset: Offset(0, 3),
+                  offset: const Offset(0, 3),
                 ),
               ],
             ),
@@ -411,8 +410,8 @@ SingleChildScrollView(
                         file.path.toLowerCase().endsWith('.png') ||
                         file.path.toLowerCase().endsWith('.jpeg')
                     ? Image.file(file, width: 100, height: 100, fit: BoxFit.cover) // Display image preview
-                    : Icon(Icons.insert_drive_file), // Display file icon
-                SizedBox(height: 10),
+                    : const Icon(Icons.insert_drive_file), // Display file icon
+                const SizedBox(height: 10),
                 Text(fileName), // Display file name
               ],
             ),
@@ -421,7 +420,7 @@ SingleChildScrollView(
             top: 5,
             left: 5,
             child: IconButton(
-              icon: Icon(Icons.close),
+              icon: const Icon(Icons.close),
               onPressed: () {
                 setState(() {
                   selectedFiles.removeAt(index);
@@ -438,7 +437,7 @@ SingleChildScrollView(
 ,
 
 
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 // Button to submit the report
                 ElevatedButton(
                   onPressed: selectedReportId == null ? null : submitReport,

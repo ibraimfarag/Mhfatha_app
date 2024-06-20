@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:mhfatha/settings/imports.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:open_street_map_search_and_pick/open_street_map_search_and_pick.dart';
 
 class EditStore extends StatefulWidget {
+  const EditStore({super.key});
+
   @override
   State<EditStore> createState() => _EditStoreState();
 }
@@ -16,10 +17,10 @@ class _EditStoreState extends State<EditStore> {
   late AuthProvider authProvider; // Declare authProvider variable
   late VendorApi vendorApi; // Declare vendorApi variable
 
-  Color backgroundColor = Color.fromARGB(220, 255, 255, 255);
-  Color ui = Color.fromARGB(220, 233, 233, 233);
-  Color ui2 = Color.fromARGB(255, 113, 194, 110);
-  Color colors = Color(0xFF05204a);
+  Color backgroundColor = const Color.fromARGB(220, 255, 255, 255);
+  Color ui = const Color.fromARGB(220, 233, 233, 233);
+  Color ui2 = const Color.fromARGB(255, 113, 194, 110);
+  Color colors = const Color(0xFF05204a);
   TextEditingController store_name = TextEditingController();
   TextEditingController address = TextEditingController();
   TextEditingController latitude = TextEditingController();
@@ -69,7 +70,7 @@ class _EditStoreState extends State<EditStore> {
 
     // Fetch store data from ModalRoute settings
 
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
         storeData =
             ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
@@ -127,9 +128,10 @@ class _EditStoreState extends State<EditStore> {
       print('Failed to parse time: $timeString');
     }
     // Return a default time if the input is invalid
-    return TimeOfDay(hour: 0, minute: 0);
+    return const TimeOfDay(hour: 0, minute: 0);
   }
 
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
   }
@@ -148,8 +150,8 @@ class _EditStoreState extends State<EditStore> {
       child: Scaffold(
         body: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-            color: Color(0xFF080E27), // Set background color to #080e27
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+            color: const Color(0xFF080E27), // Set background color to #080e27
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -160,7 +162,7 @@ class _EditStoreState extends State<EditStore> {
                   marginTop: 30,
                 ),
                 Container(
-                  margin: EdgeInsets.fromLTRB(20, 0, 20, 5),
+                  margin: const EdgeInsets.fromLTRB(20, 0, 20, 5),
                   child: Column(
                     children: [
                       Row(
@@ -190,8 +192,8 @@ class _EditStoreState extends State<EditStore> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                  decoration: BoxDecoration(
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  decoration: const BoxDecoration(
                     color: Color(0xFFF3F4F7),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(40),
@@ -201,8 +203,8 @@ class _EditStoreState extends State<EditStore> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 20),
-                      SizedBox(height: 24),
+                      const SizedBox(height: 20),
+                      const SizedBox(height: 24),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -235,13 +237,13 @@ class _EditStoreState extends State<EditStore> {
                             '',
                           ),
                           Container(
-                            margin: EdgeInsets.symmetric(
+                            margin: const EdgeInsets.symmetric(
                               vertical: 5,
                               horizontal: 0,
                             ),
-                            padding: EdgeInsets.fromLTRB(0, 0, 0, 15),
+                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
                             decoration: BoxDecoration(
-                              color: Color(0xFFFFFFFF),
+                              color: const Color(0xFFFFFFFF),
                               borderRadius: BorderRadius.circular(30),
                             ),
                             child: Row(
@@ -269,13 +271,13 @@ class _EditStoreState extends State<EditStore> {
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.symmetric(
+                            margin: const EdgeInsets.symmetric(
                               vertical: 5,
                               horizontal: 0,
                             ),
-                            padding: EdgeInsets.fromLTRB(30, 15, 30, 15),
+                            padding: const EdgeInsets.fromLTRB(30, 15, 30, 15),
                             decoration: BoxDecoration(
-                              color: Color(0xFFFFFFFF),
+                              color: const Color(0xFFFFFFFF),
                               borderRadius: BorderRadius.circular(30),
                             ),
                             child: Row(
@@ -295,7 +297,7 @@ class _EditStoreState extends State<EditStore> {
                                           selectedRegion = value;
                                         });
                                       },
-                                      selectedRegion: selectedRegion!,
+                                      selectedRegion: selectedRegion,
                                     ),
                                   ],
                                 ),
@@ -307,18 +309,18 @@ class _EditStoreState extends State<EditStore> {
                               _openMap();
                             },
                             child: Container(
-                              margin: EdgeInsets.symmetric(
+                              margin: const EdgeInsets.symmetric(
                                 vertical: 5,
                                 horizontal: 0,
                               ),
-                              padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+                              padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
                               decoration: BoxDecoration(
-                                color: Color(0xFFFFFFFF),
+                                color: const Color(0xFFFFFFFF),
                                 borderRadius: BorderRadius.circular(30),
                               ),
                               child: Row(
                                 children: [
-                                  SizedBox(width: 10),
+                                  const SizedBox(width: 10),
                                   Text(isEnglish
                                       ? 'Select On Map'
                                       : 'حدد على الخريطة'),
@@ -351,27 +353,27 @@ class _EditStoreState extends State<EditStore> {
                             '',
                           ),
                           Container(
-                              margin: EdgeInsets.symmetric(
+                              margin: const EdgeInsets.symmetric(
                                   vertical: 5, horizontal: 0),
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                   vertical: 5, horizontal: 0),
                               decoration: BoxDecoration(
-                                color: Color(0xFFFFFFFF),
+                                color: const Color(0xFFFFFFFF),
                                 borderRadius: BorderRadius.circular(30),
                               ),
                               child: Column(
                                 children: [
-                                  SizedBox(height: 20),
+                                  const SizedBox(height: 20),
                                   Text(
                                     isEnglish
                                         ? 'Select Working Days and Time'
                                         : 'حدد أيام و أوقات العمل',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  SizedBox(height: 10),
+                                  const SizedBox(height: 10),
                                   buildDayTimeSelector('Sunday'),
                                   buildDayTimeSelector('Monday'),
                                   buildDayTimeSelector('Tuesday'),
@@ -392,7 +394,7 @@ class _EditStoreState extends State<EditStore> {
                                       : 'هل انت متأكد من معلومات المتجر؟',
                                   confirmBtnText: isEnglish ? 'Yes' : 'نعم',
                                   cancelBtnText: isEnglish ? 'No' : 'لا',
-                                  confirmBtnColor: Color(0xFF0D2750),
+                                  confirmBtnColor: const Color(0xFF0D2750),
                                   onConfirmBtnTap: () async {
                                     bool success = await vendorApi.updatestore(
                                         context: context,
@@ -421,7 +423,7 @@ class _EditStoreState extends State<EditStore> {
                             ),
                             child: Text(
                               isEnglish ? 'Edit Store' : 'تحديث المتجر',
-                              style: TextStyle(color: Colors.black),
+                              style: const TextStyle(color: Colors.black),
                             ),
                           ),
                         ],
@@ -433,7 +435,7 @@ class _EditStoreState extends State<EditStore> {
             ),
           ),
         ),
-        bottomNavigationBar: NewNav(),
+        bottomNavigationBar: const NewNav(),
       ),
     );
   }
@@ -443,10 +445,10 @@ class _EditStoreState extends State<EditStore> {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
       decoration: BoxDecoration(
-        color: Color.fromARGB(20, 71, 71, 71),
+        color: const Color.fromARGB(20, 71, 71, 71),
         borderRadius: BorderRadius.circular(30),
       ),
       child: Column(
@@ -460,15 +462,15 @@ class _EditStoreState extends State<EditStore> {
                 onChanged: (value) {
                   setState(() {
                     selectedDays[day] = value!;
-                    if (value!) {
+                    if (value) {
                       // If the day is selected, initialize the opening and closing times if not already initialized
                       if (openingTimes[day] == null) {
-                        openingTimes[day] = TimeOfDay(
+                        openingTimes[day] = const TimeOfDay(
                             hour: 8,
                             minute: 0); // Set default opening time to 08:00 AM
                       }
                       if (closingTimes[day] == null) {
-                        closingTimes[day] = TimeOfDay(
+                        closingTimes[day] = const TimeOfDay(
                             hour: 12,
                             minute: 0); // Set default closing time to 12:00 PM
                       }
@@ -480,12 +482,12 @@ class _EditStoreState extends State<EditStore> {
                     print('Updated workingDays: $workingDayss');
                   });
                 },
-                activeColor: Color(0xFF1D365C),
+                activeColor: const Color(0xFF1D365C),
               ),
               Text(
                 isEnglish ? getEnglishDayName(day) : getArabicDayName(day),
                 style: TextStyle(
-                  color: Color(0xFF1D365C),
+                  color: const Color(0xFF1D365C),
                   fontSize: MediaQuery.of(context).size.width *
                       0.04, // Adjust the multiplier as needed
                   fontWeight: FontWeight.bold,
@@ -511,7 +513,7 @@ class _EditStoreState extends State<EditStore> {
                     final selectedTime = await showTimePicker(
                       context: context,
                       initialTime: openingTimes[day] ??
-                          TimeOfDay(
+                          const TimeOfDay(
                               hour: 8,
                               minute:
                                   0), // Default to 08:00 AM if not initialized
@@ -531,7 +533,7 @@ class _EditStoreState extends State<EditStore> {
                   child: Text(
                     openingTimes[day]?.format(context) ?? '- - : - -',
                     style: TextStyle(
-                      color: Color(0xFF1D365C),
+                      color: const Color(0xFF1D365C),
                       fontSize: MediaQuery.of(context).size.width *
                           0.035, // Adjust the multiplier as needed
                     ),
@@ -549,7 +551,7 @@ class _EditStoreState extends State<EditStore> {
                     final selectedTime = await showTimePicker(
                       context: context,
                       initialTime: closingTimes[day] ??
-                          TimeOfDay(
+                          const TimeOfDay(
                               hour: 12,
                               minute:
                                   0), // Default to 12:00 PM if not initialized
@@ -568,7 +570,7 @@ class _EditStoreState extends State<EditStore> {
                   child: Text(
                     closingTimes[day]?.format(context) ?? '- - : - -',
                     style: TextStyle(
-                      color: Color(0xFF1D365C),
+                      color: const Color(0xFF1D365C),
                       fontSize: MediaQuery.of(context).size.width *
                           0.035, // Adjust the multiplier as needed
                     ),
@@ -655,21 +657,21 @@ class _EditStoreState extends State<EditStore> {
     return InkWell(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-        padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+        padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
         decoration: BoxDecoration(
-          color: Color(0xFFFFFFFF),
+          color: const Color(0xFFFFFFFF),
           borderRadius: BorderRadius.circular(30),
         ),
         child: Column(
           children: [
             Row(
               children: [
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Text(isEnglish ? englishTitle : arabicTitle),
               ],
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             if (englishTitle.toLowerCase() == 'telephone / store number' ||
                 englishTitle.toLowerCase() == 'commercial register')
               TextField(
@@ -737,7 +739,7 @@ class _EditStoreState extends State<EditStore> {
         builder: (context) => EditMapScreen(
           onLocationSelected: (addressName, location) {
             // Update the address text field with the selected location
-            address.text = '$addressName';
+            address.text = addressName;
             latitude.text = '${location.latitude}';
             longitude.text = '${location.longitude}';
             print('${latitude.text},${longitude.text},${address.text}');
@@ -770,7 +772,7 @@ class _EditMapScreenState extends State<EditMapScreen> {
       body: OpenStreetMapSearchAndPick(
         buttonTextStyle:
             const TextStyle(fontSize: 18, fontStyle: FontStyle.normal),
-        buttonColor: Color(0xFF080E27),
+        buttonColor: const Color(0xFF080E27),
         buttonText: isEnglish ? 'Set Current Location' : 'اختر الموقع الحالي',
         locationPinIconColor: Colors.red,
         locationPinText: '',

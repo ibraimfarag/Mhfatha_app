@@ -1,14 +1,14 @@
 // lib\screens\QR\get_discount.dart
 
-import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:mhfatha/settings/imports.dart';
 import 'package:permission_handler/permission_handler.dart'
     hide PermissionStatus;
 import 'dart:async';
 
 class FiteredStroes extends StatefulWidget {
+  const FiteredStroes({super.key});
+
   @override
   _FiteredStroesState createState() => _FiteredStroesState();
 }
@@ -33,12 +33,13 @@ class _FiteredStroesState extends State<FiteredStroes> {
     super.initState();
     // Call the fetchRegionList method from the Api class when the widget is initialized
 
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
  
       _getLocation();
     });
   }
 
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
   }
@@ -164,12 +165,12 @@ class _FiteredStroesState extends State<FiteredStroes> {
     return DirectionalityWrapper(
       child: Scaffold(
         body: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Color(0xFF080E27), // Set your desired background color
           ),
           child: SingleChildScrollView(
             child: Container(
-              color: Color(0xFF080E27),
+              color: const Color(0xFF080E27),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
@@ -183,7 +184,7 @@ class _FiteredStroesState extends State<FiteredStroes> {
                   Container(
                     // width: 320,
                     // padding: const EdgeInsets.all(1.0),
-                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -192,7 +193,7 @@ class _FiteredStroesState extends State<FiteredStroes> {
                             children: [
                               Text(
                                 isEnglish ? 'Stores' : 'المتاجر',
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 28,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white),
@@ -203,18 +204,18 @@ class _FiteredStroesState extends State<FiteredStroes> {
                               Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    SizedBox(height: 20),
+                                    const SizedBox(height: 20),
                                     Text(
                                       isEnglish ? 'Region' : 'المدينة',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
                                       ),
                                     ),
-                                    SizedBox(height: 10),
+                                    const SizedBox(height: 10),
                                     Container(
-                                      padding: EdgeInsets.symmetric(
+                                      padding: const EdgeInsets.symmetric(
                                           vertical: 1, horizontal: 20),
                                       decoration: BoxDecoration(
                                         color: Colors.grey[200],
@@ -241,7 +242,7 @@ class _FiteredStroesState extends State<FiteredStroes> {
                                     ),
                                   ]),
 
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
 
                               Row(children: [
                                 Column(
@@ -249,15 +250,15 @@ class _FiteredStroesState extends State<FiteredStroes> {
                                   children: [
                                     Text(
                                       isEnglish ? 'Categorie' : 'الفئة',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
                                       ),
                                     ),
-                                    SizedBox(height: 10),
+                                    const SizedBox(height: 10),
                                     Container(
-                                      padding: EdgeInsets.symmetric(
+                                      padding: const EdgeInsets.symmetric(
                                           vertical: 3, horizontal: 20),
                                       decoration: BoxDecoration(
                                         color: Colors.grey[200],
@@ -289,10 +290,10 @@ class _FiteredStroesState extends State<FiteredStroes> {
                               ]),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 30,
                           ),
-                          Column(
+                          const Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               SizedBox(
@@ -306,10 +307,10 @@ class _FiteredStroesState extends State<FiteredStroes> {
                           ),
                         ]),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   // Build containers dynamically based on filteredStores
                   Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Color(0xFFF3F4F7),
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(40),
@@ -317,7 +318,7 @@ class _FiteredStroesState extends State<FiteredStroes> {
                         ),
                       ),
                       child: Column(children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         for (dynamic store in filteredStores)
@@ -329,7 +330,7 @@ class _FiteredStroesState extends State<FiteredStroes> {
           ),
         ),
         // bottomNavigationBar: BottomNavBar(initialIndex: 0),
-        bottomNavigationBar: NewNav(),
+        bottomNavigationBar: const NewNav(),
       ),
     );
   }
@@ -353,13 +354,13 @@ class _FiteredStroesState extends State<FiteredStroes> {
               color: Colors.grey.withOpacity(0.1),
               spreadRadius: 5,
               blurRadius: 3,
-              offset: Offset(0, 1),
+              offset: const Offset(0, 1),
             ),
           ],
           // color: Color(0xFFF3F4F7),
-          color: Color(0xFFFFFFFF),
+          color: const Color(0xFFFFFFFF),
           border: Border.all(
-            color: Color.fromARGB(5, 0, 0, 0),
+            color: const Color.fromARGB(5, 0, 0, 0),
             width: 2,
           ),
           borderRadius: BorderRadius.circular(30),
@@ -380,7 +381,7 @@ class _FiteredStroesState extends State<FiteredStroes> {
                             : Alignment.centerRight,
                         child: Text(
                           '${store['name']}',
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Colors.black87,
                               fontSize: 18,
                               fontWeight: FontWeight.bold),
@@ -399,7 +400,7 @@ class _FiteredStroesState extends State<FiteredStroes> {
                           isEnglish
                               ? '${store['category_name_en']}'
                               : '${store['category_name_ar']}',
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Colors.black87,
                               fontSize: 14,
                               fontWeight: FontWeight.bold),
@@ -417,7 +418,7 @@ class _FiteredStroesState extends State<FiteredStroes> {
                             : Alignment.centerRight,
                         child: Text(
                           '${store['distance']}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.black87,
                             fontWeight: FontWeight.bold,
                             fontFamily: AppVariables.serviceFontFamily,
@@ -432,13 +433,13 @@ class _FiteredStroesState extends State<FiteredStroes> {
                 ),
                 Column(
                   children: [
-                    Container(
+                    SizedBox(
                       height: 100,
 
                       // width: double.infinity,
                       width: 100,
                       child: ClipRRect(
-                        borderRadius: BorderRadius.only(
+                        borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(30),
                           topRight: Radius.circular(30),
                           bottomRight: Radius.circular(30),

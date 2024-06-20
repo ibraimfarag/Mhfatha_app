@@ -5,7 +5,7 @@ class CustomAppBar extends StatelessWidget {
   final VoidCallback onBackTap;
   final Color? iconColor; // Add a parameter for icon color
 final double? marginTop; 
-  CustomAppBar({this.title, required this.onBackTap,this.iconColor,this.marginTop});
+  const CustomAppBar({super.key, this.title, required this.onBackTap,this.iconColor,this.marginTop});
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +21,12 @@ final double? marginTop;
             IconButton(
               icon: Icon(isEnglish? Icons.arrow_forward_ios : Icons.arrow_forward_ios),
               onPressed: onBackTap,
-              color: iconColor ?? Color.fromARGB(255, 244, 244, 245), // Use the provided color or default to white
+              color: iconColor ?? const Color.fromARGB(255, 244, 244, 245), // Use the provided color or default to white
             ),
           if (title != null)
             Text(
               title!,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Color.fromARGB(255, 7, 0, 34),

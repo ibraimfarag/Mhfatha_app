@@ -2,7 +2,6 @@
 // ignore: unused_import
 import 'dart:convert';
 import 'package:mhfatha/settings/imports.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async'; // Import async library
 
 // provider.dart

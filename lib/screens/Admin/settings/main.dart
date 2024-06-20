@@ -1,13 +1,9 @@
-import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
 
 import 'package:mhfatha/settings/imports.dart';
-import 'package:permission_handler/permission_handler.dart'
-    as permission_handler;
 
 class AdminViewRequests extends StatefulWidget {
-  AdminViewRequests({Key? key}) : super(key: key);
+  const AdminViewRequests({Key? key}) : super(key: key);
 
   @override
   _AdminViewRequestsState createState() => _AdminViewRequestsState();
@@ -56,7 +52,7 @@ class _AdminViewRequestsState extends State<AdminViewRequests> {
           children: [
             Text(
               isEnglish ? 'Requests' : 'الطلبات',
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -70,172 +66,172 @@ class _AdminViewRequestsState extends State<AdminViewRequests> {
           SizedBox(
             height: MediaQuery.of(context).size.width * 0.03,
           ),
-          if (requestss != null) ...[
-            if (filteredRequests.isNotEmpty) ...[
-              Container(
-                padding: EdgeInsets.fromLTRB(
-                    0, 0, 0, MediaQuery.of(context).size.height * 0.02),
-                height: MediaQuery.of(context).size.height *
-                    0.68, // Set the container height as needed
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: filteredRequests.map((usert) {
-                      return Container(
-                        padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
-                        margin:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                        decoration: BoxDecoration(
-                          color: Color(0xFFFFFFFF),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(width: 10),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
+          ...[
+          if (filteredRequests.isNotEmpty) ...[
+            Container(
+              padding: EdgeInsets.fromLTRB(
+                  0, 0, 0, MediaQuery.of(context).size.height * 0.02),
+              height: MediaQuery.of(context).size.height *
+                  0.68, // Set the container height as needed
+              child: SingleChildScrollView(
+                child: Column(
+                  children: filteredRequests.map((usert) {
+                    return Container(
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 5),
+                      margin:
+                          const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFFFFF),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  isEnglish
+                                      ? '${usert['type_name_en']}'
+                                      : '${usert['type_name_ar']}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  '${usert['store_name']}',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12),
+                                ),
+                                if (usert['differences'] != null)
                                   Text(
-                                    isEnglish
-                                        ? '${usert['type_name_en']}'
-                                        : '${usert['type_name_ar']}',
-                                    style: TextStyle(
+                                    isEnglish ? 'Changes' : 'التحديثات',
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  Text(
-                                    '${usert['store_name']}',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12),
-                                  ),
-                                  if (usert['differences'] != null)
-                                    Text(
-                                      isEnglish ? 'Changes' : 'التحديثات',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: (usert['differences'] ?? [])
-                                        .map<Widget>((difference) {
-                                      return Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            isEnglish
-                                                ? 'change: ${difference['attribute_name_en']}'
-                                                : 'تغير: ${difference['attribute_name_ar']}',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: (usert['differences'] ?? [])
+                                      .map<Widget>((difference) {
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          isEnglish
+                                              ? 'change: ${difference['attribute_name_en']}'
+                                              : 'تغير: ${difference['attribute_name_ar']}',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                          Text(
-                                            isEnglish
-                                                ? 'Old Value: ${difference['old_value_en'] ?? 'N/A'}'
-                                                : 'القيمة القديمة: ${difference['old_value_ar'] ?? 'N/A'}',
-                                          ),
-                                          Text(
-                                            isEnglish
-                                                ? 'New Value: ${difference['new_value_en']}'
-                                                : 'القيمة الجديده: ${difference['new_value_ar']}',
-                                          ),
-                                          SizedBox(height: 8),
-                                        ],
+                                        ),
+                                        Text(
+                                          isEnglish
+                                              ? 'Old Value: ${difference['old_value_en'] ?? 'N/A'}'
+                                              : 'القيمة القديمة: ${difference['old_value_ar'] ?? 'N/A'}',
+                                        ),
+                                        Text(
+                                          isEnglish
+                                              ? 'New Value: ${difference['new_value_en']}'
+                                              : 'القيمة الجديده: ${difference['new_value_ar']}',
+                                        ),
+                                        const SizedBox(height: 8),
+                                      ],
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
+                            ),
+                          ),
+                          GestureDetector(
+                              onTap: () {
+                                // Handle user selection here
+                              },
+                              child: PullDownButton(
+                                itemBuilder: (context) => [
+                         
+                                  PullDownMenuItem(
+                                    onTap: () async {
+                                      QuickAlert.show(
+                                        context: context,
+                                        type: QuickAlertType.confirm,
+                                        customAsset: 'images/confirm.gif',
+                                        text: isEnglish
+                                            ? 'Are you sure to accept this request?'
+                                            : 'هل أنت متأكد من الموافقة على الطلب؟',
+                                        cancelBtnText:
+                                            isEnglish ? 'No' : 'لا',
+                                        confirmBtnText:
+                                            isEnglish ? 'Yes' : 'نعم',
+                                        confirmBtnColor: const Color(0xFF0D2750),
+                                        onConfirmBtnTap: () async {
+                                         await AdminApi(context).RequestActions(
+                                          context, '${usert['id']}', '1');
+                                          fetchDataFromApi(context);
+                                        },
                                       );
-                                    }).toList(),
+                                    },
+                                    // enabled: usert['is_deleted'] == 0,
+                                    title: isEnglish ? 'Accept' : 'قبول',
+                                    isDestructive: false,
+
+                                    // icon: CupertinoIcons.bag_badge_minus,
+                                  ),
+                                  PullDownMenuItem(
+                                    onTap: () async {
+                                      QuickAlert.show(
+                                        context: context,
+                                        type: QuickAlertType.confirm,
+                                        customAsset: 'images/confirm.gif',
+                                        text: isEnglish
+                                            ? 'Are you sure to reject this request?'
+                                            : 'هل أنت متأكد من الغاء الطلب ؟',
+                                        cancelBtnText:
+                                            isEnglish ? 'No' : 'لا',
+                                        confirmBtnText:
+                                            isEnglish ? 'Yes' : 'نعم',
+                                        confirmBtnColor: const Color(0xFF0D2750),
+                                        onConfirmBtnTap: () async {
+                                          await AdminApi(context)
+                                              .RequestActions(context,
+                                                  '${usert['id']}', '2');
+                                          fetchDataFromApi(context);
+                                        },
+                                      );
+                                    },
+                                    // enabled: usert['is_deleted'] == 0,
+                                    title: isEnglish ? 'Reject' : 'رفض',
+                                    isDestructive: true,
+
+                                    // icon: CupertinoIcons.bag_badge_minus,
                                   ),
                                 ],
-                              ),
-                            ),
-                            GestureDetector(
-                                onTap: () {
-                                  // Handle user selection here
-                                },
-                                child: PullDownButton(
-                                  itemBuilder: (context) => [
-                           
-                                    PullDownMenuItem(
-                                      onTap: () async {
-                                        QuickAlert.show(
-                                          context: context,
-                                          type: QuickAlertType.confirm,
-                                          customAsset: 'images/confirm.gif',
-                                          text: isEnglish
-                                              ? 'Are you sure to accept this request?'
-                                              : 'هل أنت متأكد من الموافقة على الطلب؟',
-                                          cancelBtnText:
-                                              isEnglish ? 'No' : 'لا',
-                                          confirmBtnText:
-                                              isEnglish ? 'Yes' : 'نعم',
-                                          confirmBtnColor: Color(0xFF0D2750),
-                                          onConfirmBtnTap: () async {
-                                           await AdminApi(context).RequestActions(
-                                            context, '${usert['id']}', '1');
-                                            fetchDataFromApi(context);
-                                          },
-                                        );
-                                      },
-                                      // enabled: usert['is_deleted'] == 0,
-                                      title: isEnglish ? 'Accept' : 'قبول',
-                                      isDestructive: false,
-
-                                      // icon: CupertinoIcons.bag_badge_minus,
-                                    ),
-                                    PullDownMenuItem(
-                                      onTap: () async {
-                                        QuickAlert.show(
-                                          context: context,
-                                          type: QuickAlertType.confirm,
-                                          customAsset: 'images/confirm.gif',
-                                          text: isEnglish
-                                              ? 'Are you sure to reject this request?'
-                                              : 'هل أنت متأكد من الغاء الطلب ؟',
-                                          cancelBtnText:
-                                              isEnglish ? 'No' : 'لا',
-                                          confirmBtnText:
-                                              isEnglish ? 'Yes' : 'نعم',
-                                          confirmBtnColor: Color(0xFF0D2750),
-                                          onConfirmBtnTap: () async {
-                                            await AdminApi(context)
-                                                .RequestActions(context,
-                                                    '${usert['id']}', '2');
-                                            fetchDataFromApi(context);
-                                          },
-                                        );
-                                      },
-                                      // enabled: usert['is_deleted'] == 0,
-                                      title: isEnglish ? 'Reject' : 'رفض',
-                                      isDestructive: true,
-
-                                      // icon: CupertinoIcons.bag_badge_minus,
-                                    ),
-                                  ],
-                                  buttonBuilder: (context, showMenu) =>
-                                      CupertinoButton(
-                                    onPressed: showMenu,
-                                    padding: EdgeInsets.zero,
-                                    child: const Icon(
-                                      Icons.more_vert,
-                                      color: Color(0xFF0D2750),
-                                    ),
+                                buttonBuilder: (context, showMenu) =>
+                                    CupertinoButton(
+                                  onPressed: showMenu,
+                                  padding: EdgeInsets.zero,
+                                  child: const Icon(
+                                    Icons.more_vert,
+                                    color: Color(0xFF0D2750),
                                   ),
-                                )),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  ),
+                                ),
+                              )),
+                        ],
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
-            ] else ...[
-              Text('No Requests found'),
-            ],
+            ),
+          ] else ...[
+            const Text('No Requests found'),
           ],
+        ],
         ],
       ),
     );
@@ -243,8 +239,8 @@ class _AdminViewRequestsState extends State<AdminViewRequests> {
 
   Widget _buildStatusWidget(String text, Color color) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      margin: EdgeInsets.symmetric(horizontal: 2),
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 2),
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(4),
@@ -264,21 +260,21 @@ class _AdminViewRequestsState extends State<AdminViewRequests> {
       case 'update_store':
         return Text(
           isEnglish ? 'Update store information' : 'تحديث معلومات المتجر',
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
           ),
         );
       case 'delete_store':
         return Text(
           isEnglish ? 'Delete store' : 'حذف المتجر',
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
           ),
         );
       case 'delete_discount':
         return Text(
           isEnglish ? 'Delete store discount' : 'حذف خصم متجر',
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
           ),
         );

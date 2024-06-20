@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:mhfatha/settings/imports.dart';
 class QrResponse extends StatefulWidget {
   final String responseData;
@@ -60,6 +59,7 @@ void initState() {
 }
 
 
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     
@@ -72,11 +72,11 @@ void initState() {
     bool isEnglish = Provider.of<AppState>(context).isEnglish;
     return DirectionalityWrapper(
       child: Scaffold(
-        backgroundColor: Color(0xFFF3F4F7),
+        backgroundColor: const Color(0xFFF3F4F7),
         body: SingleChildScrollView(
           // Wrap the Column with SingleChildScrollView
           child: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Color(0xFF080E27), // Set your desired background color
             ),
             // padding: const EdgeInsets.all(16.0),
@@ -95,41 +95,41 @@ void initState() {
                     Container(
                       // width: 320,
                       // padding: const EdgeInsets.all(1.0),
-                      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 1),
+                      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 1),
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(
+                                const SizedBox(
                                   height: 30,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 5,
                                 ),
                                 Text(
                                   isEnglish
                                       ? 'Discount for Store'
                                       : 'خصومات متجر',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 28,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white),
                                 ),
                                 Text(
                                   storeName,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 24,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white),
                                 ),
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 30,
                             ),
-                            Column(
+                            const Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 SizedBox(
@@ -143,13 +143,13 @@ void initState() {
                             ),
                           ]),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                   ],
                 ),
 
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Color(0xFFF3F4F7),
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(40),
@@ -199,7 +199,7 @@ void initState() {
                                                 isEnglish
                                                     ? 'Discount on: ${discount['category']} '
                                                     : 'خصم على : ${discount['category']} ',
-                                                style: TextStyle(fontSize: 14),
+                                                style: const TextStyle(fontSize: 14),
                                                 textAlign: isEnglish
                                                     ? TextAlign.left
                                                     : TextAlign.right,
@@ -212,7 +212,7 @@ void initState() {
                                                 isEnglish
                                                     ? 'Percent: ${discount['percent']}%'
                                                     : 'نسبة الخصم : ${discount['percent']}% ',
-                                                style: TextStyle(fontSize: 14),
+                                                style: const TextStyle(fontSize: 14),
                                                 textAlign: isEnglish
                                                     ? TextAlign.left
                                                     : TextAlign.right,
@@ -225,7 +225,7 @@ void initState() {
                                                 isEnglish
                                                     ? 'Days Remaining: ${calculateDaysRemaining(discount['end_date'])} ${getEnglishDaysWord(calculateDaysRemaining(discount['end_date']))}'
                                                     : 'الأيام المتبقية: ${calculateDaysRemaining(discount['end_date'])} ${getArabicDaysWord(calculateDaysRemaining(discount['end_date']))}',
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                     fontSize: 12,
                                                     color: Colors.blue),
                                                 textAlign: isEnglish
@@ -247,7 +247,7 @@ void initState() {
           ),
         ),
         // bottomNavigationBar: BottomNavBar(initialIndex: 1),
-        bottomNavigationBar: NewNav(),
+        bottomNavigationBar: const NewNav(),
       ),
     );
   }

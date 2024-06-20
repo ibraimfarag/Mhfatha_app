@@ -9,7 +9,7 @@ import 'package:mhfatha/settings/imports.dart';
 class DirectionalityWrapper extends StatelessWidget {
   final Widget child;
 
-  DirectionalityWrapper({required this.child});
+  const DirectionalityWrapper({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {

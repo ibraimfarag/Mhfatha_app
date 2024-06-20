@@ -1,13 +1,10 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:mhfatha/settings/imports.dart';
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
 
 class AdminApi {
   static const String baseUrl = AppVariables.ApiUrl;
@@ -28,7 +25,7 @@ class AdminApi {
 
 // Function to start the timer
   void _startTimer(BuildContext context) {
-    _timer = Timer(Duration(seconds: 3), () {
+    _timer = Timer(const Duration(seconds: 3), () {
       Navigator.of(context).pop();
     });
   }
@@ -147,7 +144,7 @@ class AdminApi {
 
     // Retry logic with a delay between retries
     int retryCount = 0;
-    final int maxRetries = 3;
+    const int maxRetries = 3;
     while (retryCount < maxRetries) {
       try {
         final http.Response response = await client.get(
@@ -165,13 +162,13 @@ class AdminApi {
           // If the response code is not 200, increment the retry count and wait before retrying
           retryCount++;
           await Future.delayed(
-              Duration(seconds: 1)); // Adjust the delay as needed
+              const Duration(seconds: 1)); // Adjust the delay as needed
         }
       } catch (e) {
         // If an error occurs during the request, increment the retry count and wait before retrying
         retryCount++;
         await Future.delayed(
-            Duration(seconds: 1)); // Adjust the delay as needed
+            const Duration(seconds: 1)); // Adjust the delay as needed
       }
     }
 
@@ -503,7 +500,7 @@ class AdminApi {
     String? platform,
     String? recipient_identifier,
   }) async {
-    final String url = '$baseUrl/admin/sendnotification';
+    const String url = '$baseUrl/admin/sendnotification';
     _showLoadingDialog(context);
 
     try {
@@ -575,7 +572,7 @@ void _showLoadingDialog(BuildContext context) {
     context: context,
     barrierDismissible: false, // Prevent dialog from closing on outside tap
     builder: (BuildContext context) {
-      return Dialog(
+      return const Dialog(
         backgroundColor: Colors.transparent,
         elevation: 0,
         child: Center(

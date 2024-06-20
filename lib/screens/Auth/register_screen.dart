@@ -2,12 +2,9 @@
 
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:intl/intl.dart';
 import 'package:mhfatha/settings/imports.dart';
-import 'package:flutter/cupertino.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -51,33 +48,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
     try {
       Map<String, dynamic>? result = await api.getRegionsAndCities(context);
 
-      if (result != null) {
-        setState(() {
-          // Access the 'regions' data from the result
-          List<dynamic> regions = result['regions'];
+      setState(() {
+        // Access the 'regions' data from the result
+        List<dynamic> regions = result['regions'];
 
-          // Clear existing items
-          regionDropdownItems.clear();
+        // Clear existing items
+        regionDropdownItems.clear();
 
-          // Process each region and add a DropdownMenuItem for each
-          regions.forEach((region) {
-            int regionId = region['id'];
-            String regionAr = region['region_ar'];
-            String regionEn = region['region_en'];
+        // Process each region and add a DropdownMenuItem for each
+        for (var region in regions) {
+          int regionId = region['id'];
+          String regionAr = region['region_ar'];
+          String regionEn = region['region_en'];
 
-            // Add a DropdownMenuItem for the current region
-            regionDropdownItems.add(
-              DropdownMenuItem(
-                value: regionId.toString(),
-                child: Text(isEnglish ? regionEn : regionAr),
-              ),
-            );
-          });
-        });
-      } else {
-        print('Error fetching filtered stores: Result is null');
-      }
-    } catch (e) {
+          // Add a DropdownMenuItem for the current region
+          regionDropdownItems.add(
+            DropdownMenuItem(
+              value: regionId.toString(),
+              child: Text(isEnglish ? regionEn : regionAr),
+            ),
+          );
+        }
+      });
+        } catch (e) {
       // Handle errors
       print('Eeerror fetching filtered stores: $e');
     }
@@ -549,19 +542,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                           }
                                         }
                                       },
+                                      style: ElevatedButton.styleFrom(
+                                        primary: ui,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                      ),
                                       child: Text(
                                         isEnglish ? "REGISTER" : "تسجيل",
                                         style: TextStyle(
                                           color: colors,
                                           fontWeight: FontWeight.bold,
                                           fontSize: 16,
-                                        ),
-                                      ),
-                                      style: ElevatedButton.styleFrom(
-                                        primary: ui,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
                                         ),
                                       ),
                                     ),

@@ -1,10 +1,7 @@
-import 'package:intl/intl.dart';
 import 'package:mhfatha/settings/imports.dart';
-import 'package:flutter/cupertino.dart';
 
 // Category_selection.dart
 
-import 'package:flutter/material.dart';
 
 class CategorySelection extends StatefulWidget {
   final ValueChanged<String> onCategorySelected;
@@ -50,10 +47,6 @@ void fetchCategorysAndCities() async {
     // Retry fetching until a non-null result is obtained
     while (result == null) {
       result = await Api().getcategories(context);
-      if (result == null) {
-        print('Retrying fetching categories and cities...');
-        await Future.delayed(Duration(seconds: 1)); // Add a delay before retrying
-      }
     }
 
     // Process the result once a non-null value is obtained
@@ -63,7 +56,7 @@ void fetchCategorysAndCities() async {
     citiesDropdownItems.clear();
 
     // Process each Category and add a DropdownMenuItem for each
-    Categorys.forEach((Category) {
+    for (var Category in Categorys) {
       int CategoryId = Category['id'];
       String CategoryAr = Category['category_name_ar'];
       String CategoryEn = Category['category_name_en'];
@@ -75,7 +68,7 @@ void fetchCategorysAndCities() async {
           child: Text(isEnglish ? CategoryEn : CategoryAr),
         ),
       );
-    });
+    }
 
     // Trigger a rebuild of the widget with the updated data
     setState(() {});
@@ -84,7 +77,7 @@ void fetchCategorysAndCities() async {
     // print('Error fetching categories and cities: $e');
 
     // Retry fetching after an error occurs
-    await Future.delayed(Duration(seconds: 1)); // Add a delay before retrying
+    await Future.delayed(const Duration(seconds: 1)); // Add a delay before retrying
     fetchCategorysAndCities(); // Retry fetching
   }
 }
@@ -103,9 +96,9 @@ void fetchCategorysAndCities() async {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Container(
-          margin: EdgeInsets.only(left: 45, right: 45),
+          margin: const EdgeInsets.only(left: 45, right: 45),
           alignment:
               isEnglish ? Alignment.centerLeft : Alignment.centerRight,
           child: Text(
@@ -117,10 +110,10 @@ void fetchCategorysAndCities() async {
             ),
           ),
         ),
-        SizedBox(height: 14),
+        const SizedBox(height: 14),
 Container(
-  margin: EdgeInsets.only(left: 45, right: 45),
-    padding: EdgeInsets.only(left: 10, right: 10),
+  margin: const EdgeInsets.only(left: 45, right: 45),
+    padding: const EdgeInsets.only(left: 10, right: 10),
 
   decoration: BoxDecoration(
     color: widget.color,

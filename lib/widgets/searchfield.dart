@@ -374,7 +374,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
         _overlayEntry = _createOverlay();
         if (widget.initialValue == null) {
           if (widget.suggestionState == Suggestion.expand) {
-            Future.delayed(Duration(milliseconds: 100), () {
+            Future.delayed(const Duration(milliseconds: 100), () {
               suggestionStream.sink.add(widget.suggestions);
             });
           }
@@ -471,7 +471,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
       builder: (BuildContext context,
           AsyncSnapshot<List<SearchFieldListItem<T>?>?> snapshot) {
         if (snapshot.data == null || !isSuggestionExpanded) {
-          return SizedBox();
+          return const SizedBox();
         } else if (snapshot.data!.isEmpty) {
           return widget.emptyWidget;
         } else {
@@ -495,8 +495,8 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
   controller: _scrollController,
   itemCount: snapshot.data!.length,
   physics: snapshot.data!.length == 1
-      ? NeverScrollableScrollPhysics()
-      : ScrollPhysics(),
+      ? const NeverScrollableScrollPhysics()
+      : const ScrollPhysics(),
   itemBuilder: (context, index) => TextFieldTapRegion(
       child: InkWell(
         onTap: () {
@@ -528,7 +528,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
           return AnimatedContainer(
             duration: _suggestionDirection == SuggestionDirection.up
                 ? Duration.zero
-                : Duration(milliseconds: 300),
+                : const Duration(milliseconds: 300),
             height: _totalHeight,
             alignment: Alignment.centerLeft,
             decoration: widget.suggestionsDecoration ??
@@ -539,7 +539,7 @@ class _SearchFieldState<T> extends State<SearchField<T>> {
                         color: onSurfaceColor.withOpacity(0.1),
                         blurRadius: 8.0,
                         spreadRadius: 2.0,
-                        offset: Offset(
+                        offset: const Offset(
                           2.0,
                           5.0,
                         )),
@@ -717,7 +717,7 @@ class SuggestionDecoration extends BoxDecoration {
   @override
   final EdgeInsetsGeometry padding;
 
-  SuggestionDecoration({
+  const SuggestionDecoration({
     this.padding = EdgeInsets.zero,
     Color? color,
     Border? border,

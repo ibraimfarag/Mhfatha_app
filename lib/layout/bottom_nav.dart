@@ -4,7 +4,7 @@ import 'package:mhfatha/settings/imports.dart';
 class BottomNav extends StatefulWidget {
   final int initialIndex;
 
-  BottomNav({required this.initialIndex});
+  const BottomNav({super.key, required this.initialIndex});
 
   @override
   _BottomNavState createState() =>
@@ -22,7 +22,7 @@ class _BottomNavState extends State<BottomNav> {
 
     return DefaultTextStyle(
       // Set the default text style for the entire BottomNavigationBar
-      style: TextStyle(
+      style: const TextStyle(
         // fontFamily: AppVariables.serviceFontFamily, // Use the font family you defined in pubspec.yaml
         fontSize: 20, // Adjust the font size as needed
       ),
@@ -50,18 +50,18 @@ class _BottomNavState extends State<BottomNav> {
         },
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: const Icon(Icons.home),
             label:isEnglish?  'Home':'الرئيسية' ,
           ),
         
 
           BottomNavigationBarItem(
-            icon: Icon(Icons.wallet),
+            icon: const Icon(Icons.wallet),
             label:isEnglish? 'requets':'طلباتي',
           ),
          
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
+            icon: const Icon(Icons.settings),
             label: isEnglish?'settings':'الاعدادات',
           ),
         ],

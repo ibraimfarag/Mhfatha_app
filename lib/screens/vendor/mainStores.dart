@@ -1,15 +1,13 @@
 // lib\screens\settings\settings.dart
 
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:mhfatha/settings/imports.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class MainStores extends StatefulWidget {
+  const MainStores({super.key});
+
   @override
   State<MainStores> createState() => _MainStoresState();
 }
@@ -17,10 +15,10 @@ class MainStores extends StatefulWidget {
 class _MainStoresState extends State<MainStores> {
   late AuthProvider authProvider; // Declare authProvider variable
   Api api = Api();
-  Color backgroundColor = Color.fromARGB(220, 255, 255, 255);
-  Color ui = Color.fromARGB(220, 233, 233, 233);
-  Color ui2 = Color.fromARGB(255, 113, 194, 110);
-  Color colors = Color(0xFF05204a);
+  Color backgroundColor = const Color.fromARGB(220, 255, 255, 255);
+  Color ui = const Color.fromARGB(220, 233, 233, 233);
+  Color ui2 = const Color.fromARGB(255, 113, 194, 110);
+  Color colors = const Color(0xFF05204a);
 
   // List<Map<String, dynamic>> vendorStoresDataa =
   //     []; // Declare vendorStoresData here
@@ -72,6 +70,7 @@ class _MainStoresState extends State<MainStores> {
     }
   }
 
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
   }
@@ -86,17 +85,17 @@ class _MainStoresState extends State<MainStores> {
     String lang = Provider.of<AppState>(context, listen: false).display;
     return DirectionalityWrapper(
         child: Scaffold(
-      backgroundColor: Color(0xFFF3F4F7),
+      backgroundColor: const Color(0xFFF3F4F7),
       body: SingleChildScrollView(
         child: Container(
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-            color: Color(0xFF080E27), // Set background color to #080e27
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+            color: const Color(0xFF080E27), // Set background color to #080e27
             child: Column(
                 // crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                  
-                  SizedBox(height: 6),
+                  const SizedBox(height: 6),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -104,7 +103,7 @@ class _MainStoresState extends State<MainStores> {
 
                          Text(
                                 '$comission %',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 30,
                                   fontWeight: FontWeight.bold,
@@ -115,13 +114,13 @@ class _MainStoresState extends State<MainStores> {
                                 isEnglish
                                     ? 'Current Commission'
                                     : 'نسبة العمولة الحالية',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              SizedBox(height: 30),
+                              const SizedBox(height: 30),
                       ],),
                       
                       GestureDetector(
@@ -130,9 +129,9 @@ class _MainStoresState extends State<MainStores> {
                         },
                         child: Container(
                           // width: 100,
-                          margin: EdgeInsets.fromLTRB(30, 0, 30, 20),
-                          padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                          decoration: BoxDecoration(
+                          margin: const EdgeInsets.fromLTRB(30, 0, 30, 20),
+                          padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                          decoration: const BoxDecoration(
                             color: Color(0xFFF3F4F7),
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(20),
@@ -143,16 +142,16 @@ class _MainStoresState extends State<MainStores> {
                           ),
                           child: Row(
                             children: [
-                              isEnglish ? Icon(Icons.add) : Container(),
+                              isEnglish ? const Icon(Icons.add) : Container(),
                               Text(
                                 isEnglish
                                     ? 'Add Store'
                                     : 'اضافة متجر', // Text based on language
                               ),
-                              SizedBox(width: 5), // Space between icon and text
+                              const SizedBox(width: 5), // Space between icon and text
                               isEnglish
                                   ? Container()
-                                  : Icon(Icons.add), // Plus icon
+                                  : const Icon(Icons.add), // Plus icon
                             ],
                           ),
                         ),
@@ -161,8 +160,8 @@ class _MainStoresState extends State<MainStores> {
                   ),
                   Container(
                     width: double.infinity,
-                    padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    decoration: BoxDecoration(
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    decoration: const BoxDecoration(
                       color: Color(0xFFF3F4F7),
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(40),
@@ -172,8 +171,8 @@ class _MainStoresState extends State<MainStores> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 20),
-                        SizedBox(
+                        const SizedBox(height: 20),
+                        const SizedBox(
                           height: 24,
                         ),
                         Column(
@@ -189,7 +188,7 @@ class _MainStoresState extends State<MainStores> {
                                   isEnglish
                                       ? "You haven't stores at the moment"
                                       : "ليس لديك متاجر في الوقت الحالي",
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.grey,
                                     fontSize: 16,
                                   ),
@@ -202,7 +201,7 @@ class _MainStoresState extends State<MainStores> {
                   )
                 ])),
       ),
-      bottomNavigationBar: NewNav(),
+      bottomNavigationBar: const NewNav(),
     ));
   }
 
@@ -223,12 +222,12 @@ class _MainStoresState extends State<MainStores> {
                 color: Colors.grey.withOpacity(0.1),
                 spreadRadius: 5,
                 blurRadius: 3,
-                offset: Offset(0, 1),
+                offset: const Offset(0, 1),
               ),
             ],
-            color: Color(0xFFFFFFFF),
+            color: const Color(0xFFFFFFFF),
             border: Border.all(
-              color: Color.fromARGB(5, 0, 0, 0),
+              color: const Color.fromARGB(5, 0, 0, 0),
               width: 2,
             ),
             borderRadius: BorderRadius.circular(30),
@@ -238,13 +237,13 @@ class _MainStoresState extends State<MainStores> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
+                  SizedBox(
                     height: 100,
 
                     // width: double.infinity,
                     width: 80,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(30),
                         topRight: Radius.circular(30),
                         bottomRight: Radius.circular(30),
@@ -267,7 +266,7 @@ class _MainStoresState extends State<MainStores> {
                               : Alignment.centerRight,
                           child: Text(
                             '${store['name'].length > 15 ? store['name'].substring(0, 15) + '...' : store['name']}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.black87,
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -288,7 +287,7 @@ class _MainStoresState extends State<MainStores> {
                             isEnglish
                                 ? '${store['category_name_en']}'
                                 : '${store['category_name_ar']}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.black87,
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -310,7 +309,7 @@ class _MainStoresState extends State<MainStores> {
                             children: [
                               // Display colored circle based on verification status
                               Container(
-                                margin: EdgeInsets.symmetric(horizontal: 0),
+                                margin: const EdgeInsets.symmetric(horizontal: 0),
                                 width: 10,
                                 height: 10,
                                 decoration: BoxDecoration(
@@ -322,12 +321,12 @@ class _MainStoresState extends State<MainStores> {
                                           : Colors.red,
                                 ),
                               ),
-                              SizedBox(width: 5),
+                              const SizedBox(width: 5),
                               // Display status text
                               Text(
                                 isEnglish
-                                    ? '${store['verifcation'] == 0 ? 'Pending Verify' : store['verifcation'] == 1 ? 'Verified' : 'Rejected'}'
-                                    : '${store['verifcation'] == 0 ? 'قيد التحقق' : store['verifcation'] == 1 ? 'تم التحقق' : 'مرفوض'}',
+                                    ? store['verifcation'] == 0 ? 'Pending Verify' : store['verifcation'] == 1 ? 'Verified' : 'Rejected'
+                                    : store['verifcation'] == 0 ? 'قيد التحقق' : store['verifcation'] == 1 ? 'تم التحقق' : 'مرفوض',
                                 style: TextStyle(
                                   color: store['verifcation'] == 0
                                       ? Colors.orange
@@ -355,7 +354,7 @@ class _MainStoresState extends State<MainStores> {
                             isEnglish
                                 ? 'Debit: ${store['depit']} SAR'
                                 : 'مديونيه ${store['depit']} ريال',
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.black87,
                               fontSize: 12,
                               fontWeight: FontWeight.normal,
@@ -436,7 +435,7 @@ class _MainStoresState extends State<MainStores> {
                                 : '؟ ${store['name']} هل انت متأكد من حذف متجر ',
                             cancelBtnText: isEnglish ? 'No' : 'لا',
                             confirmBtnText: isEnglish ? 'yes' : 'نعم',
-                            confirmBtnColor: Color(0xFF0D2750),
+                            confirmBtnColor: const Color(0xFF0D2750),
                             onConfirmBtnTap: () async {
                               await VendorApi(context)
                                   .deleteStore('${store['id']}', context);

@@ -2,7 +2,6 @@
 
 import 'dart:io';
 
-import 'package:flutter/services.dart';
 import 'package:mhfatha/settings/imports.dart';
 import 'package:http_parser/http_parser.dart';
 
@@ -342,7 +341,7 @@ class Api {
                     length: 5,
                     width: MediaQuery.of(context).size.width,
                     fieldWidth: 20,
-                    style: TextStyle(fontSize: 17),
+                    style: const TextStyle(fontSize: 17),
                     textFieldAlignment: MainAxisAlignment.spaceAround,
                     fieldStyle: FieldStyle.underline,
                     onCompleted: (pin) async {
@@ -383,8 +382,7 @@ class Api {
                       errorMessage = otpJsonResponse['message'];
                     } else {
                       // Fallback to using the entire response body as the error message
-                      errorMessage = "Error ${otpResponse.statusCode}: " +
-                          otpResponse.body;
+                      errorMessage = "Error ${otpResponse.statusCode}: ${otpResponse.body}";
                     }
                   } catch (e) {
                     // Log the error or handle parsing failure
@@ -399,18 +397,18 @@ class Api {
                     title: 'Server Error [${otpResponse.statusCode}]',
                     text: errorMessage,
                     widget: TextButton(
-                      child: Text('Show more',
+                      child: const Text('Show more',
                           style: TextStyle(color: Colors.blue)),
                       onPressed: () {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
-                            title: Text('Full Error Report'),
+                            title: const Text('Full Error Report'),
                             content: SingleChildScrollView(
                                 child: Text(errorMessage)),
                             actions: [
                               TextButton(
-                                child: Text('Close'),
+                                child: const Text('Close'),
                                 onPressed: () => Navigator.of(context).pop(),
                               ),
                             ],
@@ -458,7 +456,7 @@ class Api {
         print(jsonResponse);
         return false;
       }
-    } catch (e, stackTrace) {
+    } catch (e) {
       return false;
     }
   }
@@ -769,7 +767,7 @@ class Api {
                   length: 5,
                   width: MediaQuery.of(context).size.width,
                   fieldWidth: 20,
-                  style: TextStyle(fontSize: 17),
+                  style: const TextStyle(fontSize: 17),
                   textFieldAlignment: MainAxisAlignment.spaceAround,
                   fieldStyle: FieldStyle.underline,
                   onCompleted: (pin) {
@@ -818,7 +816,7 @@ class Api {
                     context: context,
                     type: QuickAlertType.success,
                     customAsset: 'images/success.gif',
-                    confirmBtnColor: Color(0xFF0D2750),
+                    confirmBtnColor: const Color(0xFF0D2750),
                     text: '$MeC',
                   );
                   await authProvider.updateUserData(context);
@@ -844,7 +842,7 @@ class Api {
             type: QuickAlertType.success,
             customAsset: 'images/success.gif',
             text: '$MessageC',
-            confirmBtnColor: Color(0xFF0D2750),
+            confirmBtnColor: const Color(0xFF0D2750),
           );
         }
 
@@ -877,7 +875,7 @@ class Api {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return Center(
+        return const Center(
           child: CircularProgressIndicator(),
         );
       },
@@ -949,7 +947,7 @@ class Api {
           type: QuickAlertType.success,
           customAsset: 'images/success.gif',
           text: message,
-          confirmBtnColor: Color(0xFF0D2750),
+          confirmBtnColor: const Color(0xFF0D2750),
         );
         return message;
       } else {
@@ -972,8 +970,8 @@ class Api {
   Future<Map<String, dynamic>> restPassword(
       BuildContext context, String emailOrMobile,
       [String? otp,
-      String? new_password,
-      String? new_password_confirmation]) async {
+      String? newPassword,
+      String? newPasswordConfirmation]) async {
     final url = Uri.parse('$baseUrl/auth/resetPassword');
     String lang = Provider.of<AppState>(context, listen: false).display;
     AuthProvider authProvider =
@@ -990,8 +988,8 @@ class Api {
           'lang': lang,
           'email_or_mobile': emailOrMobile,
           'otp': otp,
-          'new_password': new_password,
-          'new_password_confirmation': new_password_confirmation
+          'new_password': newPassword,
+          'new_password_confirmation': newPasswordConfirmation
         }),
       );
 
@@ -1087,7 +1085,7 @@ class Api {
     } catch (e) {
       // Print and re-throw any caught exceptions
       // print('Failed to update device info. Error: $e');
-      throw e;
+      rethrow;
     }
   }
 
@@ -1168,7 +1166,7 @@ class Api {
   }
 
   Future<Map<String, dynamic>> tremsRequestActions(
-      BuildContext context, String user_type) async {
+      BuildContext context, String userType) async {
     final url = Uri.parse('$baseUrl/TermsAndConditions');
     String lang = Provider.of<AppState>(context, listen: false).display;
     AuthProvider authProvider =
@@ -1186,7 +1184,7 @@ class Api {
         body: jsonEncode(<String, String>{
           // 'lang': lang,
           'lang': lang,
-          'user_type': user_type,
+          'user_type': userType,
         }),
       );
 
@@ -1289,12 +1287,14 @@ class Api {
       if (optionId != null) request.fields['option_id'] = optionId.toString();
       if (parentId != null) request.fields['parent_id'] = parentId.toString();
       if (storeId != null) request.fields['store_id'] = storeId.toString();
-      if (discountId != null)
+      if (discountId != null) {
         request.fields['discount_id'] = discountId.toString();
+      }
       // Add message, additionalPhone, and lang as fields
       if (message.isNotEmpty) request.fields['description[message]'] = message;
-      if (additionalPhone.isNotEmpty)
+      if (additionalPhone.isNotEmpty) {
         request.fields['additional_phone'] = additionalPhone;
+      }
       if (lang.isNotEmpty) request.fields['lang'] = lang;
 
       // Concatenate file paths into a single string separated by a delimiter
@@ -1343,7 +1343,7 @@ class Api {
                   textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(height: 10), // Add some spacing
+              const SizedBox(height: 10), // Add some spacing
               Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -1351,17 +1351,17 @@ class Api {
                     Text(
                       responseData['ticketNumber'], // Center the ticket number
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(width: 10), // Add some spacing
+                    const SizedBox(width: 10), // Add some spacing
                     IconButton(
-                      icon: Icon(Icons.copy),
+                      icon: const Icon(Icons.copy),
                       onPressed: () {
                         // Copy ticket number to clipboard
                         Clipboard.setData(
                             ClipboardData(text: responseData['ticketNumber']));
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                               content:
                                   Text('Ticket number copied to clipboard')),
                         );
@@ -1380,7 +1380,7 @@ class Api {
                 );
           },
           confirmBtnText: isEnglish ? 'ok' : 'حسنا',
-          confirmBtnColor: Color(0xFF0D2750),
+          confirmBtnColor: const Color(0xFF0D2750),
         );
       } else {
         throw Exception(
@@ -1523,10 +1523,9 @@ class Api {
       });
 
       // Add optionId, parentId, storeId, and discountId as fields
-      if (id != null) request.fields['id'] = id.toString();
-      if (criteria != null) request.fields['criteria'] = criteria.toString();
-      if (type != null)
-        request.fields['description[message_type]'] = type.toString();
+      request.fields['id'] = id.toString();
+      request.fields['criteria'] = criteria.toString();
+      request.fields['description[message_type]'] = type.toString();
       if (message.isNotEmpty) request.fields['description[message]'] = message;
       if (lang.isNotEmpty) request.fields['lang'] = lang;
 
@@ -1582,7 +1581,7 @@ void _showLoadingDialog(BuildContext context) {
     context: context,
     barrierDismissible: false, // Prevent dialog from closing on outside tap
     builder: (BuildContext context) {
-      return Dialog(
+      return const Dialog(
         backgroundColor: Colors.transparent,
         elevation: 0,
         child: Center(

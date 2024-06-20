@@ -1,19 +1,20 @@
 // lib\screens\settings\settings.dart
 
-import 'dart:io';
 
 import 'package:mhfatha/settings/imports.dart';
 
 class RestPassword extends StatefulWidget {
+  const RestPassword({super.key});
+
   @override
   State<RestPassword> createState() => _RestPasswordState();
 }
 
 class _RestPasswordState extends State<RestPassword> {
-  Color backgroundColor = Color.fromARGB(220, 255, 255, 255);
-  Color ui = Color.fromARGB(220, 233, 233, 233);
-  Color ui2 = Color.fromARGB(255, 113, 194, 110);
-  Color colors = Color(0xFF05204a);
+  Color backgroundColor = const Color.fromARGB(220, 255, 255, 255);
+  Color ui = const Color.fromARGB(220, 233, 233, 233);
+  Color ui2 = const Color.fromARGB(255, 113, 194, 110);
+  Color colors = const Color(0xFF05204a);
   String Userid = '';
   String OTPMsg = '';
   String passMsg = '';
@@ -37,26 +38,26 @@ class _RestPasswordState extends State<RestPassword> {
 
     return DirectionalityWrapper(
       child: Scaffold(
-        backgroundColor: Color(0xFFF3F4F7),
+        backgroundColor: const Color(0xFFF3F4F7),
         body: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-            color: Color(0xFF080E27),
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+            color: const Color(0xFF080E27),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       IconButton(
-                          icon: Icon(Icons.arrow_forward),
+                          icon: const Icon(Icons.arrow_forward),
                           onPressed: () {
                             Navigator.pop(
                                 context); // Navigate back to the previous screen
@@ -65,10 +66,10 @@ class _RestPasswordState extends State<RestPassword> {
                     ],
                   ),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 Container(
-                  padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                  decoration: BoxDecoration(
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  decoration: const BoxDecoration(
                     color: Color(0xFFF3F4F7),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(40),
@@ -79,7 +80,7 @@ class _RestPasswordState extends State<RestPassword> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(height: 130),
+                      const SizedBox(height: 130),
                       // Steps content here
 
                       buildStepContent(),
@@ -125,10 +126,10 @@ class _RestPasswordState extends State<RestPassword> {
           emailOrMobileController,
           ' ',
         ),
-        SizedBox(
+        const SizedBox(
           height: 24,
         ),
-        SizedBox(height: 24),
+        const SizedBox(height: 24),
         ElevatedButton(
           onPressed: () async {
             String emailOrMobile = emailOrMobileController.text;
@@ -172,8 +173,8 @@ class _RestPasswordState extends State<RestPassword> {
       children: [
         // Step 2 content here
         Text(OTPMsg,
-            style: TextStyle(fontSize: 15), textAlign: TextAlign.center),
-        SizedBox(
+            style: const TextStyle(fontSize: 15), textAlign: TextAlign.center),
+        const SizedBox(
           height: 10,
         ),
         Directionality(
@@ -183,21 +184,21 @@ class _RestPasswordState extends State<RestPassword> {
             length: 5,
             width: MediaQuery.of(context).size.width,
             fieldWidth: 30,
-            style: TextStyle(fontSize: 17),
+            style: const TextStyle(fontSize: 17),
             textFieldAlignment: MainAxisAlignment.center,
             fieldStyle: FieldStyle.underline,
             onCompleted: (pin) {
               enteredOtp = pin;
-              print("Completed: " + pin);
+              print("Completed: $pin");
             },
           ),
         ),
 
-        SizedBox(
+        const SizedBox(
           height: 24,
         ),
 
-        SizedBox(height: 24),
+        const SizedBox(height: 24),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -273,8 +274,8 @@ class _RestPasswordState extends State<RestPassword> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(passMsg,
-            style: TextStyle(fontSize: 15), textAlign: TextAlign.center),
-        SizedBox(
+            style: const TextStyle(fontSize: 15), textAlign: TextAlign.center),
+        const SizedBox(
           height: 10,
         ),
         buildSettingItem(
@@ -285,21 +286,21 @@ class _RestPasswordState extends State<RestPassword> {
             context, 'Enter confirm password', 'ادخل تأكيد كلمة السر', () {
           // Implement report logic
         }, ConfirmNewPasswordController, ' '),
-        SizedBox(
+        const SizedBox(
           height: 24,
         ),
-        SizedBox(height: 24),
+        const SizedBox(height: 24),
         ElevatedButton(
           onPressed: () async {
             String emailOrMobile = Userid;
             String otp = enteredOtp; // Get the entered OTP
-            String new_password = NewPasswordController.text;
-            String new_password_confirmation =
+            String newPassword = NewPasswordController.text;
+            String newPasswordConfirmation =
                 ConfirmNewPasswordController.text;
 
             // Call the restPassword method with the mobile number and entered OTP
             Map<String, dynamic> message = await api.restPassword(context,
-                emailOrMobile, otp, new_password, new_password_confirmation);
+                emailOrMobile, otp, newPassword, newPasswordConfirmation);
             print(message);
             // Handle the response message here
             if (message['step'] == 3) {
@@ -324,7 +325,7 @@ class _RestPasswordState extends State<RestPassword> {
                 onConfirmBtnTap: () {
                   Navigator.pushNamed(context, '/login');
                 },
-                confirmBtnColor: Color(0xFF0D2750),
+                confirmBtnColor: const Color(0xFF0D2750),
               );
             }
           },
@@ -366,23 +367,29 @@ class _RestPasswordState extends State<RestPassword> {
     return InkWell(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-        padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+        padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
         decoration: BoxDecoration(
-          color: Color(0xFFFFFFFF),
+          color: const Color(0xFFFFFFFF),
           borderRadius: BorderRadius.circular(30),
         ),
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Icon(icon),
-                SizedBox(width: 10),
-                Text(isEnglish ? englishTitle : arabicTitle),
-              ],
-            ),
-            SizedBox(height: 10),
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: [
+    // Icon(icon),
+    const SizedBox(width: 10),
+    Flexible(
+      child: Text(
+        isEnglish ? englishTitle : arabicTitle,
+        softWrap: true,
+      ),
+    ),
+  ],
+),
+
+            const SizedBox(height: 10),
             // Add TextField here
             TextField(
               obscureText: false,

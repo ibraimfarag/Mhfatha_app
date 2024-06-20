@@ -1,11 +1,6 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
 import 'package:mhfatha/settings/imports.dart';
-import 'package:permission_handler/permission_handler.dart'
-    as permission_handler;
 
 class AdminSendNotifi extends StatefulWidget {
   const AdminSendNotifi({Key? key}) : super(key: key);
@@ -29,10 +24,10 @@ class _AdminSendNotifiState extends State<AdminSendNotifi> {
   final TextEditingController platformController = TextEditingController();
   final TextEditingController recipientIdentifierController =
       TextEditingController();
-  Color backgroundColor = Color.fromARGB(220, 255, 255, 255);
-  Color ui = Color.fromARGB(220, 233, 233, 233);
-  Color ui2 = Color.fromARGB(255, 113, 194, 110);
-  Color colors = Color(0xFF05204a);
+  Color backgroundColor = const Color.fromARGB(220, 255, 255, 255);
+  Color ui = const Color.fromARGB(220, 233, 233, 233);
+  Color ui2 = const Color.fromARGB(255, 113, 194, 110);
+  Color colors = const Color(0xFF05204a);
   String selectedAction = 'sendByFilters'; // Default action selection
   late String selectedRegion; // Declare selectedRegion variable
 
@@ -57,12 +52,12 @@ class _AdminSendNotifiState extends State<AdminSendNotifi> {
           children: [
             Text(
               isEnglish ? 'Send Notifications' : 'إرسال اشعارات',
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
                   color: Colors.white),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
           ],
         ),
       ],
@@ -83,7 +78,7 @@ class _AdminSendNotifiState extends State<AdminSendNotifi> {
                   ),
                   Text(
                     isEnglish ? 'Send By Filters' : 'إرسال حسب الفلاتر',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
                     ),
@@ -103,7 +98,7 @@ class _AdminSendNotifiState extends State<AdminSendNotifi> {
                   ),
                   Text(
                     isEnglish ? 'Send To User' : 'إرسال للمستخدم',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
                     ),
@@ -124,10 +119,10 @@ class _AdminSendNotifiState extends State<AdminSendNotifi> {
             visible: selectedAction ==
                 'sendByFilters', // Show filters only when 'Send By Filters' is selected
             child: Container(
-              margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-              padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+              margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+              padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
               decoration: BoxDecoration(
-                color: Color(0xFFFFFFFF),
+                color: const Color(0xFFFFFFFF),
                 borderRadius: BorderRadius.circular(30),
               ),
               child: Column(
@@ -168,7 +163,7 @@ class _AdminSendNotifiState extends State<AdminSendNotifi> {
                           ),
                           Text(
                             isEnglish ? 'Male' : 'ذكر',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16.0,
                             ),
                           ),
@@ -187,7 +182,7 @@ class _AdminSendNotifiState extends State<AdminSendNotifi> {
                           ),
                           Text(
                             isEnglish ? 'Female' : 'أنثى',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16.0,
                             ),
                           ),
@@ -254,7 +249,7 @@ class _AdminSendNotifiState extends State<AdminSendNotifi> {
                           });
                         },
                       ),
-                      Text('iOS'),
+                      const Text('iOS'),
                       Radio<String>(
                         value: "Android",
                         groupValue: isAndroidController.text,
@@ -264,7 +259,7 @@ class _AdminSendNotifiState extends State<AdminSendNotifi> {
                           });
                         },
                       ),
-                      Text('Android'),
+                      const Text('Android'),
                     ],
                   ),
                 ],
@@ -279,7 +274,7 @@ class _AdminSendNotifiState extends State<AdminSendNotifi> {
                 'معرف المستلم (الهوية، الجوال، البريد الإلكتروني)',
                 recipientIdentifierController),
           ),
-          SizedBox(height: 16.0),
+          const SizedBox(height: 16.0),
           ElevatedButton(
             onPressed: () {
               if (selectedAction == 'sendToUser') {
@@ -311,7 +306,7 @@ class _AdminSendNotifiState extends State<AdminSendNotifi> {
             },
             child: Text(
               isEnglish ? 'Send Notification' : 'إرسال الإشعار',
-              style: TextStyle(fontSize: 16.0, color: Color(0xFF05204a)),
+              style: const TextStyle(fontSize: 16.0, color: Color(0xFF05204a)),
             ),
           ),
         ],
@@ -329,21 +324,21 @@ class _AdminSendNotifiState extends State<AdminSendNotifi> {
 
     return InkWell(
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-        padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+        padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
         decoration: BoxDecoration(
-          color: Color(0xFFFFFFFF),
+          color: const Color(0xFFFFFFFF),
           borderRadius: BorderRadius.circular(30),
         ),
         child: Column(
           children: [
             Row(
               children: [
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Text(isEnglish ? englishLabel : arabicLabel),
               ],
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             if (englishLabel.toLowerCase() ==
                 'birthday') // Check if it's the birthday field
               InkWell(

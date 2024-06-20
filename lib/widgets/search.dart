@@ -1,12 +1,14 @@
 import 'package:mhfatha/settings/imports.dart';
 
 class SuggestionTextField extends StatefulWidget {
+  const SuggestionTextField({super.key});
+
   @override
   _SuggestionTextFieldState createState() => _SuggestionTextFieldState();
 }
 
 class _SuggestionTextFieldState extends State<SuggestionTextField> {
-  TextEditingController _textEditingController = TextEditingController();
+  final TextEditingController _textEditingController = TextEditingController();
   List<String> _suggestions = ['Apple', 'Banana', 'Orange', 'Mango', 'Pineapple'];
 
   @override
@@ -17,7 +19,7 @@ class _SuggestionTextFieldState extends State<SuggestionTextField> {
           padding: EdgeInsets.all(screenWidth * 0.02), // Adjust padding based on screen width
           margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05), // Adjust margin based on screen width
           decoration: BoxDecoration(
-            color: Color(0xFFF0F0F0),
+            color: const Color(0xFFF0F0F0),
             borderRadius: BorderRadius.circular(screenWidth * 0.1), // Adjust border radius based on screen width
             boxShadow: [
               BoxShadow(
@@ -34,19 +36,19 @@ class _SuggestionTextFieldState extends State<SuggestionTextField> {
                 controller: _textEditingController,
                 onChanged:_fetchSuggestions,
                 decoration: InputDecoration(
-                  hintStyle: TextStyle(color: Color(0xFFA9A7B2)),
+                  hintStyle: const TextStyle(color: Color(0xFFA9A7B2)),
                   filled: true,
-                  prefixIcon: Icon(Icons.search),
-                  fillColor: Color(0xFFF0F0F0),
+                  prefixIcon: const Icon(Icons.search),
+                  fillColor: const Color(0xFFF0F0F0),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(screenWidth * 0.1), // Adjust border radius based on screen width
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: Color.fromARGB(0, 0, 0, 0),
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(screenWidth * 0.1), // Adjust border radius based on screen width
-                    borderSide: BorderSide(
+                    borderSide: const BorderSide(
                       color: Color.fromARGB(0, 225, 226, 228),
                     ),
                   ),

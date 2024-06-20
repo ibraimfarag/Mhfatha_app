@@ -1,23 +1,14 @@
-import 'dart:convert';
-import 'dart:io';
 // import 'dart:js';
-import 'package:permission_handler/permission_handler.dart'
-    as permission_handler;
 
 import 'package:mhfatha/settings/imports.dart';
-import 'dart:convert';
-import 'dart:io';
-import 'package:permission_handler/permission_handler.dart'
-    as permission_handler;
 
-import 'package:mhfatha/settings/imports.dart';
 
 class MainAdminContainer extends StatefulWidget {
   final List<Widget>? additionalWidgets;
   final Widget? child;
   final bool showCustomAppBar;
 
-  MainAdminContainer({
+  const MainAdminContainer({
     Key? key,
     this.additionalWidgets,
     this.child,
@@ -68,12 +59,12 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
     return DirectionalityWrapper(
       child: Scaffold(
 // resizeToAvoidBottomInset: false,
-        backgroundColor: Color(0xFFF3F4F7),
+        backgroundColor: const Color(0xFFF3F4F7),
         key: _scaffoldKey,
         body: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-            color: Color(0xFF080E27),
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+            color: const Color(0xFF080E27),
             child: Column(
               // crossAxisAlignment: CrossAxisAlignment.stretch,
               // mainAxisSize: MainAxisSize.min,
@@ -82,7 +73,7 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      padding: EdgeInsets.fromLTRB(20, 20, 20, 5),
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 5),
                       child: Row(
                         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -122,11 +113,11 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                   if (widget.additionalWidgets != null)
                     ...widget.additionalWidgets!,
                 ])),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Container(
                   width: double.infinity,
-                  padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                  decoration: BoxDecoration(
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  decoration: const BoxDecoration(
                     color: Color(0xFFF3F4F7),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(40),
@@ -158,7 +149,7 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        margin: EdgeInsets.fromLTRB(
+                        margin: const EdgeInsets.fromLTRB(
                             10, 40, 10, 20), // Set the margins
                         child: Image.network(
                           'https://mhfatha.net/FrontEnd/assets/images/logo/dr-logo.png',
@@ -170,11 +161,11 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                           Navigator.pushNamed(context, '/admin');
                         },
                         child: Padding(
-                          padding: EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(16),
                           child: Row(
                             children: [
-                              Icon(Icons.dashboard),
-                              SizedBox(width: 16),
+                              const Icon(Icons.dashboard),
+                              const SizedBox(width: 16),
                               Text(isEnglish ? 'Dashboard' : 'احصائيات'),
                             ],
                           ),
@@ -186,11 +177,11 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                           // Handle drawer item 2 tap
                         },
                         child: Padding(
-                          padding: EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(16),
                           child: Row(
                             children: [
-                              Icon(Icons.manage_accounts_outlined),
-                              SizedBox(width: 16),
+                              const Icon(Icons.manage_accounts_outlined),
+                              const SizedBox(width: 16),
                               Text(isEnglish ? 'Users' : 'الاعضاء'),
                             ],
                           ),
@@ -201,11 +192,11 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                           Navigator.pushNamed(context, '/admin/stores');
                         },
                         child: Padding(
-                          padding: EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(16),
                           child: Row(
                             children: [
-                              Icon(Icons.store_mall_directory_rounded),
-                              SizedBox(width: 16),
+                              const Icon(Icons.store_mall_directory_rounded),
+                              const SizedBox(width: 16),
                               Text(isEnglish ? 'Stores' : 'المتاجر'),
                             ],
                           ),
@@ -217,11 +208,11 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                           Navigator.pushNamed(context, '/admin/ViewSettings');
                         },
                         child: Padding(
-                          padding: EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(16),
                           child: Row(
                             children: [
-                              Icon(Icons.settings),
-                              SizedBox(width: 16),
+                              const Icon(Icons.settings),
+                              const SizedBox(width: 16),
                               Text(isEnglish ? 'Settings' : 'الاعدادات'),
                             ],
                           ),
@@ -232,11 +223,11 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                           Navigator.pushNamed(context, '/admin/notification');
                         },
                         child: Padding(
-                          padding: EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(16),
                           child: Row(
                             children: [
-                              Icon(Icons.notifications_on_outlined),
-                              SizedBox(width: 16),
+                              const Icon(Icons.notifications_on_outlined),
+                              const SizedBox(width: 16),
                               Text(isEnglish ? 'Notifications' : 'الاشعارات'),
                             ],
                           ),
@@ -247,18 +238,18 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                           Navigator.pushNamed(context, '/admin/requests');
                         },
                         child: Padding(
-                          padding: EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(16),
                           child: Row(
                             children: [
-                              Icon(Icons.help_outline_sharp),
-                              SizedBox(width: 16),
+                              const Icon(Icons.help_outline_sharp),
+                              const SizedBox(width: 16),
                               Text(isEnglish ? 'Requests' : 'الطلبات'),
                               // Conditionally display the badge based on padges_count
                               if (RequestspadgesCount !=
                                   0) // Assuming padgesCount is the variable holding the count from API
                                 Container(
-                                  padding: EdgeInsets.all(4),
-                                  margin: EdgeInsets.only(left: 10, right: 10),
+                                  padding: const EdgeInsets.all(4),
+                                  margin: const EdgeInsets.only(left: 10, right: 10),
                                   decoration: BoxDecoration(
                                     color: Colors
                                         .red, // Customize the badge color as needed
@@ -266,7 +257,7 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                                   ),
                                   child: Text(
                                     RequestspadgesCount.toString(),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -282,11 +273,11 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                           Navigator.pushNamed(context, '/admin/accounts');
                         },
                         child: Padding(
-                          padding: EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(16),
                           child: Row(
                             children: [
-                              Icon(Icons.account_balance_rounded),
-                              SizedBox(width: 16),
+                              const Icon(Icons.account_balance_rounded),
+                              const SizedBox(width: 16),
                               Flexible(
                                 fit: FlexFit
                                     .tight, // Ensures that the Row occupies all available space
@@ -299,8 +290,8 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                               if (AccountsspadgesCount != null &&
                                   AccountsspadgesCount! > 0)
                                 Container(
-                                  padding: EdgeInsets.all(4),
-                                  margin: EdgeInsets.only(left: 10, right: 10),
+                                  padding: const EdgeInsets.all(4),
+                                  margin: const EdgeInsets.only(left: 10, right: 10),
                                   decoration: BoxDecoration(
                                     color: Colors
                                         .red, // Customize the badge color as needed
@@ -308,7 +299,7 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                                   ),
                                   child: Text(
                                     AccountsspadgesCount!.toString(),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -324,11 +315,11 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                           Navigator.pushNamed(context, '/admin/supporting/view');
                         },
                         child: Padding(
-                          padding: EdgeInsets.all(16),
+                          padding: const EdgeInsets.all(16),
                           child: Row(
                             children: [
-                              Icon(Icons.support_agent_outlined),
-                              SizedBox(width: 16),
+                              const Icon(Icons.support_agent_outlined),
+                              const SizedBox(width: 16),
                               Flexible(
                                 fit: FlexFit
                                     .tight, // Ensures that the Row occupies all available space
@@ -371,14 +362,14 @@ class _MainAdminContainerState extends State<MainAdminContainer> {
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.45,
-                  color: Color.fromARGB(0, 0, 0, 0),
+                  color: const Color.fromARGB(0, 0, 0, 0),
                 ),
               ),
             ],
           ),
         ),
 
-        bottomNavigationBar: NewNav(),
+        bottomNavigationBar: const NewNav(),
       ),
     );
   }

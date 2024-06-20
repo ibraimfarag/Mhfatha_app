@@ -1,11 +1,11 @@
 // lib\screens\settings\settings.dart
 
-import 'dart:io';
 
-import 'package:intl/intl.dart';
 import 'package:mhfatha/settings/imports.dart';
 
 class VendorTrems extends StatefulWidget {
+  const VendorTrems({super.key});
+
   @override
   State<VendorTrems> createState() => _VendorTremsState();
 }
@@ -13,10 +13,10 @@ class VendorTrems extends StatefulWidget {
 class _VendorTremsState extends State<VendorTrems> {
   late AuthProvider authProvider; // Declare authProvider variable
 
-  Color backgroundColor = Color.fromARGB(220, 255, 255, 255);
-  Color ui = Color.fromARGB(220, 233, 233, 233);
-  Color ui2 = Color.fromARGB(255, 113, 194, 110);
-  Color colors = Color(0xFF05204a);
+  Color backgroundColor = const Color.fromARGB(220, 255, 255, 255);
+  Color ui = const Color.fromARGB(220, 233, 233, 233);
+  Color ui2 = const Color.fromARGB(255, 113, 194, 110);
+  Color colors = const Color(0xFF05204a);
 
   Map<String, dynamic>? termsData; // Variable to hold terms and conditions data
 
@@ -25,11 +25,12 @@ class _VendorTremsState extends State<VendorTrems> {
   void initState() {
     super.initState();
     authProvider = Provider.of<AuthProvider>(context, listen: false);
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       fetchTermsData();
     });
   }
 
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
   }
@@ -59,10 +60,10 @@ class _VendorTremsState extends State<VendorTrems> {
     String lang = Provider.of<AppState>(context, listen: false).display;
     return DirectionalityWrapper(
         child: Scaffold(
-      backgroundColor: Color(0xFFF3F4F7),
+      backgroundColor: const Color(0xFFF3F4F7),
       body: SingleChildScrollView(
         child: Container(
-            color: Color(0xFF080E27), // Set background color to #080e27
+            color: const Color(0xFF080E27), // Set background color to #080e27
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
@@ -73,10 +74,10 @@ class _VendorTremsState extends State<VendorTrems> {
                     },
                     marginTop: 30,
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Container(
-                    padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    decoration: BoxDecoration(
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    decoration: const BoxDecoration(
                       color: Color(0xFFF3F4F7),
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(40),
@@ -86,7 +87,7 @@ class _VendorTremsState extends State<VendorTrems> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 30),
+                        const SizedBox(height: 30),
                         if (termsData != null)
                           ...termsData!.entries.map((entry) {
                             String sectionTitle = entry.key;
@@ -97,7 +98,7 @@ class _VendorTremsState extends State<VendorTrems> {
                                 Center(
                                   child: Text(
                                     sectionTitle,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -105,7 +106,7 @@ class _VendorTremsState extends State<VendorTrems> {
                                   ),
                                 ),
 
-                                SizedBox(height: 8),
+                                const SizedBox(height: 8),
                                 // Check if sectionData is a map
                                 if (sectionData is Map<String, dynamic>)
                                   ...sectionData.entries.map((termEntry) {
@@ -121,13 +122,13 @@ class _VendorTremsState extends State<VendorTrems> {
                                     return ListTile(
                                       title: Text(
                                         termTitle,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
                                       subtitle: Text(descriptionString),
                                     );
                                   }).toList(),
-                                SizedBox(height: 16),
+                                const SizedBox(height: 16),
                               ],
                             );
                           }).toList(),
@@ -139,7 +140,7 @@ class _VendorTremsState extends State<VendorTrems> {
       // bottomNavigationBar: BottomNavBar(initialIndex: 2),
 
       bottomNavigationBar: authProvider.isAuthenticated
-          ? NewNav() // Render the bottom navigation bar if the user is authenticated
+          ? const NewNav() // Render the bottom navigation bar if the user is authenticated
           : null,
     ));
   }

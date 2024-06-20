@@ -1,8 +1,6 @@
 // lib\screens\Auth\home\home_screen.dart
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:mhfatha/settings/imports.dart';
 import 'package:permission_handler/permission_handler.dart'
     hide PermissionStatus;
@@ -50,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   String authName = '';
 
+  @override
   void initState() {
     super.initState();
 
@@ -162,6 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // locationTimer?.cancel();
   // super.dispose();
 // }
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
   }
@@ -189,10 +189,8 @@ class _HomeScreenState extends State<HomeScreen> {
         });
 
         // Call the method to send location when the coordinates are available
-        if (latitude != null && longitude != null) {
-          await _sendLocation();
-        }
-      }
+        await _sendLocation();
+            }
     } catch (e) {
       print("Error getting location: $e");
     }
@@ -281,10 +279,8 @@ class _HomeScreenState extends State<HomeScreen> {
       });
 
       // Call the method to send location when the coordinates are available
-      if (latitude != null && longitude != null) {
-        await _sendLocation();
-      }
-    } catch (e) {
+      await _sendLocation();
+        } catch (e) {
       print("Error getting location: $e");
     }
   }
@@ -306,21 +302,10 @@ class _HomeScreenState extends State<HomeScreen> {
        setState(() {
  isLoading = true;
      });
-      if (authProvider == null) {
-        print('AuthProvider is null');
-        return;
-      }
    
       // Get the language display value from the app state
       String language = Provider.of<AppState>(context, listen: false).display ??
           'defaultLanguage';
-
-      if (latitude == null || longitude == null) {
-        _getLocation();
-
-        print('Latitude or longitude is null');
-        return;
-      }
       if (latitude == 30.0444 || longitude == 31.2357) {
         _getLocation();
 
@@ -357,7 +342,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }
              // Timer(Duration(seconds: 5), () {
          if (filteredStores.isEmpty) {
-      Timer(Duration(seconds: 15), () {
+      Timer(const Duration(seconds: 15), () {
         setState(() {
           isLoading = false;
         });
@@ -386,8 +371,8 @@ class _HomeScreenState extends State<HomeScreen> {
             Provider.of<AuthProvider>(context, listen: false);
 
         return Container(
-          padding: EdgeInsets.symmetric(vertical: 30, horizontal: 40),
-          decoration: BoxDecoration(
+          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
+          decoration: const BoxDecoration(
               color: Color(0xFFF0F0F0),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(40),
@@ -403,13 +388,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   isEnglish
                       ? 'Discounts ${store['name']}'
                       : 'خصومات  ${store['name']}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 if (store['discounts'] == null ||
-                    !(store['discounts'] is List) ||
+                    store['discounts'] is! List ||
                     store['discounts'].isEmpty)
                   Container(
                       width: MediaQuery.of(context).size.width - 100,
@@ -424,15 +409,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           isEnglish
                               ? 'No discounts available now'
                               : 'لا توجد خصومات متاحة الآن',
-                          style: TextStyle(fontSize: 16, color: Colors.black),
+                          style: const TextStyle(fontSize: 16, color: Colors.black),
                         ),
                       ))
                 else
                   SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: Column(
-                      children: (store?['discounts'] is List<dynamic>
-                              ? (store?['discounts'] as List<dynamic>)
+                      children: (store['discounts'] is List<dynamic>
+                              ? (store['discounts'] as List<dynamic>)
                               : [])
                           .map<Widget>((discount) {
                         return Container(
@@ -453,7 +438,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     isEnglish
                                         ? 'Discount on ${discount['category']} '
                                         : '${discount['category']} خصم على',
-                                    style: TextStyle(fontSize: 14),
+                                    style: const TextStyle(fontSize: 14),
                                     // textAlign: TextAlign.start, // Text alignment adjusted to start
                                   )
                                 ],
@@ -465,7 +450,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     isEnglish
                                         ? 'Percent: ${discount['percent']}%'
                                         : '%${discount['percent']}  : نسبة الخصم',
-                                    style: TextStyle(fontSize: 14),
+                                    style: const TextStyle(fontSize: 14),
                                     //  / textAlign: TextAlign.start, // Text alignment adjusted to start
                                   ),
                                 ],
@@ -477,7 +462,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     isEnglish
                                         ? 'Days Remaining: ${calculateDaysRemaining(discount['end_date'])} ${getEnglishDaysWord(calculateDaysRemaining(discount['end_date']))}'
                                         : 'الأيام المتبقية: ${calculateDaysRemaining(discount['end_date'])} ${getArabicDaysWord(calculateDaysRemaining(discount['end_date']))}',
-                                    style: TextStyle(fontSize: 12),
+                                    style: const TextStyle(fontSize: 12),
                                     // textAlign: TextAlign.start, // Text alignment adjusted to start
                                   ),
                                 ],
@@ -488,21 +473,21 @@ class _HomeScreenState extends State<HomeScreen> {
                       }).toList(),
                     ),
                   ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Align(
                   alignment:
                       isEnglish ? Alignment.bottomRight : Alignment.bottomLeft,
                   child: Container(
-                    margin: EdgeInsets.all(20),
+                    margin: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: Color(0xFFF0F0F0),
+                      color: const Color(0xFFF0F0F0),
                       borderRadius: BorderRadius.circular(30),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.5),
                           spreadRadius: 5,
                           blurRadius: 7,
-                          offset: Offset(0, 3),
+                          offset: const Offset(0, 3),
                         ),
                       ],
                     ),
@@ -514,8 +499,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: ElevatedButton.styleFrom(
                         primary: Colors.white, // Change the button color
                         minimumSize:
-                            Size(100, 50), // Set the minimum width and height
-                        padding: EdgeInsets.symmetric(
+                            const Size(100, 50), // Set the minimum width and height
+                        padding: const EdgeInsets.symmetric(
                             horizontal:
                                 10), // Adjust horizontal padding as needed
                         shape: RoundedRectangleBorder(
@@ -525,7 +510,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: Text(
                         isEnglish ? 'Back' : 'العودة',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                           color: Color.fromARGB(
                               241, 114, 113, 113), // Change the text color
@@ -534,7 +519,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -564,7 +549,7 @@ class _HomeScreenState extends State<HomeScreen> {
               // height: 900,
               margin: const EdgeInsets.fromLTRB(2, 0, 2, 0),
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 3, 12, 19),
+                color: const Color.fromARGB(255, 3, 12, 19),
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Column(
@@ -574,17 +559,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     // height: 900,
                     margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 3, 12, 19),
+                      color: const Color.fromARGB(255, 3, 12, 19),
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Column(
                       children: [
                         // Image with gradient
-                        Container(
+                        SizedBox(
                           height: 105,
                           width: 140,
                           child: ClipRRect(
-                            borderRadius: BorderRadius.only(
+                            borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(15),
                               topRight: Radius.circular(15),
                             ),
@@ -597,7 +582,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Colors.transparent,
                                     Colors.black.withOpacity(0.8)
                                   ],
-                                  stops: [0.0, 1.0],
+                                  stops: const [0.0, 1.0],
                                 ).createShader(bounds);
                               },
                               blendMode: BlendMode.dstIn,
@@ -641,7 +626,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               Row(
                                 children: [
-                                  Icon(Icons.location_on,
+                                  const Icon(Icons.location_on,
                                       color: Colors.white, size: 18),
                                   // const SizedBox(width: 1),
                                   Text(
@@ -673,7 +658,7 @@ class _HomeScreenState extends State<HomeScreen> {
               // height: 900,
               margin: const EdgeInsets.fromLTRB(2, 0, 2, 0),
               decoration: BoxDecoration(
-                color: Color.fromARGB(255, 3, 12, 19),
+                color: const Color.fromARGB(255, 3, 12, 19),
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Column(
@@ -683,14 +668,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     // height: 900,
                     margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 3, 12, 19),
+                      color: const Color.fromARGB(255, 3, 12, 19),
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         Container(
@@ -708,11 +693,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: ButtonStyle(
                                 backgroundColor:
                                     MaterialStateProperty.all<Color>(
-                                        Color.fromARGB(255, 9, 5,
+                                        const Color.fromARGB(255, 9, 5,
                                             39)), // Set the background color
                                 padding: MaterialStateProperty.all<
                                         EdgeInsetsGeometry>(
-                                    EdgeInsets.all(10)), // Adjust the padding
+                                    const EdgeInsets.all(10)), // Adjust the padding
                                 shape: MaterialStateProperty.all<
                                     RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
@@ -723,14 +708,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               child: Row(
                                 children: [
-                                  Icon(
+                                  const Icon(
                                     Icons
                                         .store, // Replace with the desired icon
                                     color: Colors.white,
                                     size:
                                         15, // Adjust the size according to your preference
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width:
                                         4, // Adjust the spacing between icon and text
                                   ),
@@ -779,8 +764,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         context,
                                         authProvider,
                                         store['id'],
-                                        latitude!,
-                                        longitude!,
+                                        latitude,
+                                        longitude,
                                       );
 
                                       // Parse the store details JSON
@@ -806,11 +791,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                     },
                                     style: ButtonStyle(
                                       backgroundColor: MaterialStateProperty
-                                          .all<Color>(Color.fromARGB(255, 9, 5,
+                                          .all<Color>(const Color.fromARGB(255, 9, 5,
                                               39)), // Set the background color
                                       padding: MaterialStateProperty.all<
                                               EdgeInsetsGeometry>(
-                                          EdgeInsets.all(
+                                          const EdgeInsets.all(
                                               8)), // Adjust the padding
                                       shape: MaterialStateProperty.all<
                                           RoundedRectangleBorder>(
@@ -822,14 +807,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     child: Row(
                                       children: [
-                                        Icon(
+                                        const Icon(
                                           Icons
                                               .local_offer, // Replace with the desired icon
                                           color: Colors.white,
                                           size:
                                               15, // Adjust the size according to your preference
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width:
                                               4, // Adjust the spacing between icon and text
                                         ),
@@ -908,7 +893,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     .cover, // You can adjust the fit as per your requirement
               ),
 
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
 
                   // topLeft: Radius.circular(40),
                   // topRight: Radius.circular(40),
@@ -919,11 +904,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Column(
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 50,
                       ),
                       Container(
-                        margin: EdgeInsets.symmetric(horizontal: 25),
+                        margin: const EdgeInsets.symmetric(horizontal: 25),
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -936,12 +921,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ]),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       if (isAuthenticated)
                         Container(
-                          margin: EdgeInsets.symmetric(horizontal: 25),
+                          margin: const EdgeInsets.symmetric(horizontal: 25),
                           child: Align(
                             alignment: isEnglish
                                 ? Alignment.centerLeft
@@ -960,25 +945,25 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       Padding(
                         padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                            const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                         child: Column(
                           children: [
                             Container(
-                              padding: EdgeInsets.all(5),
+                              padding: const EdgeInsets.all(5),
                               decoration: BoxDecoration(
                                 color: isDark
-                                    ? Color.fromARGB(251, 34, 34, 34)
-                                    : Color(0xFFF0F0F0),
+                                    ? const Color.fromARGB(251, 34, 34, 34)
+                                    : const Color(0xFFF0F0F0),
                                 borderRadius: BorderRadius.circular(30),
                                 boxShadow: [
                                   BoxShadow(
                                     color: isDark
-                                        ? Color.fromARGB(250, 17, 17, 17)
+                                        ? const Color.fromARGB(250, 17, 17, 17)
                                         : Colors.grey.withOpacity(0.5),
                                     spreadRadius:
                                         5, // Negative spreadRadius makes the shadow inside
                                     blurRadius: 7,
-                                    offset: Offset(0,
+                                    offset: const Offset(0,
                                         3), // changes the position of the shadow
                                   ),
                                 ],
@@ -1014,34 +999,35 @@ class _HomeScreenState extends State<HomeScreen> {
                                       });
                                     }
                                   });
+                                  return null;
                                 },
                                 key: const Key('searchfield'),
                                 hint: isEnglish ? 'Search ' : 'البحث',
                                 itemHeight: 50,
                                 searchInputDecoration: InputDecoration(
                                   hintStyle:
-                                      TextStyle(color: Color(0xFFA9A7B2)),
+                                      const TextStyle(color: Color(0xFFA9A7B2)),
                                   filled: true,
-                                  prefixIcon: Icon(Icons.search),
+                                  prefixIcon: const Icon(Icons.search),
                                   fillColor: isDark
-                                      ? Color.fromARGB(251, 34, 34, 34)
-                                      : Color(0xFFF0F0F0),
+                                      ? const Color.fromARGB(251, 34, 34, 34)
+                                      : const Color(0xFFF0F0F0),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(30),
                                     borderSide: BorderSide(
                                       color: isDark
-                                          ? Color.fromARGB(0, 34, 34, 34)
-                                          : Color.fromARGB(0, 0, 0, 0),
+                                          ? const Color.fromARGB(0, 34, 34, 34)
+                                          : const Color.fromARGB(0, 0, 0, 0),
                                     ),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: suggestions.isEmpty
                                         ? BorderRadius.circular(30)
-                                        : BorderRadius.only(
+                                        : const BorderRadius.only(
                                             topLeft: Radius.circular(30),
                                             topRight: Radius.circular(30),
                                           ),
-                                    borderSide: BorderSide(
+                                    borderSide: const BorderSide(
                                       color: Color.fromARGB(0, 225, 226, 228),
                                     ),
                                   ),
@@ -1049,10 +1035,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 suggestionsDecoration: SuggestionDecoration(
                                   padding: const EdgeInsets.all(4),
                                   color: isDark
-                                      ? Color.fromARGB(251, 34, 34, 34)
-                                      : Color(0xFFF0F0F0),
+                                      ? const Color.fromARGB(251, 34, 34, 34)
+                                      : const Color(0xFFF0F0F0),
                                   // border: Border.all(color: Colors.red),
-                                  borderRadius: BorderRadius.only(
+                                  borderRadius: const BorderRadius.only(
                                     bottomLeft: Radius.circular(30),
                                     bottomRight: Radius.circular(30),
                                   ),
@@ -1062,7 +1048,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       spreadRadius:
                                           -5, // Negative spreadRadius makes the shadow inside
                                       blurRadius: 7,
-                                      offset: Offset(0,
+                                      offset: const Offset(0,
                                           3), // changes the position of the shadow
                                     ),
                                   ],
@@ -1080,8 +1066,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         context,
                                         authProvider,
                                         int.parse(id),
-                                        latitude!,
-                                        longitude!,
+                                        latitude,
+                                        longitude,
                                       );
 
                                       // Parse the store details JSON
@@ -1110,13 +1096,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                               100,
                                           height: 40,
                                           // color: Colors.red,
-                                          margin: EdgeInsets.symmetric(
+                                          margin: const EdgeInsets.symmetric(
                                               horizontal: 20),
                                           child: Container(
-                                            padding: EdgeInsets.symmetric(
+                                            padding: const EdgeInsets.symmetric(
                                                 horizontal: 0),
                                             child: Text(
-                                              '$name',
+                                              name,
                                               textAlign: isEnglish
                                                   ? TextAlign.start
                                                   : TextAlign.end,
@@ -1152,27 +1138,27 @@ class _HomeScreenState extends State<HomeScreen> {
                       // SuggestionTextField(), // Place your SuggestionTextField here
                       Container(
                         padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                            const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                         alignment: isEnglish
                             ? Alignment.centerLeft
                             : Alignment.centerRight,
                         child:   Row(
           children: [
             Icon(Icons.store, color: isDark ? Colors.white : Colors.black, size: 24),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Text(
               isEnglish ? 'Nearby Discounts' : 'خصومات قريبة منك ',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Spacer(),
+            const Spacer(),
             IconButton(
               icon: Row(
                 children: [
                   Icon(Icons.refresh, color: isDark ? Colors.white : Colors.black),
-                  SizedBox(width: 5),
+                  const SizedBox(width: 5),
                   
                 ],
               ),
@@ -1201,7 +1187,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               enableInfiniteScroll: true,
                               // autoPlayCurve: Curves.fastOutSlowIn,
                               autoPlayAnimationDuration:
-                                  Duration(milliseconds: 4000),
+                                  const Duration(milliseconds: 4000),
                               viewportFraction:
                                   MediaQuery.of(context).size.width >= 768
                                       ? 0.5
@@ -1217,7 +1203,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             isEnglish
                                 ? "Unfortunately, there are no Discounts near by at the moment."
                                 : "للأسف لا توجد خصومات في الوقت الحالي بالقرب منك",
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color:
@@ -1229,7 +1215,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       // SuggestionTextField(),
 
                       Padding(
-                        padding: EdgeInsets.symmetric(vertical: 20),
+                        padding: const EdgeInsets.symmetric(vertical: 20),
                         child: SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
@@ -1280,7 +1266,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           // bottomNavigationBar: BottomNav(initialIndex: 0),
-          bottomNavigationBar: NewNav(),
+          bottomNavigationBar: const NewNav(),
         ),
       ),
     );
@@ -1295,16 +1281,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: width != null ? width : null, // Adjust the width as needed
-        height: height != null
-            ? height
-            : MediaQuery.of(context).size.height *
+        width: width, // Adjust the width as needed
+        height: height ?? MediaQuery.of(context).size.height *
                 0.15, // Adjust the width as needed
         margin: const EdgeInsets.fromLTRB(8, 12, 8, 12),
         decoration: BoxDecoration(
-          color: isDark ? Color.fromARGB(255, 29, 29, 29) : Color(0xFFF0F0F0),
+          color: isDark ? const Color.fromARGB(255, 29, 29, 29) : const Color(0xFFF0F0F0),
           border: Border.all(
-            color: Color.fromARGB(
+            color: const Color.fromARGB(
                 5, 0, 0, 0), // You can customize the border color
             width: 2, // You can customize the border width
           ),
@@ -1312,22 +1296,22 @@ class _HomeScreenState extends State<HomeScreen> {
           boxShadow: [
             BoxShadow(
               color: isDark
-                  ? Color(0xFF0C0C0C).withOpacity(0.5)
+                  ? const Color(0xFF0C0C0C).withOpacity(0.5)
                   : Colors.grey.withOpacity(0.5),
               spreadRadius: 5, // Negative spreadRadius makes the shadow inside
               blurRadius: 7,
-              offset: Offset(0, 3), // changes the position of the shadow
+              offset: const Offset(0, 3), // changes the position of the shadow
             ),
           ],
         ),
         child: Column(
           children: [
-            Container(
+            SizedBox(
               height: MediaQuery.of(context).size.height *
                   0.1, // Adjust the multiplier as needed
-              width: width != null ? width : null,
+              width: width,
               child: ClipRRect(
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(15),
                   topRight: Radius.circular(15),
                 ),
@@ -1341,7 +1325,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         const Color.fromARGB(255, 238, 238, 238)
                             .withOpacity(0.8),
                       ],
-                      stops: [0.0, 1.0],
+                      stops: const [0.0, 1.0],
                     ).createShader(bounds);
                   },
                   blendMode: BlendMode.dstIn,
@@ -1359,7 +1343,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Text(
                   isEnglish ? englishText : arabicText,
                   style: TextStyle(
-                    color: isDark ? Color(0xFFFFFFFF) : Colors.black87,
+                    color: isDark ? const Color(0xFFFFFFFF) : Colors.black87,
                     fontWeight: FontWeight.bold,
                     fontFamily: AppVariables.serviceFontFamily,
                     fontSize: MediaQuery.of(context).size.width *

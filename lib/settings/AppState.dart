@@ -27,7 +27,7 @@ class AppState with ChangeNotifier {
   }
 
   void _startInternetCheckTimer(BuildContext context) {
-    _internetCheckTimer = Timer.periodic(Duration(seconds: 10), (timer) {
+    _internetCheckTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
       _checkInternetConnection(context);
       // validateTokenAndDisplayDialog(context); // Call validation method every 10 seconds
 

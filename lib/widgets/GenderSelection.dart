@@ -17,7 +17,7 @@ class GenderSelection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 40, right: 40, top: 10),
+      margin: const EdgeInsets.only(left: 40, right: 40, top: 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -25,7 +25,7 @@ class GenderSelection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Column(children: [
-                SizedBox(height: 12,),
+                const SizedBox(height: 12,),
               Text(
                 isEnglish ? 'Gender: ' : 'الجنس: ',
                 style: TextStyle(

@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:mhfatha/settings/imports.dart';
 
 class NewNav extends StatefulWidget {
+  const NewNav({super.key});
+
   @override
   State<NewNav> createState() => _NewNavState();
 }
@@ -58,7 +59,7 @@ class _NewNavState extends State<NewNav> {
     String currentRoute = ModalRoute.of(context)?.settings.name ?? '';
 
     return Container(
-      padding: EdgeInsets.only(bottom: 15, top: 5),
+      padding: const EdgeInsets.only(bottom: 15, top: 5),
       color: Colors.white,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -92,9 +93,9 @@ class _NewNavState extends State<NewNav> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 30, color: isSelected ? Color(0xFF1D365C) : Colors.grey),
-          SizedBox(height: 5),
-          Text(label, style: TextStyle(fontSize: 14, color: isSelected ? Color(0xFF1D365C) : Colors.grey)),
+          Icon(icon, size: 30, color: isSelected ? const Color(0xFF1D365C) : Colors.grey),
+          const SizedBox(height: 5),
+          Text(label, style: TextStyle(fontSize: 14, color: isSelected ? const Color(0xFF1D365C) : Colors.grey)),
         ],
       ),
     );
@@ -110,18 +111,18 @@ class _NewNavState extends State<NewNav> {
             top: 0,
             right: 0,
             child: Container(
-              padding: EdgeInsets.all(2),
+              padding: const EdgeInsets.all(2),
               decoration: BoxDecoration(
                 color: Colors.red,
                 borderRadius: BorderRadius.circular(10),
               ),
-              constraints: BoxConstraints(
+              constraints: const BoxConstraints(
                 minWidth: 18,
                 minHeight: 18,
               ),
               child: Text(
                 '$badgeCount',
-                style: TextStyle(color: Colors.white, fontSize: 12),
+                style: const TextStyle(color: Colors.white, fontSize: 12),
                 textAlign: TextAlign.center,
               ),
             ),

@@ -1,13 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
 
 import 'package:mhfatha/settings/imports.dart';
-import 'package:permission_handler/permission_handler.dart'
-    as permission_handler;
 
 class AdminViewCategories extends StatefulWidget {
-  AdminViewCategories({Key? key}) : super(key: key);
+  const AdminViewCategories({Key? key}) : super(key: key);
 
   @override
   _AdminViewCategoriesState createState() => _AdminViewCategoriesState();
@@ -48,7 +44,7 @@ class _AdminViewCategoriesState extends State<AdminViewCategories> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Add New Category'), // Dialog title
+          title: const Text('Add New Category'), // Dialog title
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -119,7 +115,7 @@ class _AdminViewCategoriesState extends State<AdminViewCategories> {
           children: [
             Text(
               isEnglish ? 'Categories' : 'المناطق',
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -129,7 +125,7 @@ class _AdminViewCategoriesState extends State<AdminViewCategories> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.add,
                     color: Colors.white,
                   ),
@@ -145,7 +141,7 @@ class _AdminViewCategoriesState extends State<AdminViewCategories> {
                   },
                   child: Text(
                     isEnglish ? 'Add new category' : 'إضافة نشاط جديد',
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 16,
                     ),
@@ -161,187 +157,187 @@ class _AdminViewCategoriesState extends State<AdminViewCategories> {
           SizedBox(
             height: MediaQuery.of(context).size.width * 0.03,
           ),
-          if (categoriess != null) ...[
-            if (filteredStores.isNotEmpty) ...[
-              Container(
-                padding: EdgeInsets.fromLTRB(
-                    0, 0, 0, MediaQuery.of(context).size.height * 0.02),
-                // height: MediaQuery.of(context).size.height *
-                //     0.50, // Set the container height as needed
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: filteredStores.map((usert) {
-                      return Container(
-                        margin:
-                            EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-                        padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
-                        decoration: BoxDecoration(
-                          color: Color(0xFFFFFFFF),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    height: 15,
-                                  ),
-                                  Text(
-                                    isEnglish
-                                        ? '${usert['category_name_en']}'
-                                        : '${usert['category_name_ar']}',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            // Add onTap to handle user selection
-                            Row(
+          ...[
+          if (filteredStores.isNotEmpty) ...[
+            Container(
+              padding: EdgeInsets.fromLTRB(
+                  0, 0, 0, MediaQuery.of(context).size.height * 0.02),
+              // height: MediaQuery.of(context).size.height *
+              //     0.50, // Set the container height as needed
+              child: SingleChildScrollView(
+                child: Column(
+                  children: filteredStores.map((usert) {
+                    return Container(
+                      margin:
+                          const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+                      padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFFFFF),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                IconButton(
-                                  icon: Icon(Icons.edit),
-                                  onPressed: () {
-                                    // Show dialog when edit icon is tapped
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        TextEditingController
-                                            englishController =
-                                            TextEditingController(
-                                                text: usert['category_name_en']);
-                                        TextEditingController arabicController =
-                                            TextEditingController(
-                                                text: usert['category_name_ar']);
-
-                                        return AlertDialog(
-                                          title: Text(isEnglish
-                                              ? 'Edit Category'
-                                              : 'تعديل النشاط'), // Dialog title
-                                          content: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              TextField(
-                                                controller:
-                                                    englishController, // Controller for English region text field
-                                                decoration: InputDecoration(
-                                                    labelText: isEnglish
-                                                        ? 'English Category'
-                                                        : 'اسم النشاط بالانجليزي'), // First text field for editing English region
-                                              ),
-                                              TextField(
-                                                controller:
-                                                    arabicController, // Controller for Arabic region text field
-                                                decoration: InputDecoration(
-                                                    labelText: isEnglish
-                                                        ? 'Arabic Category'
-                                                        : 'اسم المنطقه بالعربيه'), // Second text field for editing Arabic region
-                                              ),
-                                            ],
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                final Map<String, dynamic>
-                                                    updateData = {
-                                                  "id": "${usert['id']}",
-                                                  "category_name_ar":
-                                                      arabicController.text,
-                                                  "category_name_en":
-                                                      englishController.text
-                                                };
-                                                final jsonData = jsonEncode(
-                                                    updateData); // Convert map to JSON string
-                                                AdminApi(context).AdminSets(
-                                                  context,
-                                                  "edit",
-                                                  "StoreCategory",
-                                                  jsonData, // Pass JSON string instead of map
-                                                );
-                                                fetchDataFromApi(context);
-                                                Navigator.of(context)
-                                                    .pop(); // Close the dialog
-
-                                                print(jsonData);
-                                              },
-                                              child: Text(isEnglish
-                                                  ? 'Update'
-                                                  : 'تحديث'), // Update button
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                              
-                                              },
-                                              child: Text(isEnglish
-                                                  ? 'Cancel'
-                                                  : 'الغاء'), // Cancel button
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  },
+                                const SizedBox(
+                                  height: 15,
                                 ),
-                                IconButton(
-                                  icon: Icon(Icons.delete,
-                                      color: Colors.redAccent),
-                                  onPressed: () {
-                                      QuickAlert.show(
-                                                  context: context,
-                                                  type: QuickAlertType.confirm,
-                                                  customAsset:
-                                                      'images/confirm.gif',
-                                                  text: isEnglish
-                                                      ? 'are you sure delete Category ${usert['category_name_en']} ?'
-                                                      : 'هل انت متأكد من حذف نشاط ${usert['category_name_ar']} ؟',
-                                                  cancelBtnText:
-                                                      isEnglish ? 'No' : 'لا',
-                                                  confirmBtnText:
-                                                      isEnglish ? 'yes' : 'نعم',
-                                                  confirmBtnColor:
-                                                      Color(0xFF0D2750),
-                                                  onConfirmBtnTap: () async {
-                                                    final Map<String, dynamic>
-                                                        updateData = {
-                                                      "id": "${usert['id']}",
-                                                     
-                                                    };
-                                                    final jsonData = jsonEncode(
-                                                        updateData); // Convert map to JSON string
-                                                    AdminApi(context).AdminSets(
-                                                      context,
-                                                      "delete",
-                                                      "StoreCategory",
-                                                      jsonData, // Pass JSON string instead of map
-                                                    );
-                                                    fetchDataFromApi(context);
-
-                                                    print(jsonData);
-                                                    Navigator.of(context)
-                                                        .pop(); // Close the dialog
-                                                  },
-                                                );
-                                  },
+                                Text(
+                                  isEnglish
+                                      ? '${usert['category_name_en']}'
+                                      : '${usert['category_name_ar']}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ],
-                            )
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  ),
+                            ),
+                          ),
+                          // Add onTap to handle user selection
+                          Row(
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit),
+                                onPressed: () {
+                                  // Show dialog when edit icon is tapped
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      TextEditingController
+                                          englishController =
+                                          TextEditingController(
+                                              text: usert['category_name_en']);
+                                      TextEditingController arabicController =
+                                          TextEditingController(
+                                              text: usert['category_name_ar']);
+
+                                      return AlertDialog(
+                                        title: Text(isEnglish
+                                            ? 'Edit Category'
+                                            : 'تعديل النشاط'), // Dialog title
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            TextField(
+                                              controller:
+                                                  englishController, // Controller for English region text field
+                                              decoration: InputDecoration(
+                                                  labelText: isEnglish
+                                                      ? 'English Category'
+                                                      : 'اسم النشاط بالانجليزي'), // First text field for editing English region
+                                            ),
+                                            TextField(
+                                              controller:
+                                                  arabicController, // Controller for Arabic region text field
+                                              decoration: InputDecoration(
+                                                  labelText: isEnglish
+                                                      ? 'Arabic Category'
+                                                      : 'اسم المنطقه بالعربيه'), // Second text field for editing Arabic region
+                                            ),
+                                          ],
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              final Map<String, dynamic>
+                                                  updateData = {
+                                                "id": "${usert['id']}",
+                                                "category_name_ar":
+                                                    arabicController.text,
+                                                "category_name_en":
+                                                    englishController.text
+                                              };
+                                              final jsonData = jsonEncode(
+                                                  updateData); // Convert map to JSON string
+                                              AdminApi(context).AdminSets(
+                                                context,
+                                                "edit",
+                                                "StoreCategory",
+                                                jsonData, // Pass JSON string instead of map
+                                              );
+                                              fetchDataFromApi(context);
+                                              Navigator.of(context)
+                                                  .pop(); // Close the dialog
+
+                                              print(jsonData);
+                                            },
+                                            child: Text(isEnglish
+                                                ? 'Update'
+                                                : 'تحديث'), // Update button
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                            
+                                            },
+                                            child: Text(isEnglish
+                                                ? 'Cancel'
+                                                : 'الغاء'), // Cancel button
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete,
+                                    color: Colors.redAccent),
+                                onPressed: () {
+                                    QuickAlert.show(
+                                                context: context,
+                                                type: QuickAlertType.confirm,
+                                                customAsset:
+                                                    'images/confirm.gif',
+                                                text: isEnglish
+                                                    ? 'are you sure delete Category ${usert['category_name_en']} ?'
+                                                    : 'هل انت متأكد من حذف نشاط ${usert['category_name_ar']} ؟',
+                                                cancelBtnText:
+                                                    isEnglish ? 'No' : 'لا',
+                                                confirmBtnText:
+                                                    isEnglish ? 'yes' : 'نعم',
+                                                confirmBtnColor:
+                                                    const Color(0xFF0D2750),
+                                                onConfirmBtnTap: () async {
+                                                  final Map<String, dynamic>
+                                                      updateData = {
+                                                    "id": "${usert['id']}",
+                                                   
+                                                  };
+                                                  final jsonData = jsonEncode(
+                                                      updateData); // Convert map to JSON string
+                                                  AdminApi(context).AdminSets(
+                                                    context,
+                                                    "delete",
+                                                    "StoreCategory",
+                                                    jsonData, // Pass JSON string instead of map
+                                                  );
+                                                  fetchDataFromApi(context);
+
+                                                  print(jsonData);
+                                                  Navigator.of(context)
+                                                      .pop(); // Close the dialog
+                                                },
+                                              );
+                                },
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
-            ] else ...[
-              // Display a message if no users match the search criteria
-              Text('No users found'),
-            ],
+            ),
+          ] else ...[
+            // Display a message if no users match the search criteria
+            const Text('No users found'),
           ],
+        ],
         ],
       ),
     );
@@ -349,8 +345,8 @@ class _AdminViewCategoriesState extends State<AdminViewCategories> {
 
   Widget _buildStatusWidget(String text, Color color) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      margin: EdgeInsets.symmetric(horizontal: 2),
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 2),
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(4),

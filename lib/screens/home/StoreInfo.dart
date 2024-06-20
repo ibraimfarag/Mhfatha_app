@@ -61,6 +61,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
     return days > 1 ? 'Days' : 'Day';
   }
 
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     
@@ -78,7 +79,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
         body:  Stack(
           children: [SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
@@ -88,7 +89,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                   width: 600,
                   margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 3, 12, 19),
+                    color: const Color.fromARGB(255, 3, 12, 19),
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: Column(
@@ -98,7 +99,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                         width: 500,
                         margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                         decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 3, 12, 19),
+                          color: const Color.fromARGB(255, 3, 12, 19),
                           borderRadius: BorderRadius.circular(0),
                         ),
                         child: Column(
@@ -109,13 +110,13 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                             width: 500,
                             margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                             decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 3, 12, 19),
+                              color: const Color.fromARGB(255, 3, 12, 19),
                               borderRadius: BorderRadius.circular(0),
                             ),
                             child: Stack(
                               children: [
                                 ClipRRect(
-                                  borderRadius: BorderRadius.only(
+                                  borderRadius: const BorderRadius.only(
                                     topLeft: Radius.circular(0),
                                     topRight: Radius.circular(0),
                                   ),
@@ -128,7 +129,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                                           Colors.transparent,
                                           Colors.black.withOpacity(0.8)
                                         ],
-                                        stops: [0.0, 1.0],
+                                        stops: const [0.0, 1.0],
                                       ).createShader(bounds);
                                     },
                                     blendMode: BlendMode.dstIn,
@@ -143,7 +144,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                                 Align(
                                   alignment: isEnglish? Alignment.topLeft:Alignment.topRight,
                                   child: IconButton(
-                                    icon: Icon(Icons.arrow_back_ios, color: Colors.white),
+                                    icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },
@@ -167,7 +168,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                                   children: [
                                     Text(
                                       '${storeData?['name']}',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
                                         fontFamily:
@@ -180,8 +181,8 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                                           : TextAlign.right,
                                     ),
                                     Text(
-                                      '${Provider.of<AppState>(context).isEnglish ? '${storeData?['category_name_en']}' : '${storeData?['category_name_ar']}'}',
-                                      style: TextStyle(
+                                      Provider.of<AppState>(context).isEnglish ? '${storeData?['category_name_en']}' : '${storeData?['category_name_ar']}',
+                                      style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.normal,
                                         fontFamily:
@@ -195,7 +196,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                                     ),
                                     Text(
                                       '${Provider.of<AppState>(context).isEnglish ? 'Distance: ' : ' على بعد '}${storeData?['distance']}',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.normal,
                                         fontFamily:
@@ -220,9 +221,9 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
 
                 //  /* ------------------------------ store actions ------------------------------ */
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                  decoration: BoxDecoration(
+                  margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  decoration: const BoxDecoration(
                     color: Color.fromARGB(255, 223, 223, 223),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(0),
@@ -249,7 +250,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                               // Handle the case where the phone number is not available
                             }
                           }),
-                          VerticalDivider(color: Colors.black),
+                          const VerticalDivider(color: Colors.black),
                           buildIconButton(Icons.directions,
                               isEnglish ? 'Directions' : 'الاتجاهات', () async {
                             // Handle the directions action
@@ -273,7 +274,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                             await MapLauncher.showMarker(
                               mapType: MapType.google,
                               coords: Coords(latitude, longitude),
-                              title: "$label",
+                              title: label,
                                     description: description,
 
                             );
@@ -305,13 +306,13 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                         isEnglish
                             ? 'No discounts available now'
                             : 'لا توجد خصومات متاحة الآن',
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       ))
                 else
                   // /* ------------------------------ Discounts ------------------------------ */
                   Container(
-                    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(15),
@@ -323,14 +324,14 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                           Provider.of<AppState>(context).isEnglish
                               ? 'Discounts:'
                               : 'الخصومات:',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Container(
-                          constraints: BoxConstraints(
+                          constraints: const BoxConstraints(
                             minHeight: 100,
                             maxHeight: 250,
                           ),
@@ -360,7 +361,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                                               isEnglish
                                                   ? 'Discount on: ${discount['category']} '
                                                   : 'خصم على : ${discount['category']} ',
-                                              style: TextStyle(fontSize: 14),
+                                              style: const TextStyle(fontSize: 14),
                                               textAlign: isEnglish
                                                   ? TextAlign.left
                                                   : TextAlign.right,
@@ -373,7 +374,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                                               isEnglish
                                                   ? 'Percent: ${discount['percent']}%'
                                                   : 'نسبة الخصم : ${discount['percent']}% ',
-                                              style: TextStyle(fontSize: 14),
+                                              style: const TextStyle(fontSize: 14),
                                               textAlign: isEnglish
                                                   ? TextAlign.left
                                                   : TextAlign.right,
@@ -386,7 +387,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                                               isEnglish
                                                   ? 'Days Remaining: ${calculateDaysRemaining(discount['end_date'])} ${getEnglishDaysWord(calculateDaysRemaining(discount['end_date']))}'
                                                   : 'الأيام المتبقية: ${calculateDaysRemaining(discount['end_date'])} ${getArabicDaysWord(calculateDaysRemaining(discount['end_date']))}',
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.blue),
                                               textAlign: isEnglish
@@ -407,8 +408,8 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
 
                 //  /* ------------------------------ store address ------------------------------ */
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
                     borderRadius: BorderRadius.circular(15),
@@ -420,19 +421,19 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                         Provider.of<AppState>(context).isEnglish
                             ? 'Store Address :'
                             : 'عنوان المتجر',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Row(
                         children: [
                           Text(
                             Provider.of<AppState>(context).isEnglish
                                 ? 'City: '
                                 : 'المدينة: ',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
@@ -440,7 +441,7 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                           Text(
                             // Parse and format the city
                             '${storeData?[isEnglish ? 'region_name_en' : 'region_name_ar']}',
-                            style: TextStyle(fontSize: 16),
+                            style: const TextStyle(fontSize: 16),
                           ),
                           // SizedBox(width: 10), // Add some space between the two texts
                           // Text(
@@ -460,15 +461,15 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                       Text(
                         // Parse and format the working days and hours
                         '${storeData?['location']}',
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       ),
                     ],
                   ),
                 ),
                 //  /* ------------------------------ store number ------------------------------ */
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
                     borderRadius: BorderRadius.circular(15),
@@ -480,16 +481,16 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                         Provider.of<AppState>(context).isEnglish
                             ? 'Telephone / Store Number'
                             : 'جوال / هاتف المتجر',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Text(
                         // Parse and format the working days and hours
                         '${storeData?['phone']}',
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       ),
                     ],
                   ),
@@ -498,8 +499,8 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
 // /* ----------------------------- Days and hours ----------------------------- */
                 if (storeData?['work_days'] != null)
                   Container(
-                    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(15),
@@ -511,19 +512,19 @@ class _StoreInfoScreenState extends State<StoreInfoScreen> {
                           Provider.of<AppState>(context).isEnglish
                               ? 'Working Hours:'
                               : 'ساعات العمل',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Text(
                           // Parse and format the working days and hours
                           parseWorkDays(
                             jsonDecode(storeData?['work_days']),
                             Provider.of<AppState>(context).isEnglish,
                           ),
-                          style: TextStyle(fontSize: 16),
+                          style: const TextStyle(fontSize: 16),
                         ),
                       ],
                     ),

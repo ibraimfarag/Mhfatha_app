@@ -1,10 +1,7 @@
-import 'package:intl/intl.dart';
 import 'package:mhfatha/settings/imports.dart';
-import 'package:flutter/cupertino.dart';
 
 // region_selection.dart
 
-import 'package:flutter/material.dart';
 
 class RegionSelection extends StatefulWidget {
   final ValueChanged<String> onRegionSelected;
@@ -49,34 +46,30 @@ void updateSelectedRegion(String newRegion) {
       Map<String, dynamic>? result =
           await Api().getRegionsAndCities(context);
 
-      if (result != null) {
-        // Access the 'regions' data from the result
-        List<dynamic> regions = result['regions'];
+      // Access the 'regions' data from the result
+      List<dynamic> regions = result['regions'];
 
-        // Clear existing items
-        citiesDropdownItems.clear();
+      // Clear existing items
+      citiesDropdownItems.clear();
 
-        // Process each region and add a DropdownMenuItem for each
-        regions.forEach((region) {
-          int regionId = region['id'];
-          String regionAr = region['region_ar'];
-          String regionEn = region['region_en'];
+      // Process each region and add a DropdownMenuItem for each
+      for (var region in regions) {
+        int regionId = region['id'];
+        String regionAr = region['region_ar'];
+        String regionEn = region['region_en'];
 
-          // Add a DropdownMenuItem for the current region
-          citiesDropdownItems.add(
-            DropdownMenuItem(
-              value: regionId.toString(),
-              child: Text(isEnglish ? regionEn : regionAr),
-            ),
-          );
-        });
-
-        // Trigger a rebuild of the widget with the updated data
-        setState(() {});
-      } else {
-        print('Error fetching regions and cities: Result is null');
+        // Add a DropdownMenuItem for the current region
+        citiesDropdownItems.add(
+          DropdownMenuItem(
+            value: regionId.toString(),
+            child: Text(isEnglish ? regionEn : regionAr),
+          ),
+        );
       }
-    } catch (e) {
+
+      // Trigger a rebuild of the widget with the updated data
+      setState(() {});
+        } catch (e) {
       // Handle errors
       print('Error fetching regions and cities: $e');
     }
@@ -96,7 +89,7 @@ void updateSelectedRegion(String newRegion) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Container(
           // margin: EdgeInsets.only(left: 45, right: 45),
           alignment:
@@ -110,10 +103,10 @@ void updateSelectedRegion(String newRegion) {
             ),
           ),
         ),
-        SizedBox(height: 14),
+        const SizedBox(height: 14),
 Container(
   // margin: EdgeInsets.only(left: 45, right: 45),
-  padding: EdgeInsets.only(left: 10, right: 10),
+  padding: const EdgeInsets.only(left: 10, right: 10),
   decoration: BoxDecoration(
     color: widget.color,
     borderRadius: BorderRadius.circular(10),

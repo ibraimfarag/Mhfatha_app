@@ -1,13 +1,9 @@
-import 'dart:convert';
-import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:mhfatha/settings/imports.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class MHTicket extends StatefulWidget {
+  const MHTicket({super.key});
+
   @override
   State<MHTicket> createState() => _MHTicketState();
 }
@@ -15,10 +11,10 @@ class MHTicket extends StatefulWidget {
 class _MHTicketState extends State<MHTicket> {
   late AuthProvider authProvider; // Declare authProvider variable
   Api api = Api();
-  Color backgroundColor = Color.fromARGB(220, 255, 255, 255);
-  Color ui = Color.fromARGB(220, 233, 233, 233);
-  Color ui2 = Color.fromARGB(255, 113, 194, 110);
-  Color colors = Color(0xFF05204a);
+  Color backgroundColor = const Color.fromARGB(220, 255, 255, 255);
+  Color ui = const Color.fromARGB(220, 233, 233, 233);
+  Color ui2 = const Color.fromARGB(255, 113, 194, 110);
+  Color colors = const Color(0xFF05204a);
 
 
 
@@ -30,6 +26,7 @@ class _MHTicketState extends State<MHTicket> {
     final vendorApi = VendorApi(context);
   }
 
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final arguments = ModalRoute.of(context)?.settings.arguments;
@@ -46,11 +43,11 @@ class _MHTicketState extends State<MHTicket> {
     String lang = Provider.of<AppState>(context, listen: false).display;
     return DirectionalityWrapper(
         child: Scaffold(
-      backgroundColor: Color(0xFFF3F4F7),
+      backgroundColor: const Color(0xFFF3F4F7),
       body: SingleChildScrollView(
         child: Container(
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-            color: Color(0xFF080E27), // Set background color to #080e27
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+            color: const Color(0xFF080E27), // Set background color to #080e27
             child: Column(
                 // crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
@@ -62,10 +59,10 @@ class _MHTicketState extends State<MHTicket> {
                     marginTop: 30,
                   ),
                   Container(
-                    padding: EdgeInsets.fromLTRB(20, 1, 20, 5),
+                    padding: const EdgeInsets.fromLTRB(20, 1, 20, 5),
                     // height: 200,
                     child: Column(children: [
-                      SizedBox(height: 1),
+                      const SizedBox(height: 1),
                       Column(
                         children: [
                           Row(
@@ -77,7 +74,7 @@ class _MHTicketState extends State<MHTicket> {
                                   isEnglish
                                       ? 'Technical Support'
                                       : 'الدعم الفني',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold
@@ -86,8 +83,8 @@ class _MHTicketState extends State<MHTicket> {
                               ]),
                             ],
                           ),
-                          SizedBox(height: 16),
-                          Row(
+                          const SizedBox(height: 16),
+                          const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -101,23 +98,23 @@ class _MHTicketState extends State<MHTicket> {
                               )
                             ],
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                         ],
                       )
                     ]),
                   ),
-                  SizedBox(height: 6),
+                  const SizedBox(height: 6),
                   Container(
                     width: double.infinity,
-                    padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    decoration: BoxDecoration(
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    decoration: const BoxDecoration(
                       color: Color(0xFFF3F4F7),
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(40),
                         topRight: Radius.circular(40),
                       ),
                     ),
-                    child: Column(
+                    child: const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 20),
@@ -143,7 +140,7 @@ class _MHTicketState extends State<MHTicket> {
                   ),
                 ])),
       ),
-      bottomNavigationBar: NewNav(),
+      bottomNavigationBar: const NewNav(),
     ));
   }
 }

@@ -1,15 +1,13 @@
 // lib\screens\settings\settings.dart
 
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:mhfatha/settings/imports.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class MainDiscounts extends StatefulWidget {
+  const MainDiscounts({super.key});
+
   @override
   State<MainDiscounts> createState() => _MainDiscountsState();
 }
@@ -17,10 +15,10 @@ class MainDiscounts extends StatefulWidget {
 class _MainDiscountsState extends State<MainDiscounts> {
   late AuthProvider authProvider; // Declare authProvider variable
   Api api = Api();
-  Color backgroundColor = Color.fromARGB(220, 255, 255, 255);
-  Color ui = Color.fromARGB(220, 233, 233, 233);
-  Color ui2 = Color.fromARGB(255, 113, 194, 110);
-  Color colors = Color(0xFF05204a);
+  Color backgroundColor = const Color.fromARGB(220, 255, 255, 255);
+  Color ui = const Color.fromARGB(220, 233, 233, 233);
+  Color ui2 = const Color.fromARGB(255, 113, 194, 110);
+  Color colors = const Color(0xFF05204a);
 
   Map<String, dynamic>? store;
   List<dynamic> discounts = [];
@@ -44,7 +42,7 @@ class _MainDiscountsState extends State<MainDiscounts> {
     Api api = Api(); // Initialize vendorApi in initState
     final vendorApi = VendorApi(context);
 
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
         store =
             ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
@@ -86,11 +84,11 @@ class _MainDiscountsState extends State<MainDiscounts> {
           return Theme(
             data: ThemeData.light().copyWith(
               primaryColor:
-                  Color(0xFF080E27), // Change this to your desired color
-              colorScheme: ColorScheme.light(
+                  const Color(0xFF080E27), // Change this to your desired color
+              colorScheme: const ColorScheme.light(
                 primary: Color(0xFF080E27), // Change this to your desired color
               ),
-              buttonTheme: ButtonThemeData(
+              buttonTheme: const ButtonThemeData(
                 textTheme: ButtonTextTheme.primary,
               ),
             ),
@@ -108,6 +106,7 @@ class _MainDiscountsState extends State<MainDiscounts> {
     }
   }
 
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
   }
@@ -123,12 +122,12 @@ class _MainDiscountsState extends State<MainDiscounts> {
     String lang = Provider.of<AppState>(context, listen: false).display;
     return DirectionalityWrapper(
         child: Scaffold(
-      backgroundColor: Color(0xFFF3F4F7),
+      backgroundColor: const Color(0xFFF3F4F7),
       key: _scaffoldKey,
       body: SingleChildScrollView(
         child: Container(
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-            color: Color(0xFF080E27), // Set background color to #080e27
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+            color: const Color(0xFF080E27), // Set background color to #080e27
             child: Column(
                 // crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
@@ -140,7 +139,7 @@ class _MainDiscountsState extends State<MainDiscounts> {
                     marginTop: 30,
                   ),
                   Container(
-                    padding: EdgeInsets.fromLTRB(20, 10, 20, 5),
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 5),
                     // height: 200,
                     child: Column(children: [
                       Row(
@@ -149,55 +148,55 @@ class _MainDiscountsState extends State<MainDiscounts> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(
+                                const SizedBox(
                                   height: 30,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 5,
                                 ),
                                 Text(
                                   isEnglish
                                       ? ' Discounts store '
                                       : 'خصومات متجر',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 5,
                                 ),
                                 Text(
                                   '${store?['name']}',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 24,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white),
                                 ),
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 30,
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                SizedBox(
+                                const SizedBox(
                                   height: 20,
                                 ),
                                 CircleAvatar(
                                   radius: 60,
                                   // Add your profile image here
                                   backgroundImage: NetworkImage(
-                                      'https://mhfatha.net/FrontEnd/assets/images/store_images/${image}'),
+                                      'https://mhfatha.net/FrontEnd/assets/images/store_images/$image'),
                                 ),
                               ],
                             ),
                           ]),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                     ]),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -213,7 +212,7 @@ class _MainDiscountsState extends State<MainDiscounts> {
                               return AlertDialog(
                                 title: Text(
                                   isEnglish ? 'Add Discount' : 'إضافة خصم',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -230,14 +229,14 @@ class _MainDiscountsState extends State<MainDiscounts> {
                                         isEnglish
                                             ? 'Enter discount information'
                                             : 'أدخل بيانات الخصم',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           fontSize: 16,
                                         ),
                                         textAlign: isEnglish
                                             ? TextAlign.left
                                             : TextAlign.right,
                                       ),
-                                      SizedBox(height: 10),
+                                      const SizedBox(height: 10),
                                       TextField(
                                         decoration: InputDecoration(
                                           labelText: isEnglish
@@ -246,16 +245,16 @@ class _MainDiscountsState extends State<MainDiscounts> {
                                           hintText: isEnglish
                                               ? 'Enter Percent'
                                               : 'أدخل النسبة المئوية',
-                                          prefixIcon: Icon(Icons.percent),
-                                          focusedBorder: UnderlineInputBorder(
+                                          prefixIcon: const Icon(Icons.percent),
+                                          focusedBorder: const UnderlineInputBorder(
                                             borderSide: BorderSide(
                                                 color: Color(
                                                     0xFF080E27)), // Bottom border color when focused
                                           ),
-                                          labelStyle: TextStyle(
+                                          labelStyle: const TextStyle(
                                               color: Color(
                                                   0xFF080E27)), // Label text color
-                                          hintStyle: TextStyle(
+                                          hintStyle: const TextStyle(
                                               color: Color(
                                                   0xFF080E27)), // Hint text color
                                         ),
@@ -265,7 +264,7 @@ class _MainDiscountsState extends State<MainDiscounts> {
                                             ? TextAlign.left
                                             : TextAlign.right,
                                       ),
-                                      SizedBox(height: 10),
+                                      const SizedBox(height: 10),
                                       TextFormField(
                                         decoration: InputDecoration(
                                           labelText:
@@ -273,16 +272,16 @@ class _MainDiscountsState extends State<MainDiscounts> {
                                           hintText: isEnglish
                                               ? 'Enter Category'
                                               : 'أدخل الفئة',
-                                          prefixIcon: Icon(Icons.category),
-                                          focusedBorder: UnderlineInputBorder(
+                                          prefixIcon: const Icon(Icons.category),
+                                          focusedBorder: const UnderlineInputBorder(
                                             borderSide: BorderSide(
                                                 color: Color(
                                                     0xFF080E27)), // Bottom border color when focused
                                           ),
-                                          labelStyle: TextStyle(
+                                          labelStyle: const TextStyle(
                                               color: Color(
                                                   0xFF080E27)), // Label text color
-                                          hintStyle: TextStyle(
+                                          hintStyle: const TextStyle(
                                               color: Color(
                                                   0xFF080E27)), // Hint text color
                                         ),
@@ -291,7 +290,7 @@ class _MainDiscountsState extends State<MainDiscounts> {
                                             ? TextAlign.left
                                             : TextAlign.right,
                                       ),
-                                      SizedBox(height: 10),
+                                      const SizedBox(height: 10),
                                       GestureDetector(
                                         onTap: () => selectDate(context,
                                             startDateController), // Pass `context` explicitly here
@@ -306,15 +305,15 @@ class _MainDiscountsState extends State<MainDiscounts> {
                                                   ? 'Select Start Date'
                                                   : 'اختر تاريخ البدء',
                                               prefixIcon:
-                                                  Icon(Icons.calendar_today),
+                                                  const Icon(Icons.calendar_today),
                                               focusedBorder:
-                                                  UnderlineInputBorder(
+                                                  const UnderlineInputBorder(
                                                 borderSide: BorderSide(
                                                     color: Color(0xFF080E27)),
                                               ),
-                                              labelStyle: TextStyle(
+                                              labelStyle: const TextStyle(
                                                   color: Color(0xFF080E27)),
-                                              hintStyle: TextStyle(
+                                              hintStyle: const TextStyle(
                                                   color: Color(0xFF080E27)),
                                             ),
                                             textAlign: isEnglish
@@ -323,7 +322,7 @@ class _MainDiscountsState extends State<MainDiscounts> {
                                           ),
                                         ),
                                       ),
-                                      SizedBox(height: 10),
+                                      const SizedBox(height: 10),
                                       GestureDetector(
                                         onTap: () => selectDate(context,
                                             endDateController), // Corrected to include `context`
@@ -338,17 +337,17 @@ class _MainDiscountsState extends State<MainDiscounts> {
                                                   ? 'Select End Date'
                                                   : 'اختر تاريخ الانتهاء',
                                               prefixIcon:
-                                                  Icon(Icons.calendar_today),
+                                                  const Icon(Icons.calendar_today),
                                               focusedBorder:
-                                                  UnderlineInputBorder(
+                                                  const UnderlineInputBorder(
                                                 borderSide: BorderSide(
                                                     color: Color(
                                                         0xFF080E27)), // Bottom border color when focused
                                               ),
-                                              labelStyle: TextStyle(
+                                              labelStyle: const TextStyle(
                                                   color: Color(
                                                       0xFF080E27)), // Label text color
-                                              hintStyle: TextStyle(
+                                              hintStyle: const TextStyle(
                                                   color: Color(
                                                       0xFF080E27)), // Hint text color
                                             ),
@@ -386,7 +385,7 @@ class _MainDiscountsState extends State<MainDiscounts> {
                                     },
                                     child: Text(
                                       isEnglish ? 'Add' : 'إضافة',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                         color: Color(0xFF080E27),
@@ -400,9 +399,9 @@ class _MainDiscountsState extends State<MainDiscounts> {
                         },
                         child: Container(
                           // width: 100,
-                          margin: EdgeInsets.fromLTRB(30, 0, 30, 20),
-                          padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                          decoration: BoxDecoration(
+                          margin: const EdgeInsets.fromLTRB(30, 0, 30, 20),
+                          padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                          decoration: const BoxDecoration(
                             color: Color(0xFFF3F4F7),
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(20),
@@ -413,16 +412,16 @@ class _MainDiscountsState extends State<MainDiscounts> {
                           ),
                           child: Row(
                             children: [
-                              isEnglish ? Icon(Icons.add) : Container(),
+                              isEnglish ? const Icon(Icons.add) : Container(),
                               Text(
                                 isEnglish
                                     ? 'Add Disscount'
                                     : 'اضافة خصم', // Text based on language
                               ),
-                              SizedBox(width: 5), // Space between icon and text
+                              const SizedBox(width: 5), // Space between icon and text
                               isEnglish
                                   ? Container()
-                                  : Icon(Icons.add), // Plus icon
+                                  : const Icon(Icons.add), // Plus icon
                             ],
                           ),
                         ),
@@ -431,8 +430,8 @@ class _MainDiscountsState extends State<MainDiscounts> {
                   ),
                   Container(
                     width: double.infinity,
-                    padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    decoration: BoxDecoration(
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    decoration: const BoxDecoration(
                       color: Color(0xFFF3F4F7),
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(40),
@@ -442,7 +441,7 @@ class _MainDiscountsState extends State<MainDiscounts> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -450,8 +449,8 @@ class _MainDiscountsState extends State<MainDiscounts> {
                             if (empty.isNotEmpty)
                               Center(
                                 child: Text(
-                                  '$empty',
-                                  style: TextStyle(
+                                  empty,
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     color: Color(
                                         0xFF080E27), // Set background color to #080e27
@@ -462,8 +461,8 @@ class _MainDiscountsState extends State<MainDiscounts> {
                             else
                               Container(
                                 width: double.infinity,
-                                padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                                decoration: BoxDecoration(
+                                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                                decoration: const BoxDecoration(
                                   color: Color(0xFFF3F4F7),
                                   borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(40),
@@ -499,7 +498,7 @@ class _MainDiscountsState extends State<MainDiscounts> {
                   )
                 ])),
       ),
-      bottomNavigationBar: NewNav(),
+      bottomNavigationBar: const NewNav(),
     ));
   }
 
@@ -520,12 +519,12 @@ class _MainDiscountsState extends State<MainDiscounts> {
                 color: Colors.grey.withOpacity(0.1),
                 spreadRadius: 5,
                 blurRadius: 3,
-                offset: Offset(0, 1),
+                offset: const Offset(0, 1),
               ),
             ],
-            color: Color(0xFFFFFFFF),
+            color: const Color(0xFFFFFFFF),
             border: Border.all(
-              color: Color.fromARGB(5, 0, 0, 0),
+              color: const Color.fromARGB(5, 0, 0, 0),
               width: 2,
             ),
             borderRadius: BorderRadius.circular(30),
@@ -542,7 +541,7 @@ class _MainDiscountsState extends State<MainDiscounts> {
                         isEnglish
                             ? 'Discount on : ${Discounts['category']}'
                             : 'خصم : ${Discounts['category']}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black87,
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -560,7 +559,7 @@ class _MainDiscountsState extends State<MainDiscounts> {
                         isEnglish
                             ? ' percent : ${Discounts['percent']?.replaceAll(RegExp(r'\.0+$'), '')}%'
                             : ' قيمة الخصم : ${Discounts['percent']?.replaceAll(RegExp(r'\.0+$'), '')}%',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black87,
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -585,7 +584,7 @@ class _MainDiscountsState extends State<MainDiscounts> {
                             : '؟ ${Discounts['category']} هل انت متأكد من حذف خصم ',
                         cancelBtnText: isEnglish ? 'No' : 'لا',
                         confirmBtnText: isEnglish ? 'yes' : 'نعم',
-                        confirmBtnColor: Color(0xFF0D2750),
+                        confirmBtnColor: const Color(0xFF0D2750),
                         onConfirmBtnTap: () async {
                           await VendorApi(context)
                               .deleteDiscount('${Discounts['id']}', context);

@@ -1,14 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
-import 'package:intl/intl.dart';
 
 import 'package:mhfatha/settings/imports.dart';
-import 'package:permission_handler/permission_handler.dart'
-    as permission_handler;
 
 class AdminViewSettings extends StatefulWidget {
-  AdminViewSettings({Key? key}) : super(key: key);
+  const AdminViewSettings({Key? key}) : super(key: key);
 
   @override
   _AdminViewSettingsState createState() => _AdminViewSettingsState();
@@ -23,7 +18,7 @@ class _AdminViewSettingsState extends State<AdminViewSettings> {
   void initState() {
     super.initState();
 
-        WidgetsBinding.instance!.addPostFrameCallback((_) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
          fetchDataFromApi(context);
     });
   }
@@ -62,10 +57,10 @@ Future<void> fetchDataFromApi(BuildContext context) async {
 
 
 
-  Color backgroundColor = Color.fromARGB(220, 255, 255, 255);
-  Color ui = Color.fromARGB(220, 233, 233, 233);
-  Color ui2 = Color.fromARGB(255, 113, 194, 110);
-  Color colors = Color(0xFF05204a);
+  Color backgroundColor = const Color.fromARGB(220, 255, 255, 255);
+  Color ui = const Color.fromARGB(220, 233, 233, 233);
+  Color ui2 = const Color.fromARGB(255, 113, 194, 110);
+  Color colors = const Color(0xFF05204a);
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +75,7 @@ Future<void> fetchDataFromApi(BuildContext context) async {
           children: [
             Text(
               isEnglish ? 'Settings' : 'الاعدادات',
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -142,10 +137,10 @@ Future<void> fetchDataFromApi(BuildContext context) async {
                   );
                 }, isEnglish ? 'Update' : 'تحديث', MapDistanceController.text),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-                  padding: EdgeInsets.fromLTRB(40, 30, 40, 30),
+                  margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+                  padding: const EdgeInsets.fromLTRB(40, 30, 40, 30),
                   decoration: BoxDecoration(
-                    color: Color(0xFFFFFFFF),
+                    color: const Color(0xFFFFFFFF),
                     borderRadius: BorderRadius.circular(30),
                   ),
                   child: Row(children: [
@@ -164,10 +159,10 @@ Future<void> fetchDataFromApi(BuildContext context) async {
                   ]),
                 ),
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-                  padding: EdgeInsets.fromLTRB(40, 30, 40, 30),
+                  margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+                  padding: const EdgeInsets.fromLTRB(40, 30, 40, 30),
                   decoration: BoxDecoration(
-                    color: Color(0xFFFFFFFF),
+                    color: const Color(0xFFFFFFFF),
                     borderRadius: BorderRadius.circular(30),
                   ),
                   child: Row(children: [
@@ -206,10 +201,10 @@ Future<void> fetchDataFromApi(BuildContext context) async {
     controller.text = preFilledText;
     return InkWell(
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-        padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+        padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
         decoration: BoxDecoration(
-          color: Color(0xFFFFFFFF),
+          color: const Color(0xFFFFFFFF),
           borderRadius: BorderRadius.circular(30),
         ),
         child: Row(
@@ -220,11 +215,11 @@ Future<void> fetchDataFromApi(BuildContext context) async {
                 children: [
                   Row(
                     children: [
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Text(isEnglish ? englishLabel : arabicLabel),
                     ],
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   TextField(
                     controller: controller,
                     style: TextStyle(fontSize: 16, color: colors),
@@ -240,14 +235,14 @@ Future<void> fetchDataFromApi(BuildContext context) async {
                       fillColor: ui,
                       enabledBorder: isEnglish
                           ? OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
+                              borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(30),
                                 bottomLeft: Radius.circular(30),
                               ),
                               borderSide: BorderSide(color: backgroundColor),
                             )
                           : OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
+                              borderRadius: const BorderRadius.only(
                                 topRight: Radius.circular(30),
                                 bottomRight: Radius.circular(30),
                               ),
@@ -255,14 +250,14 @@ Future<void> fetchDataFromApi(BuildContext context) async {
                             ),
                       focusedBorder: isEnglish
                           ? OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
+                              borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(30),
                                 bottomLeft: Radius.circular(30),
                               ),
                               borderSide: BorderSide(color: backgroundColor),
                             )
                           : OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
+                              borderRadius: const BorderRadius.only(
                                 topRight: Radius.circular(30),
                                 bottomRight: Radius.circular(30),
                               ),
@@ -275,14 +270,14 @@ Future<void> fetchDataFromApi(BuildContext context) async {
             ),
             // SizedBox(width: 10),
             Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 // color: ui,
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(30),
                   bottomRight: Radius.circular(30),
                 ),
               ),
-              margin: EdgeInsets.fromLTRB(0, 30, 0, 0),
+              margin: const EdgeInsets.fromLTRB(0, 30, 0, 0),
               child: SizedBox(
                 height: 60, // Set the height of the button
                 child: ElevatedButton(
@@ -292,13 +287,13 @@ Future<void> fetchDataFromApi(BuildContext context) async {
                         colors), // Set the button color
                     shape: MaterialStateProperty.all(
                       isEnglish
-                          ? RoundedRectangleBorder(
+                          ? const RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
                                 topRight: Radius.circular(30),
                                 bottomRight: Radius.circular(30),
                               ),
                             )
-                          : RoundedRectangleBorder(
+                          : const RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(30),
                                 bottomLeft: Radius.circular(30),
@@ -308,7 +303,7 @@ Future<void> fetchDataFromApi(BuildContext context) async {
                   ),
                   child: Text(
                     buttonText,
-                    style: TextStyle(color: Colors.white), // Set the text color
+                    style: const TextStyle(color: Colors.white), // Set the text color
                   ),
                 ),
               ),

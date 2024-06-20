@@ -1,13 +1,9 @@
-import 'dart:convert';
-import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:mhfatha/settings/imports.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class StoreDetails extends StatefulWidget {
+  const StoreDetails({super.key});
+
   @override
   State<StoreDetails> createState() => _StoreDetailsState();
 }
@@ -15,10 +11,10 @@ class StoreDetails extends StatefulWidget {
 class _StoreDetailsState extends State<StoreDetails> {
   late AuthProvider authProvider; // Declare authProvider variable
   Api api = Api();
-  Color backgroundColor = Color.fromARGB(220, 255, 255, 255);
-  Color ui = Color.fromARGB(220, 233, 233, 233);
-  Color ui2 = Color.fromARGB(255, 113, 194, 110);
-  Color colors = Color(0xFF05204a);
+  Color backgroundColor = const Color.fromARGB(220, 255, 255, 255);
+  Color ui = const Color.fromARGB(220, 233, 233, 233);
+  Color ui2 = const Color.fromARGB(255, 113, 194, 110);
+  Color colors = const Color(0xFF05204a);
 
   Map<String, dynamic>? store;
   Map<String, dynamic>? storeDetails;
@@ -36,6 +32,7 @@ class _StoreDetailsState extends State<StoreDetails> {
     final vendorApi = VendorApi(context);
   }
 
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final arguments = ModalRoute.of(context)?.settings.arguments;
@@ -69,11 +66,11 @@ class _StoreDetailsState extends State<StoreDetails> {
     String lang = Provider.of<AppState>(context, listen: false).display;
     return DirectionalityWrapper(
         child: Scaffold(
-      backgroundColor: Color(0xFFF3F4F7),
+      backgroundColor: const Color(0xFFF3F4F7),
       body: SingleChildScrollView(
         child: Container(
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-            color: Color(0xFF080E27), // Set background color to #080e27
+            padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+            color: const Color(0xFF080E27), // Set background color to #080e27
             child: Column(
                 // crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
@@ -85,10 +82,10 @@ class _StoreDetailsState extends State<StoreDetails> {
                     marginTop: 30,
                   ),
                   Container(
-                    padding: EdgeInsets.fromLTRB(20, 1, 20, 5),
+                    padding: const EdgeInsets.fromLTRB(20, 1, 20, 5),
                     // height: 200,
                     child: Column(children: [
-                      SizedBox(height: 1),
+                      const SizedBox(height: 1),
                       Column(
                         children: [
                           Row(
@@ -98,7 +95,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                               Column(children: [
                                 Text(
                                   store?['name'] ?? '',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 16,
                                   ),
@@ -106,7 +103,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                               ]),
                             ],
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -116,27 +113,27 @@ class _StoreDetailsState extends State<StoreDetails> {
                                   isEnglish
                                       ? 'Purchases Times'
                                       : 'عدد مرات الشراء',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 16,
                                   ),
                                 ),
                                 Text(
-                                  '$sumCountTimess',
-                                  style: TextStyle(
+                                  sumCountTimess,
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 16,
                                   ),
                                 ),
                               ]),
-                              SizedBox(width: 20),
+                              const SizedBox(width: 20),
                               Column(
                                 children: [
                                   Text(
                                     isEnglish
                                         ? 'Total Profits'
                                         : 'الأرباح الإجمالية',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 16,
                                     ),
@@ -145,7 +142,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                                     isEnglish
                                         ? '$sumTotalPaymentss SAR'
                                         : '$sumTotalPaymentss ريال',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 16,
                                     ),
@@ -154,16 +151,16 @@ class _StoreDetailsState extends State<StoreDetails> {
                               )
                             ],
                           ),
-                          SizedBox(height: 16),
+                          const SizedBox(height: 16),
                         ],
                       )
                     ]),
                   ),
-                  SizedBox(height: 6),
+                  const SizedBox(height: 6),
                   Container(
                     width: double.infinity,
-                    padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    decoration: BoxDecoration(
+                    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    decoration: const BoxDecoration(
                       color: Color(0xFFF3F4F7),
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(40),
@@ -173,7 +170,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -207,7 +204,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                                 ],
                               ),
 
-                              SizedBox(
+                              const SizedBox(
                                   width:
                                       10), // Optional: Add some space between the text and the dropdown
                               Container(
@@ -217,7 +214,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                                   borderRadius: BorderRadius.circular(
                                       10), // Optional: Adjust border radius as needed
                                 ),
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                     horizontal:
                                         10), // Optional: Adjust padding as needed
                                 child: DropdownButton<String>(
@@ -227,7 +224,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                                       value: month,
                                       child: Text(
                                         month,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             color: Colors
                                                 .white), // Adjust text color as needed
                                       ),
@@ -256,8 +253,8 @@ class _StoreDetailsState extends State<StoreDetails> {
                             children: discounts.map((discount) {
                               return Container(
                                 width: screenWidth * 0.9,
-                                margin: EdgeInsets.symmetric(vertical: 10),
-                                padding: EdgeInsets.all(10),
+                                margin: const EdgeInsets.symmetric(vertical: 10),
+                                padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                   color: Colors.grey[200],
                                   borderRadius: BorderRadius.circular(20),
@@ -266,7 +263,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                                       color: Colors.grey.withOpacity(0.2),
                                       spreadRadius: 5,
                                       blurRadius: 7,
-                                      offset: Offset(0, 3),
+                                      offset: const Offset(0, 3),
                                     ),
                                   ],
                                 ),
@@ -277,12 +274,12 @@ class _StoreDetailsState extends State<StoreDetails> {
                                       isEnglish
                                           ? 'Discount Category: ${discount['discount_category_name']}'
                                           : 'فئة الخصم: ${discount['discount_category_name']}',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
                                       ),
                                     ),
-                                    SizedBox(height: 5),
+                                    const SizedBox(height: 5),
                                     Text(
                                       isEnglish
                                           ? 'Total Payment: ${discount['total_payment']} SAR'
@@ -319,7 +316,7 @@ class _StoreDetailsState extends State<StoreDetails> {
                   ),
                 ])),
       ),
-      bottomNavigationBar: NewNav(),
+      bottomNavigationBar: const NewNav(),
     ));
   }
 }

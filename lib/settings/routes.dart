@@ -46,61 +46,61 @@ class Routes {
   static Map<String, WidgetBuilder> getRoutes(BuildContext context) {
     return {
       // Routes that do not require authentication
-      login: (context) => LoginScreen(),
-      register: (context) => RegisterScreen(),
-      home: (context) => HomeScreen(),
-      storeInfo: (context) => StoreInfoScreen(),
-      nearby: (context) => NearBy(),
-      nonetwork: (context) => Nointernet(),
-      filteredStores: (context) => FiteredStroes(),
-      settings: (context) => SettingsScreen(),
+      login: (context) => const LoginScreen(),
+      register: (context) => const RegisterScreen(),
+      home: (context) => const HomeScreen(),
+      storeInfo: (context) => const StoreInfoScreen(),
+      nearby: (context) => const NearBy(),
+      nonetwork: (context) => const Nointernet(),
+      filteredStores: (context) => const FiteredStroes(),
+      settings: (context) => const SettingsScreen(),
+      restPassword: (context) => const RestPassword(),
+      qrscanner: (context) =>  const QrScanner(),
+      qrresponse: (context) =>  const QrResponse(responseData: ''),
 
       // Routes that require authentication
-      qrscanner: (context) =>  QrScanner(),
-      qrresponse: (context) =>  QrResponse(responseData: ''),
-      getDiscount: (context) => RouteGuard(screen: GetDiscount()),
-      report: (context) => RouteGuard(screen: ReportScreen()),
-      request: (context) => RouteGuard(screen: RequestsScreen()),
-      account: (context) => RouteGuard(screen: AccountScreen()),
-      changePasswword: (context) => RouteGuard(screen: ChangePassword()),
-      restPassword: (context) => RouteGuard(screen: RestPassword()),
-      vendorsMain: (context) => RouteGuard(screen: MainStores()),
-      createstore: (context) => RouteGuard(screen: CreateStore()),
-      editstore: (context) => RouteGuard(screen: EditStore()),
-      storeDiscounts: (context) => RouteGuard(screen: MainDiscounts()),
-      admin: (context) => RouteGuard(screen: MainAdmin()),
-      AdminViewUsers: (context) => RouteGuard(screen: AdminViewUser()),
-      AdminEditUsers: (context) => RouteGuard(screen: AdminEditUser()),
-      AdminViewStoress: (context) => RouteGuard(screen: AdminViewStores()),
-      AdminViewRequestss: (context) => RouteGuard(screen: AdminViewRequests()),
-      AdminViewAccountss: (context) => RouteGuard(screen: AdminViewAccounts()),
-      AdminViewStoreAccountss: (context) => RouteGuard(screen: AdminViewStoreAccounts()),
-      AdminSendNotifis: (context) => RouteGuard(screen: AdminSendNotifi()),
-      AdminViewSettingss: (context) => RouteGuard(screen: AdminViewSettings()),
-      AdminViewRegionss: (context) => RouteGuard(screen: AdminViewRegions()),
-      AdminViewCategoriess: (context) => RouteGuard(screen: AdminViewCategories()),
-      VENDORTrems: (context) => RouteGuard(screen: VendorTrems()),
-      UserTremss: (context) => RouteGuard(screen: UserTrems()),
-      vendorsStoreDetails: (context) => RouteGuard(screen: StoreDetails()),
-      MainSupport: (context) => RouteGuard(screen: MainSupporting()),
-      MainSupportreport: (context) => RouteGuard(screen: MainSupportingRepor()),
-      SupportTicket: (context) => RouteGuard(screen: MHTicket()),
-      Viewtickets: (context) => RouteGuard(screen: MainAdminSupporting()),
-      AdminTickets: (context) => RouteGuard(screen: MHAdminTicket()),
+      getDiscount: (context) => const RouteGuard(screen: GetDiscount()),
+      report: (context) => const RouteGuard(screen: ReportScreen()),
+      request: (context) => const RouteGuard(screen: RequestsScreen()),
+      account: (context) => const RouteGuard(screen: AccountScreen()),
+      changePasswword: (context) => const RouteGuard(screen: ChangePassword()),
+      vendorsMain: (context) => const RouteGuard(screen: MainStores()),
+      createstore: (context) => const RouteGuard(screen: CreateStore()),
+      editstore: (context) => const RouteGuard(screen: EditStore()),
+      storeDiscounts: (context) => const RouteGuard(screen: MainDiscounts()),
+      admin: (context) => const RouteGuard(screen: MainAdmin()),
+      AdminViewUsers: (context) => const RouteGuard(screen: AdminViewUser()),
+      AdminEditUsers: (context) => const RouteGuard(screen: AdminEditUser()),
+      AdminViewStoress: (context) => const RouteGuard(screen: AdminViewStores()),
+      AdminViewRequestss: (context) => const RouteGuard(screen: AdminViewRequests()),
+      AdminViewAccountss: (context) => const RouteGuard(screen: AdminViewAccounts()),
+      AdminViewStoreAccountss: (context) => const RouteGuard(screen: AdminViewStoreAccounts()),
+      AdminSendNotifis: (context) => const RouteGuard(screen: AdminSendNotifi()),
+      AdminViewSettingss: (context) => const RouteGuard(screen: AdminViewSettings()),
+      AdminViewRegionss: (context) => const RouteGuard(screen: AdminViewRegions()),
+      AdminViewCategoriess: (context) => const RouteGuard(screen: AdminViewCategories()),
+      VENDORTrems: (context) => const RouteGuard(screen: VendorTrems()),
+      UserTremss: (context) => const RouteGuard(screen: UserTrems()),
+      vendorsStoreDetails: (context) => const RouteGuard(screen: StoreDetails()),
+      MainSupport: (context) => const RouteGuard(screen: MainSupporting()),
+      MainSupportreport: (context) => const RouteGuard(screen: MainSupportingRepor()),
+      SupportTicket: (context) => const RouteGuard(screen: MHTicket()),
+      Viewtickets: (context) => const RouteGuard(screen: MainAdminSupporting()),
+      AdminTickets: (context) => const RouteGuard(screen: MHAdminTicket()),
     };
   }
 
   static MaterialPageRoute unknownRoute(RouteSettings settings) {
     print('Unknown route: ${settings.name}');
     return MaterialPageRoute(
-      builder: (context) => HomeScreen(),
+      builder: (context) => const HomeScreen(),
     );
   }
 }
 class RouteGuard extends StatelessWidget {
   final Widget screen;
 
-  RouteGuard({required this.screen});
+  const RouteGuard({super.key, required this.screen});
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +120,7 @@ class RouteGuard extends StatelessWidget {
           builder: (BuildContext context) {
             return AlertDialog(
               titlePadding: EdgeInsets.zero,
-              contentPadding: EdgeInsets.only(top: 16, bottom: 16),
+              contentPadding: const EdgeInsets.only(top: 16, bottom: 16),
               title: Stack(
                 children: [
                   Center(
@@ -128,7 +128,7 @@ class RouteGuard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
                       child: Text(
                         isEnglish ? 'Authentication Required' : 'يجب تسجيل الدخول',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
                         ),
@@ -139,7 +139,7 @@ class RouteGuard extends StatelessWidget {
                     right: 0,
                     top: 0,
                     child: IconButton(
-                      icon: Icon(Icons.close),
+                      icon: const Icon(Icons.close),
                       onPressed: () {
                         Navigator.of(context).pop();
                         Navigator.of(context).pop();
@@ -159,7 +159,7 @@ class RouteGuard extends StatelessWidget {
                           : 'تحتاج إلى تسجيل الدخول للوصول إلى هذه الميزة.',
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -171,14 +171,14 @@ class RouteGuard extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                           primary: Colors.blue,
                           onPrimary: Colors.white,
-                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
                         child: Text(
                           isEnglish ? 'Login' : 'تسجيل الدخول',
-                          style: TextStyle(fontSize: 16),
+                          style: const TextStyle(fontSize: 16),
                         ),
                       ),
                       ElevatedButton(
@@ -189,14 +189,14 @@ class RouteGuard extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                           primary: Colors.green,
                           onPrimary: Colors.white,
-                          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
                         child: Text(
                           isEnglish ? 'Sign Up' : 'تسجيل',
-                          style: TextStyle(fontSize: 16),
+                          style: const TextStyle(fontSize: 16),
                         ),
                       ),
                     ],
@@ -221,9 +221,9 @@ class ErrorScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Error'),
+        title: const Text('Error'),
       ),
-      body: Center(
+      body: const Center(
         child: Text('Page not found'),
       ),
     );

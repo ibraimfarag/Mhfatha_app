@@ -1,7 +1,6 @@
 // lib\screens\Auth\login_screen.dart
 
 import 'package:mhfatha/settings/imports.dart';
-import 'package:flutter/cupertino.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -11,11 +10,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  Color backgroundColor = Color.fromARGB(220, 255, 255, 255);
-  Color ui = Color.fromARGB(220, 233, 233, 233);
-  Color colors = Color(0xFF05204a);
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  Color backgroundColor = const Color.fromARGB(220, 255, 255, 255);
+  Color ui = const Color.fromARGB(220, 233, 233, 233);
+  Color colors = const Color(0xFF05204a);
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
   }
@@ -50,21 +50,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Container(
                     decoration: BoxDecoration(
                       color: isDark
-                          ? Color.fromARGB(251, 34, 34, 34)
-                          : Color(0xFFF0F0F0),
+                          ? const Color.fromARGB(251, 34, 34, 34)
+                          : const Color(0xFFF0F0F0),
                       borderRadius: BorderRadius.circular(15),
                       boxShadow: [
                         BoxShadow(
                           color: isDark
-                              ? Color.fromARGB(250, 17, 17, 17)
+                              ? const Color.fromARGB(250, 17, 17, 17)
                               : Colors.grey.withOpacity(0.5),
                           spreadRadius: 5,
                           blurRadius: 7,
-                          offset: Offset(0, 3),
+                          offset: const Offset(0, 3),
                         ),
                       ],
                     ),
-                    padding: EdgeInsets.all(1),
+                    padding: const EdgeInsets.all(1),
                     child: Row(
                       children: [
                         TextButton(
@@ -89,21 +89,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Container(
                     decoration: BoxDecoration(
                       color: isDark
-                          ? Color.fromARGB(251, 34, 34, 34)
-                          : Color(0xFFF0F0F0),
+                          ? const Color.fromARGB(251, 34, 34, 34)
+                          : const Color(0xFFF0F0F0),
                       borderRadius: BorderRadius.circular(15),
                       boxShadow: [
                         BoxShadow(
                           color: isDark
-                              ? Color.fromARGB(250, 17, 17, 17)
+                              ? const Color.fromARGB(250, 17, 17, 17)
                               : Colors.grey.withOpacity(0.5),
                           spreadRadius: 5,
                           blurRadius: 7,
-                          offset: Offset(0, 3),
+                          offset: const Offset(0, 3),
                         ),
                       ],
                     ),
-                    padding: EdgeInsets.all(1),
+                    padding: const EdgeInsets.all(1),
                     child: Row(
                       children: [
                         PopupMenuButton<String>(
@@ -120,11 +120,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                           itemBuilder: (BuildContext context) {
                             return <PopupMenuEntry<String>>[
-                              PopupMenuItem<String>(
+                              const PopupMenuItem<String>(
                                 value: 'en',
                                 child: Text('English'),
                               ),
-                              PopupMenuItem<String>(
+                              const PopupMenuItem<String>(
                                 value: 'ar',
                                 child: Text('العربية'),
                               ),
@@ -140,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Column(
                   // mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
-                    SizedBox(
+                    const SizedBox(
                       height: 150,
                     ),
                     BounceInDown(
@@ -149,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 50, // Adjust the height as needed
                       // width: 100, // Adjust the width as needed
                     )),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     FadeOut(
@@ -159,14 +159,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: Colors.grey.shade500, fontSize: 16),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 50,
                     ),
                     FadeInLeft(
                       child: Column(
                         children: [
                           Container(
-                            margin: EdgeInsets.fromLTRB(
+                            margin: const EdgeInsets.fromLTRB(
                                 45, 0, 45, 0), // Adjust the padding as needed
 
                             alignment: isEnglish
@@ -182,27 +182,27 @@ class _LoginScreenState extends State<LoginScreen> {
                                   fontWeight: FontWeight.normal),
                             ),
                           ),
-                          SizedBox(height: 8), // Adjust the height as needed
+                          const SizedBox(height: 8), // Adjust the height as needed
                           Container(
                             decoration: BoxDecoration(
                               color: isDark
-                                  ? Color.fromARGB(251, 34, 34, 34)
-                                  : Color(0xFFF0F0F0),
+                                  ? const Color.fromARGB(251, 34, 34, 34)
+                                  : const Color(0xFFF0F0F0),
                               borderRadius: BorderRadius.circular(30),
                               boxShadow: [
                                 BoxShadow(
                                   color: isDark
-                                      ? Color.fromARGB(250, 17, 17, 17)
+                                      ? const Color.fromARGB(250, 17, 17, 17)
                                       : Colors.grey.withOpacity(0.5),
                                   spreadRadius:
                                       5, // Negative spreadRadius makes the shadow inside
                                   blurRadius: 7,
-                                  offset: Offset(0,
+                                  offset: const Offset(0,
                                       3), // changes the position of the shadow
                                 ),
                               ],
                             ),
-                            margin: EdgeInsets.only(left: 40, right: 40),
+                            margin: const EdgeInsets.only(left: 40, right: 40),
                             child: TextField(
                               controller: _emailController,
                               style: TextStyle(fontSize: 16, color: colors),
@@ -225,14 +225,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     FadeInRight(
                       child: Column(
                         children: [
                           Container(
-                            margin: EdgeInsets.fromLTRB(
+                            margin: const EdgeInsets.fromLTRB(
                                 45, 0, 45, 0), // Adjust the padding as needed
 
                             alignment: isEnglish
@@ -246,25 +246,25 @@ class _LoginScreenState extends State<LoginScreen> {
                                   fontWeight: FontWeight.normal),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 8,
                           ),
                           Container(
-                            margin: EdgeInsets.only(left: 40, right: 40),
+                            margin: const EdgeInsets.only(left: 40, right: 40),
                             decoration: BoxDecoration(
                               color: isDark
-                                  ? Color.fromARGB(251, 34, 34, 34)
-                                  : Color(0xFFF0F0F0),
+                                  ? const Color.fromARGB(251, 34, 34, 34)
+                                  : const Color(0xFFF0F0F0),
                               borderRadius: BorderRadius.circular(30),
                               boxShadow: [
                                 BoxShadow(
                                   color: isDark
-                                      ? Color.fromARGB(250, 17, 17, 17)
+                                      ? const Color.fromARGB(250, 17, 17, 17)
                                       : Colors.grey.withOpacity(0.5),
                                   spreadRadius:
                                       5, // Negative spreadRadius makes the shadow inside
                                   blurRadius: 7,
-                                  offset: Offset(0,
+                                  offset: const Offset(0,
                                       3), // changes the position of the shadow
                                 ),
                               ],
@@ -292,11 +292,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 12,
                     ),
                     Container(
-                      margin: EdgeInsets.fromLTRB(
+                      margin: const EdgeInsets.fromLTRB(
                           45, 0, 45, 0), // Adjust the padding as needed
 
                       alignment: isEnglish
@@ -318,7 +318,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     BounceInUp(
@@ -329,25 +329,25 @@ class _LoginScreenState extends State<LoginScreen> {
                           Container(
                             decoration: BoxDecoration(
                               color: isDark
-                                  ? Color.fromARGB(251, 34, 34, 34)
-                                  : Color(0xFFF0F0F0),
+                                  ? const Color.fromARGB(251, 34, 34, 34)
+                                  : const Color(0xFFF0F0F0),
                               borderRadius: BorderRadius.circular(30),
                               boxShadow: [
                                 BoxShadow(
                                   color: isDark
-                                      ? Color.fromARGB(250, 17, 17, 17)
+                                      ? const Color.fromARGB(250, 17, 17, 17)
                                       : Colors.grey.withOpacity(0.5),
                                   spreadRadius:
                                       5, // Negative spreadRadius makes the shadow inside
                                   blurRadius: 7,
-                                  offset: Offset(0,
+                                  offset: const Offset(0,
                                       3), // changes the position of the shadow
                                 ),
                               ],
                             ),
                             height: 50,
                             // width: 100,
-                            margin: EdgeInsets.only(left: 40, right: 40),
+                            margin: const EdgeInsets.only(left: 40, right: 40),
                             child: ElevatedButton(
                               onPressed: () async {
                                 // Get the values entered by the user in the email and password fields
@@ -401,7 +401,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 45,
                     ),
                     Row(
@@ -425,12 +425,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 8,
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 0,
                     ),
                   ],

@@ -5,7 +5,7 @@ Future<void> backgroundHandler(RemoteMessage message) async {
 }
 
 class PushNotificationService {
-  FirebaseMessaging _fcm = FirebaseMessaging.instance;
+  final FirebaseMessaging _fcm = FirebaseMessaging.instance;
 
   Future<void> initialize() async {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {

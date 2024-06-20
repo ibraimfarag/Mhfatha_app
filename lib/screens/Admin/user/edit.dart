@@ -1,16 +1,12 @@
-import 'dart:convert';
 
 import 'dart:io';
 
 import 'package:intl/intl.dart';
-import 'package:flutter/cupertino.dart';
 
 import 'package:mhfatha/settings/imports.dart';
-import 'package:permission_handler/permission_handler.dart'
-    as permission_handler;
 
 class AdminEditUser extends StatefulWidget {
-  AdminEditUser({Key? key}) : super(key: key);
+  const AdminEditUser({Key? key}) : super(key: key);
 
   @override
   _AdminEditUserState createState() => _AdminEditUserState();
@@ -21,10 +17,10 @@ class _AdminEditUserState extends State<AdminEditUser> {
   late AuthProvider authProvider; // Declare authProvider variable
   late Map<String, dynamic> usert;
 
-  Color backgroundColor = Color.fromARGB(220, 255, 255, 255);
-  Color ui = Color.fromARGB(220, 233, 233, 233);
-  Color ui2 = Color.fromARGB(255, 113, 194, 110);
-  Color colors = Color(0xFF05204a);
+  Color backgroundColor = const Color.fromARGB(220, 255, 255, 255);
+  Color ui = const Color.fromARGB(220, 233, 233, 233);
+  Color ui2 = const Color.fromARGB(255, 113, 194, 110);
+  Color colors = const Color(0xFF05204a);
   TextEditingController first_name = TextEditingController();
   TextEditingController last_name = TextEditingController();
   TextEditingController email = TextEditingController();
@@ -39,6 +35,7 @@ class _AdminEditUserState extends State<AdminEditUser> {
     fetchDataFromApi(context);
   }
 
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // Receive the user data passed from the previous screen
@@ -84,7 +81,7 @@ class _AdminEditUserState extends State<AdminEditUser> {
           children: [
             Text(
               isEnglish ? 'edit user' : 'تعديل حساب',
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -92,7 +89,7 @@ class _AdminEditUserState extends State<AdminEditUser> {
             ),
             Text(
               '${usert['first_name']} ${usert['last_name']}',
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -109,7 +106,7 @@ class _AdminEditUserState extends State<AdminEditUser> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ProfilePhotoWidget(
                 isEnglish: isEnglish,
                 labelcolor: colors,
@@ -126,7 +123,7 @@ class _AdminEditUserState extends State<AdminEditUser> {
                   print('path : $path');
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               buildSettingItem(context, 'First Name', 'الاسم', () {
                 // Navigate to account settings screen
                 // Navigator.pushNamed(context, Routes.accountSettings);
@@ -152,10 +149,10 @@ class _AdminEditUserState extends State<AdminEditUser> {
                 // Implement report logic
               }, email, ' ${usert['email']}'),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-                padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+                margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+                padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
                 decoration: BoxDecoration(
-                  color: Color(0xFFFFFFFF),
+                  color: const Color(0xFFFFFFFF),
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: Row(
@@ -186,7 +183,7 @@ class _AdminEditUserState extends State<AdminEditUser> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 24,
               ),
               Row(
@@ -204,7 +201,7 @@ class _AdminEditUserState extends State<AdminEditUser> {
                               : 'هل انت متاكد من تحديث البيانات الشخصية',
                           confirmBtnText: isEnglish ? 'Yes' : 'نعم',
                           cancelBtnText: isEnglish ? 'No' : 'لا',
-                          confirmBtnColor: Color(0xFF0D2750),
+                          confirmBtnColor: const Color(0xFF0D2750),
                           onConfirmBtnTap: () async {
                             Navigator.pop(context);
 
@@ -264,10 +261,10 @@ class _AdminEditUserState extends State<AdminEditUser> {
     return InkWell(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-        padding: EdgeInsets.fromLTRB(20, 30, 20, 30),
+        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+        padding: const EdgeInsets.fromLTRB(20, 30, 20, 30),
         decoration: BoxDecoration(
-          color: Color(0xFFFFFFFF),
+          color: const Color(0xFFFFFFFF),
           borderRadius: BorderRadius.circular(30),
         ),
         child: Column(
@@ -275,11 +272,11 @@ class _AdminEditUserState extends State<AdminEditUser> {
             Row(
               children: [
                 // Icon(icon),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Text(isEnglish ? englishTitle : arabicTitle),
               ],
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             // Add TextField here
             if (englishTitle.toLowerCase() ==
                 'birthday') // Check if it's the birthday field

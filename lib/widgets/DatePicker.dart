@@ -23,7 +23,7 @@ class DatePickerWidget extends StatelessWidget {
     bool isDark = Provider.of<AppState>(context).isDarkMode;
 
     return Container(
-      margin: EdgeInsets.only(left: 40, right: 40, top: 10),
+      margin: const EdgeInsets.only(left: 40, right: 40, top: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -42,7 +42,7 @@ class DatePickerWidget extends StatelessWidget {
               color: Colors.grey.shade600,
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -55,13 +55,13 @@ class DatePickerWidget extends StatelessWidget {
                     boxShadow: [
                       BoxShadow(
                         color: isDark
-                            ? Color.fromARGB(250, 17, 17, 17)
+                            ? const Color.fromARGB(250, 17, 17, 17)
                             : Colors.grey.withOpacity(0.5),
                         spreadRadius:
                             5, // Negative spreadRadius makes the shadow inside
                         blurRadius: 7,
                         offset:
-                            Offset(0, 3), // changes the position of the shadow
+                            const Offset(0, 3), // changes the position of the shadow
                       ),
                     ],
                   ),
@@ -95,7 +95,7 @@ class DatePickerWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               if (selectedDate != null)
                 GestureDetector(
                   onTap: () async {

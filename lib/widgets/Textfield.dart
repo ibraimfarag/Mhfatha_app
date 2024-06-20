@@ -1,5 +1,4 @@
 
-import 'package:flutter/services.dart';
 import 'package:mhfatha/settings/imports.dart';
 
 
@@ -28,7 +27,7 @@ class CustomTextField extends StatefulWidget {
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
-  bool _isKeyboardVisible = false;
+  final bool _isKeyboardVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +39,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          margin: EdgeInsets.fromLTRB(45, 0, 45, 0),
+          margin: const EdgeInsets.fromLTRB(45, 0, 45, 0),
           alignment: isEnglish
               ? Alignment.centerLeft
               : Alignment.centerRight,
@@ -53,22 +52,22 @@ class _CustomTextFieldState extends State<CustomTextField> {
             ),
           ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Container(
-          padding: EdgeInsets.all(5),
+          padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
-            color: isDark ? Color.fromARGB(251, 34, 34, 34) : Color(0xFFF0F0F0),
+            color: isDark ? const Color.fromARGB(251, 34, 34, 34) : const Color(0xFFF0F0F0),
             borderRadius: BorderRadius.circular(30),
             boxShadow: [
               BoxShadow(
-                color: isDark ? Color.fromARGB(250, 17, 17, 17) : Colors.grey.withOpacity(0.5),
+                color: isDark ? const Color.fromARGB(250, 17, 17, 17) : Colors.grey.withOpacity(0.5),
                 spreadRadius: 5,
                 blurRadius: 7,
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
               ),
             ],
           ),
-          margin: EdgeInsets.only(left: 40, right: 40),
+          margin: const EdgeInsets.only(left: 40, right: 40),
           child: TextField(
             obscureText: widget.isPassword,
             controller: widget.controller,
@@ -83,12 +82,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30),
                 borderSide: BorderSide(
-                  color: isDark ? Color.fromARGB(0, 34, 34, 34) : Color.fromARGB(0, 0, 0, 0),
+                  color: isDark ? const Color.fromARGB(0, 34, 34, 34) : const Color.fromARGB(0, 0, 0, 0),
                 ),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30),
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Color.fromARGB(0, 225, 226, 228),
                 ),
               ),
@@ -105,7 +104,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
       ],
     );
   }

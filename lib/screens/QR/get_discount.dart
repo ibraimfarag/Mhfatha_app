@@ -2,10 +2,11 @@
 
 import 'dart:convert';
 
-import 'package:flutter/services.dart';
 import 'package:mhfatha/settings/imports.dart';
 
 class GetDiscount extends StatefulWidget {
+  const GetDiscount({super.key});
+
   @override
   _GetDiscountState createState() => _GetDiscountState();
 }
@@ -19,9 +20,10 @@ class _GetDiscountState extends State<GetDiscount> {
 
   // Variable to track the current screen
   int _currentScreen = 1;
-  Color backgroundColor = Color.fromARGB(255, 236, 236, 236);
+  Color backgroundColor = const Color.fromARGB(255, 236, 236, 236);
   bool _isNextButtonEnabled = false;
   Color textColor = const Color(0xFF32567A);
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
   }
@@ -44,7 +46,7 @@ class _GetDiscountState extends State<GetDiscount> {
         0.0; // Replace 0.0 with a default value or handle it as needed
     String lang = Provider.of<AppState>(context, listen: false).display;
 
-    void _postDiscountDetails() async {
+    void postDiscountDetails() async {
       try {
         Response response = await Api().scannedstore(
           Provider.of<AuthProvider>(context, listen: false),
@@ -104,7 +106,7 @@ class _GetDiscountState extends State<GetDiscount> {
       }
     }
 
-    Future<void> _showConfirmationDialog() async {
+    Future<void> showConfirmationDialog() async {
       bool confirm = await QuickAlert.show(
           context: context,
           type: QuickAlertType.confirm,
@@ -114,14 +116,14 @@ class _GetDiscountState extends State<GetDiscount> {
               : 'هل أنت متأكد أنك تريد المتابعة؟',
           confirmBtnText: isEnglish ? 'Yes' : 'نعم',
           cancelBtnText: isEnglish ? 'No' : 'لا',
-          confirmBtnColor: Color(0xFF0D2750),
+          confirmBtnColor: const Color(0xFF0D2750),
           onConfirmBtnTap: () async {
             Navigator.of(context).pop(true);
           });
       // Navigator.of(context).pop(false); // No
 
       if (confirm == true) {
-        _postDiscountDetails();
+        postDiscountDetails();
       }
     }
 
@@ -137,7 +139,7 @@ class _GetDiscountState extends State<GetDiscount> {
               iconColor: const Color.fromARGB(146, 0, 0, 0),
               marginTop: 30,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             if (_currentScreen == 1)
               Image.asset(
                 'images/discounted.png', // Replace with your image path
@@ -145,9 +147,9 @@ class _GetDiscountState extends State<GetDiscount> {
                     .size
                     .width, // Set the width to the device width
               ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Container(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
@@ -160,7 +162,7 @@ class _GetDiscountState extends State<GetDiscount> {
                           isEnglish
                               ? 'You have chosen discount on'
                               : 'لقد اخترت خصم على',
-                          style: TextStyle(fontSize: 18),
+                          style: const TextStyle(fontSize: 18),
                           textAlign:
                               isEnglish ? TextAlign.center : TextAlign.center,
                         ),
@@ -168,14 +170,14 @@ class _GetDiscountState extends State<GetDiscount> {
                           isEnglish
                               ? ' ${discount['category']} from ${store['name']}'
                               : '${discount['category']} من  ${store['name']}',
-                          style: TextStyle(fontSize: 18),
+                          style: const TextStyle(fontSize: 18),
                           textAlign:
                               isEnglish ? TextAlign.center : TextAlign.center,
                         ),
 
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         // TextField for entering cost
-                        Container(
+                        SizedBox(
                           width: 200, // Set your desired width
                           child: TextField(
                             controller: _costController,
@@ -185,7 +187,7 @@ class _GetDiscountState extends State<GetDiscount> {
                               FilteringTextInputFormatter.allow(
                                   RegExp(r'[0-9]')), // Allow only numeric input
                             ],
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 22, // Adjust the font size
                               fontWeight: FontWeight.bold, // Make the text bold
                             ),
@@ -213,7 +215,7 @@ class _GetDiscountState extends State<GetDiscount> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         // Button to move to the next screen
                         ElevatedButton(
                           onPressed: _isNextButtonEnabled
@@ -223,7 +225,7 @@ class _GetDiscountState extends State<GetDiscount> {
                                   //   _currentScreen = 2;
                                   // });
 
-                                  _showConfirmationDialog();
+                                  showConfirmationDialog();
                                 }
                               : null, // Disable the button if _isNextButtonEnabled is false
                           child: Text(isEnglish ? 'Next' : 'التالي'),
@@ -241,7 +243,7 @@ class _GetDiscountState extends State<GetDiscount> {
                       children: [
                         Container(
                           height: 170,
-                          padding: EdgeInsets.all(35),
+                          padding: const EdgeInsets.all(35),
                           decoration: BoxDecoration(
                             color: themeColor,
                             shape: BoxShape.circle,
@@ -267,7 +269,7 @@ class _GetDiscountState extends State<GetDiscount> {
                           isEnglish
                               ? ' You have earned a discount of '
                               : 'لقد حصلت على خصم ',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.black87,
                             fontWeight: FontWeight.w400,
                             fontSize: 17,
@@ -277,7 +279,7 @@ class _GetDiscountState extends State<GetDiscount> {
                           isEnglish
                               ? ' ${discount['category']} from ${store['name']}.'
                               : '${discount['category']} من ${store['name']}.',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.black87,
                             fontWeight: FontWeight.w400,
                             fontSize: 17,
@@ -287,10 +289,10 @@ class _GetDiscountState extends State<GetDiscount> {
                             height: MediaQuery.of(context).size.height * 0.02),
                         Text(
                           isEnglish
-                              ? "Please pay ${_discountResponseMessage} SAR to the merchant"
-                              : " يرجى دفع ${_discountResponseMessage} ريال للتاجر",
+                              ? "Please pay $_discountResponseMessage SAR to the merchant"
+                              : " يرجى دفع $_discountResponseMessage ريال للتاجر",
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.black54,
                             fontWeight: FontWeight.w400,
                             fontSize: 16,
@@ -320,13 +322,9 @@ class _GetDiscountState extends State<GetDiscount> {
                                       '/home',
                                     );
                                   },
-                                  confirmBtnColor: Color(0xFF0D2750),
+                                  confirmBtnColor: const Color(0xFF0D2750),
                                 );
                               },
-                              child: Text(
-                                isEnglish ? 'Accepted' : 'مقبولة',
-                                style: TextStyle(color: Colors.white),
-                              ),
                               style: ElevatedButton.styleFrom(
                                 primary:
                                     themeColor, // Set your desired color for accept button
@@ -335,8 +333,12 @@ class _GetDiscountState extends State<GetDiscount> {
                                       20), // Adjust the radius as needed
                                 ),
                               ),
+                              child: Text(
+                                isEnglish ? 'Accepted' : 'مقبولة',
+                                style: const TextStyle(color: Colors.white),
+                              ),
                             ),
-                            SizedBox(width: 16),
+                            const SizedBox(width: 16),
                             ElevatedButton(
                               onPressed: () {
                                 QuickAlert.show(
@@ -360,10 +362,6 @@ class _GetDiscountState extends State<GetDiscount> {
 // confirmBtnColor:themeColor
                                 );
                               },
-                              child: Text(
-                                isEnglish ? 'Canceled' : 'غير مقبولة',
-                                style: TextStyle(color: Colors.white),
-                              ),
                               style: ElevatedButton.styleFrom(
                                 primary: Colors
                                     .red, // Set your desired color for cancel button
@@ -371,6 +369,10 @@ class _GetDiscountState extends State<GetDiscount> {
                                   borderRadius: BorderRadius.circular(
                                       20), // Adjust the radius as needed
                                 ),
+                              ),
+                              child: Text(
+                                isEnglish ? 'Canceled' : 'غير مقبولة',
+                                style: const TextStyle(color: Colors.white),
                               ),
                             ),
                           ],
@@ -385,7 +387,7 @@ class _GetDiscountState extends State<GetDiscount> {
           ],
         )),
         // bottomNavigationBar: BottomNavBar(initialIndex: 1),
-        bottomNavigationBar: NewNav(),
+        bottomNavigationBar: const NewNav(),
       ),
     );
   }

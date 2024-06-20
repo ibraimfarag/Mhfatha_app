@@ -1,8 +1,5 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:provider/provider.dart';
 import 'package:mhfatha/settings/imports.dart';
 
 class ProfilePhotoWidget extends StatefulWidget {
@@ -46,8 +43,8 @@ class _ProfilePhotoWidgetState extends State<ProfilePhotoWidget> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            margin: EdgeInsets.fromLTRB(45, 20, 45, 0),
-            padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+            margin: const EdgeInsets.fromLTRB(45, 20, 45, 0),
+            padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,14 +57,14 @@ class _ProfilePhotoWidgetState extends State<ProfilePhotoWidget> {
                     fontWeight: FontWeight.normal,
                   ),
                 ),
-                SizedBox(height: 2),
+                const SizedBox(height: 2),
                 _imageFile != null
                     ? FutureBuilder<String>(
                         future: compressImage(_imageFile!),
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return CircularProgressIndicator();
+                            return const CircularProgressIndicator();
                           } else if (snapshot.hasError) {
                             return Text('Error: ${snapshot.error}');
                           } else {
@@ -99,13 +96,13 @@ class _ProfilePhotoWidgetState extends State<ProfilePhotoWidget> {
                             ),
                           )
                         : Container(),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Row(
                   children: [
                     ElevatedButton(
                       onPressed: () async {
-                        final ImagePicker _picker = ImagePicker();
-                        final XFile? image = await _picker.pickImage(
+                        final ImagePicker picker = ImagePicker();
+                        final XFile? image = await picker.pickImage(
                           source: ImageSource.gallery,
                         );
 
@@ -118,6 +115,12 @@ class _ProfilePhotoWidgetState extends State<ProfilePhotoWidget> {
                           });
                         }
                       },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: widget.color,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
                       child: _imageFile != null
                           ? Text(
                               widget.isEnglish
@@ -139,14 +142,8 @@ class _ProfilePhotoWidgetState extends State<ProfilePhotoWidget> {
                                 fontSize: 16,
                               ),
                             ),
-                      style: ElevatedButton.styleFrom(
-                        primary: widget.color,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
                     ),
-                    SizedBox(width: 16),
+                    const SizedBox(width: 16),
                     _imageFile != null
                         ? ElevatedButton(
                             onPressed: () {
@@ -155,18 +152,18 @@ class _ProfilePhotoWidgetState extends State<ProfilePhotoWidget> {
                                 widget.onPhotoSelected(null);
                               });
                             },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
                             child: Text(
                               widget.isEnglish ? widget.removeText : 'إزالة',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
-                              ),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.red,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
                               ),
                             ),
                           )
@@ -195,7 +192,7 @@ Future<String> compressImage(XFile imageFile) async {
   String fileName = imageFile.path.split('/').last;
   String compressedFileName = 'compressed_$fileName';
 
-  final compressedFile = File('${imageFile.path.replaceFirst(fileName, compressedFileName)}');
+  final compressedFile = File(imageFile.path.replaceFirst(fileName, compressedFileName));
   await compressedFile.writeAsBytes(result!);
 
   // Print the size of the compressed file

@@ -1,6 +1,5 @@
 // lib/screens/QR/qr_screen.dart
 
-import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'dart:math';
@@ -8,6 +7,8 @@ import 'dart:math';
 import 'package:mhfatha/settings/imports.dart';
 
 class QrScanner extends StatefulWidget {
+  const QrScanner({super.key});
+
   @override
   _QrScannerState createState() => _QrScannerState();
 }
@@ -25,7 +26,7 @@ class _QrScannerState extends State<QrScanner> with SingleTickerProviderStateMix
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 2), // Adjust the duration as needed
+      duration: const Duration(seconds: 2), // Adjust the duration as needed
     );
     _colorAnimation = ColorTween(
       begin: Colors.red,
@@ -50,6 +51,7 @@ class _QrScannerState extends State<QrScanner> with SingleTickerProviderStateMix
       1,
     );
   }
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     
@@ -84,11 +86,11 @@ class _QrScannerState extends State<QrScanner> with SingleTickerProviderStateMix
                   ),
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
             ],
           ),
         ),
-        bottomNavigationBar: NewNav(),
+        bottomNavigationBar: const NewNav(),
       ),
     );
   }
@@ -103,7 +105,7 @@ class _QrScannerState extends State<QrScanner> with SingleTickerProviderStateMix
       try {
         String lang = Provider.of<AppState>(context, listen: false).display;
 
-        if (!scanHandled && scanData is Barcode) {
+        if (!scanHandled) {
           scanHandled = true; // Set the flag to true to prevent further handling
 
           String qrText = scanData.code!;
@@ -139,7 +141,7 @@ class _QrScannerState extends State<QrScanner> with SingleTickerProviderStateMix
           }
 
           // Reset the flag after a delay to allow the next scan
-          await Future.delayed(Duration(seconds: 1));
+          await Future.delayed(const Duration(seconds: 1));
           scanHandled = false;
         }
       } catch (e) {

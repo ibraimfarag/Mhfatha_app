@@ -1,13 +1,8 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
 
 import 'package:mhfatha/settings/imports.dart';
-import 'package:permission_handler/permission_handler.dart'
-    as permission_handler;
 
 class AdminViewStoreAccounts extends StatefulWidget {
-  AdminViewStoreAccounts({Key? key}) : super(key: key);
+  const AdminViewStoreAccounts({Key? key}) : super(key: key);
 
   @override
   _AdminViewStoreAccountsState createState() => _AdminViewStoreAccountsState();
@@ -25,6 +20,7 @@ class _AdminViewStoreAccountsState extends State<AdminViewStoreAccounts> {
     fetchDataFromApi(context);
   }
 
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // Receive the user data passed from the previous screen
@@ -138,27 +134,27 @@ class _AdminViewStoreAccountsState extends State<AdminViewStoreAccounts> {
           children: [
             Text(
               isEnglish ? 'parts' : 'تجزئة ',
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Visibility(
               visible: calculateSum() != 0,
               child: Text(
                 isEnglish
                     ? 'Sum obtained: ${calculateSum()}'
                     : ' ${calculateSum()}مجموع المحدد ',
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -184,67 +180,67 @@ class _AdminViewStoreAccountsState extends State<AdminViewStoreAccounts> {
           SizedBox(
             height: MediaQuery.of(context).size.width * 0.03,
           ),
-          if (unobtainedDiscounts != null) ...[
-            if (unobtainedDiscounts.isNotEmpty) ...[
-              Container(
-                padding: EdgeInsets.fromLTRB(
-                    0, 0, 0, MediaQuery.of(context).size.height * 0.02),
-                height: MediaQuery.of(context).size.height *
-                    0.68, // Set the container height as needed
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: unobtainedDiscounts.map((usert) {
-                      return Container(
-                        padding: EdgeInsets.fromLTRB(20, 15, 20, 5),
-                        margin:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                        decoration: BoxDecoration(
-                          color: Color(0xFFFFFFFF),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Checkbox(
-                              value: usert['selected'] ?? false,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  usert['selected'] = value;
-                                });
-                              },
-                            ),
-                            // SizedBox(width: 10),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(height: 15),
-                                  Text(
-                                    isEnglish
-                                        ? ' ${usert['obtained']} SAR'
-                                        : 'ريال ${usert['obtained']}',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  ),
+          ...[
+          if (unobtainedDiscounts.isNotEmpty) ...[
+            Container(
+              padding: EdgeInsets.fromLTRB(
+                  0, 0, 0, MediaQuery.of(context).size.height * 0.02),
+              height: MediaQuery.of(context).size.height *
+                  0.68, // Set the container height as needed
+              child: SingleChildScrollView(
+                child: Column(
+                  children: unobtainedDiscounts.map((usert) {
+                    return Container(
+                      padding: const EdgeInsets.fromLTRB(20, 15, 20, 5),
+                      margin:
+                          const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFFFFF),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Checkbox(
+                            value: usert['selected'] ?? false,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                usert['selected'] = value;
+                              });
+                            },
+                          ),
+                          // SizedBox(width: 10),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 15),
+                                Text(
+                                  isEnglish
+                                      ? ' ${usert['obtained']} SAR'
+                                      : 'ريال ${usert['obtained']}',
+                                  style:
+                                      const TextStyle(fontWeight: FontWeight.bold),
+                                ),
 
-                                  // SizedBox(
-                                  //   height: MediaQuery.of(context).size.height *
-                                  //       0.04,
-                                  // )
-                                ],
-                              ),
+                                // SizedBox(
+                                //   height: MediaQuery.of(context).size.height *
+                                //       0.04,
+                                // )
+                              ],
                             ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList(),
                 ),
               ),
-            ] else ...[
-              Text('No Requests found'),
-            ],
+            ),
+          ] else ...[
+            const Text('No Requests found'),
           ],
+        ],
         ],
       ),
     );
@@ -252,8 +248,8 @@ class _AdminViewStoreAccountsState extends State<AdminViewStoreAccounts> {
 
   Widget _buildStatusWidget(String text, Color color) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      margin: EdgeInsets.symmetric(horizontal: 2),
+      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 2),
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(4),
@@ -273,21 +269,21 @@ class _AdminViewStoreAccountsState extends State<AdminViewStoreAccounts> {
       case 'update_store':
         return Text(
           isEnglish ? 'Update store information' : 'تحديث معلومات المتجر',
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
           ),
         );
       case 'delete_store':
         return Text(
           isEnglish ? 'Delete store' : 'حذف المتجر',
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
           ),
         );
       case 'delete_discount':
         return Text(
           isEnglish ? 'Delete store discount' : 'حذف خصم متجر',
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
           ),
         );
