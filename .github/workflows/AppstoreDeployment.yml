@@ -54,13 +54,20 @@ jobs:
         with:
           name: ios-build
           path: build/ios/iphoneos
-
+          
+      - name: List Files in ios Directory
+        run: ls -R ios
+        # Replace 'ios' with your actual directory name
+      
+      - name: List Files in build Directory
+        run: ls -R build
+        # Replace 'build' with your actual build directory
 
       - name: Deploy iOS Beta to TestFlight via Fastlane
         uses: maierj/fastlane-action@v3.1.0
         with:
           lane: closed_beta
-          subdirectory: ios
+          subdirectory: build/ios/iphoneos
         env:
           ITC_TEAM_ID: ${{ secrets.ITC_TEAM_ID }}
           APPLICATON_ID: ${{ secrets.APPLICATON_ID }}
