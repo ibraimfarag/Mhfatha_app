@@ -30,14 +30,13 @@ jobs:
 
       - run: flutter clean
       - run: flutter pub get
+
+      - name: Set directory permissions
+        run: chmod -R 777 build/ios
+        
       - run:  flutter build ios --release --no-codesign
       
-      - name: Set up melos
-        run: flutter pub global activate melos
-        
-      - name: Melos Bootstrap
-        run: melos bs
-        
+
       - name: Deploy iOS Beta to TestFlight via Fastlane
         uses: maierj/fastlane-action@v1.4.0
         with:
