@@ -4,11 +4,9 @@ on: workflow_dispatch
   #   branches:
   #     - master
 
-    
 jobs:
-  
-  deploy_ios:
-    name: Deploy build to TestFlight
+  build_ios:
+    name: Build iOS App
     runs-on: macOS-latest
     
     steps:
@@ -27,7 +25,6 @@ jobs:
         with:
           ruby-version: "2.7"
           
-
       - name: Run Flutter tasks
         uses: subosito/flutter-action@v2
         with:
@@ -38,8 +35,25 @@ jobs:
       - run: flutter clean
       - run: flutter pub get
         
-      - run:  flutter build ios --release --no-codesign
+      - run: flutter build ios --release --no-codesign
       
+      - name: Archive build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: ios-build
+          path: build/ios/iphoneos
+
+  upload_ios:
+    name: Deploy iOS Beta to TestFlight via Fastlane
+    runs-on: macOS-latest
+    needs: build_ios
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: ios-build
+          path: build/ios/iphoneos
 
       - name: Deploy iOS Beta to TestFlight via Fastlane
         uses: maierj/fastlane-action@v1.4.0
@@ -47,14 +61,14 @@ jobs:
           lane: closed_beta
           subdirectory: ios
         env:
-          ITC_TEAM_ID: '${{ secrets.ITC_TEAM_ID }}'
-          APPLICATON_ID: '${{ secrets.APPLICATON_ID }}'
-          BUNDLE_IDENTIFIER: '${{ secrets.BUNDLE_IDENTIFIER }}'
-          DEVELOPER_PORTAL_TEAM_ID: '${{ secrets.DEVELOPER_PORTAL_TEAM_ID }}'
-          FASTLANE_APPLE_ID: '${{ secrets.FASTLANE_APPLE_EMAIL_ID }}'
-          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: '${{ secrets.APP_SPECIFIC_PASSWORD }}'
-          MATCH_PASSWORD: '${{ secrets.MATCH_PASSWORD }}'
-          GIT_AUTHORIZATION: '${{ secrets.GIT_AUTHORIZATION }}'
-          PROVISIONING_PROFILE_SPECIFIER: '${{ secrets.PROVISIONING_PROFILE_SPECIFIER }}'
-          TEMP_KEYCHAIN_PASSWORD: '${{ secrets.TEMP_KEYCHAIN_PASSWORD }}'
-          TEMP_KEYCHAIN_USER: '${{ secrets.TEMP_KEYCHAIN_USER }}'
+          ITC_TEAM_ID: ${{ secrets.ITC_TEAM_ID }}
+          APPLICATON_ID: ${{ secrets.APPLICATON_ID }}
+          BUNDLE_IDENTIFIER: ${{ secrets.BUNDLE_IDENTIFIER }}
+          DEVELOPER_PORTAL_TEAM_ID: ${{ secrets.DEVELOPER_PORTAL_TEAM_ID }}
+          FASTLANE_APPLE_ID: ${{ secrets.FASTLANE_APPLE_EMAIL_ID }}
+          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.APP_SPECIFIC_PASSWORD }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          GIT_AUTHORIZATION: ${{ secrets.GIT_AUTHORIZATION }}
+          PROVISIONING_PROFILE_SPECIFIER: ${{ secrets.PROVISIONING_PROFILE_SPECIFIER }}
+          TEMP_KEYCHAIN_PASSWORD: ${{ secrets.TEMP_KEYCHAIN_PASSWORD }}
+          TEMP_KEYCHAIN_USER: ${{ secrets.TEMP_KEYCHAIN_USER }}
