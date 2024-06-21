@@ -6,14 +6,8 @@ on: workflow_dispatch
 
     
 jobs:
-
   
-
-  
-
-    
   deploy_ios:
-    if: contains(needs.parse-tag.outputs.DEVICE, 'ios')
     name: Deploy build to TestFlight
     runs-on: macOS-latest
     
