@@ -10,16 +10,37 @@ jobs:
     runs-on: macOS-latest
     steps:
       - name: Checkout code from ref
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
+          
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "2.7"
+          
+      - name: Bundle install for iOS Gemfile
+        timeout-minutes: 5
+        run: cd ./ios && bundle install
+
       - name: Run Flutter tasks
         uses: subosito/flutter-action@v1
         with:
           flutter-version: '3.16.6'
+          channel: "stable"
+          architecture: x64
+          cache: true
+
       - run: flutter clean
       - run: flutter pub get
       - run:  flutter build ios --release --no-codesign
+      
+      - name: Set up melos
+        run: flutter pub global activate melos
+        
+      - name: Melos Bootstrap
+        run: melos bs
+        
       - name: Deploy iOS Beta to TestFlight via Fastlane
         uses: maierj/fastlane-action@v1.4.0
         with:
