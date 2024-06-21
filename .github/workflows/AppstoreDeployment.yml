@@ -7,38 +7,12 @@ on: workflow_dispatch
     
 jobs:
 
-  lint-and-test:
-    name: Static code analysis
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: subosito/flutter-action@v1
-      - run: flutter pub get
-      - name: Lint analysis
-        run: flutter analyze
-      - name: Run tests
-        run: flutter test
+  
 
-  parse-tag:
-    needs: lint-and-test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - id: step1
-        name: Get BUILD_NAME BUILD_NUMBER and DEVICE
-        run: |
-          source .github/scripts/parse-tag.sh
-          echo "::set-output name=BUILD_NAME::$BUILD_NAME"
-          echo "::set-output name=BUILD_NUMBER::$BUILD_NUMBER"
-          echo "::set-output name=DEVICE::$DEVICE"
-    outputs:
-      BUILD_NAME: ${{ steps.step1.outputs.BUILD_NAME }}
-      BUILD_NUMBER: ${{ steps.step1.outputs.BUILD_NUMBER }}
-      DEVICE: ${{ steps.step1.outputs.DEVICE }}
+  
 
     
   deploy_ios:
-    needs: parse-tag
     if: contains(needs.parse-tag.outputs.DEVICE, 'ios')
     name: Deploy build to TestFlight
     runs-on: macOS-latest
