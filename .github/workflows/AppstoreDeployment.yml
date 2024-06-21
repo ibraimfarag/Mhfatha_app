@@ -54,8 +54,14 @@ jobs:
         with:
           name: ios-build
           path: build/ios/iphoneos
+      
+      - name: Install Bundler and Gems
+        run: |
+          gem install bundler -v '~>2.0'
+          bundle install
+        working-directory: build/ios/iphoneos
 
-
+        
       - name: Deploy iOS Beta to TestFlight via Fastlane
         uses: maierj/fastlane-action@v3.1.0
         with:
