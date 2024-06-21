@@ -59,14 +59,14 @@ jobs:
         run: |
           gem install bundler -v '~>2.0'
           bundle install
-        working-directory: build/ios/iphoneos
+        working-directory: ios
 
         
       - name: Deploy iOS Beta to TestFlight via Fastlane
         uses: maierj/fastlane-action@v3.1.0
         with:
           lane: closed_beta
-          subdirectory: build/ios/iphoneos
+          subdirectory: ios
         env:
           ITC_TEAM_ID: ${{ secrets.ITC_TEAM_ID }}
           APPLICATON_ID: ${{ secrets.APPLICATON_ID }}
