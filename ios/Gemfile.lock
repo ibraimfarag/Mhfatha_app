@@ -1,5 +1,6 @@
-PATH
+GIT
   remote: https://github.com/tianhaoz95/fastlane-plugin-flutter-version
+  revision: aa92b678f4fe842d8c1428e45cea4cba837fdfea
   specs:
     fastlane-plugin-flutter_version (1.1.15)
 
@@ -216,6 +217,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-22
+  x64-mingw-ucrt
   x86_64-darwin-22
 
 DEPENDENCIES
