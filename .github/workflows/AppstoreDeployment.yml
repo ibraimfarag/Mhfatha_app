@@ -54,19 +54,7 @@ jobs:
         with:
           name: ios-build
           path: build/ios/iphoneos
-      - name: Echo Secrets
-        run: |
-          echo "ITC_TEAM_ID: ${{ secrets.ITC_TEAM_ID }}"
-          echo "APPLICATON_ID: ${{ secrets.APPLICATON_ID }}"
-          echo "BUNDLE_IDENTIFIER: ${{ secrets.BUNDLE_IDENTIFIER }}"
-          echo "DEVELOPER_PORTAL_TEAM_ID: ${{ secrets.DEVELOPER_PORTAL_TEAM_ID }}"
-          echo "FASTLANE_APPLE_ID: ${{ secrets.FASTLANE_APPLE_EMAIL_ID }}"
-          echo "FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.APP_SPECIFIC_PASSWORD }}"
-          echo "MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}"
-          echo "GIT_AUTHORIZATION: ${{ secrets.GIT_AUTHORIZATION }}"
-          echo "PROVISIONING_PROFILE_SPECIFIER: ${{ secrets.PROVISIONING_PROFILE_SPECIFIER }}"
-          echo "TEMP_KEYCHAIN_PASSWORD: ${{ secrets.TEMP_KEYCHAIN_PASSWORD }}"
-          echo "TEMP_KEYCHAIN_USER: ${{ secrets.TEMP_KEYCHAIN_USER }}"
+
 
       - name: Deploy iOS Beta to TestFlight via Fastlane
       - uses: maierj/fastlane-action@v3.1.0
