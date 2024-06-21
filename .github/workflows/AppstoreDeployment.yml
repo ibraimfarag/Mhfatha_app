@@ -29,11 +29,12 @@ jobs:
           
 
       - name: Run Flutter tasks
-        uses: subosito/flutter-action@v1
+        uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.16.6'
           channel: "stable"
-
+          cache: true
+  
       - run: flutter clean
       - run: flutter pub get
         
