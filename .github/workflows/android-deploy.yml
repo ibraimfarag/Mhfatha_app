@@ -23,7 +23,9 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 12.x
+          distribution: 'zulu'
           cache: 'gradle'
+          java-package: jdk
           
       - name: Decrypt Android keys
         run: sh ./.github/scripts/decrypt_android_secrets.sh
