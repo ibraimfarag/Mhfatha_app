@@ -43,7 +43,7 @@ jobs:
       - name: Build the Bundle
         run: flutter build appbundle --release
       - name: Upload artifact to Github
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: release-Bundle
           path: build/app/outputs/bundle/release/app-release.aab
@@ -81,7 +81,7 @@ jobs:
       - run: flutter pub get
       - run: flutter build appbundle --release
       - name: Upload artifact to Github
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: release-Bundle
           path: build/app/outputs/bundle/release/app-release.aab
