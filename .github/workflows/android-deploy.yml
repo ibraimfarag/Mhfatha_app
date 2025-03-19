@@ -49,7 +49,7 @@ jobs:
         with:
           name: release-Bundle
           path: build/app/outputs/bundle/release/app-release.aab
-          
+          overwrite: true
           
         
 
@@ -87,6 +87,7 @@ jobs:
         with:
           name: release-Bundle
           path: build/app/outputs/bundle/release/app-release.aab
+          overwrite: true
 
       - name: Distribute app to Beta track 🚀   
         run: |
