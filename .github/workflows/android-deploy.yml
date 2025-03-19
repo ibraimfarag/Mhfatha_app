@@ -7,7 +7,7 @@ jobs:
   #CI
   build_android:
     name: Building Android 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     
     steps:
       - uses: actions/checkout@v4
@@ -54,7 +54,7 @@ jobs:
   #CD
   deploy_android:
     name: Deploying to playstore
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: [build_android]
     steps:
     
