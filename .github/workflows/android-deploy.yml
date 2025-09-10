@@ -3,29 +3,36 @@ on: workflow_dispatch
   # push:
   #   branches:
   #     - master
+
 jobs:
-  #CI
+  # CI - Build Job
   build_android:
-    name: Building Android 
+    name: Building Android
     runs-on: ubuntu-22.04
     
     steps:
-      - uses: actions/checkout@v4
-      - uses: ruby/setup-ruby@ec02537da5712d66d4d50a0f33b7eb52773b5ed1
-        with: 
-          ruby-version: '3.1' 
-        
       - name: Checkout code
-        uses: actions/checkout@v2
-     
-
-      - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/checkout@v4
+      
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
         with:
-          java-version: 12.x
-          distribution: 'zulu'
+          distribution: 'temurin'
+          java-version: '17'
           cache: 'gradle'
-          java-package: jdk
+          
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        
+      - name: Install Android SDK Components
+        run: |
+          yes | sdkmanager --licenses || true
+          sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0" "cmdline-tools;latest"
+          
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@ec02537da5712d66d4d50a0f33b7eb52773b5ed1
+        with: 
+          ruby-version: '3.1'
           
       - name: Decrypt Android keys
         run: sh ./.github/scripts/decrypt_android_secrets.sh
@@ -37,61 +44,70 @@ jobs:
         with:
           flutter-version: 3.16.6
           channel: 'stable'
-          cache: true 
-
+          cache: true
+          
       - name: Install Flutter dependencies
         run: flutter pub get
-  
-      - name: Build the Bundle
-        run: flutter build appbundle --release
+        
+      - name: Clean and Build the Bundle
+        run: |
+          flutter clean
+          flutter build appbundle --release
+          
       - name: Upload artifact to Github
         uses: actions/upload-artifact@v4
         with:
-          name: release-Bundle
+          name: release-bundle
           path: build/app/outputs/bundle/release/app-release.aab
+          retention-days: 7
           overwrite: true
-          
-        
 
-  #CD
+  # CD - Deploy Job
   deploy_android:
     name: Deploying to playstore
     runs-on: ubuntu-22.04
     needs: [build_android]
-    steps:
     
-      - uses: actions/checkout@v4
-      - uses: ruby/setup-ruby@ec02537da5712d66d4d50a0f33b7eb52773b5ed1
-        with: 
-          ruby-version: '3.1' 
-
-          
+    steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Setup Java
-        uses: actions/setup-java@v1
+        uses: actions/checkout@v4
+        
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
         with:
-          java-version: 12.x
+          distribution: 'temurin'
+          java-version: '17'
+          
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        
+      - name: Install Android SDK Components
+        run: |
+          yes | sdkmanager --licenses || true
+          sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0" "cmdline-tools;latest"
+          
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@ec02537da5712d66d4d50a0f33b7eb52773b5ed1
+        with: 
+          ruby-version: '3.1'
+          
       - name: Decrypt Android keys
         run: sh ./.github/scripts/decrypt_android_secrets.sh
         env:
           PASSPHRASE: ${{ secrets.PASSPHRASE }}
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v1
+          
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
         with:
-          flutter-version: 3.16.6
-      - run: flutter pub get
-      - run: flutter build appbundle --release
-      - name: Upload artifact to Github
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-Bundle
-          path: build/app/outputs/bundle/release/app-release.aab
-          overwrite: true
-
-      - name: Distribute app to Beta track 🚀   
+          name: release-bundle
+          path: build/app/outputs/bundle/release/
+          
+      - name: Verify artifact exists
+        run: ls -la build/app/outputs/bundle/release/
+        
+      - name: Deploy to Play Store Internal Track
         run: |
           cd android
-          sudo gem install bundler
-          sudo bundle install
-          sudo bundle exec fastlane internal
+          gem install bundler
+          bundle install
+          bundle exec fastlane internal
