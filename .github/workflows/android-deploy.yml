@@ -24,10 +24,21 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
         
-      - name: Install Android SDK Components
+      - name: Clean install Android SDK 35
         run: |
+          set -e
+          echo "Accepting all SDK licenses..."
           yes | sdkmanager --licenses || true
-          sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0" "cmdline-tools;latest"
+          
+          echo "Uninstalling potentially corrupted android-35..."
+          yes | sdkmanager --uninstall "platforms;android-35" "build-tools;35.0.0" || true
+          
+          echo "Fresh install of android-35 components..."
+          sdkmanager --install "platform-tools" "platforms;android-35" "build-tools;35.0.0" "cmdline-tools;latest"
+          
+          echo "Verifying android.jar exists and is readable..."
+          ls -la ${ANDROID_HOME}/platforms/android-35/android.jar
+          file ${ANDROID_HOME}/platforms/android-35/android.jar
           
       - name: Setup Ruby
         uses: ruby/setup-ruby@ec02537da5712d66d4d50a0f33b7eb52773b5ed1
@@ -46,13 +57,20 @@ jobs:
           channel: 'stable'
           cache: true
           
+      - name: Verify Gradle Configuration
+        run: |
+          echo "Checking current gradle wrapper version..."
+          cd android
+          cat gradle/wrapper/gradle-wrapper.properties
+          
       - name: Install Flutter dependencies
         run: flutter pub get
         
-      - name: Clean and Build the Bundle
+      - name: Clean and Build Bundle
         run: |
           flutter clean
-          flutter build appbundle --release
+          echo "Building with verbose output for debugging..."
+          flutter build appbundle --release --verbose
           
       - name: Upload artifact to Github
         uses: actions/upload-artifact@v4
@@ -78,14 +96,6 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
           
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-        
-      - name: Install Android SDK Components
-        run: |
-          yes | sdkmanager --licenses || true
-          sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0" "cmdline-tools;latest"
-          
       - name: Setup Ruby
         uses: ruby/setup-ruby@ec02537da5712d66d4d50a0f33b7eb52773b5ed1
         with: 
@@ -103,7 +113,10 @@ jobs:
           path: build/app/outputs/bundle/release/
           
       - name: Verify artifact exists
-        run: ls -la build/app/outputs/bundle/release/
+        run: |
+          ls -la build/app/outputs/bundle/release/
+          echo "AAB file size:"
+          du -h build/app/outputs/bundle/release/app-release.aab
         
       - name: Deploy to Play Store Internal Track
         run: |
