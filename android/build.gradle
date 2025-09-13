@@ -46,6 +46,14 @@ subprojects {
                 }
             }
         }
+        
+        // Force Java 17 for all Java compilation tasks
+        project.tasks.withType(JavaCompile).configureEach {
+            sourceCompatibility = JavaVersion.VERSION_17
+            targetCompatibility = JavaVersion.VERSION_17
+        }
+        
+        // Force JVM target 17 for all Kotlin compilation tasks
         project.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
             kotlinOptions {
                 jvmTarget = "17"
