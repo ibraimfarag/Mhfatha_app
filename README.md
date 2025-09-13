@@ -1,6 +1,16 @@
-# mhfatha
+# Mhfatha - أنا مؤهل
 
-A new Flutter project.
+A new Flutter project for discounts and promotions.
+
+## 🚀 CI/CD Pipeline
+
+This repository includes a complete GitHub Actions CI/CD pipeline:
+
+- ✅ **Continuous Integration**: Automated code quality checks on every push
+- ✅ **iOS Deployment**: Automated deployment to TestFlight
+- ✅ **Android Deployment**: Automated deployment to Google Play Store
+
+For detailed information about GitHub Actions setup, see [GITHUB_ACTIONS.md](GITHUB_ACTIONS.md).
 
 ## Getting Started
 
