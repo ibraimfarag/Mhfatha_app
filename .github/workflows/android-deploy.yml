@@ -27,6 +27,10 @@ jobs:
           cache: 'gradle'
           java-package: jdk
           
+      - name: Install Android SDK Platform 35
+        run: |
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-35"
+          
       - name: Decrypt Android keys
         run: sh ./.github/scripts/decrypt_android_secrets.sh
         env:
@@ -72,6 +76,11 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 12.x
+          
+      - name: Install Android SDK Platform 35
+        run: |
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-35"
+          
       - name: Decrypt Android keys
         run: sh ./.github/scripts/decrypt_android_secrets.sh
         env:
