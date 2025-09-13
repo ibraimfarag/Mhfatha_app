@@ -39,12 +39,15 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.24.3
+          flutter-version: 3.19.6
           channel: 'stable'
           cache: true 
 
       - name: Install Flutter dependencies
-        run: flutter pub get
+        run: |
+          flutter clean
+          flutter pub get
+          flutter pub upgrade
   
       - name: Build the Bundle
         run: flutter build appbundle --release
@@ -88,8 +91,10 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.24.3
-      - run: flutter pub get
+          flutter-version: 3.19.6
+      - run: |
+          flutter clean
+          flutter pub get
       - run: flutter build appbundle --release
       - name: Upload artifact to Github
         uses: actions/upload-artifact@v4
