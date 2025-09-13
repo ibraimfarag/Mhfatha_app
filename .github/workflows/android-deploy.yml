@@ -29,7 +29,7 @@ jobs:
           
       - name: Install Android SDK Platform 35
         run: |
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-35"
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-34" "build-tools;34.0.0"
           
       - name: Decrypt Android keys
         run: sh ./.github/scripts/decrypt_android_secrets.sh
@@ -39,7 +39,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.16.6
+          flutter-version: 3.24.3
           channel: 'stable'
           cache: true 
 
@@ -79,16 +79,16 @@ jobs:
           
       - name: Install Android SDK Platform 35
         run: |
-          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-35"
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-34" "build-tools;34.0.0"
           
       - name: Decrypt Android keys
         run: sh ./.github/scripts/decrypt_android_secrets.sh
         env:
           PASSPHRASE: ${{ secrets.PASSPHRASE }}
       - name: Setup Flutter
-        uses: subosito/flutter-action@v1
+        uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.16.6
+          flutter-version: 3.24.3
       - run: flutter pub get
       - run: flutter build appbundle --release
       - name: Upload artifact to Github

@@ -35,7 +35,8 @@ if (flutterVersionName == null) {
    }
 android {
     namespace "com.app.mhfatha"
-    compileSdkVersion 35
+    compileSdkVersion 34
+    buildToolsVersion "34.0.0"
     ndkVersion flutter.ndkVersion
 
     compileOptions {
